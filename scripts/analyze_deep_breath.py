@@ -15,7 +15,7 @@
   python analyze_deep_breath.py
 
 输出:
-  output/10_DEEP-BREATH/
+  output/08_旧批次-DEEP-BREATH/
     deep_breath_results.json   每窗指标 + 每段聚合
     seg2_vs_seg1_hrv.png       RSA 对比条形图
     breath_waveform.png        seg2 (深慢) vs seg4 (屏气) 呼吸位移波形对比
@@ -54,7 +54,7 @@ from analyze_rest_3min import estimate_freq_periodogram
 # 配置（硬编码参数集中声明）
 # ============================================================
 MMWAVE_DIR = Path(r"D:\Project\厚粲杯\11_数据\sub-deep-breath\ses-DB\mmwave")
-OUTPUT_DIR = Path(r"D:\Project\厚粲杯\08_算法\output\10_DEEP-BREATH")
+OUTPUT_DIR = Path(r"D:\Project\厚粲杯\08_算法\output\08_旧批次-DEEP-BREATH")
 
 # 5 段协议（与采集脚本 deep_breath_capture.py 一致）: (段号, 名称, 时长秒)
 SEGMENTS = [
