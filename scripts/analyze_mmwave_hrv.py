@@ -500,6 +500,8 @@ def analyze_window(disp_br, disp_hr, method="vmd_heart", hr_freq_hint=None):
         if len(ibi_clean) >= 5:
             hrv = compute_hrv_time(ibi_clean)
             hrv["frequency"] = compute_hrv_frequency(ibi_clean)
+            # 非线性特征挂 IBI 序列（供窗级 SampEn/DFA 扩展, v1.4+）
+            hrv["ibi_ms"] = ibi_clean.tolist()
 
     return {
         "hr_freq_bpm": round(float(hr_freq * 60), 1) if hr_freq else None,
