@@ -29,8 +29,8 @@
 │   ├── 毫米波数据Q&A.md
 │   └── 交付/                    ← 给外部专家的交付包（仅清单 md/ris 入仓库）
 ├── output/                      ← 分析产物（git 忽略，可再生成）
-│   ├── 09_预实验-*              ← 预实验批次 000-007（FULL/QUALITY/ROBUST/COMPARE）
-│   └── 08_旧批次-*              ← 旧批次 001/007/008/SXQ + 早期探索
+│   ├── 预实验/                  ← 预实验批次 000-007（09_预实验-*：FULL/QUALITY/ROBUST/COMPARE）
+│   └── 旧实验/                  ← 旧批次 001/007/008/SXQ + 早期探索（08_旧批次-*）
 └── .gitignore
 ```
 
@@ -61,7 +61,7 @@ cd scripts
 # 预实验分析主线（000-007，按顺序）
 python assess_preexp_quality.py --subject 004 --data-root F:/预实验        # ① 质量门
 python analyze_mmwave_full.py --subject 004 --data-root F:/预实验 \
-    --output-dir 09_预实验-SUB004-FULL                                    # ② 全程窗+探针特征
+    --output-dir 预实验/09_预实验-SUB004-FULL                             # ② 全程窗+探针特征
 python analyze_preexp_robustness.py --data-root F:/预实验                  # ③ 相关稳健性（全被试）
 python compare_preexp_hrv.py                                               # ④ 跨被试分布对比
 python gen_range_time_maps.py --data-root F:/预实验                        # ⑤ 距离-时间热图

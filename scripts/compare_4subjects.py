@@ -2,7 +2,7 @@
 compare_4subjects.py — 四被试（001/007/008/SXQ）对比图与统计汇总
 ================================================================
 读 08_旧批次-SUBXXX-FULL 的全程/探针 JSON, 输出:
-  output/08_旧批次-SUBJECTS-COMPARE/
+  output/旧实验/08_旧批次-SUBJECTS-COMPARE/
     subjects_compare.png      ← 探针标签特征对比（HR/SDNN/RT × 4 标签 × 4 被试）
     subjects_usability.png    ← 可用率对比（全程窗/探针窗）
     subjects_summary.json     ← 统计汇总（供文档引用）

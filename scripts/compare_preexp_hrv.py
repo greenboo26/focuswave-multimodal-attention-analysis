@@ -5,7 +5,7 @@ compare_preexp_hrv.py — 预实验全被试（000-007）HR/HRV 跨被试分布�
 功能: 对 8 个预实验被试的可信窗做跨被试分布对比:
       HR/SDNN/RMSSD/BR 生理指标 + RT/误错率行为指标 + 可用率 + 探针标签分布
 数据: 09_预实验-SUB{XXX}-FULL/sub{XXX}_full_windows.json（analyze_mmwave_full 产出）
-输出: output/09_预实验-SUBJECTS-COMPARE/
+输出: output/预实验/09_预实验-SUBJECTS-COMPARE/
         preexp_hrv_distributions.png  ← 生理指标小提琴图（2×2）
         preexp_behavior_distributions.png ← RT/误错率小提琴图（1×2）
         preexp_usability_probes.png   ← 可用率条形图 + 探针标签分布
@@ -23,7 +23,7 @@ from pathlib import Path
 import numpy as np
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-OUT_ROOT = SCRIPT_DIR.parent / "output"
+OUT_ROOT = SCRIPT_DIR.parent / "output" / "预实验"
 OUT_DIR = OUT_ROOT / "09_预实验-SUBJECTS-COMPARE"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 

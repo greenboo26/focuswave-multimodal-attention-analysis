@@ -23,7 +23,7 @@ gen_range_time_maps.py — 全程距离-时间热图生成（多被试对比）
   python gen_range_time_maps.py --data-root F:/预实验
 
 输出:
-  output/09_预实验-SUBJECTS-COMPARE/
+  output/预实验/09_预实验-SUBJECTS-COMPARE/
     range_time_map_全程对比_000-007.png  ← 2×4 对比
     range_time_map_sub-000_全程.png       ← 单被试图 ×8
     range_time_maps_data.json             ← 数据摘要（供复核）

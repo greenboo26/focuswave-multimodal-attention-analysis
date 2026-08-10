@@ -15,7 +15,7 @@ analyze_mmwave_full.py — sub-001 全程毫米波 × 行为联合分析
   python analyze_mmwave_full.py --subject 001
 
 输出:
-  output/08_旧批次-SUB{XXX}-FULL/
+  output/旧实验/08_旧批次-SUB{XXX}-FULL/
     sub{XXX}_full_windows.json    ← 全程窗特征 + 行为
     sub{XXX}_probe_features.json  ← 探针前 30s 特征
     sub{XXX}_full_timeline.png    ← 时间线图（毫米波 × 行为）
@@ -194,7 +194,7 @@ def main():
     DATA_ROOT = Path(args.data_root)
     MMWAVE_DIR = DATA_ROOT / f"sub-{SUBJECT}_" / "mmwave"
     BEH_DIR = DATA_ROOT / f"sub-{SUBJECT}_" / "beh"
-    out_name = args.output_dir or f"08_旧批次-SUB{SUBJECT}-FULL"
+    out_name = args.output_dir or f"旧实验/08_旧批次-SUB{SUBJECT}-FULL"
     OUTPUT_DIR = Path(rf"D:\Project\厚粲杯\08_算法\output\{out_name}")
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
