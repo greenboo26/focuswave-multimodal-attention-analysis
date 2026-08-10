@@ -197,7 +197,31 @@ def _heartband_assess(phi_det: np.ndarray, hr_hint: float | None):
     return snr_db, hr_bpm, ibi_ratio, hr_freq_hz
 
 
-def assess_window(iq: np.ndarray, hr_hint: float | None = None) -> dict:
+def spc_score(iq: np.ndarray, ch: int, b: int, radius: int = 2) -> float:
+    """相邻距离单元相位相干性（胸腔反射覆盖相邻 bin, 体征单元与邻居相位差分相关高）。
+
+    参数:
+        iq: 窗数据
+        ch: 通道索引
+        b: 候选 bin
+        radius: 相邻半径（bin）
+    返回:
+        SPC 评分（与 ±radius bin 相位差分的最大 |r|, 0-1）
+    """
+    from scipy import stats as _stats
+    pd = np.diff(np.unwrap(np.angle(iq[:, b, ch])))
+    rs = []
+    for nb in range(max(0, b - radius), min(iq.shape[1], b + radius + 1)):
+        if nb == b:
+            continue
+        pd2 = np.diff(np.unwrap(np.angle(iq[:, nb, ch])))
+        r = _stats.pearsonr(pd, pd2)[0]
+        rs.append(abs(r) if r == r else 0.0)
+    return max(rs) if rs else 0.0
+
+
+def assess_window(iq: np.ndarray, hr_hint: float | None = None,
+                  use_spc: bool = False) -> dict:
     """对单窗做心跳质量评估（文献标准流程 + 多候选 bin）。
 
     流程: 距离功率谱 → 距离门控内多候选 bin（应对近距杂波定位竞争）
@@ -238,8 +262,15 @@ def assess_window(iq: np.ndarray, hr_hint: float | None = None) -> dict:
         result["phase_mod_rad"] = round(ph_mod_g, 4)
         result["reason"] = "static_target" if ph_mod_g < PHASE_MOD_RAD else "no_target"
         return result
-    cand_bins = [zone.start + int(idx) for idx in
-                 np.argsort(zone_power)[::-1][:MAX_CAND_BINS]]
+    if use_spc:
+        # SPC 加权候选: 功率 top 12 → SPC 排序取 top N（定位竞争场景改善）
+        cand_bins = [zone.start + int(idx) for idx in
+                     np.argsort(zone_power)[::-1][:12]]
+        cand_bins.sort(key=lambda b: spc_score(iq, best_ch, b), reverse=True)
+        cand_bins = cand_bins[:MAX_CAND_BINS]
+    else:
+        cand_bins = [zone.start + int(idx) for idx in
+                     np.argsort(zone_power)[::-1][:MAX_CAND_BINS]]
 
     # ── 3. 逐候选评估, 取 IBI 有效率最高者 ──
     best = None
@@ -404,6 +435,8 @@ def main():
                         help="数据根目录, 含 sub-XXX_/ 子目录")
     parser.add_argument("--output-dir", type=str, default=None,
                         help="输出目录名（相对 output/）")
+    parser.add_argument("--use-spc", action="store_true",
+                        help="启用 SPC 相邻单元相位相干性定位排序（实验特性）")
     args = parser.parse_args()
 
     subject = args.subject.zfill(3)
@@ -445,7 +478,7 @@ def main():
                          "ok": False, "reason": "short_data"})
             continue
         iq = load_frames_by_time(mm_dir, subject, frame_idx, fa, fb)
-        res = assess_window(iq)
+        res = assess_window(iq, use_spc=args.use_spc)
         row = {"t_start_s": round((w0 - t_start_ms) / 1000)}
         row.update(res)
         rows.append(row)
