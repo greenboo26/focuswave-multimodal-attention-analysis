@@ -45,6 +45,7 @@ from analyze_mmwave_hrv import (
     estimate_freq_periodogram, HR_MIN, HR_MAX, detect_motion_frames,
 )
 from analyze_rest_3min import select_bins_from_profile
+from hrv_nonlinear import sampen, dfa
 import analyze_mmwave_hrv as rhrv  # 用于设置模块级 FIRST_FRAME/N_PARTITIONS
 
 # ============================================================
@@ -261,6 +262,12 @@ def main():
             hrv = win_res[0].get("hrv", {})
             row["sdnn_ms"] = hrv.get("SDNN_ms")
             row["rmssd_ms"] = hrv.get("RMSSD_ms")
+            ibi = hrv.get("ibi_ms")
+            if ibi and len(ibi) >= 16:
+                row["sampen"] = round(sampen(ibi), 4)
+                a1, a2 = dfa(ibi)
+                row["dfa_alpha1"] = round(a1, 3) if a1 == a1 else None
+                row["dfa_alpha2"] = round(a2, 3) if a2 == a2 else None
             row["heart_bin"] = win_res[1]["bin"]
         row.update(beh)
         windows.append(row)
@@ -288,6 +295,12 @@ def main():
             hrv = res[0].get("hrv", {})
             w["sdnn_ms"] = hrv.get("SDNN_ms")
             w["rmssd_ms"] = hrv.get("RMSSD_ms")
+            ibi = hrv.get("ibi_ms")
+            if ibi and len(ibi) >= 16:
+                w["sampen"] = round(sampen(ibi), 4)
+                a1, a2 = dfa(ibi)
+                w["dfa_alpha1"] = round(a1, 3) if a1 == a1 else None
+                w["dfa_alpha2"] = round(a2, 3) if a2 == a2 else None
             w["heart_bin"] = res[1]["bin"]
             w["harmonics_corrected"] = True
             n_w_corrected += 1
