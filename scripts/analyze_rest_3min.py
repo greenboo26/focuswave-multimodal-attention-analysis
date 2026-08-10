@@ -16,7 +16,7 @@ v1.1 修正 (2026-08-06):
   python analyze_rest_3min.py
 
 输出:
-  output/07_REST-3min/v1/
+  output/08_旧批次-REST-3min/v1/
     sub-rest_3min_mmwave_vital_signs.json   ← 体征指标（含 HRV 时域+频域）
     sub-rest_3min_mmwave_vital_signs.npz    ← 波形数据（呼吸/心跳/峰值）
     sub-rest_3min_mmwave_vital_signs.png    ← 诊断图
@@ -55,7 +55,7 @@ from process_vital_signs_v5 import detect_peaks_breath_robust
 # 数据目录: 3 分钟静止数据的 npz 分片
 DATA_DIR = Path(r"D:\Project\厚粲杯\11_数据\sub-rest_3min_\mmwave")
 # 输出目录
-OUTPUT_DIR = Path(r"D:\Project\厚粲杯\08_算法\output\07_REST-3min\v1")
+OUTPUT_DIR = Path(r"D:\Project\厚粲杯\08_算法\output\08_旧批次-REST-3min\v1")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # 分析参数

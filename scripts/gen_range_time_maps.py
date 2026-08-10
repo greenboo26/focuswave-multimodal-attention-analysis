@@ -2,7 +2,7 @@
 gen_range_time_maps.py — 全程距离-时间热图生成（多被试对比）
 ============================================================
 版本: v2.0 (2026-08-10)
-功能: 对预实验被试（000/001/002/003）流式读取毫米波 npz 分片,
+功能: 对预实验被试（000-007）流式读取毫米波 npz 分片,
       生成全程距离-时间热图（时间 × 距离 的幅度图）, 直观呈现
       全程人体目标位置、信号强弱、休息段/运动伪影。
 
@@ -11,7 +11,7 @@ gen_range_time_maps.py — 全程距离-时间热图生成（多被试对比）
   - Y 轴距离 (m), 范围 0-1.75 m（bin 0-46, 3.75cm/bin）
   - 无 colorbar, 用颜色梯度直接传递幅度
   - 标题格式: "预实验 sub-000 (43min) — 全程距离-时间热图(每列=10s, 幅度)"
-  - 2×2 对比图 + 每被试单独图, 四被试统一 dB 归一化
+  - 2×4 对比图 + 每被试单独图, 八被试统一 dB 归一化
 
 方法:
   逐片读取 → 每 10s（1000 帧）取幅度最大值（时间聚合）→ 距离 bin
@@ -23,9 +23,9 @@ gen_range_time_maps.py — 全程距离-时间热图生成（多被试对比）
   python gen_range_time_maps.py --data-root F:/预实验
 
 输出:
-  output/09_PREEXP-SUBJECTS-COMPARE/
-    range_time_map_全程对比_000-003.png  ← 2×2 对比
-    range_time_map_sub-000_全程.png       ← 单被试图 ×4
+  output/09_预实验-SUBJECTS-COMPARE/
+    range_time_map_全程对比_000-007.png  ← 2×4 对比
+    range_time_map_sub-000_全程.png       ← 单被试图 ×8
     range_time_maps_data.json             ← 数据摘要（供复核）
 
 依赖: numpy, matplotlib
@@ -44,17 +44,17 @@ import numpy as np
 # 配置（硬编码参数集中声明）
 # ============================================================
 
-SUBJECTS = ["000", "001", "002", "003"]   # 参与对比的被试
+SUBJECTS = ["000", "001", "002", "003", "004", "005", "006", "007"]  # 参与对比的被试
 CHUNK = 1000                              # 每 npz 片帧数
 FS = 100.0                                # 采样率 (Hz)
 AGG_SEC = 10.0                            # 时间聚合粒度 (s)：每 10s 一列（与旧图一致）
 BIN_CM = 3.75                             # 距离 bin 分辨率 (cm)，8GHz 带宽 → 3.75cm
 Y_MAX_M = 1.75                            # 显示距离上限 (m)，bin 0-46（环境反射远距 bin 排除）
-DB_LO_PCT, DB_HI_PCT = 5.0, 99.5          # dB 动态范围裁剪百分位（四被试统一）
+DB_LO_PCT, DB_HI_PCT = 5.0, 99.5          # dB 动态范围裁剪百分位（八被试统一）
 COLORMAP = "jet"                          # 配色（旧图同款: 深蓝→浅蓝→黄→红）
-FIG_SIZE = (14, 11)                       # 2×2 对比图尺寸
+FIG_SIZE = (24, 10)                       # 2×4 对比图尺寸
 SCRIPT_DIR = Path(__file__).resolve().parent
-OUTPUT_DIR = SCRIPT_DIR.parent / "output" / "09_PREEXP-SUBJECTS-COMPARE"
+OUTPUT_DIR = SCRIPT_DIR.parent / "output" / "09_预实验-SUBJECTS-COMPARE"
 
 
 # ============================================================
@@ -146,7 +146,7 @@ def main():
 
     t_all = time_mod.time()
     print("=" * 60)
-    print("  全程距离-时间热图（000/001/002/003, 样式对齐旧版）")
+    print("  全程距离-时间热图（000-007, 样式对齐旧版）")
     print("=" * 60)
 
     # ── 1. 逐被试构建矩阵 ──
@@ -157,7 +157,7 @@ def main():
         maps[subject] = build_range_time_map(mm_dir, subject)
         print(f"  → {maps[subject].shape} ({maps[subject].shape[0] * AGG_SEC / 60:.1f} min)")
 
-    # ── 2. 统一 dB 动态范围（四被试聚合百分位） ──
+    # ── 2. 统一 dB 动态范围（八被试聚合百分位） ──
     all_db = np.concatenate([20 * np.log10(m + 1e-9).ravel() for m in maps.values()])
     vmin, vmax = np.percentile(all_db, [DB_LO_PCT, DB_HI_PCT])
     del all_db
@@ -181,14 +181,14 @@ def main():
         plt.close(fig)
         print(f"  [png] {png}")
 
-    # ── 4. 2×2 对比图（无 colorbar） ──
-    fig, axes = plt.subplots(2, 2, figsize=FIG_SIZE)
+    # ── 4. 2×4 对比图（无 colorbar） ──
+    fig, axes = plt.subplots(2, 4, figsize=FIG_SIZE)
     for ax, subject in zip(axes.flat, SUBJECTS):
         db = to_db(maps[subject], vmin, vmax)
         duration_min = maps[subject].shape[0] * AGG_SEC / 60
         plot_single(ax, db, vmin, vmax, subject, duration_min)
-    fig.suptitle("预实验全程距离-时间热图对比（统一 dB 范围）", fontsize=15)
-    png = out_dir / "range_time_map_全程对比_000-003.png"
+    fig.suptitle("预实验全程距离-时间热图对比（统一 dB 范围）", fontsize=16)
+    png = out_dir / "range_time_map_全程对比_000-007.png"
     fig.tight_layout(rect=[0, 0, 1, 0.96])
     fig.savefig(png, dpi=150)
     plt.close(fig)

@@ -15,7 +15,7 @@ analyze_mmwave_full.py — sub-001 全程毫米波 × 行为联合分析
   python analyze_mmwave_full.py --subject 001
 
 输出:
-  output/08_SUB{XXX}-FULL/
+  output/08_旧批次-SUB{XXX}-FULL/
     sub{XXX}_full_windows.json    ← 全程窗特征 + 行为
     sub{XXX}_probe_features.json  ← 探针前 30s 特征
     sub{XXX}_full_timeline.png    ← 时间线图（毫米波 × 行为）
@@ -56,7 +56,7 @@ DATA_ROOT = Path("E:")  # 数据根目录（原 F: 盘数据已迁移至 E: 根�
                         # 预实验数据传 E:\预实验（--data-root 覆盖）
 MMWAVE_DIR = DATA_ROOT / f"sub-{SUBJECT}_" / "mmwave"
 BEH_DIR = DATA_ROOT / f"sub-{SUBJECT}_" / "beh"
-OUTPUT_DIR = Path(rf"D:\Project\厚粲杯\08_算法\output\08_SUB{SUBJECT}-FULL")
+OUTPUT_DIR = Path(rf"D:\Project\厚粲杯\08_算法\output\08_旧批次-SUB{SUBJECT}-FULL")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 WINDOW_SEC = 30        # 全程时间线窗长（秒），30s 保证 HR/BR 稳定, HRV 仅报告时域
@@ -186,15 +186,15 @@ def main():
     parser.add_argument("--data-root", type=str, default=str(DATA_ROOT),
                         help="数据根目录, 默认 E:（旧数据 E:\\sub-XXX_）; 预实验传 E:\\预实验")
     parser.add_argument("--output-dir", type=str, default=None,
-                        help="输出目录名（相对 output/）, 默认 08_SUB{SUBJECT}-FULL; "
-                             "预实验传 09_PREEXP-SUB{SUBJECT}-FULL 避免覆盖旧分析")
+                        help="输出目录名（相对 output/）, 默认 08_旧批次-SUB{SUBJECT}-FULL; "
+                             "预实验传 09_预实验-SUB{SUBJECT}-FULL 避免覆盖旧分析")
     args = parser.parse_args()
 
     SUBJECT = args.subject.zfill(3)
     DATA_ROOT = Path(args.data_root)
     MMWAVE_DIR = DATA_ROOT / f"sub-{SUBJECT}_" / "mmwave"
     BEH_DIR = DATA_ROOT / f"sub-{SUBJECT}_" / "beh"
-    out_name = args.output_dir or f"08_SUB{SUBJECT}-FULL"
+    out_name = args.output_dir or f"08_旧批次-SUB{SUBJECT}-FULL"
     OUTPUT_DIR = Path(rf"D:\Project\厚粲杯\08_算法\output\{out_name}")
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
