@@ -47,7 +47,7 @@
 - `scripts/analyze_erp_errors.py`、`scripts/hrv_nonlinear.py`（新增）
 - `scripts/gen_preexp_reports.py`、`scripts/export_window_matrix.py`（新增）
 - `scripts/analyze_mmwave_hrv.py`（IBI 挂出）、`scripts/analyze_mmwave_full.py`（非线性特征接入）
-- `output/预实验/09_预实验-事件相关/`、`09_预实验-预处理报告/`、`09_预实验-窗特征矩阵/`
+- `output/预实验/03_跨被试/09_预实验-事件相关/`、`09_预实验-预处理报告/`、`09_预实验-窗特征矩阵/`
 
 
 

@@ -19,7 +19,7 @@ analyze_preexp_robustness.py — 预实验全被试行为×毫米波相关稳健
 数据:
   输入: output/预实验/09_预实验-SUB{XXX}-FULL/sub{XXX}_full_windows.json
         + F:/预实验/sub-XXX_/beh/master_timeline.csv
-  输出: output/预实验/09_预实验-ROBUST-ALL/
+  输出: output/预实验/03_跨被试/09_预实验-ROBUST-ALL/
         preexp_robustness.json   ← 全部检验结果
         preexp_robustness.txt    ← 可读报告
 
@@ -46,7 +46,7 @@ from scipy import stats
 
 SUBJECTS = ["000", "001", "002", "003", "004", "005", "006", "007"]  # 预实验全部有信号被试
 SCRIPT_DIR = Path(__file__).resolve().parent
-OUTPUT_ROOT = SCRIPT_DIR.parent / "output" / "09_预实验-ROBUST-ALL"
+OUTPUT_ROOT = SCRIPT_DIR.parent / "output" / "03_跨被试" / "09_预实验-ROBUST-ALL"
 WINDOW_SEC = 30                      # 全程窗长（秒, 与 analyze_mmwave_full 一致）
 MIN_TRIALS = 10                      # 行为估计稳定的最少窗内试次数
 IQR_K = 1.5                          # 离群剔除系数（1.5×IQR 标准）
@@ -65,7 +65,7 @@ CORR_PAIRS = [
 
 def load_windows(subject: str, out_root: Path) -> list[dict]:
     """读取全程窗 JSON（analyze_mmwave_full 产出）。"""
-    path = out_root / f"09_预实验-SUB{subject}-FULL" / f"sub{subject}_full_windows.json"
+    path = out_root / "02_全程窗" / f"09_预实验-SUB{subject}-FULL" / f"sub{subject}_full_windows.json"
     with open(path, encoding="utf-8") as f:
         return json.load(f)["windows"]
 
@@ -223,7 +223,7 @@ def robust_analysis(ok_windows: list[dict], block_map: dict) -> dict:
 
 def probe_summary(subject: str, out_root: Path) -> dict:
     """可信探针窗的 HR/HRV 描述统计与标签分布。"""
-    path = out_root / f"09_预实验-SUB{subject}-FULL" / f"sub{subject}_full_windows.json"
+    path = out_root / "02_全程窗" / f"09_预实验-SUB{subject}-FULL" / f"sub{subject}_full_windows.json"
     with open(path, encoding="utf-8") as f:
         probes = json.load(f)["probes"]
     ok = [p for p in probes if p.get("quality") == "ok"]
