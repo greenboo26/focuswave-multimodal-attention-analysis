@@ -6,6 +6,47 @@
 
 ---
 
+## 2026-08-11 — v1.6 自主优化夜（31 项实验 + 摄像头-毫米波融合门控）
+
+### 背景
+
+用户要求睡眠期间自主尝试文献/仓库中的优化方法（NeuroKit 分析思路 +
+mmHRV/倪杰2024/Radar_monitor 等来源），并利用摄像头数据融合。
+
+### 改动
+
+- **外部方法 A/B（7 项, 全无实质改进）**: SPC 定位（+1.8%, 保留 --use-spc 开关）、
+  Hampel IBI 清洗（误伤 RSA 撤销）、相位差分/CFAR/SSA/包络归一化/CEEMDAN（不采用）
+- **摄像头-毫米波融合（核心发现）**: NIR/RGB 1Hz 运动量 × 毫米波质量门
+  **6/6 被试全显著**（000/003/004/005/006/007, d 中位 -0.90）; AUC 0.69,
+  P90 阈值标记伪影精确率 76%; 工具 `motion_gate.py`; 方案
+  `docs/摄像头毫米波融合门控方案.md`; 边界: 极弱信号（001 型）不适用
+- **融合应用**: 006 错误窗 BR 升高通过运动量控制（非伪影）; 运动窗 HRV 虚高
+  （RMSSD +55%）防护; 运动量门后事件相关更保守可信
+- **行为机制**: 探针前后行为无一致变化（Wiemers2019 一致）; 错误后 RT 个体差异
+  （005 冲动型 vs 007 警觉型）; RT 规律学习加速（007 313→177ms）
+- **答卷分析**: 自报（睡眠/不适/专注力）与客观指标全面脱节
+- **文献库**: Zotero 334 条中精读 7 篇（Corcoran2025/Martínez-Pérez2023/mmHRV/
+  Cui2025/Gao2025/Joshi2025/Paterniani2023）——确认现有管线覆盖主流方法
+- **正式实验设计建议**: docs/正式实验设计建议.md（刺激序列/探针/采集/管线/样本量）
+
+### 验证
+
+- 融合门控: 6/6 被试 p<0.05（000 p<0.001 d=-1.12; 005 p<0.001 d=-1.19 最强）,
+  时间级趋势耦合（003 运动量↑质量↓同步）, 001 反向为时间混淆
+- 外部方法: 预实验质量门口径下无改进——现有管线（门控+相位判别+谐波陷波+
+  VMD+窄带逐拍+质量门）环节已覆盖
+
+### 涉及文件
+
+- `scripts/experiment_{spc,hampel,phasediff,cfar,ssa,envelope,ceemdan}.py`（7 项 A/B）
+- `scripts/experiment_video_motion.py`、`scripts/experiment_video_roi.py`、`scripts/motion_gate.py`
+- `scripts/analyze_survey_physio.py`、`scripts/analyze_probe_effect.py`
+- `docs/优化决策记录.md`（31 项实验）、`docs/摄像头毫米波融合门控方案.md`、
+  `docs/正式实验设计建议.md`、`docs/毫米波数据Q&A.md`（+5 篇文献笔记）
+
+---
+
 ## 2026-08-11 — v1.5 分析框架扩展（NeuroKit 思路：事件相关 + 非线性 HRV + 标准化报告 + 特征矩阵）
 
 ### 背景
