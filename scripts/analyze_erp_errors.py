@@ -10,7 +10,7 @@ analyze_erp_errors.py — 行为错误事件相关生理分析（Event-Related, 
 数据: 行为事件: F:/预实验/sub-XXX_/beh/sub-XXX_Block*_beh.csv
       生理窗:   output/预实验/09_预实验-SUB{XXX}-FULL/sub{XXX}_full_windows.json
       时间对齐: beh/ 下 master_timeline.csv 的 mmwave_start
-输出: output/预实验/09_预实验-事件相关/
+输出: output/预实验/03_跨被试/09_预实验-事件相关/
         erp_summary.json        ← 每被试 + 聚合统计
         erp_window_compare.png  ← 错误窗 vs 非错误窗对比
         erp_response_curve.png  ← 错误前/错误/错误后窗变化曲线
@@ -30,7 +30,7 @@ from scipy import stats
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 OUT_ROOT = SCRIPT_DIR.parent / "output" / "预实验"
-OUT_DIR = OUT_ROOT / "09_预实验-事件相关"
+OUT_DIR = OUT_ROOT / "03_跨被试" / "09_预实验-事件相关"
 SUBJECTS = ["000", "001", "002", "003", "004", "005", "006", "007"]
 WINDOW_SEC = 30.0          # 生理窗长（与 analyze_mmwave_full 一致）
 MIN_EVENTS = 5             # 被试级分析最少事件数
@@ -75,7 +75,7 @@ def load_events(data_root: Path, subject: str) -> list[dict]:
 
 def load_windows(subject: str) -> list[dict]:
     """读取可信窗（quality=ok, 含生理指标）。"""
-    p = OUT_ROOT / f"09_预实验-SUB{subject}-FULL" / f"sub{subject}_full_windows.json"
+    p = OUT_ROOT / "02_全程窗" / f"09_预实验-SUB{subject}-FULL" / f"sub{subject}_full_windows.json"
     if not p.exists():
         return []
     d = json.load(open(p, encoding="utf-8"))

@@ -5,7 +5,7 @@ compare_preexp_hrv.py — 预实验全被试（000-007）HR/HRV 跨被试分布�
 功能: 对 8 个预实验被试的可信窗做跨被试分布对比:
       HR/SDNN/RMSSD/BR 生理指标 + RT/误错率行为指标 + 可用率 + 探针标签分布
 数据: 09_预实验-SUB{XXX}-FULL/sub{XXX}_full_windows.json（analyze_mmwave_full 产出）
-输出: output/预实验/09_预实验-SUBJECTS-COMPARE/
+输出: output/预实验/03_跨被试/09_预实验-SUBJECTS-COMPARE/
         preexp_hrv_distributions.png  ← 生理指标小提琴图（2×2）
         preexp_behavior_distributions.png ← RT/误错率小提琴图（1×2）
         preexp_usability_probes.png   ← 可用率条形图 + 探针标签分布
@@ -24,7 +24,7 @@ import numpy as np
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 OUT_ROOT = SCRIPT_DIR.parent / "output" / "预实验"
-OUT_DIR = OUT_ROOT / "09_预实验-SUBJECTS-COMPARE"
+OUT_DIR = OUT_ROOT / "03_跨被试" / "09_预实验-SUBJECTS-COMPARE"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 SUBJECTS = ["000", "001", "002", "003", "004", "005", "006", "007"]
@@ -46,7 +46,7 @@ def load_ok_windows(subject: str) -> tuple[list[dict], list[dict]]:
         (ok_windows, probes): 可信窗列表（quality=ok, 含生理字段）,
                               探针列表
     """
-    path = OUT_ROOT / f"09_预实验-SUB{subject}-FULL" / f"sub{subject}_full_windows.json"
+    path = OUT_ROOT / "02_全程窗" / f"09_预实验-SUB{subject}-FULL" / f"sub{subject}_full_windows.json"
     if not path.exists():
         return [], []
     d = json.load(open(path, encoding="utf-8"))
@@ -204,7 +204,7 @@ def main():
             "ok_ratio": len(ok) / max(1, len(ok) + sum(1 for w in ok if False)),
         }
         # ok_ratio 应为 可信窗/总窗: 需要总窗数, 这里从 json 再读
-        jpath = OUT_ROOT / f"09_预实验-SUB{sub}-FULL" / f"sub{sub}_full_windows.json"
+        jpath = OUT_ROOT / "02_全程窗" / f"09_预实验-SUB{sub}-FULL" / f"sub{sub}_full_windows.json"
         if jpath.exists():
             total = len(json.load(open(jpath, encoding="utf-8"))["windows"])
             data[sub]["ok_ratio"] = len(ok) / total if total else 0.0

@@ -409,7 +409,7 @@ def main():
     subject = args.subject.zfill(3)
     data_root = Path(args.data_root)
     mm_dir = data_root / f"sub-{subject}_" / "mmwave"
-    out_name = args.output_dir or f"预实验/09_预实验-SUB{subject}-QUALITY"
+    out_name = args.output_dir or f"预实验/01_质量评估/09_预实验-SUB{subject}-QUALITY"
     out_dir = OUTPUT_ROOT / out_name
     out_dir.mkdir(parents=True, exist_ok=True)
 

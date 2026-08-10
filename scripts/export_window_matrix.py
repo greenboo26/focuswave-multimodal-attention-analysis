@@ -10,7 +10,7 @@ export_window_matrix.py — 预实验窗特征矩阵导出（统一分析入口�
       窗内试次/错误数）+ 质量（可信标记/心跳 bin/谐波修正）+ 探针标签。
 
 数据: output/预实验/09_预实验-SUB{XXX}-FULL/sub{XXX}_full_windows.json
-输出: output/预实验/09_预实验-窗特征矩阵/
+输出: output/预实验/04_汇总产物/09_预实验-窗特征矩阵/
         window_matrix.csv        ← 全被试可信窗特征表
         window_matrix_summary.json ← 窗数/被试数/缺失统计
 用法:
@@ -27,7 +27,7 @@ import numpy as np
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 OUT_ROOT = SCRIPT_DIR.parent / "output" / "预实验"
-OUT_DIR = OUT_ROOT / "09_预实验-窗特征矩阵"
+OUT_DIR = OUT_ROOT / "04_汇总产物" / "09_预实验-窗特征矩阵"
 SUBJECTS = ["000", "001", "002", "003", "004", "005", "006", "007"]
 FEATURES = ["subject", "t_start_s", "quality", "hr_bpm", "br_bpm", "sdnn_ms",
             "rmssd_ms", "sampen", "dfa_alpha1", "dfa_alpha2", "rt_mean", "rt_sd",
@@ -40,7 +40,7 @@ def main():
     rows = []
     per_sub = {}
     for sub in SUBJECTS:
-        p = OUT_ROOT / f"09_预实验-SUB{sub}-FULL" / f"sub{sub}_full_windows.json"
+        p = OUT_ROOT / "02_全程窗" / f"09_预实验-SUB{sub}-FULL" / f"sub{sub}_full_windows.json"
         if not p.exists():
             continue
         d = json.load(open(p, encoding="utf-8"))

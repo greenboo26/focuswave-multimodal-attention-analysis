@@ -10,7 +10,7 @@ gen_preexp_reports.py — 预实验标准化预处理报告生成
 数据: quality: output/预实验/09_预实验-SUB{XXX}-QUALITY/sub{XXX}_quality_detail.csv
       windows: output/预实验/09_预实验-SUB{XXX}-FULL/sub{XXX}_full_windows.json
       行为:    F:/预实验/sub-XXX_/beh/（Block csv + master_timeline）
-输出: output/预实验/09_预实验-预处理报告/
+输出: output/预实验/04_汇总产物/09_预实验-预处理报告/
         sub{XXX}_prep_report.md  ← 每被试报告
         preexp_all_report.md     ← 汇总对比表
 用法:
@@ -28,13 +28,13 @@ import numpy as np
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 OUT_ROOT = SCRIPT_DIR.parent / "output" / "预实验"
-OUT_DIR = OUT_ROOT / "09_预实验-预处理报告"
+OUT_DIR = OUT_ROOT / "04_汇总产物" / "09_预实验-预处理报告"
 SUBJECTS = ["000", "001", "002", "003", "004", "005", "006", "007"]
 
 
 def load_quality(subject: str) -> dict:
     """读质量评估 detail.csv, 汇总 SNR/IBI/原因分布。"""
-    p = OUT_ROOT / f"09_预实验-SUB{subject}-QUALITY" / f"sub{subject}_quality_detail.csv"
+    p = OUT_ROOT / "01_质量评估" / f"09_预实验-SUB{subject}-QUALITY" / f"sub{subject}_quality_detail.csv"
     if not p.exists():
         return None
     rows = list(csv.DictReader(open(p, encoding="utf-8-sig")))
@@ -53,7 +53,7 @@ def load_quality(subject: str) -> dict:
 
 def load_full(subject: str) -> dict:
     """读 full_windows.json, 汇总生理与行为特征。"""
-    p = OUT_ROOT / f"09_预实验-SUB{subject}-FULL" / f"sub{subject}_full_windows.json"
+    p = OUT_ROOT / "02_全程窗" / f"09_预实验-SUB{subject}-FULL" / f"sub{subject}_full_windows.json"
     if not p.exists():
         return None
     d = json.load(open(p, encoding="utf-8"))

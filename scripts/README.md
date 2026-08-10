@@ -1,17 +1,17 @@
 # 08_算法/scripts — 分析脚本索引
 
-数据在 `F:/预实验/sub-XXX_/`（预实验批次 000-007），输出统一到 `../output/`，按批次分目录：预实验 `预实验/09_预实验-*`、旧批次 `旧实验/08_旧批次-*`。
+数据在 `F:/预实验/sub-XXX_/`（预实验批次 000-007），输出统一到 `../output/`，按批次分目录：预实验 `预实验/`（01_质量评估/02_全程窗/03_跨被试/04_汇总产物 四组, 组内 `09_预实验-*`）、旧批次 `旧实验/`（`08_旧批次-*`）。
 
 ## 预实验分析主线（000-007，按执行顺序）
 
 | 脚本 | 用途 | 用法 |
 |------|------|------|
-| `assess_preexp_quality.py` | 心跳质量独立评估（文献标准流程：SNR/IBI 窗级门控），输出 `预实验/09_预实验-SUB{XXX}-QUALITY/` | `python assess_preexp_quality.py --subject 004 --data-root F:/预实验` |
-| `analyze_mmwave_full.py` | 全程窗特征 + 探针前 30s 特征 + 行为对应，输出 `预实验/09_预实验-SUB{XXX}-FULL/` | `python analyze_mmwave_full.py --subject 004 --data-root F:/预实验 --output-dir 预实验/09_预实验-SUB004-FULL` |
+| `assess_preexp_quality.py` | 心跳质量独立评估（文献标准流程：SNR/IBI 窗级门控），输出 `预实验/01_质量评估/09_预实验-SUB{XXX}-QUALITY/` | `python assess_preexp_quality.py --subject 004 --data-root F:/预实验` |
+| `analyze_mmwave_full.py` | 全程窗特征 + 探针前 30s 特征 + 行为对应，输出 `预实验/02_全程窗/09_预实验-SUB{XXX}-FULL/` | `python analyze_mmwave_full.py --subject 004 --data-root F:/预实验 --output-dir 预实验/09_预实验-SUB004-FULL` |
 | `analyze_mmwave_hrv.py` | 休息段/全程 HRV 提取管线（analyze_mmwave_full 的底层依赖，也可独立跑 rest HRV） | 被 full 脚本 import；独立用见 docstring |
-| `analyze_preexp_robustness.py` | 行为×毫米波相关稳健性检验（Pearson/Spearman/分 block/剔离群/Jackknife），输出 `预实验/09_预实验-ROBUST-ALL/` | `python analyze_preexp_robustness.py --data-root F:/预实验` |
-| `compare_preexp_hrv.py` | 跨被试 HR/HRV/行为分布对比 + 可用率 + 探针标签，输出 `预实验/09_预实验-SUBJECTS-COMPARE/` | `python compare_preexp_hrv.py` |
-| `gen_range_time_maps.py` | 全程距离-时间热图（8 被试 2×4 对比 + 单图），输出 `预实验/09_预实验-SUBJECTS-COMPARE/` | `python gen_range_time_maps.py --data-root F:/预实验` |
+| `analyze_preexp_robustness.py` | 行为×毫米波相关稳健性检验（Pearson/Spearman/分 block/剔离群/Jackknife），输出 `预实验/03_跨被试/09_预实验-ROBUST-ALL/` | `python analyze_preexp_robustness.py --data-root F:/预实验` |
+| `compare_preexp_hrv.py` | 跨被试 HR/HRV/行为分布对比 + 可用率 + 探针标签，输出 `预实验/03_跨被试/09_预实验-SUBJECTS-COMPARE/` | `python compare_preexp_hrv.py` |
+| `gen_range_time_maps.py` | 全程距离-时间热图（8 被试 2×4 对比 + 单图），输出 `预实验/03_跨被试/09_预实验-SUBJECTS-COMPARE/` | `python gen_range_time_maps.py --data-root F:/预实验` |
 
 ## 数据工具
 
