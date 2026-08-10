@@ -1,0 +1,19 @@
+# 分析产物（可再生成）
+output/
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 原始数据（隐私 + 体积）
+*.npz
+*.bin
+*.dat
+
+# 交付包中的原文 PDF/epub（版权）与压缩包
+docs/交付/*/原文/
+*.zip
+
+# 系统文件
+.DS_Store
+Thumbs.db
