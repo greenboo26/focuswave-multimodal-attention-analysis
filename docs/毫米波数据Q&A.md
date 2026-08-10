@@ -433,3 +433,18 @@ DebugTool 不认识 .npz                 不用关心文件头
 
 **对我们的启示**: 生理-行为关联的研究设计（事件锚点+探针+多窗长）与我们的方向一致;
 "走神/空白解离"是正式实验有标签后最值得优先验证的假设。
+
+### Q：2025 年 FMCW 雷达 HRV 提取的最新精度水平是多少？
+
+**文献 1**: Cui et al. Non-Contact Heart Rate Variability Monitoring with FMCW Radar via a Novel Signal Processing Algorithm. Sensors, 2025, 25(17): 5607.
+- 校准-free 3D 定位（数字波束成形 + 运动目标指示 MTI + DBSCAN 聚类）+ 呼吸/心跳分离的独立相位模型 + **二阶谱稀疏分离（Lagrangian 乘子）**
+- 结果: 平均 IBI 误差比 state-of-the-art 降 50%+；限制: 仅限少动场景、离线验证
+
+**文献 2**: Gao et al. Non-contact radar-based HRV monitoring method using adaptive cycle segmentation and peak extraction. J. Meas. Sci. Instrum., 2025, 16(2).
+- **自适应周期分割 + 峰值提取**（离散能量信号 + SVM 形态-时域-频谱特征自适应阈值）
+- 结果（ECG 金标准）: **IBI 平均误差 8.28 ms（RMSE 15.3 ms）**, SDNN 误差 2.65 ms, RMSSD 误差 4.33 ms, 92% IBI 误差 <20 ms；不同距离鲁棒（远距仅 <6ms 退化）
+
+**对我们的意义**:
+1. 方法与我们同构（心跳提取→峰值→IBI），无颠覆性新思路——无需更换管线
+2. **Gao 2025 的精度数据是"当前 FMCW 雷达 HRV 的合理基准"**：正式实验若购买 ECG 金标准（设备决策见前文 Q），IBI 误差应期望在 8-20ms 水平；若远超此范围说明管线需要排查
+3. "自适应周期分割"（心率随状态时变）与我们的窄带逐拍（主频锚定）思路一致但更精细——作为正式实验前可选优化项（中等改动）
