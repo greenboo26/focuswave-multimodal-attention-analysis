@@ -29,7 +29,7 @@ assess_preexp_quality.py — 预实验毫米波心跳质量独立评估（文献
   python assess_preexp_quality.py --subject 003 --data-root F:/预实验
 
 输出:
-  output/09_预实验-SUB{XXX}-QUALITY/
+  output/预实验/09_预实验-SUB{XXX}-QUALITY/
     sub{XXX}_quality_detail.csv   ← 窗级结果
     sub{XXX}_quality_summary.md   ← 汇总报告
     sub{XXX}_quality_timeline.png ← 质量时间线图
@@ -409,7 +409,7 @@ def main():
     subject = args.subject.zfill(3)
     data_root = Path(args.data_root)
     mm_dir = data_root / f"sub-{subject}_" / "mmwave"
-    out_name = args.output_dir or f"09_预实验-SUB{subject}-QUALITY"
+    out_name = args.output_dir or f"预实验/09_预实验-SUB{subject}-QUALITY"
     out_dir = OUTPUT_ROOT / out_name
     out_dir.mkdir(parents=True, exist_ok=True)
 

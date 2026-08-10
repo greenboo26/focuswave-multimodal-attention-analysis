@@ -16,7 +16,7 @@ v1.1 修正 (2026-08-06):
   python analyze_rest_3min.py
 
 输出:
-  output/08_旧批次-REST-3min/v1/
+  output/旧实验/08_旧批次-REST-3min/v1/
     sub-rest_3min_mmwave_vital_signs.json   ← 体征指标（含 HRV 时域+频域）
     sub-rest_3min_mmwave_vital_signs.npz    ← 波形数据（呼吸/心跳/峰值）
     sub-rest_3min_mmwave_vital_signs.png    ← 诊断图

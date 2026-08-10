@@ -17,9 +17,9 @@ analyze_preexp_robustness.py — 预实验全被试行为×毫米波相关稳健
   （预实验探针标签可能不平衡, 仅作基线描述）。
 
 数据:
-  输入: output/09_预实验-SUB{XXX}-FULL/sub{XXX}_full_windows.json
+  输入: output/预实验/09_预实验-SUB{XXX}-FULL/sub{XXX}_full_windows.json
         + F:/预实验/sub-XXX_/beh/master_timeline.csv
-  输出: output/09_预实验-ROBUST-ALL/
+  输出: output/预实验/09_预实验-ROBUST-ALL/
         preexp_robustness.json   ← 全部检验结果
         preexp_robustness.txt    ← 可读报告
 
@@ -261,7 +261,7 @@ def main():
     data_root = Path(args.data_root)
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_root = SCRIPT_DIR.parent / "output"
+    out_root = SCRIPT_DIR.parent / "output" / "预实验"
 
     result = {}
     print("=" * 60)

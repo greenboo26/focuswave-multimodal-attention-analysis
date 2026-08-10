@@ -15,7 +15,7 @@
   python analyze_deep_breath.py
 
 输出:
-  output/08_旧批次-DEEP-BREATH/
+  output/旧实验/08_旧批次-DEEP-BREATH/
     deep_breath_results.json   每窗指标 + 每段聚合
     seg2_vs_seg1_hrv.png       RSA 对比条形图
     breath_waveform.png        seg2 (深慢) vs seg4 (屏气) 呼吸位移波形对比

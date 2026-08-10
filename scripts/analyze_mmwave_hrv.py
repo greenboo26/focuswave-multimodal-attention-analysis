@@ -28,7 +28,7 @@ v1.1 (2026-08-07):
   python analyze_rest_hrv.py --subject 007
 
 输出:
-  output/08_旧批次-SUB{XXX}-REST-HRV/
+  output/旧实验/08_旧批次-SUB{XXX}-REST-HRV/
     sub{XXX}_rest_hrv_windows.json   ← 每段每窗指标 + 聚合统计
     sub{XXX}_rest_hrv_trajectory.png ← 3 窗轨迹图（个体线 + 均值±SE）
 
@@ -531,7 +531,7 @@ def main():
     DATA_ROOT = Path(args.data_root)
     MMWAVE_DIR = DATA_ROOT / f"sub-{SUBJECT}_" / "mmwave"
     BEH_TIMELINE = DATA_ROOT / f"sub-{SUBJECT}_" / "beh" / "master_timeline.csv"
-    out_name = args.output_dir or f"08_旧批次-SUB{SUBJECT}-REST-HRV"
+    out_name = args.output_dir or f"旧实验/08_旧批次-SUB{SUBJECT}-REST-HRV"
     OUTPUT_DIR = Path(rf"D:\Project\厚粲杯\08_算法\output\{out_name}")
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
