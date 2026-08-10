@@ -78,9 +78,9 @@ def hr_in_window(iq) -> float | None:
     return None
 
 
-def load_events_007(data_root: Path):
-    """007 的 commission 与正确按键事件（相对 mmwave 时间, 秒）。"""
-    tl = data_root / "sub-007_" / "beh" / "master_timeline.csv"
+def load_events(data_root: Path, subject: str):
+    """commission 与正确按键事件（相对 mmwave 时间, 秒）。"""
+    tl = data_root / f"sub-{subject}_" / "beh" / "master_timeline.csv"
     mm_start = None
     with open(tl, encoding="utf-8", newline="") as f:
         for parts in csv.reader(f):
@@ -88,7 +88,7 @@ def load_events_007(data_root: Path):
                 mm_start = int(parts[2])
                 break
     comm, correct = [], []
-    for fpath in sorted((data_root / "sub-007_" / "beh").glob("sub-007_Block*_beh.csv")):
+    for fpath in sorted((data_root / f"sub-{subject}_" / "beh").glob(f"sub-{subject}_Block*_beh.csv")):
         with open(fpath, encoding="utf-8-sig", newline="") as f:
             for r in csv.DictReader(f):
                 try:
@@ -96,7 +96,7 @@ def load_events_007(data_root: Path):
                 except (ValueError, KeyError):
                     continue
                 rel = (onset - mm_start) / 1000.0
-                if rel < 10 or rel > 2500:  # 004 截断类比: 007 数据 2574s, 留边距
+                if rel < 10:
                     continue
                 if r["is_no_go"] == "1" and r["response"] == "1":
                     comm.append(rel)
@@ -105,10 +105,10 @@ def load_events_007(data_root: Path):
     return comm, correct
 
 
-def extract_curve(data_root: Path, event_times: list[float], label: str):
+def extract_curve(data_root: Path, subject: str, event_times: list[float], label: str):
     """事件锁定 HR 曲线: [-10,-5), [-5,0), [0,5), [5,10) 四窗。"""
-    mm_dir = data_root / "sub-007_" / "mmwave"
-    frame_idx, py_ms = apq.load_timestamps(mm_dir, "007")
+    mm_dir = data_root / f"sub-{subject}_" / "mmwave"
+    frame_idx, py_ms = apq.load_timestamps(mm_dir, subject)
     t0 = int(py_ms[0])
     curves = [[] for _ in range(4)]
     for et in event_times:
@@ -119,7 +119,7 @@ def extract_curve(data_root: Path, event_times: list[float], label: str):
             fa, fb = min(max(fa, 0), len(frame_idx) - 1), min(fb, len(frame_idx) - 1)
             if fb - fa < int(0.6 * FINE_WIN * apq.FS):
                 continue
-            iq = apq.load_frames_by_time(mm_dir, "007", frame_idx, fa, fb)
+            iq = apq.load_frames_by_time(mm_dir, subject, frame_idx, fa, fb)
             hr = hr_in_window(iq)
             if hr is not None:
                 curves[k].append(hr)
@@ -134,22 +134,24 @@ def extract_curve(data_root: Path, event_times: list[float], label: str):
 
 def main():
     parser = argparse.ArgumentParser(description="事件相关细粒度（5s HR + 按键对照）")
+    parser.add_argument("--subject", type=str, default="007")
     parser.add_argument("--data-root", type=str, default="F:/预实验")
     args = parser.parse_args()
     data_root = Path(args.data_root)
+    subject = args.subject.zfill(3)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    comm, correct = load_events_007(data_root)
-    print(f"007: commission {len(comm)}, 正确按键 {len(correct)}")
+    comm, correct = load_events(data_root, subject)
+    print(f"{subject}: commission {len(comm)}, 正确按键 {len(correct)}")
     # 正确按键抽样到与错误同数量（避免事件数不对称）
     rng = np.random.default_rng(42)
     correct_s = sorted(rng.choice(correct, size=min(len(comm), len(correct)), replace=False))
     print("提取错误事件曲线...")
-    comm_curve = extract_curve(data_root, comm, "comm")
+    comm_curve = extract_curve(data_root, subject, comm, "comm")
     print("提取正确按键曲线（对照）...")
-    corr_curve = extract_curve(data_root, correct_s, "correct")
+    corr_curve = extract_curve(data_root, subject, correct_s, "correct")
 
-    result = {"comm": comm_curve, "correct": corr_curve}
+    result = {"subject": subject, "comm": comm_curve, "correct": corr_curve}
     with open(OUT_DIR / "erp_fine_summary.json", "w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
@@ -177,7 +179,7 @@ def main():
     ax.set_xticks(xs)
     ax.set_xticklabels(["前 10s", "前 5s", "后 5s", "后 10s"])
     ax.set_ylabel("HR (bpm)")
-    ax.set_title("sub-007 按键事件锁定 HR 响应（5s 窗, 错误 vs 正确对照）")
+    ax.set_title(f"sub-{subject} 按键事件锁定 HR 响应（5s 窗, 错误 vs 正确对照）")
     ax.legend()
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
