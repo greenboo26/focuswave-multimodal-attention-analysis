@@ -1,0 +1,2 @@
+examples/formal_mmwave_sample_v1/*.npz filter=lfs diff=lfs merge=lfs -text
+examples/formal_mmwave_sample_v1/*.bin filter=lfs diff=lfs merge=lfs -text
