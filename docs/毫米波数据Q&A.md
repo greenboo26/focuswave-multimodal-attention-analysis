@@ -416,3 +416,20 @@ DebugTool 不认识 .npz                 不用关心文件头
 **与我们管线的差异**：他们 20Hz 慢时间采样（我们 100Hz），10s 窗口深度分析 + 心拍矩阵；我们 30s/60s 窗 + 窗级质量门。两者质量门思路一致（MAD 离群 + 生理范围 + 能量门控）。
 
 **建议落地顺序**：①SPC 定位评分（预实验定位竞争的针对性测试）→ ②Hampel 连续段替换进 IBI 清洗 → ③CEEMDAN 预分组（如 VMD 模态混叠在弱信号数据上实测有问题再做）。
+
+### Q：Corcoran 2025（Communications Biology）走神的心脏相关标志有哪些方法细节？
+
+**来源**: Corcoran, Le Coz, Hohwy, Andrillon, et al. When your heart isn't in it anymore: Cardiac correlates of task disengagement. Communications Biology, 2025, 8: 1646（共享文件夹 corcoran_2025_heart_cardiac.pdf；2024 bioRxiv 预印本）。N=65，SART + 探针 + EEG/ECG/瞳孔。
+
+**关键方法细节（与我们的分析直接相关）**:
+
+1. **走神 vs 大脑空白的生理解离**:
+   - **走神**: 更高的 HRV + 心跳诱发电位（HEP）晚期调制
+   - **空白**: 心率、瞳孔、脑-心耦合更显著下降（IBI 与低频 EEG 的互信息）
+   - 含义: 我们的探针 4 选项含"走神/大脑空白"——若正式实验标签多样, HRV（走神高）与 HR（空白低）可分离验证
+2. **窗长选择**: 状态报告分析用**探针前 10s 窗**（HR/HEP），其他分析用 30s 窗——支持我们 30s 窗合理, 并可补充 10s HR 窗做状态敏感性
+3. **心率预测行为**: IBI 更长（心率低）→ 警觉下降、反应更慢更偏; **HRV 高 → 更冲动行为**——与预实验 006 的 rmssd~rt 负相关方向一致（但预实验 Spearman 不显著）
+4. **脑-心耦合**: IBI 与 EEG 的 copula 归一化互信息, 带时间滞后（IBI 领先 EEG 50-800ms / EEG 领先 IBI 100-1600ms）——我们无 EEG, 但"呼吸-心率耦合"是毫米波可做的对应物
+
+**对我们的启示**: 生理-行为关联的研究设计（事件锚点+探针+多窗长）与我们的方向一致;
+"走神/空白解离"是正式实验有标签后最值得优先验证的假设。
