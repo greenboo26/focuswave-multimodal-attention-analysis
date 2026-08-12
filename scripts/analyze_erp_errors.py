@@ -31,10 +31,13 @@ from scipy import stats
 SCRIPT_DIR = Path(__file__).resolve().parent
 OUT_ROOT = SCRIPT_DIR.parent / "output" / "预实验"
 OUT_DIR = OUT_ROOT / "03_跨被试" / "09_预实验-事件相关"
-SUBJECTS = ["000", "001", "002", "003", "004", "005", "006", "007"]
+SUBJECTS = ["000", "003", "004", "005", "006", "007", "008", "009", "010"]
 WINDOW_SEC = 30.0          # 生理窗长（与 analyze_mmwave_full 一致）
 MIN_EVENTS = 5             # 被试级分析最少事件数
 METRICS = ["hr_bpm", "sdnn_ms", "rmssd_ms", "br_bpm"]
+# 伪影窗剔除: sub-010 快呼吸时呼吸 4-5 次谐波与环境中第二心跳源泄漏,
+# 产生 75-106bpm 假 HR 窗（2026-08-11 频谱验证）。真实静息 HR 49-62bpm。
+SUBJECT_HR_VALID = {"010": (40.0, 75.0)}
 
 
 def load_events(data_root: Path, subject: str) -> list[dict]:
@@ -79,7 +82,11 @@ def load_windows(subject: str) -> list[dict]:
     if not p.exists():
         return []
     d = json.load(open(p, encoding="utf-8"))
-    return [w for w in d["windows"] if w.get("quality") == "ok" and w.get("hr_bpm")]
+    ws = [w for w in d["windows"] if w.get("quality") == "ok" and w.get("hr_bpm")]
+    if subject in SUBJECT_HR_VALID:
+        lo, hi = SUBJECT_HR_VALID[subject]
+        ws = [w for w in ws if lo <= w["hr_bpm"] <= hi]
+    return ws
 
 
 def classify_windows(windows: list[dict], events: list[dict]) -> tuple[dict, dict]:
@@ -192,7 +199,8 @@ def main():
             print(f"sub-{sub}: 无可信窗, 跳过")
             continue
         ev_idx, context = classify_windows(windows, events)
-        n_comm, n_omis = len(ev_idx["comm"]), len(ev_idx["omis"])
+        # 按唯一窗计数（同窗多事件去重, 与 window_compare 内部一致）
+        n_comm, n_omis = len(set(ev_idx["comm"])), len(set(ev_idx["omis"]))
         print(f"sub-{sub}: 可信窗 {len(windows)}, commission {n_comm}, omission {n_omis}")
         sub_res = {"n_windows": len(windows), "n_comm": n_comm, "n_omis": n_omis,
                    "compare": {}, "response": {}}
