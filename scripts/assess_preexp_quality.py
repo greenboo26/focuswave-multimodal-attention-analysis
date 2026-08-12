@@ -64,7 +64,11 @@ IBI_OK_RATIO = 0.8      # 窗级可信 IBI 有效率下界
 PHASE_MOD_RAD = 0.01    # 10s 相位角度变化阈值 (rad)：低于此判静态目标
 POWER_RATIO_TARGET = 0.30  # 目标 bin 功率须 ≥ 最强 bin 的该比例（定位竞争判别）
 MAX_CAND_BINS = 6         # 每窗最多评估的候选 bin 数（多候选定位, 取 IBI 最优）
-MIN_TARGET_BIN = 8        # 人体目标距离下界 (bin ≈ 30cm)
+MIN_TARGET_BIN = 0        # 距离下界已取消。2026-08-12 实测: 下限 0 与 2 无差异
+                          # （000/003/rest_3min 质量一致, 无窗误选 DC bin),
+                          # 近场底噪与 DC bin 由相位方差/心跳合理性门控过滤。
+                          # 人体主瓣可落在近场带（000/004 型实测主瓣 bin 6）,
+                          # 原下界 bin 8 会把这类主瓣排除导致 no_target 误判
 MAX_TARGET_BIN = 45       # 人体目标距离上界 (bin ≈ 1.69m)，超出视为环境反射
 
 # 输出目录（相对 08_算法/output/）
