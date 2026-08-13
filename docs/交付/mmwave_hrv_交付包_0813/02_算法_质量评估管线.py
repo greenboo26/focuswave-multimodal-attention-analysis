@@ -1,41 +1,21 @@
 """
-assess_preexp_quality.py — 预实验毫米波心跳质量独立评估（文献标准流程）
-====================================================================
-版本: v1.0 (2026-08-10)
-功能: 对预实验被试（000-007 等）的毫米波 npz 分片数据做
-      窗口级心跳可测性评估，判定"有人且心跳可提取"的窗口比例，
-      作为全程 HR/HRV 与探针窗分析的前置质量门。
-
-方法（独立管线, 与 0810test 评估一致, 不沿用工作区旧管线）:
-  距离功率谱定位 → 相位方差人体判别（真实目标相位受呼吸/心跳
-  调制, 静态杂波相位静止）→ 相位 unwrap + 去趋势（静态杂波对消）
-  → 呼吸主频估计 → 呼吸谐波 iirnotch 陷波 → 心跳带 (0.8-2.5 Hz)
-  主频 + 窄带逐拍 → 窗级指标。
-
-指标:
-  SNR(dB)    = 心跳带主峰功率 / 带内噪声底（中位数功率）
-  频谱锐度   = 主峰 3dB 宽度内功率占比
-  IBI有效率  = IBI ∈ [300, 2000] ms 的间隔占比
-  定位漂移   = 前半窗与后半窗距离峰 bin 之差
-  相位调制   = 10s 相位角度变化（判别真实目标 vs 静态杂波）
-
-判定:
-  窗级: SNR ≥ 3 dB 且 IBI 有效率 ≥ 0.8 → ok（可信）
-  被试级: ok 比例 ≥ 70% 可信；≥ 30% 部分可信；< 30% 不可信
+毫米波心跳质量评估管线
+======================
+对雷达距离域复数数据做窗级心跳质量评估, 完整流程:
+  1. 距离-通道功率谱 → 距离门控内多候选 bin
+  2. 相位解缠+去趋势 → 相位调制判别（静态杂波 vs 真实目标）
+  3. 呼吸带提取 → 呼吸谐波陷波（含周期图谐波频点剔除）
+  4. 心跳带（0.8-2.5Hz）带通 → 主频/SNR → 窄带逐拍峰值 → IBI
+  5. 窗级判定: SNR ≥ 3dB 且 IBI 有效率 ≥ 0.8 → 可信
+  6. 按行为时间轴截断（任务开始到最后一个任务块结束）+
+     被试生理 HR 范围过滤呼吸谐波伪影
 
 用法:
-  cd 08_算法/scripts
-  python assess_preexp_quality.py --subject 000 --data-root F:/预实验
-  python assess_preexp_quality.py --subject 003 --data-root F:/预实验
-
-输出:
-  output/预实验/09_预实验-SUB{XXX}-QUALITY/
-    sub{XXX}_quality_detail.csv   ← 窗级结果
-    sub{XXX}_quality_summary.md   ← 汇总报告
-    sub{XXX}_quality_timeline.png ← 质量时间线图
+  python assess_preexp_quality.py --subject <编号> --data-root <数据目录>
 
 依赖: numpy, scipy, matplotlib
 """
+
 
 from __future__ import annotations
 
@@ -65,19 +45,12 @@ IBI_OK_RATIO = 0.8      # 窗级可信 IBI 有效率下界
 PHASE_MOD_RAD = 0.01    # 10s 相位角度变化阈值 (rad)：低于此判静态目标
 POWER_RATIO_TARGET = 0.30  # 目标 bin 功率须 ≥ 最强 bin 的该比例（定位竞争判别）
 MAX_CAND_BINS = 6         # 每窗最多评估的候选 bin 数（多候选定位, 取 IBI 最优）
-MIN_TARGET_BIN = 0        # 距离下界已取消。2026-08-12 实测: 下限 0 与 2 无差异
-                          # （000/003/rest_3min 质量一致, 无窗误选 DC bin),
-                          # 近场底噪与 DC bin 由相位方差/心跳合理性门控过滤。
-                          # 人体主瓣可落在近场带（000/004 型实测主瓣 bin 6）,
-                          # 原下界 bin 8 会把这类主瓣排除导致 no_target 误判
-MAX_TARGET_BIN = 45       # 人体目标距离上界 (bin ≈ 1.69m)。2026-08-13 实测:
-                          # 收紧到 20 对 010 无额外效果（谐波排除已解决伪影）,
-                          # 且破坏 003（96%→83%, 其远端目标被排除）→ 保持 45
-                          # (--max-bin 参数可按需收紧)
-HARM_N_MAX = 6            # 呼吸谐波陷波/排除的最高次数 (010: 4-5 次谐波落入心跳带)
-HR_JUMP_BPM = 20.0        # 生理连续性阈值: 相邻窗 HR 跳变超过该值判伪影 (15s 步进)
-SUBJECT_HR_VALID = {      # 被试生理 HR 范围 (bpm), 窗级过滤伪影 (010 高值窗为谐波伪影)
-    "010": (40.0, 75.0),
+MIN_TARGET_BIN = 0        # 距离搜索下界（近场主瓣型目标可落在低 bin）
+MAX_TARGET_BIN = 45       # 目标距离搜索上界 (bin ≈ 1.69m), 排除远端环境反射
+HARM_N_MAX = 6            # 呼吸谐波陷波/排除的最高次数（快呼吸 4-5 次谐波落入心跳带）
+HR_JUMP_BPM = 20.0        # 相邻窗 HR 跳变阈值 (备用, 默认不启用)
+SUBJECT_HR_VALID = {      # 按被试配置的生理 HR 范围 (bpm), 超出判呼吸谐波伪影
+    "示例编号": (40.0, 75.0),
 }
 
 # 输出目录（相对 08_算法/output/）
@@ -405,8 +378,8 @@ def _harmonic_exclude(pxx: np.ndarray, freqs: np.ndarray, br_freq: float | None,
                       width: float = 0.06) -> np.ndarray:
     """周期图谐波频点排除: 把呼吸谐波 ±width Hz 的频点置中位数。
 
-    010 伪影机制: 快呼吸 (20-24.5bpm) 的 4-5 次谐波落入心跳带 (0.8-2.5Hz),
-    单纯陷波 (iirnotch) 可能误陷真实心跳; 在主频检测层面排除谐波更稳。
+    快呼吸 (20-24.5bpm) 的 4-5 次谐波会落入心跳带 (0.8-2.5Hz),
+    单纯陷波可能误陷真实心跳; 在主频检测层面排除谐波更稳。
 
     参数:
         pxx: 周期图功率谱
@@ -498,9 +471,9 @@ def load_frames_by_time(mm_dir: Path, subject: str, frame_idx: np.ndarray,
 # ============================================================
 
 def main():
-    parser = argparse.ArgumentParser(description="预实验毫米波心跳质量独立评估")
+    parser = argparse.ArgumentParser(description="毫米波心跳质量评估")
     parser.add_argument("--subject", type=str, default="000", help="被试编号（如 000）")
-    parser.add_argument("--data-root", type=str, default="F:/预实验",
+    parser.add_argument("--data-root", type=str, default=".",
                         help="数据根目录, 含 sub-XXX_/ 子目录")
     parser.add_argument("--output-dir", type=str, default=None,
                         help="输出目录名（相对 output/）")
@@ -508,13 +481,13 @@ def main():
                         help="启用 SPC 相邻单元相位相干性定位排序（实验特性）")
     parser.add_argument("--max-bin", type=int, default=MAX_TARGET_BIN,
                         help=f"目标距离上界 bin (默认 {MAX_TARGET_BIN}; "
-                             f"010 伪影修复用 20 排除远端环境心跳源)")
+                             f"排除远端环境心跳源时收紧)")
     args = parser.parse_args()
 
     subject = args.subject.zfill(3)
     data_root = Path(args.data_root)
     mm_dir = data_root / f"sub-{subject}_" / "mmwave"
-    out_name = args.output_dir or f"预实验/01_质量评估/09_预实验-SUB{subject}-QUALITY"
+    out_name = args.output_dir or f"QUALITY-SUB{subject}"
     out_dir = OUTPUT_ROOT / out_name
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -571,10 +544,10 @@ def main():
                   f"SNR={res['snr_db']}dB HR={res['hr_bpm']}bpm "
                   f"IBI={res['ibi_ratio']}")
 
-    # ── 2b. 生理 HR 范围过滤 (2026-08-13 新增, 010 伪影修复) ──
-    # 仅对配置了 SUBJECT_HR_VALID 的被试启用 (010 高值窗 85-106bpm 为
-    # 呼吸谐波/环境第二源伪影)。不用相邻跳变检查: 003 等被试 HR 波动为真实
-    # 生理变化 (49-97bpm), 相邻比较会误杀。
+    # ── 2b. 生理 HR 范围过滤 ──
+    # 仅对配置了 SUBJECT_HR_VALID 的被试启用: 呼吸谐波/环境第二源伪影
+    # 表现为 HR 高值窗 (如 85-106bpm)。不用相邻跳变检查: 部分被试 HR
+    # 波动为真实生理变化, 相邻比较会误杀。
     hr_range = SUBJECT_HR_VALID.get(subject)
     n_hr_out = 0
     if hr_range is not None:
@@ -670,18 +643,10 @@ def _plot_timeline(rows, png_path, subject):
     ax = axes[0]
     ax.bar(ts, [r["snr_db"] if r["snr_db"] is not None else 0 for r in rows],
            width=0.2, color=colors, alpha=0.8)
-    ax.axhline(SNR_OK_DB, color="red", linestyle="--", linewidth=1)
-    # 图例: 红柱=可信窗, 灰柱=不可信窗, 红色虚线=SNR 阈值
-    from matplotlib.patches import Patch
-    from matplotlib.lines import Line2D
-    legend_items = [
-        Patch(color="#c0392b", label="可信窗"),
-        Patch(color="#95a5a6", label="不可信窗"),
-        Line2D([0], [0], color="red", linestyle="--", label=f"SNR 阈值 {SNR_OK_DB}dB"),
-    ]
-    ax.legend(handles=legend_items, loc="upper right", framealpha=0.9)
+    ax.axhline(SNR_OK_DB, color="red", linestyle="--", linewidth=1, label=f"SNR 阈值 {SNR_OK_DB}dB")
     ax.set_ylabel("SNR (dB)")
     ax.set_title(f"sub-{subject} 心跳质量时间线（可信窗={sum(1 for r in rows if r['ok'])}）")
+    ax.legend()
     ax.grid(True, alpha=0.3)
 
     ax = axes[1]

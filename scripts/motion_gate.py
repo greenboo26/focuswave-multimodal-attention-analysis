@@ -5,7 +5,7 @@ motion_gate.py — 摄像头运动量前置质量门（正式实验可复用工�
 功能: 从 NIR/RGB 视频提取 1Hz 运动量序列, 为毫米波 30s 窗标记
       运动伪影（运动量 > 被试内 P90 的窗标记为伪影）。
       依据: 预实验 6/6 被试显著发现（d 中位 -0.90, 见
-      docs/摄像头毫米波融合门控方案.md）。
+      docs/方案/摄像头毫米波融合门控方案.md）。
 用法:
   cd 08_算法/scripts
   python motion_gate.py --subject 007 --data-root F:/预实验 \

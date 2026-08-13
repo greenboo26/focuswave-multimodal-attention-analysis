@@ -57,6 +57,8 @@ DATA_ROOT = Path("E:")  # 数据根目录（原 F: 盘数据已迁移至 E: 根�
                         # 预实验数据传 E:\预实验（--data-root 覆盖）
 MMWAVE_DIR = DATA_ROOT / f"sub-{SUBJECT}_" / "mmwave"
 BEH_DIR = DATA_ROOT / f"sub-{SUBJECT}_" / "beh"
+# 被试生理 HR 范围 (bpm), 窗级过滤呼吸谐波伪影 (010 高值窗 85-106bpm)
+SUBJECT_HR_VALID = {"010": (40.0, 75.0)}
 OUTPUT_DIR = Path(rf"D:\Project\厚粲杯\08_算法\output\08_旧批次-SUB{SUBJECT}-FULL")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -219,9 +221,18 @@ def main():
     print(f"[1/5] 帧 {frame_idx[0]}-{frame_idx[-1]} ({len(frame_idx)} 帧), "
           f"试次 {len(trials)}, 探针 {n_probe}")
 
-    # 全程时间范围（mmwave 数据覆盖范围）
+    # 全程时间范围（严格按行为时间轴: sart_start → 最后 block_stop,
+    # 排除实验开始前 cover/instructions/practice 与结束后结束界面停留）
     t_start_ms = int(py_ms[0])
     t_end_ms = int(py_ms[-1])
+    span_start, span_end = rhrv.load_behavior_span(DATA_ROOT / f"sub-{SUBJECT}_")
+    if span_start is None:
+        print("  ⚠️ 未找到 master_timeline.csv, 使用全量数据 (可能混入实验前后)")
+    else:
+        t_start_ms = max(t_start_ms, span_start)
+        t_end_ms = min(t_end_ms, span_end)
+        print(f"  [行为轴截断] 分析范围: {(t_start_ms - py_ms[0]) / 1000:.0f}s → "
+              f"{(t_end_ms - py_ms[0]) / 1000:.0f}s")
     n_win = int((t_end_ms - t_start_ms) / (WINDOW_SEC * 1000))
 
     # 排除休息段时间范围（被试不在座位, 空场景数据无效）
@@ -304,8 +315,17 @@ def main():
             w["heart_bin"] = res[1]["bin"]
             w["harmonics_corrected"] = True
             n_w_corrected += 1
+    # HR 生理范围过滤 (010 等被试呼吸谐波伪影: HR>75 窗剔除, 与质量评估一致)
+    hr_range = SUBJECT_HR_VALID.get(SUBJECT)
+    n_hr_out = 0
+    if hr_range is not None:
+        for w in windows:
+            if w["quality"] == "ok" and w.get("hr_bpm"):
+                if not (hr_range[0] <= w["hr_bpm"] <= hr_range[1]):
+                    w["quality"] = "hr_out_of_range"
+                    n_hr_out += 1
     print(f"  可信窗: {sum(1 for w in windows if w['quality'] == 'ok')}/{len(windows)}"
-          f"（段参考修正救回 {n_w_corrected} 窗）")
+          f"（段参考修正救回 {n_w_corrected} 窗, HR 伪影剔除 {n_hr_out} 窗）")
 
     # ── 4. 探针前 30s 特征（窗级自适应 + 段参考修正） ──
     print(f"[4/5] 探针前 {PROBE_BEFORE_MS // 1000}s 窗特征（两遍: 正常 → 段参考修正）...")

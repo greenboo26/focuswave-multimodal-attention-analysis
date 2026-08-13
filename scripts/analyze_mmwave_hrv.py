@@ -76,8 +76,10 @@ BEH_TIMELINE = DATA_ROOT / f"sub-{SUBJECT}_" / "beh" / "master_timeline.csv"
 OUTPUT_DIR = Path(rf"D:\Project\厚粲杯\08_算法\output\08_旧批次-SUB{SUBJECT}-REST-HRV")
 
 # 分析参数
-WINDOW_SEC = 60            # 每窗时长（秒），60s 保证 LF/HF 频域分辨率
-N_WINDOWS = 3              # 每休息段切窗数（0-60 / 60-120 / 120-180s）
+WINDOW_SEC = 30            # 每窗时长（秒）。2026-08-13: 60s→30s, 与全程窗管线一致;
+                           # 60s 长窗下候选收集的相位方差/幅度 CV 条件失效（呼吸累积
+                           # 漂移+坐姿微调累积）致 46% 窗被误拒, 30s 窗同段 86% 可信
+N_WINDOWS = 6              # 每休息段最多切窗数（30s×6=180s, 段尾不足 30s 自动跳过）
 METHOD = "vmd_heart"       # 分离方法（当前主线: 心跳 VMD, 呼吸 bp）
 CHUNK = 1000               # 每 npz 片帧数（与采集写入一致）
 HRV_RS_FS = 4.0            # HRV 频域重采样率 (Hz), Task Force 1996 建议 2-4 Hz
@@ -142,6 +144,35 @@ def parse_rest_segments():
                 })
                 pending_stop = None
     return segments
+
+
+def load_behavior_span(subject_dir=None):
+    """读 master_timeline.csv 取任务数据起止时间 (unix_ms)。
+
+    严格按行为时间轴截断: 任务数据 = sart_start → 最后 block_stop,
+    排除实验开始前 (cover/instructions/practice) 与结束后 (结束界面停留)
+    的雷达数据。找不到时间轴返回 (None, None) (调用方全量+警告)。
+
+    参数:
+        subject_dir: sub-XXX_ 目录 (含 beh/master_timeline.csv);
+                     None 时用模块全局 DATA_ROOT 推导
+    返回:
+        (sart_start_ms, last_block_stop_ms), 缺失项为 None
+    """
+    if subject_dir is None:
+        subject_dir = BEH_TIMELINE.parent.parent if hasattr(BEH_TIMELINE, "parent") else None
+    tl = subject_dir / "beh" / "master_timeline.csv"
+    if tl is None or not tl.exists():
+        return None, None
+    sart_start = None
+    last_block_stop = None
+    with open(tl, encoding="utf-8-sig") as f:
+        for row in csv.DictReader(f):
+            if row.get("event") == "sart_start":
+                sart_start = int(row["unix_ms"])
+            elif row.get("event") == "block_stop":
+                last_block_stop = int(row["unix_ms"])
+    return sart_start, last_block_stop
 
 
 def load_timestamps():
@@ -223,46 +254,62 @@ def detect_motion_frames(iq, mad_k=5.0):
     return motion, float(np.mean(motion))
 
 
-def collect_candidates(iq, max_candidates=MAX_CANDIDATES):
-    """窗内收集幅度稳定的候选 (ch, bin)。
+def spc_score(iq, ch, b, radius=2):
+    """相邻距离单元相位相干性（SPC, 空间相位相干）。
 
-    过滤规则（与 select_bins_from_profile 一致）: 功率高于峰值 1%、
-    相位方差合理（真实点目标, 排除纯噪声）、幅度 CV < 15%（排除闪烁伪影）。
+    文献判据（UESTC Optimizing SNR 等）: 胸腔反射覆盖相邻 bin,
+    生命体征单元与邻居的相位差分相关高; 纯噪声 bin 相邻相位不相关。
+    与距离/SNR 解耦, 替代固定相位方差阈值（后者随距离失效）。
+
+    参数:
+        iq: (n, 256, 8) 窗数据
+        ch: 通道索引
+        b: 候选 bin
+        radius: 相邻半径（bin）
+    返回:
+        SPC 评分（与 ±radius bin 相位差分的最大 |r|, 0-1）
+    """
+    pd = np.diff(np.unwrap(np.angle(iq[:, b, ch])))
+    rs = []
+    for nb in range(max(0, b - radius), min(iq.shape[1], b + radius + 1)):
+        if nb == b:
+            continue
+        pd2 = np.diff(np.unwrap(np.angle(iq[:, nb, ch])))
+        r = stats.pearsonr(pd, pd2)[0]
+        rs.append(abs(r) if r == r else 0.0)
+    return max(rs) if rs else 0.0
+
+
+def collect_candidates(iq, max_candidates=MAX_CANDIDATES):
+    """窗内收集候选 (ch, bin), 按 SPC 空间相位相干排序。
+
+    过滤规则（2026-08-13 修订, 文献依据）: 功率高于峰值 1%、
+    距离门控、幅度 CV < 30%（闪烁伪影）; 弃用固定相位方差阈值
+    （phi_var 随距离/SNR 剧烈变化, 人体 bin 实测 70 会超 50 上限误拒）,
+    改用 SPC 排序取前 max_candidates。
 
     Returns:
-        list[tuple]: [(ch, bin), ...]，按功率降序
+        list[tuple]: [(ch, bin), ...]，按 SPC 降序
     """
     power = np.mean(np.abs(iq) ** 2, axis=0)  # (256, 8)
-    cands = []
-    for cv_amp_max in (0.15, 0.30):
-        # 两轮收集: 第一轮严格（幅度稳定 bin）; 若为空, 放宽到 0.30
-        # （休息段存在运动/幅度波动时, 严格过滤会清空候选, 原段级版本
-        #   靠"退回 SNR 排序"兜底, 这里用放宽阈值代替）
-        for ch in range(N_CH):
-            bin_power = power[:, ch]
-            thresh = np.max(bin_power) * 0.01
-            order = np.argsort(bin_power)[::-1]
-            for b in order:
-                if bin_power[b] < thresh:
-                    break
-                # 距离门控: 排除人体距离范围外的 bin（环境反射误判心跳）。
-                # npz 裁剪后 b 是相对索引, 需加 BIN_OFFSET 换算回全局 bin
-                global_bin = b + BIN_OFFSET
-                if not (MIN_TARGET_BIN <= global_bin <= MAX_TARGET_BIN):
-                    continue
-                phi = np.unwrap(np.angle(iq[:, b, ch]))
-                phi_var = np.var(phi)
-                if not (0.1 < phi_var < 50):
-                    continue
-                mag = np.abs(iq[:, b, ch])
-                if np.std(mag) / (np.mean(mag) + 1e-12) >= cv_amp_max:
-                    continue
-                cands.append((int(ch), int(b)))
-                if len(cands) >= max_candidates:
-                    return cands
-        if cands:
-            break
-    return cands
+    raw = []
+    for ch in range(N_CH):
+        bin_power = power[:, ch]
+        thresh = np.max(bin_power) * 0.01
+        for b in range(len(bin_power)):
+            if bin_power[b] < thresh:
+                continue
+            # 距离门控: 排除人体距离范围外的 bin（环境反射误判心跳）
+            global_bin = b + BIN_OFFSET
+            if not (MIN_TARGET_BIN <= global_bin <= MAX_TARGET_BIN):
+                continue
+            mag = np.abs(iq[:, b, ch])
+            if np.std(mag) / (np.mean(mag) + 1e-12) >= 0.30:
+                continue
+            raw.append((int(ch), int(b)))
+    # SPC 排序取 top N（文献判据, 与距离解耦）
+    scored = sorted(raw, key=lambda cb: spc_score(iq, cb[0], cb[1]), reverse=True)
+    return scored[:max_candidates]
 
 
 def evaluate_heart_bin(iq, ch, b):
@@ -453,6 +500,34 @@ def detect_heart_peaks_narrowband(heartbeat, hr_freq):
     return np.array(peaks_list, dtype=int)
 
 
+def _ibi_continuity_filter(ibi_ms, max_jump_ms=250):
+    """相邻 IBI 生理连续性过滤（文献标准做法: 心率不会瞬间跳变）。
+
+    迭代剔除与前后相邻 IBI 差都超过 max_jump_ms 的孤立异常
+    （漏检/误检峰导致）。参考 R-peak 检测后处理的常规生理约束。
+
+    参数:
+        ibi_ms: IBI 序列 (ms)
+        max_jump_ms: 相邻跳变上限 (ms), 静息心率 50-100bpm 对应
+                     IBI 600-1200ms, 250ms 跳变 ≈ 40-50% 瞬时变化
+    返回:
+        np.ndarray: 过滤后的 IBI 序列
+    """
+    ibi = np.asarray(ibi_ms, dtype=float)
+    if len(ibi) < 3:
+        return ibi
+    for _ in range(3):
+        if len(ibi) < 3:
+            break
+        prev_diff = np.abs(np.diff(ibi, prepend=ibi[0]))
+        next_diff = np.abs(np.diff(ibi, append=ibi[-1]))
+        bad = (prev_diff > max_jump_ms) & (next_diff > max_jump_ms)
+        if not bad.any():
+            break
+        ibi = ibi[~bad]
+    return ibi
+
+
 def analyze_window(disp_br, disp_hr, method="vmd_heart", hr_freq_hint=None):
     """对单窗位移信号做分离、峰值检测、体征估计（含 HRV 时域+频域）。
 
@@ -498,14 +573,19 @@ def analyze_window(disp_br, disp_hr, method="vmd_heart", hr_freq_hint=None):
     # 窄带逐拍检测
     hp = detect_heart_peaks_narrowband(heartbeat, hr_freq)
 
-    # HRV: 时域 + 频域（60s 窗, 频域可分辨 LF/HF）
+    # HRV: 时域 + 频域
     hrv = {}
     if len(hp) >= 5:
         ibi_ms = np.diff(hp) / FS * 1000
         ibi_clean = ibi_ms[(ibi_ms >= 300) & (ibi_ms <= 2000)]
+        # 生理连续性过滤（文献标准做法）: 相邻 IBI 跳变 >250ms 的孤立异常剔除
+        # （心率不会瞬间跳变, 此类 IBI 为漏检/误检峰导致）
+        ibi_clean = _ibi_continuity_filter(ibi_clean, max_jump_ms=250)
         if len(ibi_clean) >= 5:
             hrv = compute_hrv_time(ibi_clean)
-            hrv["frequency"] = compute_hrv_frequency(ibi_clean)
+            # 频域仅长窗计算（LF 0.04-0.15Hz 需 ≥120s 窗才有分辨率）
+            if len(disp_hr) / FS >= 120:
+                hrv["frequency"] = compute_hrv_frequency(ibi_clean)
             # 非线性特征挂 IBI 序列（供窗级 SampEn/DFA 扩展, v1.4+）
             hrv["ibi_ms"] = ibi_clean.tolist()
 
@@ -573,18 +653,22 @@ def main():
         fb = min(fb, len(frame_idx) - 1)
         frame_fa = int(frame_idx[fa])
         frame_fb = int(frame_idx[fb])
-        # 窗边界（帧号, 按实际采样率换算）
-        n_win = int(WINDOW_SEC * FS)
-        win_edges = [frame_fa + k * n_win for k in range(N_WINDOWS + 1)]
-        win_edges[-1] = min(win_edges[-1], frame_fb)
-        n_use = win_edges[-1] - frame_fa
+        # 窗切分: 30s 窗 × 15s 步进（与全程窗管线完全一致, 重叠窗增加覆盖）
+        step_frames = int(15 * FS)
+        win_frames = int(WINDOW_SEC * FS)
+        n_win_max = max(1, int((frame_fb - frame_fa - win_frames) / step_frames) + 1)
+        n_use = frame_fb - frame_fa
         print(f"\n  {seg['label']}: 帧 {frame_fa}-{frame_fb} "
-              f"({n_use / FS:.0f}s / {seg['rest_s']}s 可用)")
+              f"({n_use / FS:.0f}s / {seg['rest_s']}s 可用, 最多 {n_win_max} 窗)")
 
-        # 逐窗分析（每窗独立选 bin）
-        for k in range(N_WINDOWS):
-            f0k, f1k = win_edges[k], win_edges[k + 1]
-            if f1k - f0k < 30 * FS:  # 窗太短（<30s）则跳过
+        # 逐窗分析（第一遍正常检测）
+        seg_rows = []
+        for k in range(n_win_max):
+            f0k = frame_fa + k * step_frames
+            f1k = f0k + win_frames
+            if f1k > frame_fb:  # 窗超出段尾则跳过
+                break
+            if f1k - f0k < 15 * FS:  # 窗太短（<15s）则跳过
                 continue
             iq = load_frames(f0k, f1k)
             win_res = analyze_window_auto(iq, method=METHOD)
@@ -594,23 +678,51 @@ def main():
             if win_res is None:
                 row["quality"] = "poor"
                 row["reason"] = "无合格心跳 bin（运动伪影或信号差）"
-                all_rows.append(row)
-                print(f"      win{k+1} ({row['t_start_s']}-{row['t_end_s']}s): "
-                      f"[不可信] 无合格心跳 bin")
+                seg_rows.append(row)
                 continue
             res, hr_bin, br_bin = win_res
             row.update(res)
             row["heart_bin"] = hr_bin
             row["breath_bin"] = br_bin
+            seg_rows.append(row)
+
+        # 段参考修正（与全程窗一致）: ok 窗 HR 中位 → poor 窗重检
+        ref_hrs = [r.get("hr_time_bpm") for r in seg_rows
+                   if r.get("quality") == "ok" and r.get("hr_time_bpm")]
+        med_hr_seg = float(np.median(ref_hrs)) if ref_hrs else None
+        n_corrected = 0
+        if med_hr_seg is not None:
+            for k, r in enumerate(seg_rows):
+                if r.get("quality") == "ok":
+                    continue
+                f0k = frame_fa + k * step_frames
+                f1k = f0k + win_frames
+                if f1k > frame_fb:
+                    continue
+                iq = load_frames(f0k, f1k)
+                win_res = analyze_window_auto(iq, method=METHOD, med_hr_hint=med_hr_seg)
+                if win_res is not None:
+                    res, hr_bin, br_bin = win_res
+                    r.update(res)
+                    r["heart_bin"] = hr_bin
+                    r["breath_bin"] = br_bin
+                    r["harmonics_corrected"] = True
+                    n_corrected += 1
+
+        for row in seg_rows:
             all_rows.append(row)
-            hrv = res["hrv"]
-            hrv_s = (f"SDNN={hrv['SDNN_ms']}ms RMSSD={hrv['RMSSD_ms']}ms "
-                     f"LF={hrv['frequency']['LF_ms2']} HF={hrv['frequency']['HF_ms2']} "
-                     f"LF/HF={hrv['frequency']['LF_HF']}") if hrv else "峰值不足"
-            print(f"      win{k+1} ({row['t_start_s']}-{row['t_end_s']}s): "
-                  f"HR={res['hr_time_bpm']}bpm [ch{hr_bin['ch']}/bin{hr_bin['bin']}, "
-                  f"CV={hr_bin['cv']}] {hrv_s}")
-        print(f"      [耗时 {time_mod.time() - t_seg:.0f}s]")
+            if row.get("quality") == "poor":
+                print(f"      win{row['window']} ({row['t_start_s']}-{row['t_end_s']}s): "
+                      f"[不可信] {row.get('reason')}")
+            else:
+                hrv = row.get("hrv", {})
+                hrv_s = f"SDNN={hrv.get('SDNN_ms')}ms RMSSD={hrv.get('RMSSD_ms')}ms"
+                if "frequency" in hrv and hrv["frequency"]:
+                    hrv_s += (f" LF={hrv['frequency']['LF_ms2']} "
+                              f"HF={hrv['frequency']['HF_ms2']} LF/HF={hrv['frequency']['LF_HF']}")
+                print(f"      win{row['window']} ({row['t_start_s']}-{row['t_end_s']}s): "
+                      f"HR={row.get('hr_time_bpm')}bpm {hrv_s}")
+        print(f"      [段参考修正救回 {n_corrected} 窗, 耗时 {time_mod.time() - t_seg:.0f}s]")
 
     # ── 4. 聚合统计: 可信窗的每窗均值 ± SE ──
     print("\n[4/5] 跨段聚合（均值 ± SE, 仅 quality=ok 窗）...")

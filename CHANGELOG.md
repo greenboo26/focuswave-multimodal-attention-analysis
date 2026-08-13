@@ -6,6 +6,65 @@
 
 ---
 
+## 2026-08-14 — v1.7 问卷×行为×主程序三方对照 + 外部金标准数据集验证
+
+### 背景
+
+预实验答卷（7 人）需与 J 盘行为数据（11 人）及 FocusWave 主程序实现三方对照，找出
+主观报告与客观数据的偏差来源；同时引入两个外部公开数据集（phish-tech TI 原始 ADC、
+Zenodo 60GHz AgeBalanced 110 人 ECG 金标准）验证处理链路的跨设备可用性与金标准精度，
+补上"HRV 验证必须 ECG"的缺口。
+
+### 改动
+
+- **问卷合并与三方对照报告**：`scripts/merge_preexp_surveys_0813.py`（v3 版 3 人补编号
+  001-003 与 v4 版 004-007 合并）、`docs/报告/预实验问卷深入分析_结合主程序_0813.md`
+- **序列规律双重实锤**：formal_A/B/C 均为 18 试次 cycle 机械重复 ×12，no-go 间隔
+  完全固定（A=4/5、B=9、C=18），B 条件柠檬后 100% 接苹果；7/7 被试自报发现规律
+- **判定逻辑审计**：commission/omission 响应窗口含掩蔽期（1150ms），74% 的
+  commission 是掩蔽期节奏性按键（掩蔽后段 32 次预按的下一试次 100% 是 GO）；
+  修正口径（仅刺激期 rt≤250ms）后条件效应 A 9.8% > C 4.2% > B 2.4%，个体模式
+  与问卷自述吻合（002 紧张/疲倦、005 干扰窗、007 最后一轮）
+- **时间戳规范澄清**：CSV 第 2 列（DLL 固件时戳，间隔中位 10.0ms）用于帧内时间轴，
+  第 3 列（Python 回调，抖动大）仅用于跨模态对齐；写入 `docs/决策/规范备忘.md`
+- **生命体征逐步图**：`scripts/plot_vitalsign_pipeline_0813.py`（静态杂波去除 + 3D mesh +
+  带内功率选门 + SOS 窄带滤波，支持 --mesh-only / --all）；修复 IIR 低频窄带
+  滤波数值爆炸（b/a → SOS）与噪声门误选（幅度阈值排除）
+- **外部金标准验证管线**：`scripts/validate_external_gold_0814.py`（25s 窗 5s 步长时频
+  融合 + quality 门控 + 谐波判别 + 金标准对比）；`scripts/analyze_external_heartbeat_0814.py`
+  （TI 原始 ADC 解析，10 文件全跑通）
+- **三项 A/B（见优化决策记录实验 35）**：T 波剔除（金标准 R 峰 26% 误检修复）、
+  HPS 谐波乘积谱（2 倍锁定 32→4，保留）、时间轨迹连续性（保留）、呼吸谐波
+  固定陷波（净负收益回退，v9 模拟验证的边界条件补全）
+
+### 验证
+
+- 外部金标准（220 会话）：总体 MAE 中位 9.5 BPM，quality 分层有效（high 1.6 /
+  med 3.4 / low 10.1 BPM），2 倍锁定 4/1188 窗、半频锁定 0
+- 跨设备：phish-tech TI 原始 ADC（4MHz/20Hz 快慢时间，与 POSSUMIC 完全不同格式）
+  直接跑通，10 文件输出生理合理范围
+- 行为数据：11 人时间轴与问卷提交时间交叉验证全部吻合（含双设备并行实验发现）
+
+### 涉及文件
+
+- `scripts/merge_preexp_surveys_0813.py`、`scripts/analyze_preexp_behavior_0813.py`（J 盘 11 人）
+- `scripts/plot_vitalsign_pipeline_0813.py`、`scripts/validate_external_gold_0814.py`、
+  `scripts/analyze_external_heartbeat_0814.py`
+- `docs/报告/预实验问卷深入分析_结合主程序_0813.md`
+- `docs/决策/规范备忘.md`（时间戳规范）、`docs/决策/优化决策记录.md`（实验 35）
+- 数据：`11_数据/外部数据集_AgeBalanced_60GHz/`（110 人）、
+  `11_数据/外部数据集_mmWave_Heartbeat/`（TI gby 批次）
+- 一敏 v3.1 结果归档（心率时序改进，25s 窗 5s 步长时频融合 + 2:1 谐波修正 +
+  quality 门控；raw/replay 双跑可复现）：
+  - `output/旧实验/08_旧批次-DEEP-BREATH/v3_1/`（raw + replay）
+  - `output/旧实验/08_旧批次-REST-3min/v3_1/`（raw + replay）
+  - `output/旧实验/08_旧批次-SXQ-47min/v3_1/`（raw + replay）
+  - 报告：`docs/报告/v3.1心率时序改进与验证报告.md`
+  - 验证：rest_3min 100% 高质量窗（HR 91.7±1.7）；sxq/deep-breath 约 52% 高质量窗，
+    使用需按 `quality != low` 筛选；HRV 需另行建立带质量门控的 NN 间期序列
+
+---
+
 ## 2026-08-11 — v1.6 自主优化夜（31 项实验 + 摄像头-毫米波融合门控）
 
 ### 背景
