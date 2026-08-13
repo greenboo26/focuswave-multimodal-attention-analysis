@@ -53,7 +53,7 @@
     ↓ 窄带逐拍检测 + IBI → HR / BR / HRV（时域+频域）
 ```
 
-信号分离方法演进 v1-v8 与分析架构演进 v1.1→v1.4 见 `docs/CHANGELOG.md`（v6/v7/v8 为 v5 失败分支，已归档）。
+信号分离方法演进 v1-v8 与分析架构演进 v1.1→v1.4 见 `CHANGELOG.md`（v6/v7/v8 为 v5 失败分支，已归档）。
 
 ## 用法
 
@@ -84,7 +84,7 @@ python analyze_deep_breath.py
 ## 依赖
 
 ```bash
-pip install -r docs/requirements.txt
+pip install -r requirements.txt
 ```
 
 | 库 | 状态 | 用途 |
@@ -104,4 +104,4 @@ pip install -r docs/requirements.txt
 ## 可追溯
 
 - 图 → 脚本 → 版本对应：`01_管理/图表索引.md`（仓库外，项目根目录）
-- 算法版本演进与修改记录：`docs/CHANGELOG.md`
+- 算法版本演进与修改记录：`CHANGELOG.md`
