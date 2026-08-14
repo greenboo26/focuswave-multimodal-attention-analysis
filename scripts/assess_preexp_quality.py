@@ -648,6 +648,9 @@ def main():
         "",
         "窗级判定: SNR ≥ 3dB 且 IBI 有效率 ≥ 0.8 → 可信。",
         "",
+        f"> 注意: quality_detail.csv 含全部 {len(rows)} 窗（含被剔除窗, ok=False 列标记原因）; "
+        "本汇总的 HR/SNR 中位数与可信率均只统计可信窗（ok=True）。",
+        "",
     ]
     md_path.write_text("\n".join(md_lines), encoding="utf-8")
     print(f"  [md] {md_path}")
