@@ -66,6 +66,7 @@ WINDOW_SEC = 30        # 全程时间线窗长（秒），30s 保证 HR/BR 稳�
 PROBE_BEFORE_MS = 30_000   # 探针前特征窗（毫秒）
 PROBE_RT_N = 5             # 探针前最近 N 个 go 试次的行为特征
 PROBE_LABELS = {"1": "专注", "2": "任务相关干扰", "3": "走神", "4": "大脑空白"}
+RT_PREEMPT_MS = 150    # 预判按键阈值: RT<150ms 不可能为真实视觉反应 (8-13 定调, 数据分型不改设计)
 
 
 # ============================================================
@@ -161,17 +162,25 @@ def analyze_fixed_bin(iq, hr_ch, hr_bin, br_ch, br_bin, method="vmd_heart"):
 def window_behavior(trials, t0_ms, t1_ms):
     """聚合落在 [t0_ms, t1_ms) 内试次的行为指标。
 
-    返回 dict: n_trials / n_err / rt_mean / rt_sd；无试次时 rt 为 None。
+    RT<150ms 判预判按键（真视觉反应不可能 <150ms, 8-13 定调）:
+      rt_mean/rt_sd 只用真反应（RT≥150）; preempt_rate = 预判比例,
+      单独作为自动化指标（Block 内上升 = SART 规律→自动化→走神信号）。
+
+    返回 dict: n_trials / n_err / rt_mean / rt_sd / preempt_rate；
+    无试次时 rt 为 None。
     """
     in_win = [t for t in trials if t0_ms <= t["onset_ms"] < t1_ms]
     if not in_win:
-        return {"n_trials": 0, "n_err": 0, "rt_mean": None, "rt_sd": None}
-    rts = [t["rt"] for t in in_win if t["rt"] is not None]
+        return {"n_trials": 0, "n_err": 0, "rt_mean": None, "rt_sd": None, "preempt_rate": None}
+    rts_all = [t["rt"] for t in in_win if t["rt"] is not None]
+    rts = [r for r in rts_all if r >= RT_PREEMPT_MS]
+    n_preempt = len(rts_all) - len(rts)
     return {
         "n_trials": len(in_win),
         "n_err": sum(1 for t in in_win if not t["correct"]),
         "rt_mean": round(float(np.mean(rts)), 1) if rts else None,
         "rt_sd": round(float(np.std(rts)), 1) if len(rts) > 1 else None,
+        "preempt_rate": round(n_preempt / len(rts_all), 3) if rts_all else None,
     }
 
 
@@ -365,7 +374,9 @@ def main():
                "label_name": PROBE_LABELS.get(t["probe_response"], "?")}
         prior_go = [x for x in trials
                     if x["onset_ms"] < t["probe_onset_ms"] and x["rt"] is not None and not x["is_probe"]][-PROBE_RT_N:]
-        row["prior_rt_mean"] = round(float(np.mean([x["rt"] for x in prior_go])), 1) if prior_go else None
+        row["prior_rt_mean"] = round(
+            float(np.mean([x["rt"] for x in prior_go if x["rt"] is not None and x["rt"] >= RT_PREEMPT_MS])), 1
+        ) if any(x["rt"] is not None and x["rt"] >= RT_PREEMPT_MS for x in prior_go) else None
         row["prior_n_err"] = sum(1 for x in prior_go if not x["correct"])
         if iq is None:
             row["quality"] = "poor"
@@ -399,7 +410,8 @@ def main():
     corrs = {}
     for m1, m2 in [("hr_bpm", "rt_mean"), ("hr_bpm", "rt_sd"),
                    ("sdnn_ms", "rt_mean"), ("rmssd_ms", "rt_mean"),
-                   ("br_bpm", "rt_mean"), ("sdnn_ms", "n_err")]:
+                   ("br_bpm", "rt_mean"), ("sdnn_ms", "n_err"),
+                   ("sdnn_ms", "preempt_rate"), ("rmssd_ms", "preempt_rate")]:
         pairs = [(w[m1], w[m2]) for w in ok_w
                  if w.get(m1) is not None and w.get(m2) is not None]
         if len(pairs) >= 10:
@@ -476,18 +488,24 @@ def plot_probe_compare(probe_rows, png_path):
     ok = [p for p in probe_rows if p["quality"] == "ok"]
     if not ok:
         return
-    labels = sorted({p["label"] for p in ok}, key=lambda x: int(x))
+    labels = ["1", "2", "3", "4"]  # 固定 4 类, 无数据类标注 n=0（标签偏斜时防误读为空图）
     fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
 
     for ax, key, ylab in [
         (axes[0], "hr_bpm", "HR (bpm)"),
         (axes[1], "prior_rt_mean", "探针前 RT 均值 (ms)"),
     ]:
-        for lab in labels:
+        for lab in labels:  # 先画有数据的类
             vals = [p[key] for p in ok if p["label"] == lab and p.get(key) is not None]
             if vals:
                 ax.scatter([PROBE_LABELS[lab]] * len(vals), vals, alpha=0.6, s=40)
                 ax.plot([PROBE_LABELS[lab]], [np.mean(vals)], "D", color="red", markersize=7)
+        ymax = ax.get_ylim()[1] if ax.get_ylim()[1] else 1.0
+        for lab in labels:  # 再标无数据类
+            vals = [p[key] for p in ok if p["label"] == lab and p.get(key) is not None]
+            if not vals:
+                ax.text(PROBE_LABELS[lab], ymax, "n=0", ha="center", va="bottom",
+                        color="gray", fontsize=9)
         ax.set_ylabel(ylab)
         ax.set_title(ylab)
         ax.grid(True, alpha=0.3)

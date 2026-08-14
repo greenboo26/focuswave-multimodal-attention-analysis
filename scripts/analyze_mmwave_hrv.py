@@ -801,15 +801,14 @@ def plot_trajectory(rows, agg, png_path):
     plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DengXian"]
     plt.rcParams["axes.unicode_minus"] = False
 
+    # 30s 窗不做频域 LF/HF（Task Force 1996: LF 最低 0.04Hz=25s/周期,
+    # 30s 窗频谱分辨率不足）——只画时域三面板, 频域面板已删（2026-08-14）
     panels = [
         ("hr_time_bpm", "HR (bpm)", "心率"),
         ("SDNN_ms", "SDNN (ms)", "时域"),
         ("RMSSD_ms", "RMSSD (ms)", "时域"),
-        ("LF_ms2", "LF (ms²)", "频域"),
-        ("HF_ms2", "HF (ms²)", "频域"),
-        ("LF_HF", "LF/HF", "频域"),
     ]
-    fig, axes = plt.subplots(2, 3, figsize=(14, 8))
+    fig, axes = plt.subplots(1, 3, figsize=(15, 4.8))
     xs = [r["window"] for r in agg["windows"]]
     for ax, (m, ylabel, kind) in zip(axes.flat, panels):
         # 个体线
@@ -826,13 +825,21 @@ def plot_trajectory(rows, agg, png_path):
         for seg, d in per_seg.items():
             if len(d) >= 2:
                 w = sorted(d)
-                ax.plot(w, [d[k] for k in w], "o-", alpha=0.25, markersize=3, linewidth=0.8)
+                ax.plot(w, [d[k] for k in w], "o-", alpha=0.25, markersize=3,
+                        linewidth=0.8, label="休息段个体线" if seg == min(per_seg) else None)
         # 聚合均值 ± SE
         pts = agg["metrics"].get(m, [])
         if pts:
             ax.errorbar([p["window"] for p in pts], [p["mean"] for p in pts],
                         yerr=[p["se"] for p in pts], fmt="D-", color="red",
-                        capsize=4, markersize=6, linewidth=1.5)
+                        capsize=4, markersize=6, linewidth=1.5, label="均值±SE")
+        if ax.get_legend_handles_labels()[1]:
+            ax.legend(loc="upper right", fontsize=7)
+        if not pts and not any(per_seg.values()):
+            # 无数据面板必须标注原因, 防误读为空白图
+            ax.text(0.5, 0.5, "无数据\n（30s 窗不做频域 LF/HF, 分析口径 2026-08-13）",
+                    ha="center", va="center", transform=ax.transAxes,
+                    color="gray", fontsize=11)
         ax.set_xticks(xs)
         ax.set_xlabel("休息时间窗 (60s/窗)")
         ax.set_ylabel(ylabel)
