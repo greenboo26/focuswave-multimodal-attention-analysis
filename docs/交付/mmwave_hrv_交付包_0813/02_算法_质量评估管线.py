@@ -433,25 +433,25 @@ def _detect_peaks_narrowband(heartbeat: np.ndarray, hr_freq: float) -> np.ndarra
 # 按帧号加载（流式: 每窗只读覆盖的 2-4 片, 避免全量入内存）
 # ============================================================
 
-def load_frames_by_time(mm_dir: Path, subject: str, frame_idx: np.ndarray,
+def load_frames_by_time(mm_dir: Path, subject: str,
                         fa_row: int, fb_row: int) -> np.ndarray:
     """按帧行索引 [fa_row, fb_row) 加载复数距离域数据。
 
-    片 i 覆盖帧 [FIRST_FRAME + i*CHUNK, FIRST_FRAME + (i+1)*CHUNK)。
-    30s 窗 ≈ 3 片, 相邻窗重叠片由 OS 缓存命中, 无需全局缓冲。
+    分片按写入行切分: 片 i 覆盖行 [i*CHUNK, (i+1)*CHUNK)。丢帧采集
+    （SPI 传输掉帧）下帧号出现跳变, 用帧号映射片号会错位甚至空载,
+    故直接用行索引定位, 与帧号连续性无关。30s 窗 ≈ 3 片, 相邻窗
+    重叠片由 OS 缓存命中, 无需全局缓冲。
 
     参数:
         mm_dir: mmwave 分片所在目录
         subject: 被试编号
-        frame_idx: 帧号数组（与 timestamps.csv 对齐）
         fa_row: 起始帧的行索引
         fb_row: 结束帧的行索引（不含）
     返回:
         iq_fd: (fb_row-fa_row, 256, 8) complex64
     """
-    first_frame = int(frame_idx[0])
-    i_start = (int(frame_idx[fa_row]) - first_frame) // CHUNK
-    i_end = (int(frame_idx[fb_row - 1]) - first_frame) // CHUNK
+    i_start = fa_row // CHUNK
+    i_end = (fb_row - 1) // CHUNK
     chunks = []
     for i in range(i_start, i_end + 1):
         fpath = mm_dir / (f"sub-{subject}_mmwave_datacube.npz" if i == 0
@@ -460,8 +460,7 @@ def load_frames_by_time(mm_dir: Path, subject: str, frame_idx: np.ndarray,
             continue
         chunks.append(load_part(fpath))
     iq = np.concatenate(chunks)
-    base_frame = first_frame + i_start * CHUNK
-    lo = int(frame_idx[fa_row]) - base_frame
+    lo = fa_row - i_start * CHUNK
     hi = lo + (fb_row - fa_row)
     return iq[lo:hi]
 
@@ -533,7 +532,7 @@ def main():
             rows.append({"t_start_s": round((w0 - t_start_ms) / 1000),
                          "ok": False, "reason": "short_data"})
             continue
-        iq = load_frames_by_time(mm_dir, subject, frame_idx, fa, fb)
+        iq = load_frames_by_time(mm_dir, subject, fa, fb)
         res = assess_window(iq, use_spc=args.use_spc, max_bin=args.max_bin)
         row = {"t_start_s": round((w0 - t_start_ms) / 1000)}
         row.update(res)
@@ -597,10 +596,10 @@ def main():
         for r in rows:
             writer.writerow({"subject": f"sub-{subject}_", "t_start": r["t_start_s"],
                              "ok": r["ok"], "reason": r["reason"],
-                             "snr_db": r["snr_db"], "hr_bpm": r["hr_bpm"],
-                             "ibi_ratio": r["ibi_ratio"], "heart_bin": r["heart_bin"],
-                             "drift_bin": r["drift_bin"],
-                             "phase_mod_rad": r["phase_mod_rad"]})
+                             "snr_db": r.get("snr_db"), "hr_bpm": r.get("hr_bpm"),
+                             "ibi_ratio": r.get("ibi_ratio"), "heart_bin": r.get("heart_bin"),
+                             "drift_bin": r.get("drift_bin"),
+                             "phase_mod_rad": r.get("phase_mod_rad")})
     print(f"  [csv] {csv_path}")
 
     md_path = out_dir / f"sub{subject}_quality_summary.md"
@@ -641,7 +640,7 @@ def _plot_timeline(rows, png_path, subject):
     fig, axes = plt.subplots(2, 1, figsize=(14, 6), sharex=True)
     colors = ["#c0392b" if r["ok"] else "#95a5a6" for r in rows]
     ax = axes[0]
-    ax.bar(ts, [r["snr_db"] if r["snr_db"] is not None else 0 for r in rows],
+    ax.bar(ts, [r.get("snr_db") if r.get("snr_db") is not None else 0 for r in rows],
            width=0.2, color=colors, alpha=0.8)
     ax.axhline(SNR_OK_DB, color="red", linestyle="--", linewidth=1, label=f"SNR 阈值 {SNR_OK_DB}dB")
     ax.set_ylabel("SNR (dB)")
