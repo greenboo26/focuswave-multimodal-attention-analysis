@@ -1,0 +1,12 @@
+﻿subject,prefix,n_frames,duration_s,best_ch,hr_ch,hr_bin,hr_bin_dist_m,hr_ch_power_ratio,phase_stability,n_windows,std_mm_median,std_mm_p25,std_mm_p75,std_mm_min,std_mm_max,usable_ratio,below_threshold_ratio,error
+000,sub-000_mmwave,,,,,,,,,,,,,,,,,No tx* arrays found in chunk: E:\预实验\sub-000_\mmwave\sub-000_mmwave_datacube_part261.npz
+001,sub-001_mmwave,,,,,,,,,,,,,,,,,No tx* arrays found in chunk: E:\预实验\sub-001_\mmwave\sub-001_mmwave_datacube_part256.npz
+002,sub-002_mmwave,259833,2598.0,6,0,7,0.56,0.0701,0.7709,260,0.000215,0.00017,0.000463,0.000108,0.002744,0.2346,0.7654,
+003,sub-003_mmwave,,,,,,,,,,,,,,,,,No tx* arrays found in chunk: E:\预实验\sub-003_\mmwave\sub-003_mmwave_datacube_part339.npz
+004,sub-004_mmwave,254837,2548.0,0,6,9,0.72,0.0897,0.9071,255,0.219726,0.153892,0.359065,0.034136,2.440719,1.0,0.0,
+005,sub-005_mmwave,272649,2726.0,2,3,7,0.56,0.1542,0.9058,273,0.194759,0.150006,0.337584,0.035583,1.994036,1.0,0.0,
+006,sub-006_mmwave,230579,2306.0,0,4,5,0.4,0.1474,0.9616,231,0.240506,0.120089,0.4474,0.019686,2.549634,1.0,0.0,
+007,sub-007_mmwave,254504,2545.0,0,7,11,0.88,0.1177,0.9328,255,0.131142,0.097657,0.17608,0.010538,2.493813,1.0,0.0,
+008,sub-008_mmwave,262863,2629.0,3,4,4,0.32,0.1151,0.9566,263,0.069111,0.030032,0.136142,0.002813,1.651915,1.0,0.0,
+009,sub-009_mmwave,236953,2370.0,2,2,13,1.04,0.1419,0.9429,237,0.183891,0.123577,0.264279,0.027936,1.582192,1.0,0.0,
+010,sub-010_mmwave,,,,,,,,,,,,,,,,,No tx* arrays found in chunk: E:\预实验\sub-010_\mmwave\sub-010_mmwave_datacube_part273.npz
