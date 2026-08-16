@@ -483,7 +483,7 @@ def main():
                              f"排除远端环境心跳源时收紧)")
     args = parser.parse_args()
 
-    subject = args.subject.zfill(3)
+    subject = args.subject
     data_root = Path(args.data_root)
     mm_dir = data_root / f"sub-{subject}_" / "mmwave"
     out_name = args.output_dir or f"QUALITY-SUB{subject}"
