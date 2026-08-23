@@ -21,16 +21,21 @@ analyze_formal_behavior.py — 正式实验第一批（E:\\正式实验）行为
 
 import csv
 import glob
+import sys
 from collections import Counter
 from pathlib import Path
 
 import numpy as np
 from scipy import stats
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 # ============================================================
 # 参数声明
 # ============================================================
-DATA_ROOT = Path(r"E:\正式实验")
+DATA_ROOT = Path(r"D:\正式实验")
 OUT_DIR = Path(r"D:\Project\厚粲杯\08_算法\output\06_正式实验\行为分析")
 SUBJECTS_BEHAVIOR = ["011", "012", "013", "014", "016"]  # 行为有效被试（015 规则反排除）
 SUBJECTS_PHYSIO = ["011", "012", "013", "014", "015", "016"]  # 生理被试（015 生理保留）

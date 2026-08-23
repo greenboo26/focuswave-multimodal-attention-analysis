@@ -1758,7 +1758,7 @@ def plot_result(
         ax.set_title(f"HR time course - robust time/frequency fusion (p95 jump {metrics.get('jump_p95_bpm', 'NA')} BPM)")
         ax.set_xlabel("Time (s)")
         ax.set_ylabel("Heart Rate (BPM)")
-        ax.legend(loc="upper right", fontsize=7, ncol=2)
+        ax.legend(loc="upper left", fontsize=7, ncol=2)
         ax.grid(True, alpha=0.3)
     elif len(hp) >= 2:
         hr_ts = 60 / (np.diff(hp) / FS)
@@ -1797,7 +1797,93 @@ def _nearest_spectral_power(freqs: np.ndarray, pxx: np.ndarray, target_hz: float
     return float(pxx[idx])
 
 
-def _window_hr_candidates(heartbeat_seg: np.ndarray, peaks_seg: np.ndarray, ref_bpm: float | None) -> dict:
+def respiration_harmonic_reject(
+    freqs: np.ndarray,
+    pxx: np.ndarray,
+    raw_bpm: float,
+    ext_br_bpm: float | None,
+    prefer_bpm: float | None = None,
+    ext_br_tol_bpm: float = 5.0,
+    harmonics: tuple[int, ...] = (2, 3),
+    min_fallback_power_ratio: float = 0.5,
+) -> dict:
+    """Reject an HR candidate that lands on a respiration harmonic k*ext_br_bpm.
+
+    The external respiration rate (ext_br_bpm, e.g. from a chest belt / RSP channel)
+    is a strong prior the mmWave pipeline otherwise ignores. When the raw max-power HR
+    peak coincides with 2*br / 3*br (the exact failure mode of subjects 97795/97796,
+    where mmWave locked onto the respiration 2nd/3rd harmonic instead of the heartbeat),
+    we do NOT blindly trust the next spectral peak -- it may be noise if the true
+    heartbeat is weak. Correction priority:
+      1. prefer_bpm (the time/peak-domain estimate) if it is clean (not a resp harmonic);
+      2. the next-strongest spectral peak with power >= min_fallback_power_ratio of the
+         raw peak AND not a respiration harmonic;
+      3. if nothing confident, keep raw_bpm but flag resp_harmonic_reject so downstream
+         quality gates can down-weight the window.
+    See 0816 gold-standard report (锁半频=强而错). This is the only pending "real new
+    action" from that report: RSP is already used on the gold-standard side
+    (validate_gold_anchor.py) but never fed back into mmWave candidate selection.
+    Backward compatible: pass ext_br_bpm=None to disable.
+    """
+    out = {
+        "resp_harmonic_reject": False,
+        "resp_harmonic_k": None,
+        "resp_harmonic_target_bpm": None,
+        "chosen_bpm": raw_bpm,
+        "fallback_bpm": None,
+        "fallback_source": None,
+    }
+    if ext_br_bpm is None or ext_br_bpm <= 0:
+        return out
+
+    def _is_harmonic(bpm: float) -> bool:
+        return any(
+            HR_LO_BPM <= k * ext_br_bpm <= HR_HI_BPM and abs(bpm - k * ext_br_bpm) <= ext_br_tol_bpm
+            for k in harmonics
+        )
+
+    if not _is_harmonic(raw_bpm):
+        return out
+
+    out["resp_harmonic_reject"] = True
+    best_k, best_d = None, 1e9
+    for k in harmonics:
+        if HR_LO_BPM <= k * ext_br_bpm <= HR_HI_BPM:
+            d = abs(raw_bpm - k * ext_br_bpm)
+            if d < best_d:
+                best_k, best_d = k, d
+    out["resp_harmonic_k"] = best_k
+    out["resp_harmonic_target_bpm"] = round(best_k * ext_br_bpm, 1) if best_k is not None else None
+
+    # 1) prefer the time/peak-domain estimate if it is clean
+    if prefer_bpm is not None and HR_LO_BPM <= prefer_bpm <= HR_HI_BPM and not _is_harmonic(prefer_bpm):
+        out["chosen_bpm"] = prefer_bpm
+        out["fallback_bpm"] = round(prefer_bpm, 1)
+        out["fallback_source"] = "time_domain"
+        return out
+
+    # 2) next-strongest spectral peak meeting power + harmonic constraints
+    band_mask = (freqs >= HR_LO_HZ) & (freqs <= HR_HI_HZ)
+    band_freqs = freqs[band_mask]
+    band_pxx = pxx[band_mask]
+    raw_power = float(np.max(band_pxx)) if len(band_pxx) else 0.0
+    if len(band_freqs) > 0:
+        order = np.argsort(band_pxx)[::-1]
+        for idx in order:
+            cand_bpm = float(band_freqs[idx] * 60.0)
+            cand_power = float(band_pxx[idx])
+            if cand_power < min_fallback_power_ratio * raw_power:
+                break  # remaining peaks are all too weak to be credible
+            if not _is_harmonic(cand_bpm):
+                out["fallback_bpm"] = round(cand_bpm, 1)
+                out["chosen_bpm"] = out["fallback_bpm"]
+                out["fallback_source"] = "spectrum_next_peak"
+                break
+    # 3) else keep raw_bpm but flagged (downstream gate should distrust it)
+    return out
+
+
+def _window_hr_candidates(heartbeat_seg: np.ndarray, peaks_seg: np.ndarray, ref_bpm: float | None, ext_br_bpm: float | None = None) -> dict:
     freqs, pxx = signal.periodogram(heartbeat_seg, fs=FS, window="hann")
     mask = (freqs >= HR_LO_HZ) & (freqs <= HR_HI_HZ)
     if not np.any(mask):
@@ -1813,6 +1899,15 @@ def _window_hr_candidates(heartbeat_seg: np.ndarray, peaks_seg: np.ndarray, ref_
         ibi = ibi[(ibi >= 60.0 / HR_HI_BPM) & (ibi <= 60.0 / HR_LO_BPM)]
         if len(ibi) >= 2:
             time_bpm = float(60.0 / np.mean(ibi))
+
+    # Approach ①: external RSP prior gate. If the raw spectrum peak is a respiration
+    # harmonic (2*br / 3*br), prefer the time-domain estimate if clean, else the
+    # next-strongest non-harmonic spectral peak; if neither is confident, keep raw
+    # but flag it so downstream quality gates can down-weight the window.
+    resp_rej = respiration_harmonic_reject(freqs, pxx, raw_bpm, ext_br_bpm, prefer_bpm=time_bpm)
+    if resp_rej["resp_harmonic_reject"] and resp_rej["fallback_source"] is not None:
+        raw_bpm = resp_rej["chosen_bpm"]
+        raw_hz = raw_bpm / 60.0
 
     corrected_bpm = raw_bpm
     harmonic_lock = False
@@ -1840,13 +1935,16 @@ def _window_hr_candidates(heartbeat_seg: np.ndarray, peaks_seg: np.ndarray, ref_
         "corrected_bpm": round(corrected_bpm, 1),
         "harmonic_lock": bool(harmonic_lock),
         "reason": reason,
+        "resp_harmonic_reject": bool(resp_rej["resp_harmonic_reject"]),
+        "resp_harmonic_k": resp_rej["resp_harmonic_k"],
+        "resp_harmonic_br_bpm": round(float(ext_br_bpm), 1) if ext_br_bpm is not None else None,
         "raw_power": round(float(np.max(band_pxx)), 6),
         "half_power": round(_nearest_spectral_power(band_freqs, band_pxx, raw_hz * 0.5), 6),
         "double_power": round(_nearest_spectral_power(band_freqs, band_pxx, raw_hz * 2.0), 6),
     }
 
 
-def _heart_segment_reference_correction(heartbeat: np.ndarray, hp: np.ndarray, base_freq_bpm: float | None) -> dict:
+def _heart_segment_reference_correction(heartbeat: np.ndarray, hp: np.ndarray, base_freq_bpm: float | None, ext_br_bpm: float | None = None) -> dict:
     win_s = 20.0
     step_s = 10.0
     win = int(round(win_s * FS))
@@ -1880,6 +1978,7 @@ def _heart_segment_reference_correction(heartbeat: np.ndarray, hp: np.ndarray, b
     ref_bpm = float(np.median(valid_time_bpms)) if valid_time_bpms else base_freq_bpm
     corrected_values: list[float] = []
     harmonic_locked = 0
+    resp_rejected = 0
     corrected_window_count = 0
     detailed_windows = []
     current_ref = ref_bpm
@@ -1889,9 +1988,11 @@ def _heart_segment_reference_correction(heartbeat: np.ndarray, hp: np.ndarray, b
         end = int(item["end_frame"])
         seg = heartbeat[start:end]
         local_peaks = peak_set[(peak_set >= start) & (peak_set < end)] - start
-        info = _window_hr_candidates(seg, local_peaks, current_ref)
+        info = _window_hr_candidates(seg, local_peaks, current_ref, ext_br_bpm=ext_br_bpm)
         if info["harmonic_lock"]:
             harmonic_locked += 1
+        if info.get("resp_harmonic_reject"):
+            resp_rejected += 1
         if info["reason"] != "raw_spectrum":
             corrected_window_count += 1
         corrected = info["corrected_bpm"]
@@ -1906,6 +2007,7 @@ def _heart_segment_reference_correction(heartbeat: np.ndarray, hp: np.ndarray, b
         "step_s": step_s,
         "windows": detailed_windows,
         "n_harmonic_locked": int(harmonic_locked),
+        "n_resp_harmonic_rejected": int(resp_rejected),
         "n_corrected_windows": int(corrected_window_count),
         "corrected_freq_bpm": round(corrected_freq_bpm, 1) if corrected_freq_bpm is not None else None,
         "corrected_from_segments": bool(corrected_window_count > 0),
@@ -2144,6 +2246,7 @@ def _evaluate_heart_candidate(
     method: str = "vmd_heart",
     frame_start: int | None = None,
     frame_end: int | None = None,
+    ext_br_bpm: float | None = None,
 ) -> dict:
     disp_chunks: list[np.ndarray] = []
     for iq_td in _iter_selected_chunks(npz_files, frame_start=frame_start, frame_end=frame_end):
@@ -2178,6 +2281,7 @@ def _evaluate_heart_candidate(
         heartbeat=heart_pd,
         hp=hp,
         base_freq_bpm=round(hr_freq_bpm_raw, 1) if hr_freq_bpm_raw is not None else None,
+        ext_br_bpm=ext_br_bpm,
     )
     hr_freq_bpm_periodogram = seg_corr.get("corrected_freq_bpm", round(hr_freq_bpm_raw, 1) if hr_freq_bpm_raw is not None else None)
     hr_freq_bpm, hr_time_bpm_consensus, hr_consensus = _heart_window_consensus_bpm(
@@ -2220,6 +2324,7 @@ def _select_refined_heart_candidate(
     channel_override: int | None = None,
     top_k_per_channel: int = 1,
     reference_candidates: list[tuple[int, int]] | None = None,
+    ext_br_bpm: float | None = None,
 ) -> tuple[int, int, list[dict]]:
     channels = [int(channel_override)] if channel_override is not None else list(range(bin_power_acc.shape[1]))
     candidates_to_eval: list[tuple[int, int, float, float, float]] = []
@@ -2249,7 +2354,7 @@ def _select_refined_heart_candidate(
             f"[heart-refine] {idx}/{total} ch={ch} bin={bin_idx} "
             f"sample_hr_snr={hr_snr:.2f} phase_stability={phase_stability:.3f} selection_score={heart_score:.3f}"
         )
-        item = _evaluate_heart_candidate(npz_files=npz_files, ch=ch, bin_idx=bin_idx, method=method, frame_start=frame_start, frame_end=frame_end)
+        item = _evaluate_heart_candidate(npz_files=npz_files, ch=ch, bin_idx=bin_idx, method=method, frame_start=frame_start, frame_end=frame_end, ext_br_bpm=ext_br_bpm)
         item["sample_hr_snr"] = round(hr_snr, 3)
         item["sample_phase_stability"] = round(phase_stability, 4)
         item["sample_selection_score"] = round(heart_score, 4)
@@ -2277,6 +2382,7 @@ def _analyze_displacement_v23(
     n_frames: int,
     method: str = "vmd_heart",
     session: str = "sub-sxq_ses-SART",
+    ext_br_bpm: float | None = None,
 ) -> tuple[dict, tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
     duration = n_frames / FS
     t = np.arange(n_frames) / FS
@@ -2301,7 +2407,7 @@ def _analyze_displacement_v23(
     hp = detect_peaks_heart_lo(heart_pd, lo_bpm=HR_LO_BPM, hi_bpm=HR_HI_BPM)
     hr_time_bpm = round(float(60 * FS / np.mean(np.diff(hp))), 1) if len(hp) >= 2 else None
     hr_freq_bpm_raw = round(float(hr_freq * 60), 1) if hr_freq else None
-    hr_seg_corr = _heart_segment_reference_correction(heartbeat=heart_pd, hp=hp, base_freq_bpm=hr_freq_bpm_raw)
+    hr_seg_corr = _heart_segment_reference_correction(heartbeat=heart_pd, hp=hp, base_freq_bpm=hr_freq_bpm_raw, ext_br_bpm=ext_br_bpm)
     hr_freq_bpm_periodogram = hr_seg_corr.get("corrected_freq_bpm", hr_freq_bpm_raw)
     hr_freq_bpm, hr_time_bpm_consensus, hr_window_consensus = _heart_window_consensus_bpm(
         seg_corr=hr_seg_corr, hr_freq_bpm_periodogram=hr_freq_bpm_periodogram, hr_time_bpm_global=hr_time_bpm
@@ -2478,6 +2584,7 @@ def save_selected_channel_range_fft(
         ax.set_title(f"{label} channel ch{ch} (bin {bin_idx}, {bin_dist_m:.2f} m)")
         ax.set_xlabel("Distance (m)")
         ax.set_ylabel("Chirp / frame index")
+        ax.set_xlim(0.0, 3.0)  # clip to human-relevant range; static clutter at ~5 m (wall) excluded
 
     fig.suptitle(f"Selected-channel Range FFT - {session} ({view_start_s:.0f}-{view_end_s:.0f} s)", fontsize=14)
     cbar = fig.colorbar(im, ax=axes.ravel().tolist(), shrink=0.92)
@@ -2623,6 +2730,7 @@ def _analyze_long_record_with_forced_heart_candidate_v23(
     max_range_m: float | None = 1.5,
     bin_spacing_m: float = SDK_DEFAULT_BIN_SPACING_M,
     range_bias_m: float = SDK_DEFAULT_RANGE_BIAS_M,
+    ext_br_bpm: float | None = None,
 ) -> tuple[dict, tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
     npz_files = collect_npz_parts(parts_dir, pattern=pattern)
     if not npz_files:
@@ -2652,7 +2760,8 @@ def _analyze_long_record_with_forced_heart_candidate_v23(
     disp_br, disp_hr, n_frames = extract_displacement_separate(
         npz_files, br_ch, br_bin, int(heart_ch), int(heart_bin), frame_start=frame_start, frame_end=frame_end
     )
-    result, waveforms = _analyze_displacement_v23(disp_br, disp_hr, n_frames, method=method, session=session)
+    result, waveforms = _analyze_displacement_v23(disp_br, disp_hr, n_frames, method=method, session=session, ext_br_bpm=ext_br_bpm)
+    result["external_respiration_bpm"] = round(ext_br_bpm, 1) if ext_br_bpm is not None else None
     result["best_channel"] = br_ch
     result["auto_best_channel"] = best_ch_auto
     result["channels"] = {"breath": br_ch, "heart": int(heart_ch)}
@@ -2706,6 +2815,7 @@ def _analyze_long_record_v23(
     bin_spacing_m: float = SDK_DEFAULT_BIN_SPACING_M,
     range_bias_m: float = SDK_DEFAULT_RANGE_BIAS_M,
     heart_reference_candidates: list[tuple[int, int]] | None = None,
+    ext_br_bpm: float | None = None,
 ) -> tuple[dict, tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]:
     npz_files = collect_npz_parts(parts_dir, pattern=pattern)
     if not npz_files:
@@ -2752,7 +2862,8 @@ def _analyze_long_record_v23(
     print(f"[bins] breath_ch={br_ch}, breath_bin={br_bin}, heart_ch={hr_ch}, heart_bin={hr_bin}, auto_best_ch={best_ch_auto}")
 
     disp_br, disp_hr, n_frames = extract_displacement_separate(npz_files, br_ch, br_bin, hr_ch, hr_bin, frame_start=frame_start, frame_end=frame_end)
-    result, waveforms = _analyze_displacement_v23(disp_br, disp_hr, n_frames, method=method, session=session)
+    result, waveforms = _analyze_displacement_v23(disp_br, disp_hr, n_frames, method=method, session=session, ext_br_bpm=ext_br_bpm)
+    result["external_respiration_bpm"] = round(ext_br_bpm, 1) if ext_br_bpm is not None else None
     result["best_channel"] = br_ch
     result["auto_best_channel"] = best_ch_auto
     result["channels"] = {"breath": br_ch, "heart": hr_ch}
@@ -2789,6 +2900,63 @@ def _analyze_long_record_v23(
     return result, waveforms
 
 
+def estimate_respiration_bpm_from_acq(acq_path) -> float | None:
+    """从 Biopac .acq 金标准文件提取呼吸带(RSP)全段中位呼吸率, 作为毫米波侧
+    候选心率门控的外部先验 ext_br_bpm (approach ① / A2 接线)。
+
+    这是 0816 报告点明的「呼吸带应是必做项」的落地: 此前 RSP 只在金标准侧
+    (validate_gold_anchor.py) 用, 从未喂进毫米波侧候选频率判定。本函数把 RSP
+    呼吸率接到 respiration_harmonic_reject, 直接剔除落在 2*br / 3*br 附近的候选,
+    正面解决 97795/97796 那种「质量门控全绿却锁半频」的强而错。
+
+    退化策略(保证向后兼容):
+      · 无 bioread / 读取失败        -> 返回 None (门控不触发)
+      · .acq 无 RSP 通道(如 sub-2_)  -> 返回 None (门控自动禁用)
+      · 复用 gold_standard_qa.rsp_qa 项目标准清洗; 模块不可导入则退化为内联带通+峰值
+    仅做全段中位估计(呼吸率段内较稳, 见 0816 报告 21/25 次/分); 如需逐窗可变,
+    后续可把返回值改为按时间轴的分段数组并透传 array 版 ext_br_bpm。
+    """
+    try:
+        import bioread
+    except Exception:
+        return None
+    try:
+        da = bioread.read_file(str(acq_path))
+    except Exception:
+        return None
+    sr = da.samples_per_second
+    rsp_idx = next((i for i, c in enumerate(da.channels) if "RSP" in str(c.name).upper()), None)
+    if rsp_idx is None:
+        return None
+    rsp = np.asarray(da.channels[rsp_idx].data).astype(float)
+    if len(rsp) < sr * 10:
+        return None
+
+    # 优先复用项目标准 RSP 清洗(与金标准侧一致)
+    try:
+        from gold_standard_qa import rsp_qa
+        br, rep = rsp_qa(rsp, sr, 0, len(rsp))
+        if br is not None and rep.get("usable"):
+            return float(br)
+        # 不可用时仍返回中位估计: 门控自带 ±容差, 弱先验优于无
+        return float(br) if br is not None else None
+    except Exception:
+        pass
+
+    # 退化: 内联带通 + 峰值(与 gold_standard_qa 参数一致)
+    seg = rsp - np.median(rsp)
+    sos = signal.butter(4, (0.1, 0.7), btype="band", fs=sr, output="sos")
+    seg_f = signal.sosfiltfilt(sos, seg)
+    peaks, _ = signal.find_peaks(seg_f, distance=int(0.5 * sr), prominence=0.2)
+    if len(peaks) < 3:
+        return None
+    period = np.diff(peaks) / sr
+    period = period[(period >= 60.0 / 42.0) & (period <= 60.0 / 6.0)]
+    if len(period) < 2:
+        return None
+    return float(60.0 / np.median(period))
+
+
 def analyze_long_record(
     parts_dir: Path,
     output_dir: Path,
@@ -2811,9 +2979,21 @@ def analyze_long_record(
     behavior_status: str | None = None,
     heart_waveform_view: str = "last_20_s",
     heart_reference_candidates: list[tuple[int, int]] | None = None,
+    ext_br_bpm: float | None = None,
+    acq_path: str | Path | None = None,
 ) -> tuple[dict, tuple]:
     if (forced_heart_ch is None) ^ (forced_heart_bin is None):
         raise ValueError("forced_heart_ch and forced_heart_bin must be provided together.")
+
+    # Approach ① (A2): 从 Biopac .acq 金标准提取 RSP 呼吸率, 作为毫米波侧外部先验
+    # ext_br_bpm。此前提案只在金标准侧用 RSP, 从未喂进毫米波候选频率判定; 现在接上。
+    # 若显式传入 ext_br_bpm 则优先, acq_path 仅作自动派生(向后兼容)。
+    if ext_br_bpm is None and acq_path is not None:
+        ext_br_bpm = estimate_respiration_bpm_from_acq(acq_path)
+        if ext_br_bpm is not None:
+            print(f"[RSP gate] acq={acq_path} -> ext_br_bpm={ext_br_bpm:.1f} (呼吸带先验已接入毫米波侧)")
+        else:
+            print("[RSP gate] acq 无 RSP 通道或读取失败 -> 门控自动禁用(向后兼容)")
 
     runner = _analyze_long_record_v23
     kwargs = dict(
@@ -2830,6 +3010,7 @@ def analyze_long_record(
         max_range_m=max_range_m,
         bin_spacing_m=bin_spacing_m,
         range_bias_m=range_bias_m,
+        ext_br_bpm=ext_br_bpm,
     )
     if forced_heart_ch is not None and forced_heart_bin is not None:
         runner = _analyze_long_record_with_forced_heart_candidate_v23

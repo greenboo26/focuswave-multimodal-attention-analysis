@@ -4,6 +4,7 @@ output/
 # Python 缓存
 __pycache__/
 *.pyc
+.venv/
 
 # 原始数据（隐私 + 体积）
 *.npz

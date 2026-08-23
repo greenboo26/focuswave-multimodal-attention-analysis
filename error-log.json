@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "date": "2026-08-22",
+    "command": "python scripts/analyze_formal_behavior.py",
+    "error_type": "encoding",
+    "error_message": "UnicodeEncodeError: gbk codec cannot encode character in console output",
+    "fix_applied": "added UTF-8-safe stdout/stderr configuration and reran successfully",
+    "is_systemic": true
+  },
+  {
+    "id": 2,
+    "date": "2026-08-22",
+    "command": "python scripts/analyze_formal_cross_subject.py",
+    "error_type": "encoding",
+    "error_message": "UnicodeEncodeError: gbk codec cannot encode Unicode minus sign in console output",
+    "fix_applied": "added UTF-8-safe stdout/stderr configuration and reran successfully",
+    "is_systemic": true
+  },
+  {
+    "id": 3,
+    "date": "2026-08-22",
+    "command": "python scripts/analyze_formal_probe_centric.py",
+    "error_type": "path_wrong",
+    "error_message": "ZeroDivisionError after no probes were loaded from the configured formal data root",
+    "fix_applied": "corrected DATA_ROOT to D:\\正式实验, added empty-input guard, and reran 180 probes successfully",
+    "is_systemic": true
+  }
+]

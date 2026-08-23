@@ -1,4 +1,6 @@
 numpy>=1.24
 scipy>=1.10
+scikit-learn>=1.7
 matplotlib>=3.7
 vmdpy>=0.2
+bioread>=2025.5.2
