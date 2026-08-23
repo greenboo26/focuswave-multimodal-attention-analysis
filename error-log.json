@@ -25,5 +25,59 @@
     "error_message": "ZeroDivisionError after no probes were loaded from the configured formal data root",
     "fix_applied": "corrected DATA_ROOT to D:\\正式实验, added empty-input guard, and reran 180 probes successfully",
     "is_systemic": true
+  },
+  {
+    "id": 4,
+    "date": "2026-08-24",
+    "command": ".venv\\Scripts\\python.exe -m py_compile scripts\\evaluate_j_multimodal_loso.py",
+    "error_type": "runtime_path_stale",
+    "error_message": "Project virtual environment launcher points to missing D:\\Program Files\\PsychoPy\\python.exe",
+    "fix_applied": "used the current bundled Codex Python runtime; compilation passed without rewriting the user virtual environment",
+    "is_systemic": false
+  },
+  {
+    "id": 5,
+    "date": "2026-08-24",
+    "command": "bundled Codex Python scripts\\evaluate_j_multimodal_loso.py --bootstrap 1000",
+    "error_type": "missing_dependency",
+    "error_message": "ModuleNotFoundError: No module named 'sklearn'",
+    "fix_applied": "located C:\\Users\\550ACW\\AppData\\Local\\Programs\\Python\\Python314\\python.exe with scikit-learn 1.9.0",
+    "is_systemic": false
+  },
+  {
+    "id": 6,
+    "date": "2026-08-24",
+    "command": "Python314 scripts\\evaluate_j_multimodal_loso.py --bootstrap 1000",
+    "error_type": "unknown",
+    "error_message": "Manual KeyboardInterrupt during repeated pandas DataFrame concatenation in subject bootstrap",
+    "fix_applied": "replaced DataFrame concatenation with NumPy subject-index resampling; Python314 compilation passed",
+    "is_systemic": true
+  },
+  {
+    "id": 7,
+    "date": "2026-08-24",
+    "command": "Python314 scripts\\evaluate_j_multimodal_loso.py --bootstrap 1000 (second run)",
+    "error_type": "unknown",
+    "error_message": "Manual KeyboardInterrupt during repeated 200-tree random-forest LOSO fitting",
+    "fix_applied": "added selectable models/feature sets, reduced forest size to 80 trees, and added per-result checkpoints with progress output; compilation passed",
+    "is_systemic": true
+  },
+  {
+    "id": 8,
+    "date": "2026-08-24",
+    "command": "Python314 inline integrity check for J_Data_MULTIMODAL_v1 outputs",
+    "error_type": "verification_schema_mismatch",
+    "error_message": "KeyError: y_prob; loso_predictions.csv stores predicted probability in the score column",
+    "fix_applied": "inspected both prediction schemas and changed the integrity assertion from y_prob to score; analysis outputs were not affected",
+    "is_systemic": false
+  },
+  {
+    "id": 9,
+    "date": "2026-08-24",
+    "command": "Python314 inline integrity check for J_Data_MULTIMODAL_v1 outputs (second schema pass)",
+    "error_type": "verification_schema_mismatch",
+    "error_message": "AttributeError: multimodal_probe_matrix.csv uses subject rather than subject_id",
+    "fix_applied": "inspected the matrix schema and changed the subject-count assertion to the subject column; analysis outputs were not affected",
+    "is_systemic": false
   }
 ]
