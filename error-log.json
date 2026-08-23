@@ -79,5 +79,41 @@
     "error_message": "AttributeError: multimodal_probe_matrix.csv uses subject rather than subject_id",
     "fix_applied": "inspected the matrix schema and changed the subject-count assertion to the subject column; analysis outputs were not affected",
     "is_systemic": false
+  },
+  {
+    "id": 10,
+    "date": "2026-08-24",
+    "command": "Python314 build_evaluate_j_mmwave_m1_loso.py --subjects 056 --extract-only",
+    "error_type": "runtime_api_compatibility",
+    "error_message": "AttributeError: module 'numpy' has no attribute 'trapz' during raw-phase spectral band-power integration.",
+    "fix_applied": "Replaced removed NumPy API with scipy.integrate.trapezoid; no raw data or previous outputs were modified.",
+    "is_systemic": true
+  },
+  {
+    "id": 11,
+    "date": "2026-08-24",
+    "command": "Python314 inline M1/Q0 representative-matrix descriptive check",
+    "error_type": "verification_syntax",
+    "error_message": "SyntaxError caused by a malformed nested list expression in a one-line inspection command.",
+    "fix_applied": "Corrected the inspection expression and reran; analysis files were not affected.",
+    "is_systemic": false
+  },
+  {
+    "id": 12,
+    "date": "2026-08-24",
+    "command": "M1/Q0 sub-056 representative diagnostic review",
+    "error_type": "timestamp_irregularity",
+    "error_message": "Using the median inter-frame interval gave a 142.9 Hz spectral grid although the selected data span was 30 s; representative plots therefore displayed about 22 s.",
+    "fix_applied": "Feature extractor now uses elapsed-window effective sampling rate and linearly resamples raw phase/magnitude to an equal-duration grid before spectral and dynamic features. Q0 continues to retain the timestamp-gap fraction.",
+    "is_systemic": true
+  },
+  {
+    "id": 13,
+    "date": "2026-08-24",
+    "command": "Python314 build_evaluate_j_mmwave_m1_loso.py --reuse-matrix --bootstrap 20",
+    "error_type": "feature_matrix_schema_gap",
+    "error_message": "KeyError: prior_n_err. The trusted-probe summary CSV lacks this B0 variable, which is stored in the frozen per-subject full_windows JSON used by the prior LOSO baseline.",
+    "fix_applied": "Added deterministic read-only join from J_Data_SUB*_FULL/sub*_full_windows.json keyed by subject and probe_id; the precomputed raw M1/Q0 columns were reused unchanged.",
+    "is_systemic": false
   }
 ]
