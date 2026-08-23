@@ -372,6 +372,12 @@ def main():
         row = {"probe_id": len(probe_rows) + 1,
                "label": t["probe_response"],
                "label_name": PROBE_LABELS.get(t["probe_response"], "?")}
+        # Preserve the behavior timestamp so reference physiology and all
+        # cross-modal signals can be paired by event time rather than row
+        # order.  This is also the audit trail for excluding pre/post windows.
+        row["probe_onset_ms"] = int(t["probe_onset_ms"])
+        row["window_start_ms"] = int(t["probe_onset_ms"] - PROBE_BEFORE_MS)
+        row["window_end_ms"] = int(t["probe_onset_ms"])
         prior_go = [x for x in trials
                     if x["onset_ms"] < t["probe_onset_ms"] and x["rt"] is not None and not x["is_probe"]][-PROBE_RT_N:]
         row["prior_rt_mean"] = round(

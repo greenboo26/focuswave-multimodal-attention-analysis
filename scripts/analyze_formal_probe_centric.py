@@ -35,16 +35,21 @@ analyze_formal_probe_centric.py — 正式实验第一批探针中心分析（�
 import csv
 import glob
 import json
+import sys
 from collections import Counter
 from pathlib import Path
 
 import numpy as np
 from scipy import stats
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 # ============================================================
 # 参数声明
 # ============================================================
-DATA_ROOT = Path(r"E:\正式实验")
+DATA_ROOT = Path(r"D:\正式实验")
 OUT_ROOT = Path(r"D:\Project\厚粲杯\08_算法\output\06_正式实验")
 OUT_DIR = OUT_ROOT / "探针中心"
 SUBJECTS = ["011", "012", "013", "014", "015", "016"]  # 生理全 6 人
@@ -104,6 +109,11 @@ def main():
     for s in SUBJECTS:
         all_probes.extend(load_probe_data(s))
     ok_probes = [p for p in all_probes if p["quality"] == "ok"]
+    if not all_probes:
+        print("\n[数据] 未加载到正式实验探针，已跳过探针统计并保留空结果。请检查 DATA_ROOT 和输出 JSON。")
+        with open(OUT_DIR / "probe_centric_summary.csv", "w", encoding="utf-8-sig", newline="") as f:
+            csv.writer(f).writerow(["subject", "attention", "vigilance", "quality", "hr_bpm", "rmssd_ms", "br_bpm"])
+        return
     print(f"\n[数据] 探针总数 {len(all_probes)}, 生理可信 {len(ok_probes)} "
           f"({len(ok_probes)/len(all_probes)*100:.0f}%)")
 

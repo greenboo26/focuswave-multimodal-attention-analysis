@@ -15,10 +15,15 @@ analyze_formal_cross_subject.py — 正式实验第一批跨被试汇总 + 稳�
 """
 
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
 from scipy import stats
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 # ============================================================
 # 参数声明
