@@ -1,10 +1,13 @@
 # 分析产物（可再生成）
 output/
 
-# Python 缓存
+# Python 缓存与本地运行环境
 __pycache__/
 *.pyc
 .venv/
+**/.venv*/
+**/venv*/
+**/node_modules/
 
 # 原始数据（隐私 + 体积）
 *.npz
@@ -21,3 +24,14 @@ docs/交付/*/原文/
 # 系统文件
 .DS_Store
 Thumbs.db
+
+# NIR 训练过程与批量运行缓存
+**/runs/
+**/runtime/*/outputs/
+
+# 独立维护的 NIR 工程：主库通过版本说明和统一 models/ 目录引用，不嵌套复制其 Git 历史
+/01_Attention-Analysis_nvidia-cuda/
+/external/
+
+# Git LFS 管理的模型权重
+# 权重本身不忽略，使用 .gitattributes 进入 LFS

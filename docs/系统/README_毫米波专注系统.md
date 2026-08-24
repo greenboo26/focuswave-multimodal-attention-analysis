@@ -92,11 +92,11 @@ python scripts\batch_extract_crossmodal.py --probe-csv output\E_Data_FAST\behavi
 - [E_Data_FAST/personalized_temporal_lopo.json](output/E_Data_FAST/personalized_temporal_lopo.json)：按时间顺序的个体校准审计。
 - [E_Data_FAST/label_coverage_audit.json](output/E_Data_FAST/label_coverage_audit.json)：校准段和测试段的标签覆盖审计。
 - [系统验证报告](output/系统验证报告_20260821.md)：数据来源、ECG 对照、手册对应关系和限制。
-- [100 人目标采集与验收清单](数据采集与验收清单_100人目标.md)：后续被试的探针配额、时间戳和质量门槛。
+- [100 人目标采集与验收清单](../项目管理/数据采集与验收清单_100人目标.md)：被试的探针配额、时间戳和质量门槛。
 - [100 人目标自动验收审计](output/E_Data_FAST/target_100_audit.json)：逐被试检查前后时间段的专注/走神标签覆盖和有效窗口。
 - [发布验收结果](output/E_Data_FAST/release_verification.json)：检查数据覆盖、关键产物和脚本可编译性。
 - [三层数据源清单](output/E_Data_FAST/source_inventory_final.json)：区分主验证集、正式实验和 ECG/RSP 多源对照层。
-- [需求—证据追踪矩阵](需求-证据追踪矩阵.md)：逐项对应申请书目标、程序数据、手册边界和当前证据。
+- [需求—证据追踪矩阵](../项目管理/需求-证据追踪矩阵.md)：逐项对应申请书目标、程序数据、手册边界和当前证据。
 - [项目级完成审计](output/E_Data_FAST/project_completion_audit.json)：逐项区分已实现、部分可用、探索性和未完成要求。
 - [系统模式策略](output/E_Data_FAST/system_mode_policy.json)：区分生理质量模式、个体化毫米波模式、行为辅助多模态模式和视觉探索模式。
 - [来源覆盖审计](output/E_Data_FAST/source_evidence_audit.json)：核对 E:\Data、正式实验、ECG/RSP 参照、FocusWave 程序包、11_数据、03_文献和申请书均已进入证据链，并保留协议边界。
