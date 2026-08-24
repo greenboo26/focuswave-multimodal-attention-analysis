@@ -26,12 +26,14 @@ from scipy.signal import find_peaks
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SCRIPT_DIR)
+from path_registry import load_paths
 import process_vital_signs_v3_1_1 as algo
 from process_vital_signs_v3_1_1 import FS, HR_LO_HZ, HR_HI_HZ, BR_LO_HZ, BR_HI_HZ
 import gold_standard_qa as gold_qa
 
-ACQ_ROOT = Path(r"D:\acq_mmwave_results")
-OUT_ROOT = Path(r"D:\Project\厚粲杯\08_算法\output\校准")
+PATHS = load_paths()
+ACQ_ROOT = Path(PATHS["calibration_root"])
+OUT_ROOT = Path(PATHS["algorithm_root"]) / "output" / "校准"
 
 # 呼吸峰值检测参数
 RSP_MIN_DIST_S = 0.5          # 呼吸峰最小间距（秒）

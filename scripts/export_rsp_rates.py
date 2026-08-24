@@ -6,10 +6,13 @@ import sys, csv
 from pathlib import Path
 import numpy as np
 
-ROOT = Path(r"D:\acq_mmwave_results")
-OUT = Path(r"D:\Project\厚粲杯\08_算法\output\A2_rsp_gate")
-OUT.mkdir(parents=True, exist_ok=True)
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from path_registry import load_paths
+
+PATHS = load_paths()
+ROOT = Path(PATHS["calibration_root"])
+OUT = Path(PATHS["algorithm_root"]) / "output" / "A2_rsp_gate"
+OUT.mkdir(parents=True, exist_ok=True)
 import bioread
 from gold_standard_qa import rsp_qa
 

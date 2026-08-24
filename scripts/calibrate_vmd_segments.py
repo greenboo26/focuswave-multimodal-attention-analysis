@@ -28,10 +28,12 @@ from scipy.signal import find_peaks
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SCRIPT_DIR)
+from path_registry import load_paths
 import process_vital_signs_v3_1_1 as algo
 
-DATA_ROOT = Path(r"D:\acq_mmwave_results")
-OUT_ROOT = Path(r"D:\Project\厚粲杯\08_算法\output\校准\vmd_segments")
+PATHS = load_paths()
+DATA_ROOT = Path(PATHS["calibration_root"])
+OUT_ROOT = Path(PATHS["algorithm_root"]) / "output" / "校准" / "vmd_segments"
 
 SUBJECTS = {
     'sub2': {'acq': 'sub-2_/sub2.acq', 'dir': 'sub-2_/mmwave',
