@@ -35,3 +35,6 @@ Thumbs.db
 
 # Git LFS 管理的模型权重
 # 权重本身不忽略，使用 .gitattributes 进入 LFS
+
+# 本机路径配置
+configs/paths.local.json

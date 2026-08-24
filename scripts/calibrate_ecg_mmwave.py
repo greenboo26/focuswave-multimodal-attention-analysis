@@ -59,6 +59,8 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 if SCRIPT_DIR not in sys.path:
     sys.path.insert(0, SCRIPT_DIR)
 
+from path_registry import load_paths
+
 from process_vital_signs_v2 import FS, N_CH, _sos_bandpass
 from analyze_rest_3min import (select_bins_from_profile, analyze_displacement,
                                estimate_freq_periodogram)
@@ -71,7 +73,8 @@ from process_vital_signs_v9 import suppress_harmonics
 
 # 各校准场次的数据路径: (acq 路径, 毫米波目录, events.csv 路径, mmwave 文件前缀)
 # 2026-08-16 数据已从 11_数据/生理多导校正 迁移至 D:\acq_mmwave_results
-DATA_ROOT = r"D:\acq_mmwave_results"
+PATHS = load_paths()
+DATA_ROOT = str(Path(PATHS["calibration_root"]))
 SUBJECTS = {
     'sub1': {
         'acq': DATA_ROOT + r"\sub-cal01_\cal01.acq",
@@ -656,7 +659,7 @@ def main():
     print(f"  毫米波 × ECG 双机校准分析（{args.subject}）")
     print("=" * 60)
 
-    OUTPUT_DIR = Path(r"D:\Project\厚粲杯\08_算法\output\校准") / cfg['output']
+    OUTPUT_DIR = Path(PATHS["algorithm_root"]) / "output" / "校准" / cfg['output']
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     # ── 读数据 ──

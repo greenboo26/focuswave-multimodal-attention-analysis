@@ -22,21 +22,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.signal import butter, filtfilt, find_peaks, sosfiltfilt
 
+from path_registry import load_paths
+
+
+PATHS = load_paths()
+
 def _resolve_acq_root() -> Path:
     """Resolve the synchronized ECG/RSP/mmWave root across the two path spellings."""
     candidates = []
     configured = os.environ.get("ACQ_SOURCE_ROOT")
     if configured:
         candidates.append(Path(configured))
-    candidates.extend([
-        Path(r"D:\acq_mmwave_results"),
-        Path(r"D:\acq\_mmwave\_results"),
-    ])
+    configured_path = PATHS.get("calibration_root")
+    if configured_path:
+        candidates.append(Path(configured_path))
     return next((p for p in candidates if p.exists()), candidates[0])
 
 
 DATA_ROOT = _resolve_acq_root()
-OUT_ROOT = Path(r"D:\Project\厚粲杯\08_算法\output\ACQ_reference_20260821")
+OUT_ROOT = Path(PATHS["algorithm_root"]) / "output" / "ACQ_reference_20260821"
 WINDOW_S = 60.0
 VALIDATION_WINDOW_S = 30.0
 

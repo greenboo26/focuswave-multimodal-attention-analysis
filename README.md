@@ -81,7 +81,9 @@
 
 ## 用法
 
-数据根目录：预实验 `J:/预实验`（sub-000_~010_，F 盘已迁），输出统一到 `output/`。
+当前分析阶段的稳定数据路径和本机正式数据路径配置见 [`configs/README.md`](configs/README.md)。新脚本应通过 `scripts/path_registry.py` 读取路径；正式数据移动硬盘只在本机配置，不写死盘符。
+
+当前预实验数据根目录为 `I:/预实验`（具体配置见 `configs/paths.local.json` 或 `paths.example.json`），输出统一到 `output/`。README 中的旧盘符只作为历史记录，不作为当前默认路径。
 
 ```bash
 cd scripts
