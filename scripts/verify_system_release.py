@@ -56,9 +56,9 @@ def main():
         ROOT / "docs" / "毫米波专注系统_运行手册.md",
         ROOT / "docs" / "最终交付审计报告_100人目标.md",
         ROOT / "docs" / "系统模式结果对照表.md",
-        ROOT / "数据采集与验收清单_100人目标.md",
-        ROOT / "需求-证据追踪矩阵.md",
-        ROOT / "output" / "系统验证报告_20260821.md", ROOT / "README_毫米波专注系统.md",
+        ROOT / "docs" / "项目管理" / "数据采集与验收清单_100人目标.md",
+        ROOT / "docs" / "项目管理" / "需求-证据追踪矩阵.md",
+        ROOT / "output" / "系统验证报告_20260821.md", ROOT / "docs" / "系统" / "README_毫米波专注系统.md",
     ]
     errors.extend(f"missing artifact: {p}" for p in required if not p.exists())
     if errors:

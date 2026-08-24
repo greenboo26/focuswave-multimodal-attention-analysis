@@ -1,0 +1,2 @@
+﻿subject,n_windows,n_ok,ok_ratio,hr_median_bpm,snr_median_db,ibi_ok_median,n_drift,verdict
+sub-rest_3min_,35,34,0.971,90.0,9.64,1.0,1,可信

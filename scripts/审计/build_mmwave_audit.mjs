@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import { Workbook, SpreadsheetFile } from '@oai/artifact-tool';
 
 const base = 'D:/Project/厚粲杯/08_算法';
-const rows = JSON.parse(await fs.readFile(`${base}/mmwave_audit_data.json`, 'utf8'));
+const rows = JSON.parse(await fs.readFile(`${base}/data/审计/mmwave_audit_data.json`, 'utf8'));
 const outDir = `${base}/output/00_最新审计/mmwave_audit`;
 await fs.mkdir(outDir, { recursive: true });
 

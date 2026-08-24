@@ -84,6 +84,7 @@ HRV_RS_FS = 4.0            # HRV 频域重采样率 (Hz), Task Force 1996 建议
 
 FIRST_FRAME = None         # 首帧号（雷达上电即发帧, 各被试不同, 从 timestamps 首行读取）
 N_PARTITIONS = None        # npz 有效片数（= frame_count // CHUNK, 各被试不同）
+FRAME_IDX = None           # 完整硬件帧号序列，用于丢帧后的行索引映射
 BIN_OFFSET = 0             # npz 距离裁剪偏移（新采集数据 bin_offset=8, 旧数据=0,
                            # 由 load_frames 读取 npz 内 bin_offset 字段自动更新）
 
@@ -145,6 +146,7 @@ def load_timestamps():
         frame_idx: (n,) int 数组, 帧号
         py_ms: (n,) int64 数组, 采集电脑 Python 时间戳 (ms)
     """
+    global FRAME_IDX
     frame_idx, py_ms = [], []
     with open(MMWAVE_DIR / f"sub-{SUBJECT}_mmwave_timestamps.csv") as f:
         for line in f:
@@ -153,7 +155,8 @@ def load_timestamps():
                 continue
             frame_idx.append(int(parts[0]))
             py_ms.append(int(parts[2]))
-    return np.array(frame_idx), np.array(py_ms, dtype=np.int64)
+    FRAME_IDX = np.array(frame_idx, dtype=np.int64)
+    return FRAME_IDX, np.array(py_ms, dtype=np.int64)
 
 
 def load_frames(fa, fb):
@@ -165,10 +168,25 @@ def load_frames(fa, fb):
     Returns:
         iq_fd: (fb-fa, 256, 8) complex64, 通道序 tx0_rx0..tx3_rx3
     """
-    i_start = (fa - FIRST_FRAME) // CHUNK
-    i_end = (fb - FIRST_FRAME + CHUNK - 1) // CHUNK
+    # npz 分片按 timestamps 行数写入；硬件帧号在丢帧后会跳变，不能
+    # 直接用 (帧号-首帧号)//CHUNK 推断分片号。
+    global FRAME_IDX
+    if FRAME_IDX is not None and len(FRAME_IDX):
+        row_start = int(np.searchsorted(FRAME_IDX, fa, side="left"))
+        row_end = int(np.searchsorted(FRAME_IDX, fb, side="left"))
+        row_start = max(0, min(row_start, len(FRAME_IDX) - 1))
+        row_end = max(row_start + 1, min(row_end, len(FRAME_IDX)))
+        i_start = row_start // CHUNK
+        i_end = (row_end + CHUNK - 1) // CHUNK
+        offset0 = i_start * CHUNK
+        requested_len = row_end - row_start
+    else:
+        row_start = None
+        i_start = (fa - FIRST_FRAME) // CHUNK
+        i_end = (fb - FIRST_FRAME + CHUNK - 1) // CHUNK
+        offset0 = FIRST_FRAME + i_start * CHUNK
+        requested_len = fb - fa
     chunks = []
-    offset0 = FIRST_FRAME + i_start * CHUNK
     for i in range(i_start, min(i_end, N_PARTITIONS)):
         fpath = MMWAVE_DIR / (f"sub-{SUBJECT}_mmwave_datacube.npz" if i == 0
                               else f"sub-{SUBJECT}_mmwave_datacube_part{i:03d}.npz")
@@ -185,8 +203,8 @@ def load_frames(fa, fb):
         d.close()
         chunks.append(chunk)
     iq = np.concatenate(chunks)
-    lo = fa - offset0
-    hi = lo + (fb - fa)
+    lo = (row_start if row_start is not None else fa) - offset0
+    hi = lo + requested_len
     return iq[lo:hi]
 
 
