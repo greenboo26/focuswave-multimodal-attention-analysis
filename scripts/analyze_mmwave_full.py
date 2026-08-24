@@ -236,7 +236,17 @@ def main():
     t_end_ms = int(py_ms[-1])
     span_start, span_end = rhrv.load_behavior_span(DATA_ROOT / f"sub-{SUBJECT}_")
     if span_start is None:
-        print("  ⚠️ 未找到 master_timeline.csv, 使用全量数据 (可能混入实验前后)")
+        # Some formal sessions contain Block behavior files but no
+        # master_timeline.csv. Use the recorded Block trial onset range as a
+        # conservative fallback instead of silently analyzing the whole
+        # recording, which may include setup/teardown or an empty tail.
+        trial_onsets = [t["onset_ms"] for t in trials if t.get("onset_ms") is not None]
+        if trial_onsets:
+            t_start_ms = max(t_start_ms, min(trial_onsets))
+            t_end_ms = min(t_end_ms, max(trial_onsets) + WINDOW_SEC * 1000)
+            print("  ⚠️ 未找到 master_timeline.csv, 已改用 Block 行为试次时间范围")
+        else:
+            print("  ⚠️ 未找到 master_timeline.csv 和有效行为时间, 使用全量数据")
     else:
         t_start_ms = max(t_start_ms, span_start)
         t_end_ms = min(t_end_ms, span_end)
@@ -268,7 +278,17 @@ def main():
         fa = int(np.searchsorted(py_ms, t0))
         fb = int(np.searchsorted(py_ms, t1))
         fa, fb = min(max(fa, 0), len(frame_idx) - 1), min(fb, len(frame_idx) - 1)
-        iq = load_frames(int(frame_idx[fa]), int(frame_idx[fb]))
+        if fb <= fa:
+            continue
+        try:
+            iq = load_frames(int(frame_idx[fa]), int(frame_idx[fb]))
+        except ValueError as exc:
+            # Missing/empty chunk windows are retained as unavailable in the
+            # audit by omission from valid windows, never interpreted as a
+            # physiological signal.
+            if "need at least one array" not in str(exc):
+                raise
+            continue
         win_res = analyze_window_auto(iq, method="vmd_heart")
         beh = window_behavior(trials, t0, t1)
         row = {"t_start_s": round((t0 - t_start_ms) / 1000),
@@ -306,7 +326,14 @@ def main():
         fa = int(np.searchsorted(py_ms, t0))
         fb = int(np.searchsorted(py_ms, t1))
         fa, fb = min(max(fa, 0), len(frame_idx) - 1), min(fb, len(frame_idx) - 1)
-        iq = load_frames(int(frame_idx[fa]), int(frame_idx[fb]))
+        if fb <= fa:
+            continue
+        try:
+            iq = load_frames(int(frame_idx[fa]), int(frame_idx[fb]))
+        except ValueError as exc:
+            if "need at least one array" not in str(exc):
+                raise
+            continue
         res = analyze_window_auto(iq, method="vmd_heart", med_hr_hint=med_hr_w)
         if res is not None:
             w["quality"] = "ok"
