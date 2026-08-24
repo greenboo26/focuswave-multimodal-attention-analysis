@@ -1,0 +1,12 @@
+{
+  "project_root": "D:/Project/厚粲杯",
+  "algorithm_root": "D:/Project/厚粲杯/08_算法",
+  "project_data_root": "D:/Project/厚粲杯/11_数据",
+  "calibration_root": "D:/acq_mmwave_data",
+  "preexperiment_root": "I:/预实验",
+  "formal_data_root": null,
+  "notes": {
+    "formal_data_root": "正式数据位于移动硬盘，请在本机 configs/paths.local.json 或环境变量 FOCUSWAVE_FORMAL_DATA_ROOT 中填写当前路径。",
+    "stable_roots": "calibration_root、preexperiment_root 和 project_data_root 为当前分析阶段稳定路径。"
+  }
+}

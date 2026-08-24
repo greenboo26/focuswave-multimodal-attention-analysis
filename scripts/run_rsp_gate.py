@@ -16,9 +16,11 @@ import sys
 import argparse
 from pathlib import Path
 
-ROOT = Path(r"D:\acq_mmwave_results")
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from path_registry import load_paths
 import process_vital_signs_v3_1_1 as algo
+
+ROOT = Path(load_paths()["calibration_root"])
 
 
 def main():
@@ -36,7 +38,7 @@ def main():
     acq_path = acqs[0]
     mm_dir = data_dir / "mmwave"
     pattern = f"sub-{sub}_mmwave_datacube_part*.npz"
-    out = Path(r"D:\Project\厚粲杯\08_算法\output\A2_rsp_gate") / f"sub-{sub}"
+    out = Path(load_paths()["algorithm_root"]) / "output" / "A2_rsp_gate" / f"sub-{sub}"
     out.mkdir(parents=True, exist_ok=True)
 
     acq_arg = None if args.no_acq else acq_path
