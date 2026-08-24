@@ -115,5 +115,14 @@
     "error_message": "KeyError: prior_n_err. The trusted-probe summary CSV lacks this B0 variable, which is stored in the frozen per-subject full_windows JSON used by the prior LOSO baseline.",
     "fix_applied": "Added deterministic read-only join from J_Data_SUB*_FULL/sub*_full_windows.json keyed by subject and probe_id; the precomputed raw M1/Q0 columns were reused unchanged.",
     "is_systemic": false
+  },
+  {
+    "id": 14,
+    "date": "2026-08-24",
+    "command": "Python inline read-only Zotero schema query",
+    "error_type": "verification_syntax",
+    "error_message": "SyntaxError caused by PowerShell and Python quote nesting in a one-line sqlite3 query.",
+    "fix_applied": "Switched to passing the Python query through standard input; Zotero database remained read-only and unchanged.",
+    "is_systemic": false
   }
 ]
