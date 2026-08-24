@@ -1,0 +1,104 @@
+{
+  "evaluator_version": "ECG evaluator v1",
+  "reference_windows": 10,
+  "sessions": [
+    "sub-97793_"
+  ],
+  "matching": {
+    "offset_estimation": {
+      "offset_s": 0.3650000000000011,
+      "tolerance_s": 0.15,
+      "pooled_matched_count": 190,
+      "pooled_timing_mae_ms": 73.62631578947352,
+      "search": [
+        -1.0,
+        1.0,
+        0.005
+      ],
+      "source": "pooled S1 windows"
+    },
+    "offset_application": "one shared scalar fitted from pooled S1 windows, applied unchanged to every model/window",
+    "algorithm": "monotonic one-to-one dynamic-programming beat-event matching",
+    "tolerance_ms": 150.0,
+    "ibi_rule": "only adjacent ECG beats and adjacent radar beats that are both matched one-to-one",
+    "rmssd_rule": "computed only on the longest contiguous run of matched valid IBI intervals; coverage is reported"
+  },
+  "models": {
+    "S1": {
+      "n_windows": 10,
+      "matched_ibi_usable_windows": 10,
+      "matched_rmssd_usable_windows": 8,
+      "hr_abs_error_bpm": 8.66821336892354,
+      "ibi_mae_ms_matched": 80.6099381868131,
+      "ibi_rmse_ms_matched": 97.6981435402438,
+      "rmssd_abs_error_ms_matched": 130.55441939965294,
+      "beat_precision": 0.5238539349065665,
+      "beat_recall": 0.46131198070222457,
+      "false_beat_rate": 0.47614606509343355,
+      "timing_error_mae_ms": 75.17508537758525,
+      "resp_harmonic_mislock": 0.3
+    },
+    "T0": {
+      "n_windows": 10,
+      "matched_ibi_usable_windows": 10,
+      "matched_rmssd_usable_windows": 8,
+      "hr_abs_error_bpm": 7.418213368923537,
+      "ibi_mae_ms_matched": 83.35225912975929,
+      "ibi_rmse_ms_matched": 102.98380326821332,
+      "rmssd_abs_error_ms_matched": 139.20967812331608,
+      "beat_precision": 0.463182955804907,
+      "beat_recall": 0.4178238631287411,
+      "false_beat_rate": 0.5368170441950929,
+      "timing_error_mae_ms": 76.51707756710638,
+      "resp_harmonic_mislock": 0.3
+    },
+    "T1": {
+      "n_windows": 10,
+      "matched_ibi_usable_windows": 10,
+      "matched_rmssd_usable_windows": 6,
+      "hr_abs_error_bpm": 10.638213368923537,
+      "ibi_mae_ms_matched": 84.56753968253972,
+      "ibi_rmse_ms_matched": 100.19436745096134,
+      "rmssd_abs_error_ms_matched": 127.42253071876713,
+      "beat_precision": 0.4530871698518758,
+      "beat_recall": 0.3920838917180381,
+      "false_beat_rate": 0.5469128301481242,
+      "timing_error_mae_ms": 82.37453022875833,
+      "resp_harmonic_mislock": 0.3
+    },
+    "A4": {
+      "n_windows": 10,
+      "matched_ibi_usable_windows": 10,
+      "matched_rmssd_usable_windows": 6,
+      "hr_abs_error_bpm": 9.748213368923539,
+      "ibi_mae_ms_matched": 93.83099423724457,
+      "ibi_rmse_ms_matched": 110.22500753448155,
+      "rmssd_abs_error_ms_matched": 143.3871827918416,
+      "beat_precision": 0.47974950724950727,
+      "beat_recall": 0.42696462074510855,
+      "false_beat_rate": 0.5202504927504928,
+      "timing_error_mae_ms": 78.60490765829954,
+      "resp_harmonic_mislock": 0.5
+    },
+    "C8-PH": {
+      "n_windows": 10,
+      "matched_ibi_usable_windows": 10,
+      "matched_rmssd_usable_windows": 7,
+      "hr_abs_error_bpm": 10.5307665604129,
+      "ibi_mae_ms_matched": 76.48305583361879,
+      "ibi_rmse_ms_matched": 91.90057959959265,
+      "rmssd_abs_error_ms_matched": 118.92284017492284,
+      "beat_precision": 0.5033928581993596,
+      "beat_recall": 0.4414370588760832,
+      "false_beat_rate": 0.4966071418006403,
+      "timing_error_mae_ms": 77.8317723453018,
+      "resp_harmonic_mislock": 0.2
+    }
+  },
+  "notes": [
+    "ECG peak cleaning is unchanged from the first-pass evaluator.",
+    "Ordinal truncation metrics are intentionally absent from this output.",
+    "This remains a single-session, ten-window experimental comparison; no mainline algorithm was changed.",
+    "No complex coherent fusion was run."
+  ]
+}

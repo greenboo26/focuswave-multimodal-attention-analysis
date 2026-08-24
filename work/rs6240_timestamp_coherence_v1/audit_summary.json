@@ -1,0 +1,62 @@
+{
+  "sessions": [
+    "sub-3_",
+    "sub-4_",
+    "sub-97793_"
+  ],
+  "max_frames_per_session": 6000,
+  "bands_hz": {
+    "br": [
+      0.1,
+      0.5
+    ],
+    "hr": [
+      0.8,
+      2.0
+    ]
+  },
+  "timestamp_sources": {
+    "device_ms": 1,
+    "host_ms": 2
+  },
+  "gap_policy": {
+    "gap_factor_of_median_dt": 1.5,
+    "minimum_segment_frames": 256,
+    "cross_gap_interpolation": false
+  },
+  "selected_range_bins": {
+    "sub-3_": [
+      9,
+      12,
+      18,
+      247,
+      69
+    ],
+    "sub-4_": [
+      12,
+      15,
+      4,
+      20,
+      69
+    ],
+    "sub-97793_": [
+      10,
+      20,
+      70,
+      247,
+      13
+    ]
+  },
+  "finite_timestamp_aware_hr_rows_by_source": {
+    "device_ms": 420,
+    "host_ms": 0
+  },
+  "legacy_method": "frame-index arrays with fs=100 Hz",
+  "primary_method": "timestamp interpolation to median-dt uniform grid, segment at large gaps, weighted mean coherence",
+  "notes": [
+    "This output is a correction audit; it does not by itself establish same-Tx superiority.",
+    "Device timestamp is primary; host timestamp is a sensitivity comparison.",
+    "After device-timestamp correction, the same-Tx versus cross-Tx direction remains unchanged; this still does not establish same-Tx superiority.",
+    "Host timestamp has many large gaps and produced no usable cardiac-band segment under the strict gap policy."
+  ]
+}

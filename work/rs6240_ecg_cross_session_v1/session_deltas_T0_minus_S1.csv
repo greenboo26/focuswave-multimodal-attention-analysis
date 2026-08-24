@@ -1,0 +1,5 @@
+﻿session,n_windows_expected,n_windows_completed,global_offset_s,delta_definition,delta_hr_abs_error_bpm_T0_minus_S1,delta_ibi_mae_ms_matched_T0_minus_S1,delta_ibi_rmse_ms_matched_T0_minus_S1,delta_beat_recall_T0_minus_S1,delta_rmssd_abs_error_ms_matched_T0_minus_S1,delta_resp_harmonic_mislock_T0_minus_S1
+sub-97794_,20,20,0.365,T0 - S1; lower is better except beat_recall,0.1707735929004059,5.686214735557093,8.100527655141732,0.014937926842612342,16.147619172013172,0.1
+sub-97795_,20,20,0.365,T0 - S1; lower is better except beat_recall,-0.12500000000000142,-10.78007759253486,-15.901465301359428,0.018426344187213752,-9.698182361354215,0.15
+sub-97796_,20,20,0.365,T0 - S1; lower is better except beat_recall,-0.24146353878558066,-4.588242035741835,-8.449746282232498,-0.006586396742851787,-21.532056386095316,0.05
+sub-9779_,20,20,0.365,T0 - S1; lower is better except beat_recall,-2.3154093790342807,-13.270564990350218,-13.601657568130411,0.012421786681262863,29.384466121447097,-0.2

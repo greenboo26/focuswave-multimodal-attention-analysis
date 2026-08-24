@@ -1,0 +1,31 @@
+{
+  "evaluator_version": "ECG evaluator v1",
+  "development_session_excluded": "sub-97793_",
+  "sessions": [
+    "sub-97794_",
+    "sub-97795_",
+    "sub-97796_",
+    "sub-9779_"
+  ],
+  "reference_windows": 80,
+  "completed_windows": 80,
+  "failed_windows": 0,
+  "fixed_global_offset_s": 0.365,
+  "matching_tolerance_ms": 150.0,
+  "models": [
+    "S1",
+    "T0"
+  ],
+  "outputs": [
+    "window_metrics.csv",
+    "session_model_summary.csv",
+    "session_deltas_T0_minus_S1.csv",
+    "failures.csv"
+  ],
+  "notes": [
+    "The +0.365 s offset is frozen from the evaluator-development session and was not re-estimated here.",
+    "No per-session, per-window, or per-model ECG-based tuning was performed.",
+    "Session deltas are paired mean T0-S1 differences over windows present for both models.",
+    "This is an experimental cross-session validation and does not modify the S1 mainline baseline."
+  ]
+}
