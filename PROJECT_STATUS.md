@@ -16,33 +16,37 @@
 - formaltest 历史中曾出现 1–9 分即时专注评分的过渡版本，但该版本从未用于正式被试，不进入正式数据版本划分。
 - 两地正式实验的 B1/B2、四分类注意状态探针、警觉度探针和 probe schedule family 属于同一 measurement protocol。
 - 共同主分析范围：`Beijing B1+B2 + Zhuhai B1+B2`。
-- 珠海 B3：`long time-on-task extension`，单独作为更长时程扩展分析。
-- pooled 分析必须保留 `site`，participant/repeat participant 仍为独立分组单位。
+- 珠海 B3：`long time-on-task extension`。
+- pooled 分析保留 `site`，participant/repeat participant 作为独立分组单位。
 
-## 珠海预实验与重复参与规则
+## 珠海预实验与重复采集规则
 
 - 珠海正式实验前约有 10 名左右预实验被试；预实验使用 FocusWave 中单独标注的预实验程序分支，程序结构与正式实验差异较大。
-- 预实验 session 不直接并入正式 B1/B2/B3 probe-level 主分析。
-- 北京和珠海正式实验均允许同一自然人最多参加 3 次正式实验。
-- 若同一自然人出现 4 个及以上 session，必须逐场判断是否为：预实验、质量问题后的重采、或真正有效的正式重复实验。不能按 session 数量机械定义正式参加次数。
-- canonical 身份层必须区分 `phase=pilot/formal`、`is_retake`、`formal_repeat_index`、`repeat_participant_id` 和程序版本/protocol family。
+- 预实验 session 作为独立 protocol family 保存，可用于 pilot-specific 分析、流程质控和身份层纵向关联；正式主分析使用 formal protocol 数据。
+- 常规每人最多安排 3 次正式实验是采集管理规则，用于避免同一早晨/下午/晚上短时间连续重复，不是统计有效性的硬性上限。
+- 因毫米波、NIR 或其他模态质量问题进行的第 4 次及以后正式重采可以保留，只要核心任务、probe 和时间线有效。
+- 数据质量按模态判断：某一模态质量不足时，该 session 的其他有效模态、行为、probe 和问卷继续用于相应分析。
+- canonical 身份层记录 `phase`、`formal_session_index`、`collection_reason`、`repeat_participant_id`、程序版本和各模态 usable 字段。
+- 同一自然人的全部 session 在机器学习评估中进入同一个 participant group。
 
 ## 问卷身份辅助题处理
 
 - 珠海正式问卷比北京多一个“是否参加过第一阶段/预实验”的问题，用于辅助识别预实验参与经历。
-- 北京只有最前几个答卷曾残留该题，发现后即从问卷删除；北京该题回答后续直接忽略，不进入问卷分析。
+- 北京只有最前几个答卷曾残留该题；北京该题回答后续直接忽略。
 - 珠海该题只作为 participant/session provenance 和 pilot/formal linkage 辅助字段，不作为心理测量变量，不进入专注状态预测特征。
 
 ## 当前直接下一步
 
-1. 建立北京—珠海统一 canonical person/session crosswalk，先区分 pilot / formal / retake / formal repeat 1–3。
-2. 建立 `shared_primary = Beijing B1+B2 + Zhuhai B1+B2` 的共同 probe master。
-3. 建立 `zhuhai_extended = Zhuhai B3` 的长时程扩展 master。
-4. 在共同协议数据上先验证行为/探针纵向规律和 site × progress，再决定后续 pooled 传感器模型。
+1. 建立北京—珠海统一 canonical person/session crosswalk，逐 session 标记 pilot/formal、formal_session_index、collection_reason 和 program_family。
+2. 为每个正式 session 建立 `behavior/probe/mmwave/NIR/RGB` 模态级 QC，而不是整场一票剔除。
+3. 建立 `shared_primary = Beijing B1+B2 + Zhuhai B1+B2` 的共同 probe master。
+4. 建立 `zhuhai_extended = Zhuhai B3` 的长时程扩展 master。
+5. 先运行共同协议的行为/probe 纵向验证与 `site × progress`，随后将同一 canonical master 接入毫米波/NIR/RGB matched-cohort 模型。
+6. 对第 4 次及以后正式 session 在主分析中保留，并预先准备“全部有效 session vs 每人最多前三场”的敏感性分析。
 
 ## 解释边界
 
-- 珠海预实验与正式实验属于不同 protocol family；身份可以连接，测量数据不能未经定义直接拼接。
-- 同一自然人可以跨预实验、正式实验和重采出现多个 session；自然人身份与有效正式重复次数必须分开记录。
+- 珠海预实验与正式实验属于不同 protocol family；身份可以连接，正式 pooled probe 主分析使用 formal protocol。
+- 正式 session 是否保留由核心实验结构决定；具体模态是否进入某一分析由该模态 QC 决定。
 - Q1 是 session-level 外部效标支持，不等于逐窗口标签的完全验证。
 - C1 的停止结论仅适用于当前比赛周期的逐搏 IBI/HRV 开发，不代表 RS6240 永远无法测量 HRV。
