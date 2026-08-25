@@ -637,3 +637,22 @@ NIR 当前权威输入：
 解释边界：本轮完成的是技术 benchmark 运行，不等于“HRV 已验证”。当前薄基线的逐搏覆盖/召回偏低，后续如要把该外部 benchmark 作为算法性能证据，应优先复核/改进逐搏检测器并保留本轮作为可复现 baseline；不能只依据 HR 误差较小就宣称 IBI/HRV 有效。
 
 状态替代关系：本节 supersede 10.9 中的 `DATASET_LOCAL_READY / benchmark_not_run`；10.8 的“数据未下载”状态保留为历史记录，不再作为 CURRENT。
+
+### 10.11 本地数据、输出与代码资产总索引（CURRENT）
+
+本轮只读盘点已完成，未运行算法、未解码视频、未移动或修改原始数据。完整索引见：
+
+`D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825\docs\research\2026-08-25-local-asset-inventory-and-work-map.md`
+
+路径纠正：用户消息中的 `D:\Project\厚粲杯\11\_数据` 实际对应 `D:\Project\厚粲杯\11_数据`；`D:\Project\厚粲杯\08\_算法` 实际对应 `D:\Project\厚粲杯\08_算法`。`D:\acq\_mmwave\_data` 及其上级 `D:\acq` 不存在，本机可核验的实际毫米波目录为 `D:\acq_mmwave_data`，不能把两者写成同一路径。
+
+关键本地资产当前登记为：
+
+- NIR 正式输出：`D:\Project\厚粲杯\11_数据\01_Attention-Analysis_nvidia-cuda_formal_NIR`，1,527 个非 `.git` 文件、约 3.30 GB；当前候选运行 2 个、完整运行 0 个、正式特征行 0，不能标成 NIR 全量完成；
+- 毫米波采集：`D:\acq_mmwave_data`，1,286 个文件、约 19.43 GB，含 NPZ、时间戳 CSV、元数据 JSON、ACQ/BIN 和行为/校准配套；原始数据不上传；
+- 正式/预实验数据总目录：`D:\Project\厚粲杯\11_数据`，可见递归文件约 5,788 个、约 11.53 GB，具体结果必须指向子目录和文件；
+- 预实验：`I:\预实验`，2,684 个文件、约 209.58 GB，含 NPZ、CSV、AVI、JSON、BIN 和 7Z；本轮未解码、未重跑；
+- NIR/行为仓库：`D:\Project\厚粲杯\08_算法\01_Attention-Analysis_nvidia-cuda`，分支 `nvidia-cuda`，HEAD `1d3587f`，工作区存在未提交修改；
+- 当前 mmWave/ECG 交接 worktree：`D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825`，HEAD `97b236a`。
+
+状态边界：GitHub 只保存代码、协议、决策、状态、字段清单和可复现入口；原始数据、视频、NPZ、MAT 和大型派生结果继续保留在本地。后续 GPT/Codex 应先读本节和上述资产地图，再读取具体 `report.md`、`run_manifest.json`、`status.json`，不得重新扫描原始数据或把 smoke/历史/重跑候选当作 CURRENT。
