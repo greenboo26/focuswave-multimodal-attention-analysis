@@ -1,0 +1,15 @@
+{
+  "audit_date": "2026-08-25",
+  "repositories": [
+    {"url": "https://github.com/Rc-W024/VS_DATASET", "commit": "8551e67385e400a884335fef322b3734aadd0bf0", "license": "MIT, copyright 2025 Ruochen Wu"},
+    {"url": "https://github.com/Rc-W024/VitalSense2024", "commit": "d9f71f96800da7ed2192ff1dc0cba0f0ef5b6de6", "license": "MIT, copyright 2024 Ruochen Wu"}
+  ],
+  "raw_links_and_uses": [
+    {"url": "https://github.com/Rc-W024/VS_DATASET/blob/main/HEALTHY.md", "use": "healthy cohort layout and cited access entries"},
+    {"url": "https://github.com/Rc-W024/VS_DATASET/blob/main/PATIENT.md", "use": "patient cohort availability and two-channel raw BIN description"},
+    {"url": "https://github.com/Rc-W024/VS_DATASET/blob/main/VS_separation.m", "use": "radar/reference variables and separation implementation"},
+    {"url": "https://github.com/Rc-W024/VS_DATASET/blob/main/TechValidation.m", "use": "respiration cross-correlation synchronization route"},
+    {"url": "https://github.com/Rc-W024/VitalSense2024/blob/main/main.m", "use": "FFT period selection, waveform template, matched-filter, heartbeat timestamps"},
+    {"url": "https://github.com/Rc-W024/VitalSense2024/blob/main/HRestim.m", "use": "spectral/autocorrelation period candidate selection"}
+  ]
+}

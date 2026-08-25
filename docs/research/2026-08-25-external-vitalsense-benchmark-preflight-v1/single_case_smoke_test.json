@@ -1,0 +1,46 @@
+{
+  "status": "completed_single_record_smoke_test",
+  "input_mat": "D:\\Project\\\u539a\u7cb2\u676f\\11_\u6570\u636e\\derived\\external_vitalsense_benchmark_preflight_v1\\source_snapshots\\VitalSense2024\\data\\C_chest_normal_withECG.mat",
+  "input_variables": [
+    "ECGSignal",
+    "beatingTone_time",
+    "data"
+  ],
+  "input_shapes": {
+    "beatingTone_time": [
+      512,
+      8000
+    ],
+    "ECGSignal": 4096000
+  },
+  "parameters": {
+    "frame_s": 0.003,
+    "radar_fs_hz": 333.3333333333333,
+    "adc_fs_hz": 683600.0,
+    "alignment": "same-ADC index correspondence; fixed lag 0 s; no ECG-driven lag optimization",
+    "beat_tolerance_s": 0.075,
+    "target_selection": "max positive FFT bin over every 100th chirp"
+  },
+  "counts": {
+    "radar_frames": 8000,
+    "ecg_beats": 72,
+    "radar_beats": 31,
+    "matched_beats": 7
+  },
+  "metrics": {
+    "hr_reference_bpm": 178.5714285714284,
+    "hr_radar_bpm": 91.11617312072904,
+    "hr_absolute_error_bpm": 87.45525545069937,
+    "beat_recall": 0.09722222222222222,
+    "beat_precision": 0.22580645161290322,
+    "matched_ibi_mae_ms": 43.49999999999974,
+    "matched_ibi_bias_ms": 3.4999999999996896,
+    "rmssd_error_ms": 7.715634615723047,
+    "sdnn_error_ms": 0.43036049835700396
+  },
+  "limitations": [
+    "ECG peak detector is a provisional generic detector, not adjudicated R-peaks.",
+    "Mechanical radar pulse morphology need not be zero-lag with ECG R-peaks; this smoke test deliberately does not learn a lag.",
+    "One example recording only; no subject/session split, tuning, or publication comparison is claimed."
+  ]
+}
