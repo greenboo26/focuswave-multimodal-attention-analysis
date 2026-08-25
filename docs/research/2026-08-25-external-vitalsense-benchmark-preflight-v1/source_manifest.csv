@@ -1,0 +1,7 @@
+source_id,kind,url,revision_or_version,local_snapshot,access_checked,used_for,limitations
+VS_DATASET_GitHub,code_and_dataset_documentation,https://github.com/Rc-W024/VS_DATASET,8551e67385e400a884335fef322b3734aadd0bf0,source_snapshots/VS_DATASET,2026-08-25,healthy_and_patient_layout_license_fields_sync_route,repository does not contain the 24-subject healthy MAT cohort
+VitalSense2024_GitHub,code_and_example_data,https://github.com/Rc-W024/VitalSense2024,d9f71f96800da7ed2192ff1dc0cba0f0ef5b6de6,source_snapshots/VitalSense2024,2026-08-25,matched_filter_heartbeat_timestamp_route_and_single_record_smoke_test,example files are not VS_DATASET cohort and have no subject/session metadata
+VS_DATASET_healthy,public_dataset_entry,https://doi.org/10.21227/wq68-sv85,repository-linked,not_downloaded,2026-08-25,formal_healthy_access_entry,download/auth terms and MAT variables were not directly verified
+VS_DATASET_healthy_alternate,public_dataset_entry,https://doi.org/10.34810/data2962,repository-linked,not_downloaded,2026-08-25,alternate_access_entry,download contents not directly verified
+VS_DATASET_patient,public_dataset_entry,https://figshare.com/s/e056be5dd8bfee45dd6c,repository-linked,not_downloaded,2026-08-25,patient_access_entry,repository marks dataset under construction and says approximately 87 GB
+VitalSense_article,publication_metadata,https://doi.org/10.1109/TMC.2025.3640267,repository-linked,not_downloaded,2026-08-25,baseline_provenance_only,not used to infer unverified numerical claims

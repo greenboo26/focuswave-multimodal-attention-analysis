@@ -1,0 +1,35 @@
+{
+  "name": "external_vitalsense_beat_ibi_benchmark_preflight_v1",
+  "scope": "adapter and single-record smoke test only",
+  "reference": {
+    "primary": "ECG Lead II R-peak timestamps from the reference stream",
+    "alignment": "use recorded timestamps if supplied; otherwise map native sample indices to seconds. A session lag may be estimated only from an independent synchronization channel such as RSP, frozen before beat evaluation.",
+    "vitalsense2024_smoke_test": "same-ADC index correspondence, fixed lag 0 s, no ECG-driven lag optimization"
+  },
+  "radar_route": [
+    "raw FMCW chirps -> target-bin phase/unwrapping -> displacement vital signal",
+    "0.3 Hz low-pass respiratory estimate; cardiac residual = vital minus respiratory",
+    "period proposal via spectrum/autocorrelation; pulse template from radar residual; reverse-template adaptive matched filter; peak timestamps",
+    "store every processing parameter and output one timestamp vector per session"
+  ],
+  "beat_matching": {
+    "matching": "chronological one-to-one greedy matching after fixed alignment",
+    "tolerance_s": 0.075,
+    "no_posthoc_lag_search": true,
+    "exclude": ["first/last beat if incomplete", "reference artifacts/ectopic beats only when a predeclared ECG QC rule marks them"]
+  },
+  "metrics": {
+    "HR_absolute_error_bpm": "absolute difference of 60 / median IBI, computed independently for all accepted reference and radar beats in a session",
+    "matched_IBI_MAE_ms": "mean absolute difference of adjacent intervals from consecutive one-to-one matched beat pairs",
+    "beat_recall": "matched reference beats / eligible reference beats",
+    "beat_precision": "matched radar beats / eligible radar beats",
+    "RMSSD_error_ms": "absolute difference in RMSSD of matched IBI sequences",
+    "SDNN_error_ms": "absolute difference in SDNN of matched IBI sequences"
+  },
+  "split_rule": "subject-disjoint: all sessions/scenarios of a subject occur in exactly one split. Tune thresholds/template choices only on training subjects; report held-out subjects, with no random window split.",
+  "vitalsense_baseline_comparability": {
+    "shared": ["122 GHz FMCW phase-derived vital signal", "3 ms frame route when source metadata confirms it", "0.3 Hz respiratory low-pass subtraction", "FFT/autocorrelation period proposal", "radar pulse-template matched filter", "findpeaks-derived timestamps"],
+    "added_for_benchmark": ["frozen ECG alignment", "one-to-one beat matching", "IBI and HRV errors", "subject-disjoint evaluation", "reference ECG QC and provenance"],
+    "not_comparable_without_reimplementation": ["baseline's exact manual peak prominence/filter tuning", "publication figures or any unexported annotation policy"]
+  }
+}
