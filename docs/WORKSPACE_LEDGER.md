@@ -469,3 +469,39 @@ GPT 后续不再从大量 handoff 猜项目状态，固定顺序：
 结果摘要：10/20/30 s 窗口错误率均值为 .049/.053/.051，RT 中位数为 318.5/316.1/312.6 ms，RT SD 为 69.1/79.9/84.1 ms。B1 late→B2 early 错误率 .055→.052、RT 中位数 313.1→315.2 ms、RT SD 92.0→87.9 ms、Probe response=1 比例 .721→.786；恢复 GEE 原始 p 分别为 .384、.399、.428 和 .140，当前不写成明确恢复效应。
 
 状态：`CURRENT / 首轮正式行为结果已补齐；最终正文措辞待 BH-FDR、模型诊断和缺失模式复核`。
+
+### 10.5 C1b VS_DATASET 数据获取核查（CURRENT）
+
+本轮为只读获取核查，未运行毫米波/ECG 算法，未下载或上传被试级数据。
+
+**已经确认的事实：**
+
+- 官方 `VS_DATASET` 的健康队列 README 明确提供完整数据结构：`VS01`–`VS24` 共 24 名被试；每名被试包含 `Resting.mat`、`Resting_Mindray.mat`、`Apnea.mat`、`Apnea_Mindray.mat`，另有 `Subject Information.xlsx`。
+- README 说明全包约 31 MB，Mindray 配套文件属于同步参考记录；后续正式 benchmark 仍需核对其中 ECG Lead II 字段和数据许可/使用条款。
+- 官方 README 给出两个数据入口：IEEE DataPort DOI `https://doi.org/10.21227/wq68-sv85`，以及 Catalan Open Research Area 备用入口 `https://doi.org/10.34810/data2962`。
+- 本地只读检查未发现 `VITALSENSE_120_DATASET` 或完整 `VS01`–`VS24` 的成套 Mindray 文件；目前可见的是既有代码/示例资产。官方 `VitalSense2024` README 也明确把仓库内 `data` 定义为测试、熟悉和算法研究用 sample data，不能替代 24 被试正式包。
+
+**状态修正：**
+
+`C1a = DONE`；`C1b = DATASET_PUBLIC_ENTRY_CONFIRMED_BUT_NOT_LOCAL`。
+
+此前的 `data-access blocked` 只能表示“正式数据当前不在本地”，不能解释为“公开数据不存在或无法获取”。当前真正缺少的是：完整 24 被试 Radar–Mindray 配套文件、Subject Information、下载后的许可/条款记录以及本地文件清单和哈希。
+
+**证据与来源：**
+
+- 官方数据说明：`https://github.com/Rc-W024/VS_DATASET/blob/main/HEALTHY.md`
+- 官方代码/示例说明：`https://github.com/Rc-W024/VitalSense2024`
+- IEEE DataPort 数据入口：`https://doi.org/10.21227/wq68-sv85`
+- Catalan Open Research Area 备用入口：`https://doi.org/10.34810/data2962`
+
+**为什么本地没有：**
+
+当前证据支持的最小结论是：此前只取得了官方代码和示例类文件，尚未把 README 所列的完整数据包下载进项目数据目录；本轮未把“未下载到本地”误写成“数据不可得”。
+
+**下一步唯一动作：**
+
+由用户或 Codex 通过上述 IEEE DataPort/备用入口完成一次正式下载，将数据放入项目外部 benchmark 数据目录；随后只做文件清单、许可记录、SHA-256 和 subject-disjoint manifest，再恢复 C1b。下载完成前，C1b 仍不产生正式性能结论，也不调 VitalSense 示例。
+
+**是否替代旧资产：**
+
+不替代 C1b 的冻结评价协议；只修正 blocker 的原因描述和获取路径。北京正式行为结果不受影响，VS_DATASET 获取线不阻塞北京主线。
