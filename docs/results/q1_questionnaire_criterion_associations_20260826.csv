@@ -1,0 +1,8 @@
+analysis_family,association_id,n_sessions,n_participants,effect_size,ci95_low,ci95_high,p_bh,interpretation
+probe,label_1_complete_task_focus_proportion,67,46,-0.5813,-0.7350,-0.4094,0.00000175,criterion-supportive inverse association
+probe,label_2_task_related_interference_proportion,67,46,0.5343,0.3524,0.6895,0.00001121,criterion-supportive positive association
+probe,label_3_mind_blank_proportion,67,46,0.3623,0.1329,0.5673,0.00603525,criterion-supportive positive association
+probe,label_4_mind_wandering_proportion,67,46,0.3303,0.1262,0.5136,0.01110385,criterion-supportive positive association
+behavior,commission_error_rate,67,46,0.2595,0.0145,0.4939,0.04751306,weak behavior criterion support
+behavior,preempt_rate,67,46,0.1541,-0.1610,0.4619,0.24849735,weak or no precise association
+behavior,go_rt_median_ms,67,46,-0.0685,-0.3505,0.1962,0.58186101,weak or no precise marginal association
