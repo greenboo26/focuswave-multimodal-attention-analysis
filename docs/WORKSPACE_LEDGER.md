@@ -657,7 +657,7 @@ NIR 当前权威输入：
 
 状态边界：GitHub 只保存代码、协议、决策、状态、字段清单和可复现入口；原始数据、视频、NPZ、MAT 和大型派生结果继续保留在本地。后续 GPT/Codex 应先读本节和上述资产地图，再读取具体 `report.md`、`run_manifest.json`、`status.json`，不得重新扫描原始数据或把 smoke/历史/重跑候选当作 CURRENT。
 
-### 10.12 C1b 官方 VitalSense MATLAB 复现（CURRENT / TECHNICAL BLOCKER）
+### 10.12 C1b 官方 VitalSense MATLAB 复现（CURRENT / COMPLETE）
 
 任务：`C1B_OFFICIAL_VITALSENSE_REPRO_V1_20260825`。
 
@@ -669,9 +669,11 @@ NIR 当前权威输入：
 官方 commit：`d9f71f96800da7ed2192ff1dc0cba0f0ef5b6de6`  
 官方源代码未修改。
 
-本机环境核验：未发现可调用的 MATLAB、MATLAB Runtime 或 Octave；`C:\Program Files\MATLAB`、`C:\Program Files\MATLAB Runtime`、`C:\Program Files\GNU Octave` 和 `C:\Program Files\Polyspace` 均不存在，`matlab`/`octave` 命令也不存在。因此官方 `main.m` sample 尚未运行，48 场官方 MATLAB 复现尚未运行，MATLAB 版本和 toolbox 无法记录。
+本机 MATLAB 已确认：`D:\Program Files\MATLAB\R2024b\bin\matlab.exe`，MATLAB R2024b Update 1，Signal Processing Toolbox R2024b。命令行核验使用 `matlab -batch "ver"`；由于可执行文件未加入 PATH，实际调用使用绝对路径，结果与 MATLAB R2024b 一致。
 
-本轮正式状态：`OFFICIAL_REPRO_TECHNICAL_BLOCKER`，不是性能结论。
+官方 sample `C_chest_normal_withECG.mat` 已完成，实际调用 HRestim、官方 pulse-template/RWAMF 路线和 MATLAB `findpeaks`，输出 36 个 radar beat。VS01–VS24 × Resting/Apnea 共 48 个 session 已完成，MATLAB 状态为 `OFFICIAL_BATCH_COMPLETE complete=48 errors=0`。
+
+本轮正式状态：`OFFICIAL_REPRO_COMPLETE`。这表示官方 MATLAB 路线和 48 session benchmark 已完成，不等于毫米波 HRV 已验证。
 
 已生成的交接材料：
 
@@ -691,4 +693,12 @@ NIR 当前权威输入：
 
 `D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825\docs\decisions\2026-08-25-vitalsense-official-reproduction-handoff.md`
 
-下一步只能在具备兼容 MATLAB 和所需 Signal Processing Toolbox 的机器上先跑官方 sample，再跑 VS01–VS24 × Resting/Apnea，并将官方峰位置送入既有 C1b ECG evaluator。当前禁止修改官方算法、调 findpeaks、调滤波器、开发 V2 或继续迁移 RS6240。
+本地正式输出目录：
+
+`D:\Project\厚粲杯\11_数据\derived\vitalsense_official_reproduction_v1\`
+
+关键产物包括：`official_sample_matlab_console.log`、`official_batch_matlab_console.log`、`official_session_results.csv`、`official_beat_metrics_primary.csv`、`official_beat_metrics_long.csv`、`three_method_comparison.csv`、`official_evaluation_run_manifest.json` 和 `overlays\` 下的固定复核图。48 个官方逐搏 CSV 留在本地，不提交 GitHub。
+
+C1b 评价已使用相同 ECG Lead II、500 Hz、一对一匹配和 ±50/75/100/150 ms 容差，±75 ms 为主结果，与 `project_bandpass_peak`、`python_vitalsense_amf` 进行比较。官方路线在 ±75 ms 的平均总体 recall 约为 .156，未显示明确逐搏优势；官方 delay 诊断在 VS01 Resting 主容差下不可估计，不能将 0 ms 当作校准结果。RMSSD/SDNN 仅保留为诊断输出，不能据此宣称 HRV 已验证。
+
+本节 supersede 本节原先的 `OFFICIAL_REPRO_TECHNICAL_BLOCKER` 描述。原始 MAT、官方仓库源码和大型派生结果不提交 GitHub；仅提交 adapter、评估脚本、报告、manifest 和可追溯状态文件。
