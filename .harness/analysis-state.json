@@ -1,0 +1,25 @@
+{
+  "updated": "2026-08-25",
+  "project": "mmwave-hrv-analysis",
+  "formal_pipeline": {
+    "ecg": "existing_formal_pipeline",
+    "ecg_v3_1_1": "validation_only",
+    "mmwave_hr_br_hrv": "target_lock_precedes_physiology"
+  },
+  "target_lock": {
+    "stage": "spatial_consistency_and_exploratory_rgb_gate_complete",
+    "priority_subjects": ["sub-078", "sub-091"],
+    "hr_br_candidate_segments": [
+      "sub-078-middle", "sub-078-last",
+      "sub-091-middle", "sub-091-last"
+    ],
+    "needs_rgb_review": ["sub-078-first", "sub-091-first"],
+    "negative_cases": ["sub-074", "sub-107", "sub-129", "sub-134"]
+  },
+  "next_actions": [
+    "review_rgb_boundary_effects",
+    "run_minimal_hr_br_validation",
+    "do_not_start_formal_hrv"
+  ],
+  "local_results": "D:\\Project\\厚粲杯\\11_数据\\derived\\j_mmwave_target_lock_audit_v1"
+}
