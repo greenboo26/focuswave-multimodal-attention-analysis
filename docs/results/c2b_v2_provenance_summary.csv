@@ -1,0 +1,5 @@
+﻿quantity,n,meaning
+c2a_probe_universe,1440,formal behavior probes
+c2a_timestamp_complete,1420,manifest timestamp-complete probes
+old_m1_q0_matrix,1317,"legacy matrix; old namespace, no current row join"
+legacy_1278_claim,1278,not reproducible from synchronized manifest/script
