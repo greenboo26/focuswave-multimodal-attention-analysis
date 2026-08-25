@@ -447,7 +447,11 @@ GPT 后续不再从大量 handoff 猜项目状态，固定顺序：
 
 - 做了什么：仅索引并登记实际 worktree、分支、commit、C2 身份输入和北京 deterministic join 产物；没有重新恢复身份、重新扫描原始数据或重算 C2 模型。
 - 复用了什么：`subject_session_master_v2.csv`、C2 `run_manifest.json`、`deterministic_join.csv`、`bb_probe_mapping_once.csv`。
-- 新产出：本节总账索引；本轮没有新的科研统计结果。
-- 当前状态：北京已有 70 个可审计 `PASS_FORMAL` session，但正式 longitudinal/event-related 分析仍需使用既有冻结入口或明确运行入口；本次 ledger 补全标记为 `NO_NEW_SCIENTIFIC_OUTPUT`。
+- 新产出：本节总账索引；随后已按冻结设计新增最薄行为分析启动脚本并运行北京正式行为纵向子集分析。
+- 启动脚本（CURRENT）：`D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825\scripts\run_beijing_longitudinal_event_analysis_v1.py`
+- 结果目录（CURRENT）：`D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\formal_behavior_longitudinal_v1\`
+- 具体结果文件：`report.md`、`model_results.csv`、`descriptives.csv`、`fig_error_trajectory.png`、`fig_preprobe_error_trajectory.png`、`trial_level_behavior.csv`、`probe_event_level_behavior.csv`、`run_manifest.json`。
+- 结果摘要：70 个 PASS_FORMAL session、46 个重复参与者、59,080 个 trial、1,400 个 Probe；trial error 的 block 内进度效应 beta=0.251，95% CI [0.027, 0.474]，原始 p=.028；log RT 进度效应不明显；probe_response=1 概率随进度下降 beta=-0.893，95% CI [-1.501, -0.284]，原始 p=.004；B1/B2×进度交互未见明显证据。
+- 当前状态：北京已从“无法开始”进入 `completed_behavior_only_formal_subset`；毫米波、NIR、ECG/RSP 未进入本轮模型。统计结果是首轮正式行为子集结果，仍需结合缺失模式、模型诊断和多重比较校正解释。
 - 是否替代旧资产：不替代 C2 身份主表；仅明确 `subject_session_master_v2.csv` 为当前权威身份输入，明确 `audit_predictions.csv` 为模型审计结果而非身份表。
-- 下一步：在不新增 audit 的前提下，使用 `deterministic_join.csv` 和既有冻结设计运行北京正式 longitudinal/event-related analysis。
+- 下一步：复核这批正式行为结果的模型诊断和报告图表，不重新恢复身份、不新增北京 gate；之后再决定是否把毫米波/NIR挂到同一已完成行为时间轴。
