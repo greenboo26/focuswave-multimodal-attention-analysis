@@ -1,0 +1,7 @@
+feature_set,feature_family,feature_definition,source,privacy_scope
+C+B,context,block position and absolute task onset,C2a/C2b-v2 canonical matrix,aggregate only
+C+B,behavior,pre-probe 30-second behavioral summary,C2b-v2 canonical matrix,aggregate only
+W_absolute,mmwave,existing label-free phase micromotion spectral and QC descriptors,C2b-v2 canonical matrix,aggregate only
+W_within,mmwave,feature-wise (probe value minus session resting median) divided by 1.4826 times session resting MAD,same M1/Q0 extractor on pre-task 180-second rest,aggregate only
+C+B+W_absolute,combined,C+B plus W_absolute,C2b-v2 canonical matrix,aggregate only
+C+B+W_within,combined,C+B plus W_within,C2a/C2b-v2 canonical matrix and session baseline,aggregate only
