@@ -21,20 +21,28 @@
     "zhuhai_extended": "Zhuhai_B3",
     "zhuhai_formal_start": "2026-08-15",
     "unused_transition_protocol": "formaltest_1_to_9_attention_rating_never_used_in_formal_subjects",
-    "pilot_rule": "Zhuhai_preformal_pilot_sessions_use_separate_program_family_and_are_not_directly_pooled_with_formal_probe_data"
+    "pilot_rule": "Zhuhai_preformal_pilot_sessions_use_separate_program_family"
   },
   "repeat_participation": {
-    "formal_max_per_person": 3,
-    "sessions_ge_4_require_classification": ["pilot", "retake", "formal_repeat"],
+    "three_session_rule": "collection_management_guideline_not_statistical_validity_limit",
+    "formal_sessions_ge_4": "retain_if_core_task_probe_timeline_are_valid",
+    "qc_level": "modality_specific",
+    "participant_disjoint_rule": "all_sessions_from_same_person_share_one_evaluation_group",
+    "sensitivity_analysis": "all_valid_sessions_vs_first_three_formal_sessions_per_person",
     "required_fields": [
       "repeat_participant_id",
       "session_id",
       "site",
       "phase",
-      "formal_repeat_index",
-      "is_retake",
+      "formal_session_index",
+      "collection_reason",
       "retake_of_session_id",
-      "program_family"
+      "program_family",
+      "behavior_usable",
+      "probe_usable",
+      "mmwave_usable",
+      "nir_usable",
+      "rgb_usable"
     ]
   },
   "questionnaire_identity_item": {
@@ -43,10 +51,11 @@
     "use_as_psychological_feature": false
   },
   "next_actions": [
-    "build_beijing_zhuhai_person_session_crosswalk",
+    "build_beijing_zhuhai_person_session_crosswalk_with_modality_qc",
     "build_shared_primary_probe_master",
     "build_zhuhai_b3_extended_master",
-    "run_shared_behavior_probe_site_progress_validation"
+    "run_shared_behavior_probe_site_progress_validation",
+    "run_repeat_count_sensitivity_analysis_when_modeling"
   ],
   "canonical_decision": "docs/decisions/2026-08-26-beijing-zhuhai-protocol-identity-harmonization.md"
 }
