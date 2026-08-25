@@ -1,0 +1,9 @@
+{
+  "sample_alias": "formal_qc_subject_a",
+  "selected_duration_approx_s": 180.293,
+  "chunks": 3,
+  "source_path_not_recorded": true,
+  "source_subject_id_not_recorded": true,
+  "source_absolute_timestamps_not_recorded": true,
+  "purpose": "public structure-reading sample only; not a formal analysis result"
+}

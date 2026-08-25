@@ -1,0 +1,25 @@
+{
+  "sample_alias": "formal_qc_subject_a",
+  "source_subject_id_removed": true,
+  "selected_frame_count": 17867,
+  "frame_range_in_source_removed": true,
+  "fps": 99.1,
+  "tx_ant": 2,
+  "rx_ant": 4,
+  "range_fft": 256,
+  "doppler_fft": 32,
+  "npz_keys": [
+    "tx0_rx0",
+    "tx0_rx1",
+    "tx0_rx2",
+    "tx0_rx3",
+    "tx1_rx0",
+    "tx1_rx1",
+    "tx1_rx2",
+    "tx1_rx3"
+  ],
+  "npz_dtype": "complex128",
+  "npz_shape_per_chunk": "(frames, 256)",
+  "timestamp_semantics": "three source columns retained only as relative values; source column names were absent",
+  "absolute_timestamps_removed": true
+}
