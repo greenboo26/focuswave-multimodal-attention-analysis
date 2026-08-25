@@ -702,3 +702,29 @@ NIR 当前权威输入：
 C1b 评价已使用相同 ECG Lead II、500 Hz、一对一匹配和 ±50/75/100/150 ms 容差，±75 ms 为主结果，与 `project_bandpass_peak`、`python_vitalsense_amf` 进行比较。官方路线在 ±75 ms 的平均总体 recall 约为 .156，未显示明确逐搏优势；官方 delay 诊断在 VS01 Resting 主容差下不可估计，不能将 0 ms 当作校准结果。RMSSD/SDNN 仅保留为诊断输出，不能据此宣称 HRV 已验证。
 
 本节 supersede 本节原先的 `OFFICIAL_REPRO_TECHNICAL_BLOCKER` 描述。原始 MAT、官方仓库源码和大型派生结果不提交 GitHub；仅提交 adapter、评估脚本、报告、manifest 和可追溯状态文件。
+
+## 2026-08-26 C1 封存与 C2a 交接
+
+### C1 封存状态
+
+`C1D_NO_MATERIAL_IMPROVEMENT_STOP_HRV`
+
+含义：当前比赛周期停止继续投入毫米波逐搏 IBI/HRV 算法开发，不得解释为“RS6240 无法测 HRV”。C1c 确定性重放已通过，C1d 后端 pilot 未达到冻结成功门槛。
+
+本轮封存的代码：
+
+- `scripts/run_c1c_mmhrv_pilot.py`
+- `scripts/replay_c1c_assets.py`
+- `scripts/run_c1d_radarbeat_backend_pilot.py`
+
+本轮封存的紧凑结果位于 `docs/results/c1_pilot/`，包括 C1c/C1d 报告、primary/long CSV、`c1d_decision.json` 和 C1c run manifest。
+
+以下资产明确不上传 GitHub：J 盘 raw ADC、ECG 原始文件、三场 waveform NPZ、PNG 诊断图、完整 derived 输出、虚拟环境、缓存和模型权重。
+
+### C2a 审计状态
+
+C2a 本地产物位于：
+
+`D:\Project\厚粲杯\08_算法\output\40_正式实验\04_C2a_标签与样本单元审计\derived_20260826\`
+
+本轮只读盘点正式 probe/self-report、行为字段、候选窗口、毫米波字段和休息边界；不训练模型、不提取大规模 RGB/NIR 特征、不重做 HRV。行级 manifest、subject mapping 和问卷原始字段只留本地；GitHub 只接收脱敏汇总、schema、方法报告和审计脚本。

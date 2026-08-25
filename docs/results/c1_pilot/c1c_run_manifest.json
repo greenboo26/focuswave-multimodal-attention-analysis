@@ -1,0 +1,20 @@
+{
+  "status": "C1C_PILOT_COMPLETE",
+  "subjects": [
+    "97793",
+    "9779",
+    "97795"
+  ],
+  "input": "formal RS6240 raw ADC NPZ + Biopac ECG",
+  "pilot_scope": "first 60 s / 6000 frames per session",
+  "no_beamforming": true,
+  "fixed_delay_ms": -18.000000000000682,
+  "primary_tolerance_ms": 75.0,
+  "tolerances_ms": [
+    50.0,
+    75.0,
+    100.0,
+    150.0
+  ],
+  "baseline_scope": "same selected phase, local C1b-compatible implementations; official MATLAB VS baseline is not applicable to formal RS6240 raw ADC"
+}

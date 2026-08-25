@@ -1,0 +1,36 @@
+{
+  "status": "C1D_NO_MATERIAL_IMPROVEMENT_STOP_HRV",
+  "subjects": [
+    "97793",
+    "9779",
+    "97795"
+  ],
+  "scope": "C1c waveform only; same-session baseline waveform unavailable",
+  "mean_f1_gain": -0.05094794408164039,
+  "sessions_f1_improved": 0,
+  "f1_differences": {
+    "97793": -0.05948275862068966,
+    "9779": -0.04629629629629631,
+    "97795": -0.04706477732793521
+  },
+  "ibi_mae_differences_ms": {
+    "97793": 8.779670128454754,
+    "9779": 8.922629220143175,
+    "97795": 11.032923648232739
+  },
+  "success_rule": {
+    "mean_f1_gain_min": 0.1,
+    "sessions_improved_min": 2,
+    "ibi_mae_not_worse": true
+  },
+  "config": {
+    "template_window_rule": "median local-peak interval; symmetric one-cycle windows",
+    "template_generation": "median of robustly normalized local-peak-centered cycles",
+    "similarity": "sliding normalized cross-correlation",
+    "dp_interval_rule": "estimated mean interval +/- 3 sample SD, clipped to 0.30-2.00 s",
+    "dp_objective": "similarity at beat centers minus quadratic interval penalty",
+    "template_and_dp_use_ecg": false,
+    "parameters_fitted_to_ecg": false,
+    "source_scope": "Radar-Beat 2023 / RF-Heartbeat published backend concept; unspecified numerical details frozen here"
+  }
+}
