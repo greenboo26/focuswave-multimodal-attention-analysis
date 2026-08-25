@@ -1,25 +1,52 @@
 {
-  "updated": "2026-08-25",
+  "updated": "2026-08-26",
   "project": "mmwave-hrv-analysis",
-  "formal_pipeline": {
-    "ecg": "existing_formal_pipeline",
-    "ecg_v3_1_1": "validation_only",
-    "mmwave_hr_br_hrv": "target_lock_precedes_physiology"
+  "c1": {
+    "status": "C1_ALIGNMENT_NOT_PRIMARY_CAUSE_STOP_HRV_CONFIRMED",
+    "competition_cycle_action": "stop_beat_level_ibi_hrv_development"
   },
-  "target_lock": {
-    "stage": "spatial_consistency_and_exploratory_rgb_gate_complete",
-    "priority_subjects": ["sub-078", "sub-091"],
-    "hr_br_candidate_segments": [
-      "sub-078-middle", "sub-078-last",
-      "sub-091-middle", "sub-091-last"
-    ],
-    "needs_rgb_review": ["sub-078-first", "sub-091-first"],
-    "negative_cases": ["sub-074", "sub-107", "sub-129", "sub-134"]
+  "q1": {
+    "status": "QUESTIONNAIRE_CRITERION_VALIDITY_COMPLETE",
+    "sessions": 67,
+    "repeat_participants": 46,
+    "primary_item": "formal_questionnaire_q4_whole_experiment_mind_wandering_proportion",
+    "label1_spearman_rho": -0.581,
+    "label1_ci95": [-0.735, -0.409],
+    "commission_error_spearman_rho": 0.260,
+    "commission_error_ci95": [0.014, 0.494]
+  },
+  "protocol_harmonization": {
+    "status": "BEIJING_ZHUHAI_SHARED_PROBE_PROTOCOL_CONFIRMED",
+    "shared_primary": "Beijing_B1_B2_plus_Zhuhai_B1_B2",
+    "zhuhai_extended": "Zhuhai_B3",
+    "zhuhai_formal_start": "2026-08-15",
+    "unused_transition_protocol": "formaltest_1_to_9_attention_rating_never_used_in_formal_subjects",
+    "pilot_rule": "Zhuhai_preformal_pilot_sessions_use_separate_program_family_and_are_not_directly_pooled_with_formal_probe_data"
+  },
+  "repeat_participation": {
+    "formal_max_per_person": 3,
+    "sessions_ge_4_require_classification": ["pilot", "retake", "formal_repeat"],
+    "required_fields": [
+      "repeat_participant_id",
+      "session_id",
+      "site",
+      "phase",
+      "formal_repeat_index",
+      "is_retake",
+      "retake_of_session_id",
+      "program_family"
+    ]
+  },
+  "questionnaire_identity_item": {
+    "zhuhai_first_stage_item": "identity_provenance_only",
+    "beijing_residual_answers": "ignore",
+    "use_as_psychological_feature": false
   },
   "next_actions": [
-    "review_rgb_boundary_effects",
-    "run_minimal_hr_br_validation",
-    "do_not_start_formal_hrv"
+    "build_beijing_zhuhai_person_session_crosswalk",
+    "build_shared_primary_probe_master",
+    "build_zhuhai_b3_extended_master",
+    "run_shared_behavior_probe_site_progress_validation"
   ],
-  "local_results": "D:\\Project\\厚粲杯\\11_数据\\derived\\j_mmwave_target_lock_audit_v1"
+  "canonical_decision": "docs/decisions/2026-08-26-beijing-zhuhai-protocol-identity-harmonization.md"
 }
