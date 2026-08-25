@@ -455,3 +455,17 @@ GPT 后续不再从大量 handoff 猜项目状态，固定顺序：
 - 当前状态：北京已从“无法开始”进入 `completed_behavior_only_formal_subset`；毫米波、NIR、ECG/RSP 未进入本轮模型。统计结果是首轮正式行为子集结果，仍需结合缺失模式、模型诊断和多重比较校正解释。
 - 是否替代旧资产：不替代 C2 身份主表；仅明确 `subject_session_master_v2.csv` 为当前权威身份输入，明确 `audit_predictions.csv` 为模型审计结果而非身份表。
 - 下一步：复核这批正式行为结果的模型诊断和报告图表，不重新恢复身份、不新增北京 gate；之后再决定是否把毫米波/NIR挂到同一已完成行为时间轴。
+
+### 10.4 北京 Probe 前轨迹与恢复结果（CURRENT）
+
+本轮依据 GPT 裁决 `e08b169`，在同一 70-session 北京时间轴上补齐两组预先指定结果：
+
+- `D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\formal_behavior_longitudinal_v1\preprobe_window_trajectories.csv`
+- `D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\formal_behavior_longitudinal_v1\recovery_b1late_b2early.csv`
+- `D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\formal_behavior_longitudinal_v1\recovery_probe_b1late_b2early.csv`
+- `D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\formal_behavior_longitudinal_v1\fig_preprobe_window_trajectories.png`
+- `D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\formal_behavior_longitudinal_v1\fig_recovery_b1late_b2early.png`
+
+结果摘要：10/20/30 s 窗口错误率均值为 .049/.053/.051，RT 中位数为 318.5/316.1/312.6 ms，RT SD 为 69.1/79.9/84.1 ms。B1 late→B2 early 错误率 .055→.052、RT 中位数 313.1→315.2 ms、RT SD 92.0→87.9 ms、Probe response=1 比例 .721→.786；恢复 GEE 原始 p 分别为 .384、.399、.428 和 .140，当前不写成明确恢复效应。
+
+状态：`CURRENT / 首轮正式行为结果已补齐；最终正文措辞待 BH-FDR、模型诊断和缺失模式复核`。

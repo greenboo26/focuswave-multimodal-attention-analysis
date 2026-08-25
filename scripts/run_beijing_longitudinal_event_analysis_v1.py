@@ -82,7 +82,11 @@ def make_trial_table(subjects: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame
 
 
 def gee_result(model_name: str, formula: str, data: pd.DataFrame, family, outcome: str) -> dict:
-    d = data.dropna(subset=[outcome, "repeat_participant_id", "block_num", "block_progress"]).copy()
+    required = [outcome, "repeat_participant_id"]
+    for name in ("block_num", "block_progress", "phase"):
+        if name in formula and name in data.columns:
+            required.append(name)
+    d = data.dropna(subset=required).copy()
     if d["repeat_participant_id"].nunique() < 3 or d[outcome].nunique() < 2:
         return {"model": model_name, "status": "not_estimable", "n": len(d), "n_participants": d["repeat_participant_id"].nunique()}
     try:
@@ -104,6 +108,58 @@ def main() -> None:
     trials.to_csv(OUT / "trial_level_behavior.csv", index=False, encoding="utf-8-sig")
     probes.to_csv(OUT / "probe_event_level_behavior.csv", index=False, encoding="utf-8-sig")
 
+    window_rows = []
+    for window in (10, 20, 30):
+        for _, r in probes.iterrows():
+            window_rows.append({
+                "subject": r["subject"],
+                "repeat_participant_id": r["repeat_participant_id"],
+                "block_num": r["block_num"],
+                "probe_progress": r["probe_progress"],
+                "target_label1": r["target_label1"],
+                "window_s": window,
+                "error_rate": r[f"pre{window}_error_rate"],
+                "rt_median_ms": r[f"pre{window}_rt_median_ms"],
+                "rt_sd_ms": r[f"pre{window}_rt_sd_ms"],
+                "n_trials": r[f"pre{window}_n_trials"],
+            })
+    pre_windows = pd.DataFrame(window_rows)
+    pre_windows.to_csv(OUT / "preprobe_window_trajectories.csv", index=False, encoding="utf-8-sig")
+
+    recovery_parts = []
+    for (subject, repeat_id), g in trials.groupby(["subject", "repeat_participant_id"]):
+        phase_masks = {
+            "B1_late": (g["block_num"] == 1) & (g["block_progress"] >= .8),
+            "B2_early": (g["block_num"] == 2) & (g["block_progress"] < .2),
+        }
+        for phase, mask in phase_masks.items():
+            x = g[mask]
+            rts = x["valid_go_rt"].dropna()
+            recovery_parts.append({
+                "subject": subject, "repeat_participant_id": repeat_id, "phase": phase,
+                "error_rate": x["error"].mean() if len(x) else np.nan,
+                "rt_median_ms": rts.median() if len(rts) else np.nan,
+                "rt_sd_ms": rts.std(ddof=1) if len(rts) > 1 else np.nan,
+                "n_trials": len(x),
+            })
+    recovery = pd.DataFrame(recovery_parts)
+    probe_recovery_rows = []
+    for (subject, repeat_id), g in probes.groupby(["subject", "repeat_participant_id"]):
+        phase_masks = {
+            "B1_late": (g["block_num"] == 1) & (g["probe_progress"] >= .8),
+            "B2_early": (g["block_num"] == 2) & (g["probe_progress"] < .2),
+        }
+        for phase, mask in phase_masks.items():
+            x = g[mask]
+            probe_recovery_rows.append({
+                "subject": subject, "repeat_participant_id": repeat_id, "phase": phase,
+                "target_label1_rate": x["target_label1"].mean() if len(x) else np.nan,
+                "n_probes": len(x),
+            })
+    probe_recovery = pd.DataFrame(probe_recovery_rows)
+    recovery.to_csv(OUT / "recovery_b1late_b2early.csv", index=False, encoding="utf-8-sig")
+    probe_recovery.to_csv(OUT / "recovery_probe_b1late_b2early.csv", index=False, encoding="utf-8-sig")
+
     desc = []
     for (block, bin_id), g in trials.assign(time_bin=pd.cut(trials["block_progress"], bins=5, labels=False, include_lowest=True)).groupby(["block_num", "time_bin"], dropna=False):
         desc.append({"level": "trial", "block_num": block, "time_bin": bin_id, "n": len(g), "n_participants": g["repeat_participant_id"].nunique(), "error_rate_mean": g["error"].mean(), "rt_median_mean_ms": g["valid_go_rt"].median()})
@@ -118,6 +174,14 @@ def main() -> None:
     rt["log_rt"] = np.log(rt["valid_go_rt"])
     model_rows += gee_result("log_rt_block_time", "log_rt ~ C(block_num) * block_progress", rt, sm.families.Gaussian(), "log_rt")
     model_rows += gee_result("probe_label1_block_time", "target_label1 ~ C(block_num) * probe_progress", probes, sm.families.Binomial(), "target_label1")
+    model_rows += gee_result("recovery_error_b1late_b2early", "error_rate ~ C(phase)", recovery, sm.families.Gaussian(), "error_rate")
+    recovery_rt = recovery.dropna(subset=["rt_median_ms"]).copy()
+    recovery_rt["log_rt_median"] = np.log(recovery_rt["rt_median_ms"])
+    model_rows += gee_result("recovery_log_rt_b1late_b2early", "log_rt_median ~ C(phase)", recovery_rt, sm.families.Gaussian(), "log_rt_median")
+    recovery_sd = recovery.dropna(subset=["rt_sd_ms"]).copy()
+    recovery_sd["log_rt_sd"] = np.log(recovery_sd["rt_sd_ms"])
+    model_rows += gee_result("recovery_log_rt_sd_b1late_b2early", "log_rt_sd ~ C(phase)", recovery_sd, sm.families.Gaussian(), "log_rt_sd")
+    model_rows += gee_result("recovery_probe_label1_b1late_b2early", "target_label1_rate ~ C(phase)", probe_recovery, sm.families.Gaussian(), "target_label1_rate")
     model_df = pd.DataFrame(model_rows)
     model_df["ci_low"] = model_df["estimate"] - 1.96 * model_df["se"]
     model_df["ci_high"] = model_df["estimate"] + 1.96 * model_df["se"]
@@ -151,6 +215,28 @@ def main() -> None:
     plt.savefig(OUT / "fig_preprobe_error_trajectory.png", dpi=180)
     plt.close()
 
+    plt.figure(figsize=(8, 5))
+    for window, g in pre_windows.groupby("window_s"):
+        s = g.assign(time_bin=pd.cut(g["probe_progress"], bins=5, labels=False, include_lowest=True)).groupby("time_bin", as_index=False)["error_rate"].mean()
+        plt.plot(s["time_bin"], s["error_rate"], marker="o", label=f"pre-{int(window)} s")
+    plt.xlabel("Within-block probe time bin")
+    plt.ylabel("Pre-probe error rate")
+    plt.title("Beijing behavior: pre-probe error trajectories")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(OUT / "fig_preprobe_window_trajectories.png", dpi=180)
+    plt.close()
+
+    recovery_plot = recovery.dropna(subset=["error_rate"])
+    means = recovery_plot.groupby("phase")["error_rate"].mean().reindex(["B1_late", "B2_early"])
+    plt.figure(figsize=(6, 5))
+    plt.bar(means.index, means.values, color=["#8172b2", "#55a868"])
+    plt.ylabel("Session-level error rate")
+    plt.title("B1 late to B2 early recovery contrast")
+    plt.tight_layout()
+    plt.savefig(OUT / "fig_recovery_b1late_b2early.png", dpi=180)
+    plt.close()
+
     manifest = {
         "run_id": "BEIJING_FORMAL_BEHAVIOR_LONGITUDINAL_V1_20260825",
         "status": "completed_behavior_only_formal_subset",
@@ -161,14 +247,14 @@ def main() -> None:
         "n_probes": int(len(probes)),
         "endpoint": "probe_response=1 versus probe_response=2/3/4; code-neutral wording retained",
         "windows": [10, 20, 30],
-        "models": ["trial_error_block_time_GEE", "log_rt_block_time_GEE", "probe_label1_block_time_GEE"],
+        "models": ["trial_error_block_time_GEE", "log_rt_block_time_GEE", "probe_label1_block_time_GEE", "recovery_b1late_b2early_GEE"],
         "grouping": "repeat_participant_id; participant-level clustering, no session-level independence assumption",
         "radar_nir_ecg_used": False,
         "entrypoint": "scripts/run_beijing_longitudinal_event_analysis_v1.py",
         "outputs": [p.name for p in OUT.iterdir() if p.is_file()],
     }
     (OUT / "run_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
-    report = f"""# 北京正式行为纵向分析 v1\n\n状态：`completed_behavior_only_formal_subset`\n\n- 已复用北京 C2 deterministic join：{JOIN}\n- PASS_FORMAL session：{len(subjects)}\n- 重复参与者：{subjects['repeat_participant_id'].nunique()}\n- trial：{len(trials)}\n- probe：{len(probes)}\n- 窗口：probe 前 10/20/30 秒\n- 模型：trial error、log RT、probe response 的 participant-clustered GEE\n- 未使用毫米波、NIR、ECG 或 RSP。\n\n## 第一批结果\n\n- trial error 随 block 内进度上升：`beta=0.251`，95% CI [0.027, 0.474]，原始 *p* = .028；这表示任务错误率存在随任务推进而增加的迹象。\n- log RT 的 block 内进度主效应不明显：`beta=-0.015`，95% CI [-0.084, 0.054]，原始 *p* = .669。\n- `probe_response=1` 的概率随 block 内进度下降：`beta=-0.893`，95% CI [-1.501, -0.284]，原始 *p* = .004；对应优势比约为 0.41。这里仍使用代码中性终点，不将其直接命名为“专注/走神”。\n- B1/B2 与进度的交互项均未见明显证据；B2 并未显示出明确不同的时间斜率。\n\n以上 *p* 值为首轮模型输出，并已在 `model_results.csv` 中附带 BH-FDR 校正列；正式报告还应结合缺失模式、模型诊断和计划内对比解释。\n\n## 解释边界\n\n`probe_response=1` 与 `probe_response=2/3/4` 保持代码中性命名。结果只代表已通过 C2 join 的北京子集；不能把 block 内进度效应直接解释为生理机制或因果疲劳，也不能外推到珠海。\n"""
+    report = f"""# 北京正式行为纵向分析 v1\n\n状态：`completed_behavior_only_formal_subset`\n\n- 已复用北京 C2 deterministic join：{JOIN}\n- PASS_FORMAL session：{len(subjects)}\n- 重复参与者：{subjects['repeat_participant_id'].nunique()}\n- trial：{len(trials)}\n- probe：{len(probes)}\n- 窗口：probe 前 10/20/30 秒\n- 模型：trial error、log RT、probe response 的 participant-clustered GEE；B1 late→B2 early recovery contrasts\n- 未使用毫米波、NIR、ECG 或 RSP。\n\n## 第一批结果\n\n- trial error 随 block 内进度上升：`beta=0.251`，95% CI [0.027, 0.474]，原始 *p* = .028。\n- log RT 的 block 内进度主效应不明显：`beta=-0.015`，95% CI [-0.084, 0.054]，原始 *p* = .669。\n- `probe_response=1` 的概率随 block 内进度下降：`beta=-0.893`，95% CI [-1.501, -0.284]，原始 *p* = .004；对应优势比约为 0.41。\n- B1/B2 与进度的交互项均未见明显证据。\n- `preprobe_window_trajectories.csv` 和 `recovery_b1late_b2early.csv` 提供了三种 Probe 前窗口及 B1 后段→B2 前段的直接比较。\n\n以上 *p* 值为首轮模型输出，并已在 `model_results.csv` 中附带 BH-FDR 校正列；正式报告还应结合缺失模式、模型诊断和计划内对比解释。\n\n## 解释边界\n\n`probe_response=1` 与 `probe_response=2/3/4` 保持代码中性命名。结果只代表已通过 C2 join 的北京子集；不能把 block 内进度效应直接解释为生理机制或因果疲劳，也不能外推到珠海。\n"""
     (OUT / "report.md").write_text(report, encoding="utf-8")
     print(json.dumps(manifest, ensure_ascii=False, indent=2))
 
