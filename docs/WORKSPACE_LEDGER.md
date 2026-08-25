@@ -508,7 +508,41 @@ NIR 当前权威输入：
 
 现有多模态 join 规范仍以 `subject + probe_id` 为键，`probe_onset_ms` 只做绝对时间审计；毫米波目前先限于相位/微动、呼吸候选、质量/覆盖和 Probe 前动态，不把心脏候选称为 HRV。
 
-### 10.7 C1b VS_DATASET 数据获取核查（CURRENT）
+### 10.7 北京传感器 common-probe 增量比较（CURRENT）
+
+本轮纠正了前一轮“participant_id 为空即身份未恢复”的误读，直接复用：
+
+`D:\Project\厚粲杯\11_数据\derived\c3_identity_coverage_crosswalk_v1\identity_crosswalk.csv`
+
+该表记录 17 个 NIR session 中 16 个已恢复 `repeat_participant_id`，subject 070 保持 unresolved。毫米波特征复用：
+
+`D:\Project\厚粲杯\11_数据\derived\non_nir_window_analysis_input_v1\non_nir_window_analysis_input.csv`
+
+执行入口：
+
+`D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825\scripts\run_beijing_sensor_increment_v1.py`
+
+结果目录：
+
+`D:\Project\厚粲杯\11_数据\derived\beijing_sensor_increment_v1\`
+
+主要结果文件：
+
+- `beijing_nir_probe_with_existing_identity.csv`
+- `beijing_behavior_nir_mmwave_common_probe.csv`
+- `common_probe_coverage.csv`
+- `sensor_state_group_summary_primary_common.csv`
+- `common_probe_incremental_models.csv`
+- `report.md`
+- `run_manifest.json`
+
+覆盖结果：NIR identity resolved 为 320 Probe/16 session/14 重复参与者；NIR ≥80% 为 246 Probe/15 session/13 重复参与者；毫米波特征可用为 1,297 Probe/70 session/46 重复参与者；NIR ≥80% 与毫米波共同覆盖为 233 Probe/15 session/13 重复参与者。
+
+同样本参与者留一交叉验证结果：毫米波增量 ΔAUC = −.023，NIR 增量 ΔAUC = −.050，毫米波+NIR 增量 ΔAUC = −.069。当前只说明第一版低复杂度特征没有显示增量预测证据，不作“传感器无效”结论。
+
+状态：`CURRENT / common-probe 接入和第一版增量基线已完成；下一步可转向 Probe 前动态特征，不新增身份审计`。
+
+### 10.8 C1b VS_DATASET 数据获取核查（CURRENT）
 
 本轮为只读获取核查，未运行毫米波/ECG 算法，未下载或上传被试级数据。
 
