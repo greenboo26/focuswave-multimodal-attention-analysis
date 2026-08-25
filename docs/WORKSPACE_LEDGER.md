@@ -393,3 +393,61 @@ GPT 后续不再从大量 handoff 猜项目状态，固定顺序：
 3. **清除关键 blocker**：原来不能分析，现在可以分析。
 
 如果一天主要增加的是 Markdown、handoff、PASS/BLOCKED 表，而没有上述三类之一，就不能称为实质性进展。
+
+---
+
+## 10. 2026-08-25 总账补全：实际 worktree 与 C2 身份资产
+
+### 10.1 实际本地 worktree
+
+| 仓库 | 本地路径 | 当前分支 | 当前 commit | 用途 |
+|---|---|---|---|---|
+| `greenboo26/mmwave-hrv-analysis` | `D:\Project\厚粲杯\08_算法\` | `codex/audit-j-target-lock-gate` | `5da545e1789fc16a0841786dff20846f98f5dcad` | 本地算法主工作区，存在用户既有未提交改动；本轮未修改 |
+| `FocusWave` | `D:\Project\厚粲杯\05_实验\FocusWave\` | `formaltest` | `6f6dd0fc2ad3c10e43479cfd4e1ed5bd303604fa` | 北京 BB 两阶段程序与 Probe 资产来源 |
+| GPT↔Codex handoff worktree | `D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825\` | `codex/gpt-codex-handoff-20260825` | 本次提交后更新 | 仅用于 GitHub 交接文件 |
+
+厚粲杯数据根目录：`D:\Project\厚粲杯\11_数据\`
+派生结果统一目录：`D:\Project\厚粲杯\11_数据\derived\`
+
+### 10.2 C2 `71 sessions → 46 repeat_participant_id` 权威资产
+
+**CURRENT（权威身份/被试-session 对照表）：**
+
+`D:\Project\厚粲杯\11_数据\derived\analysis_tables_v2\subject_session_master_v2.csv`
+
+- 文件行数：179 条数据行，65 个字段；包含多个站点和登记记录，不等同于 71 行 C2 结果表。
+- 关键字段：`single_experiment_id`、`repeat_participant_id`、`repeat_count`、`site`、`session_date_time`、`j_source_folder`、`j_master_timeline_present`、`j_raw_behavior_present`、`j_raw_mmwave_present`、`m1_probe_windows`、`m1_probe_windows_ok`、`current_analysis_eligibility`。
+- C2 实际运行使用该文件作为 `identity_master`，来源记录于：
+  `D:\Project\厚粲杯\11_数据\derived\c2_radar_only_attention_baseline_v1\run_manifest.json`
+- 生成/使用来源：`C2_RADAR_ONLY_ATTENTION_BASELINE_V1_20260825`；该 manifest 明确记录 71 recording sessions、46 restored `repeat_participant_id`，并采用 leave-one-repeat-participant-out 分组。
+- 状态：`CURRENT / 可复用`，禁止重新恢复 participant identity。
+
+**CURRENT（C2 模型审计结果，不是身份主表）：**
+
+`D:\Project\厚粲杯\11_数据\derived\c2_evaluation_label_audit_v1\audit_predictions.csv`
+
+- 用途：C2 标签和模型评估审计；关键字段为 `subject`、`probe_id`、`repeat_participant_id`、`label`、`target`、`fold`、`score`。
+- 它不是 `71 sessions → 46 repeat_participant_id` 身份主表，不能单独用于 session identity 恢复。
+
+**CURRENT（北京 71 个有效 behavior/timeline session 的确定性 join）：**
+
+`D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\deterministic_join.csv`
+
+- 结果：70 个 `PASS_FORMAL`；C2 未匹配 `sub-099`（缺有效 `master_timeline.csv`）；北京 timeline 未匹配 `sub-067`（不在既有 C2 71-session crosswalk 中）。
+- BB mapping：`D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\bb_probe_mapping_once.csv`
+- 运行清单：`D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\run_manifest.json`
+- 状态：`CURRENT / deterministic join 已完成；正式 longitudinal/event-related analysis 尚未运行`。
+
+**SUPERSEDED / 不作为当前权威身份资产：**
+
+- `D:\Project\厚粲杯\11_数据\derived\subject_modalities_v1\subject_session_questionnaire_master.csv`：问卷/模态登记主表，保留作来源记录，但不能替代 C2 实际 participant-disjoint 身份输入。
+- `D:\Project\厚粲杯\11_数据\derived\beijing_longitudinal_event_v1\` 下的早期 preflight：仅记录旧 blocker；本轮以 `beijing_c2_identity_reuse_event_analysis_v2\deterministic_join.csv` 为北京 join 权威资产。
+
+### 10.3 本轮动作与状态
+
+- 做了什么：仅索引并登记实际 worktree、分支、commit、C2 身份输入和北京 deterministic join 产物；没有重新恢复身份、重新扫描原始数据或重算 C2 模型。
+- 复用了什么：`subject_session_master_v2.csv`、C2 `run_manifest.json`、`deterministic_join.csv`、`bb_probe_mapping_once.csv`。
+- 新产出：本节总账索引；本轮没有新的科研统计结果。
+- 当前状态：北京已有 70 个可审计 `PASS_FORMAL` session，但正式 longitudinal/event-related 分析仍需使用既有冻结入口或明确运行入口；本次 ledger 补全标记为 `NO_NEW_SCIENTIFIC_OUTPUT`。
+- 是否替代旧资产：不替代 C2 身份主表；仅明确 `subject_session_master_v2.csv` 为当前权威身份输入，明确 `audit_predictions.csv` 为模型审计结果而非身份表。
+- 下一步：在不新增 audit 的前提下，使用 `deterministic_join.csv` 和既有冻结设计运行北京正式 longitudinal/event-related analysis。
