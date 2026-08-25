@@ -1,4 +1,4 @@
-# GPT 裁决：C2 evaluation/label audit 与 C3 identity/coverage crosswalk
+# 生成式预训练变换器（generative pretrained transformer [GPT]）裁决：C2 evaluation/label audit 与 C3 identity/coverage crosswalk
 
 日期：2026-08-25
 依据：`docs/decisions/2026-08-25-gpt-c2-c3-audit-handoff.md`
@@ -33,16 +33,16 @@
 
 接受将原 `N0_grouped_null` 正式改名为“时间/区组结构基线（time/block structural baseline）”，不再称为 generic null。
 
-受试者工作特征曲线下面积（area under the receiver operating characteristic curve [AUC]）为 0.628 的 `N0` 不包含雷达传感器信息，因此不能作为雷达证据；但 session-preserving permutation 的结果表明，时间/区组结构与标签之间存在明显的非随机关系。
+受试者工作特征曲线下面积（area under the receiver operating characteristic curve [AUC]）为 .628 的 `N0` 不包含雷达传感器信息，因此不能作为雷达证据；但 session-preserving permutation 的结果表明，时间/区组结构与标签之间存在明显的非随机关系。
 
-后续雷达/行为/NIR 模型必须至少同时对照：
+后续雷达、行为和 NIR 模型必须至少同时对照：
 
 - 训练折先验常数基线；
 - probe index / time-on-task 基线；
 - time/block structural baseline；
 - 行为 baseline。
 
-不得仅与 0.50 比较后宣称存在有效传感器预测。
+不得仅与 .50 比较后宣称存在有效传感器预测。
 
 此外，`N0` 的结果提示 time-on-task / block progression 本身值得作为正式解释性分析对象，而不仅是需要“消除”的 nuisance variable。
 
@@ -64,7 +64,7 @@
 
 C2 缺少显式 `session_id`。在正式建模前，Codex 应优先尝试通过现有 metadata/crosswalk 对 289 条 strict overlap 进行确定性 session 映射，并新增 canonical `session_id`。只有一对一、可审计的元数据映射可以使用；不得用特征或模型猜测。
 
-如果仍无法恢复 session_id，可继续做 participant-disjoint 的最小共同样本基线，但必须继续称为“strict common probe”，不得写成“same-session multimodal dataset”。
+如果仍无法恢复 `session_id`，可继续做 participant-disjoint 的最小共同样本基线，但必须继续称为“strict common probe”，不得写成“same-session multimodal dataset”。
 
 ### 4.2 参与者分组
 
@@ -80,7 +80,7 @@ C2 缺少显式 `session_id`。在正式建模前，Codex 应优先尝试通过�
 - 二元主终点类别比例；
 - 每个参与者的 probe 数和类别覆盖。
 
-若部分测试参与者只有单一类别，则该参与者的 AUC 不可计算；不得填成 0.50。应报告 pooled out-of-fold（OOF）AUC，并另报可定义 participant-level AUC 的宏平均结果。
+若部分测试参与者只有单一类别，则该参与者的 AUC 不可计算；不得填成 .50。应报告 pooled 折外预测（out-of-fold [OOF]）AUC，并另报可定义 participant-level AUC 的宏平均结果。
 
 ### 4.3 NIR 质量集合
 
@@ -88,12 +88,12 @@ C2 缺少显式 `session_id`。在正式建模前，Codex 应优先尝试通过�
 
 正式比较至少预先形成两个集合：
 
-- Primary NIR-comparable set：strict common probe + identity resolved + NIR 质量控制（quality control [QC]）覆盖率 `>=80%`；
-- Sensitivity set：strict common probe + identity resolved + NIR QC 覆盖率 `>=50%`。
+- Primary NIR-comparable set：strict common probe + identity resolved + NIR 质量控制（quality control [QC]）覆盖率 ≥ 80%；
+- Sensitivity set：strict common probe + identity resolved + NIR QC 覆盖率 ≥ 50%。
 
 所有模态在每个集合中必须使用完全相同的 probe 行。也就是说，当比较 NIR 与 radar 时，radar 也必须限制在同一 NIR-qualified probe 集合上。
 
-`<50%` 的 NIR probe 不进入 NIR 性能主分析。
+NIR QC 覆盖率 < 50% 的 probe 不进入 NIR 性能主分析。
 
 ### 4.4 第一轮模型复杂度
 
@@ -119,10 +119,10 @@ C2 缺少显式 `session_id`。在正式建模前，Codex 应优先尝试通过�
 
 - balanced accuracy；
 - sensitivity / specificity（若阈值预先固定或在训练折内确定）；
-- participant-level bootstrap 95% confidence interval（置信区间 [CI]）；
+- 参与者层级 bootstrap 的 95% 置信区间（confidence interval [CI]）；
 - coverage；
 - 每个模态相对 behavior-only 与 time/block baseline 的 AUC 差值；
-- paired participant bootstrap 的模态差值 CI。
+- paired participant bootstrap 的模态差值 95% CI。
 
 不根据同一测试结果选择“最佳”QC 阈值、特征组或模型。
 
@@ -163,7 +163,7 @@ C2 缺少显式 `session_id`。在正式建模前，Codex 应优先尝试通过�
 
 ## 7. C1b 与 HRV 状态
 
-C1b 继续保持 `protocol-ready / data-access blocked`。心率变异性（heart rate variability [HRV]）路线不取消、不降级，也不因当前 C2 结果修改冻结的 beat/IBI 评价协议。
+C1b 继续保持 `protocol-ready / data-access blocked`。心率变异性（heart rate variability [HRV]）路线不取消、不降级，也不因当前 C2 结果修改冻结的逐搏（beat）/心搏间期（inter-beat interval [IBI]）评价协议。
 
 ## 下一次 Codex handoff 要求
 
