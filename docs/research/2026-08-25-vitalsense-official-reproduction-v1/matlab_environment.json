@@ -1,0 +1,17 @@
+{
+  "status": "OFFICIAL_REPRO_TECHNICAL_BLOCKER",
+  "matlab_command": null,
+  "matlab_version": null,
+  "matlab_runtime": null,
+  "octave_command": null,
+  "toolboxes": null,
+  "checks": {
+    "Get-Command matlab": "not_found",
+    "Get-Command octave": "not_found",
+    "C:\\Program Files\\MATLAB": false,
+    "C:\\Program Files\\MATLAB Runtime": false,
+    "C:\\Program Files\\GNU Octave": false,
+    "C:\\Program Files\\Polyspace": false
+  },
+  "blocker": "No callable MATLAB/Octave runtime is installed or discoverable on this host; official main.m cannot be executed."
+}

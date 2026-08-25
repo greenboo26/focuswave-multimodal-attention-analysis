@@ -656,3 +656,39 @@ NIR 当前权威输入：
 - 当前 mmWave/ECG 交接 worktree：`D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825`，HEAD `97b236a`。
 
 状态边界：GitHub 只保存代码、协议、决策、状态、字段清单和可复现入口；原始数据、视频、NPZ、MAT 和大型派生结果继续保留在本地。后续 GPT/Codex 应先读本节和上述资产地图，再读取具体 `report.md`、`run_manifest.json`、`status.json`，不得重新扫描原始数据或把 smoke/历史/重跑候选当作 CURRENT。
+
+### 10.12 C1b 官方 VitalSense MATLAB 复现（CURRENT / TECHNICAL BLOCKER）
+
+任务：`C1B_OFFICIAL_VITALSENSE_REPRO_V1_20260825`。
+
+官方仓库已原样 clone 到：
+
+`D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825\external\vendor\VitalSense2024`
+
+官方分支：`main`  
+官方 commit：`d9f71f96800da7ed2192ff1dc0cba0f0ef5b6de6`  
+官方源代码未修改。
+
+本机环境核验：未发现可调用的 MATLAB、MATLAB Runtime 或 Octave；`C:\Program Files\MATLAB`、`C:\Program Files\MATLAB Runtime`、`C:\Program Files\GNU Octave` 和 `C:\Program Files\Polyspace` 均不存在，`matlab`/`octave` 命令也不存在。因此官方 `main.m` sample 尚未运行，48 场官方 MATLAB 复现尚未运行，MATLAB 版本和 toolbox 无法记录。
+
+本轮正式状态：`OFFICIAL_REPRO_TECHNICAL_BLOCKER`，不是性能结论。
+
+已生成的交接材料：
+
+`D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825\docs\research\2026-08-25-vitalsense-official-reproduction-v1\`
+
+包含：
+
+- `official_repo_manifest.json`；
+- `matlab_environment.json`；
+- `official_vs_python_equivalence.csv`；
+- `reproduction_report.md`；
+- `run_manifest.json`。
+
+当前 Python AMF 与官方 MATLAB 在六个环节均标记为 `DIFFERENT`：输入信号、分离滤波、HRestim 周期估计、脉搏模板、RWAMF 和 findpeaks 定位。因此不能把当前 Python AMF 称为官方算法完整复现。
+
+交接裁决：
+
+`D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825\docs\decisions\2026-08-25-vitalsense-official-reproduction-handoff.md`
+
+下一步只能在具备兼容 MATLAB 和所需 Signal Processing Toolbox 的机器上先跑官方 sample，再跑 VS01–VS24 × Resting/Apnea，并将官方峰位置送入既有 C1b ECG evaluator。当前禁止修改官方算法、调 findpeaks、调滤波器、开发 V2 或继续迁移 RS6240。
