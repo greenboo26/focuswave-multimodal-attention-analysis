@@ -1,0 +1,2 @@
+window_s,outcome,predictor,model,n_probe_windows,n_trials,beta,or,ci95_beta_low,ci95_beta_high,ci95_or_low,ci95_or_high,p_approx,note
+30,trial_error,other_nonfully_task_focused,Bayesian_random_intercept_logistic_mixed_model,1440,34502,0.634167062802142,1.885451024935467,0.5528478925287976,0.7154862330754863,1.7381961716318828,2.045180875121079,0.0,Variational-Bayes posterior normal approximation; no causal or RT inference.

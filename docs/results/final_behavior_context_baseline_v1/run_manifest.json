@@ -1,0 +1,25 @@
+{
+  "run_id": "FINAL_BEHAVIOR_CONTEXT_BASELINE_V1",
+  "cohort_source": "C2a_frozen_Beijing_canonical_fallback",
+  "cohort": {
+    "probes": 1440,
+    "sessions": 72,
+    "participant_groups": 46
+  },
+  "primary_window_s": 30,
+  "sensitivity_windows_s": [
+    10,
+    20
+  ],
+  "seed": 20260826,
+  "models": "L2 logistic only",
+  "excluded_modalities": [
+    "mmWave",
+    "RGB",
+    "NIR",
+    "HRV"
+  ],
+  "row_level_local_only": [
+    "oof_predictions_LOCAL_ONLY.csv"
+  ]
+}
