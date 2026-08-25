@@ -1,0 +1,14 @@
+{
+  "task": "C1B_OFFICIAL_VITALSENSE_REPRO_V1_20260825",
+  "status": "OFFICIAL_REPRO_TECHNICAL_BLOCKER",
+  "dataset": "D:\\Project\\厚粲杯\\11_数据\\external_benchmarks\\VS_DATASET_healthy_v1",
+  "existing_c1b_result": "D:\\Project\\厚粲杯\\11_数据\\derived\\vitalsense_c1b_benchmark_v1",
+  "official_repo_commit": "d9f71f96800da7ed2192ff1dc0cba0f0ef5b6de6",
+  "sample_run": "not_started",
+  "formal_sessions": 48,
+  "formal_run": "not_started",
+  "primary_matching_tolerance_ms": 75,
+  "sensitivity_tolerances_ms": [50, 75, 100, 150],
+  "reason": "MATLAB/Octave executable and required MATLAB toolbox environment unavailable; no official MATLAB output generated.",
+  "raw_data_uploaded": false
+}

@@ -1,0 +1,12 @@
+{
+  "task": "C1B_OFFICIAL_VITALSENSE_REPRO_V1_20260825",
+  "status": "OFFICIAL_REPRO_TECHNICAL_BLOCKER",
+  "repository": "https://github.com/Rc-W024/VitalSense2024",
+  "local_path": "D:\\Project\\厚粲杯\\08_算法_worktrees\\gpt-codex-handoff-20260825\\external\\vendor\\VitalSense2024",
+  "branch": "main",
+  "commit": "d9f71f96800da7ed2192ff1dc0cba0f0ef5b6de6",
+  "source_files": ["main.m", "HRestim.m", "plotPhase.m", "plotPhasewu.m"],
+  "source_mutated": false,
+  "official_sample_run": "not_run_matlab_unavailable",
+  "formal_24_subject_run": "not_run_matlab_unavailable"
+}
