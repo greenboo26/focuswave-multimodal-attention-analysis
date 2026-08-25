@@ -577,3 +577,29 @@ NIR 当前权威输入：
 **是否替代旧资产：**
 
 不替代 C1b 的冻结评价协议；只修正 blocker 的原因描述和获取路径。北京正式行为结果不受影响，VS_DATASET 获取线不阻塞北京主线。
+
+### 10.9 VS_DATASET 完整健康队列已下载（CURRENT）
+
+本轮根据官方备用入口 Catalan Open Research Area / Dataverse 下载完整数据包：
+
+`https://doi.org/10.34810/data2962`
+
+本地目录：
+
+`D:\Project\厚粲杯\11_数据\external_benchmarks\VS_DATASET_healthy_v1\`
+
+下载结果：
+
+- 98 个官方数据文件；
+- `VS01`–`VS24` 共 24 名被试；
+- 每名被试 4 个 `.mat` 文件，共 96 个；
+- `README.txt` 和 `Subject Information.tab` 各 1 个；
+- 官方数据文件总大小 32,435,416 bytes，约 30.9 MiB；
+- 逐文件 SHA-256 已记录到 `_verification\sha256.csv`；
+- Dataverse API 文件清单和下载过程记录在 `_verification\download_manifest_api.csv`。
+
+校验注意：Dataverse API 对 `Subject Information.tab` 返回的元数据大小为 22,189 bytes，但实际下载文件为 22,270 bytes；该文件已通过备用下载请求复核，差异被记录为来源元数据大小不一致，未静默修改或截断文件。完整数据文件均已落盘，待 C1b 运行前再做 MATLAB 字段、ECG Lead II 和 session 参数清单核验。
+
+状态修正：`C1b = DATASET_LOCAL_READY / benchmark_not_run`。此前的本地缺失 blocker 已解除；尚未声称外部 benchmark 或 HRV 验证完成。
+
+下一步：只做数据清单、字段和许可记录，然后按已经冻结的 C1b 协议运行 24 被试、subject-disjoint 的 Radar–ECG beat/IBI benchmark；不调 VitalSense 示例，不改变 ±75 ms、时延拆分或评价指标协议。
