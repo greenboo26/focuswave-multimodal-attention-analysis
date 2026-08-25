@@ -1,17 +1,22 @@
 {
-  "status": "OFFICIAL_REPRO_TECHNICAL_BLOCKER",
-  "matlab_command": null,
-  "matlab_version": null,
-  "matlab_runtime": null,
-  "octave_command": null,
-  "toolboxes": null,
+  "status": "MATLAB_CONFIRMED",
+  "matlab_executable": "D:\\Program Files\\MATLAB\\R2024b\\bin\\matlab.exe",
+  "matlab_version": "24.2.0.2740171 (R2024b) Update 1",
+  "toolboxes": ["Signal Processing Toolbox 24.2 (R2024b)"],
   "checks": {
-    "Get-Command matlab": "not_found",
-    "Get-Command octave": "not_found",
+    "verification_command": "matlab -batch \\\"ver\\\"",
+    "Get-Command matlab": "registry_path_used",
+    "Get-Command octave": "not_used",
     "C:\\Program Files\\MATLAB": false,
     "C:\\Program Files\\MATLAB Runtime": false,
     "C:\\Program Files\\GNU Octave": false,
     "C:\\Program Files\\Polyspace": false
   },
-  "blocker": "No callable MATLAB/Octave runtime is installed or discoverable on this host; official main.m cannot be executed."
+  "official_sample_status": "OFFICIAL_SAMPLE_COMPLETE",
+  "official_sample_hr_fft_bpm": 89.70,
+  "official_sample_hr_peaks_bpm": 90.0,
+  "official_sample_hr_intervals_bpm": 92.6576,
+  "hrestim_called": true,
+  "official_template_and_rw_amf_called": true,
+  "matlab_findpeaks_called": true
 }
