@@ -1,0 +1,32 @@
+{
+  "status": "C1_ALIGNMENT_NOT_PRIMARY_CAUSE_STOP_HRV_CONFIRMED",
+  "no_new_heartbeat_algorithm": true,
+  "fixed_delay_ms": -18.0,
+  "primary_tolerance_ms": 75.0,
+  "lag_grid_ms": [
+    -250,
+    250,
+    5
+  ],
+  "mean_fixed_f1": 0.22286238609590095,
+  "mean_oracle_f1": 0.3618597844202805,
+  "mean_heldout_f1": 0.3136103198939675,
+  "heldout_session_mean_f1": {
+    "97793": 0.29965014365862724,
+    "9779": 0.36308031210390235,
+    "97795": 0.2781005039193729
+  },
+  "fixed_session_mean_f1": {
+    "97793": 0.25474137931034485,
+    "9779": 0.22685185185185186,
+    "97795": 0.18699392712550605
+  },
+  "stable_recovery_sessions_ge_0_10": 1,
+  "lag_invariant_ibi_mae_mean_ms": 93.2968038381975,
+  "device_sync_all_marker_fit_available": true,
+  "interpretation": "Oracle lag is an upper bound only; it is not a formal performance result. IBI audit is independent of constant timestamp shift.",
+  "inputs": [
+    "D:\\Project\\厚粲杯\\11_数据\\derived\\c1c_mmhrv_pilot_v1",
+    "D:\\acq_mmwave_data"
+  ]
+}
