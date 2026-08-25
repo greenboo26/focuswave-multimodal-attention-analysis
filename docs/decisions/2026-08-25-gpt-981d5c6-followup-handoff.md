@@ -1,7 +1,7 @@
 # GPT 981d5c6 裁决执行结果交接
 
 **日期：** 2026-08-25
-**执行依据：** GPT 裁决短 hash `981d5c6`（当前工作树无法定位该 commit 对象，相关阻塞已如实记录）
+**执行依据：** GPT 裁决 `981d5c6`，现已在同一远程分支中核验可读
 **执行状态：** 三条主线已完成；北京和珠海仍阻塞，RS6240 通过有限技术门控但未解除正式生理分析条件。
 
 ## 总结
@@ -68,17 +68,15 @@
 - Tx timing：`BLOCKED`；目前只有代码级 2TX×4RX 和约 10 ms 帧周期，缺少固件级 Tx slot 或实测触发时序。
 - memory mapping：`PARTIAL_NOT_FORMAL`；8 个 `tx*_rx*` 数组和 256 range bins 可见，但 PSIC/ReportDataCube1D 字段定义、IQ 排列、stride、端序和镜像处理尚未独立核验。
 
-## 4. GPT 裁决文件可追溯性问题
+## 4. GPT 裁决文件可追溯性
 
-三条线均报告：短 hash `981d5c6` 目前无法在当前可访问 Git 对象、引用或指定路径中定位。不能假装已读取该裁决的原文，只能依据用户提供的裁决内容和此前可定位的 handoff 文件执行。
+子任务启动时远程分支尚未同步 `981d5c6`，因此三个任务的早期 manifest 记录了暂时性的不可读状态。随后已从同一远程分支核验：
 
-此前可定位的 GPT↔Codex handoff：
+`docs/decisions/2026-08-25-gpt-p0-audit-adjudication.md`
 
-`docs/decisions/2026-08-25-p0-audit-gpt-handoff.md`
+对应 commit：`981d5c6`。
 
-对应 commit：`89a6818`。
-
-**需要 GPT 确认：** `981d5c6` 实际写入的仓库、分支或可访问文件路径，以便后续执行具有完整版本追溯。
+此前 Codex handoff 为 `89a6818`；本轮合并后的远程分支已同时包含 GPT 裁决、本次三条主线结果及相关方法文件。
 
 ## 5. 当前不应做的事情
 
