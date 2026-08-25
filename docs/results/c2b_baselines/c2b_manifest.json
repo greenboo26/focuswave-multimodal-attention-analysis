@@ -1,0 +1,20 @@
+{
+  "status": "C2B_TASK_FOCUS_BASELINES_COMPLETE_WITH_WINDOW_BLOCKERS",
+  "primary_window_s": 30,
+  "sensitivity_windows_s": [
+    10,
+    60
+  ],
+  "label": "positive=non_fully_task_focused; probe_response in {2,3,4}",
+  "grouping": "5-fold StratifiedGroupKFold by group_subject_id",
+  "n_rows": 1317,
+  "n_groups": 46,
+  "n_sessions": 71,
+  "excluded_hrv": true,
+  "excluded_rgb_nir": true,
+  "notes": [
+    "Existing reusable matrix has 1317 rows/71 sessions, not the full 1440-probe C2a manifest.",
+    "10 s and 60 s sensitivity matrices are not available and were not reconstructed."
+  ],
+  "seed": 20260826
+}

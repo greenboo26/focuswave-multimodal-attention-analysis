@@ -1,0 +1,4 @@
+window_s,status,reason
+10,not_available,no equivalent precomputed 10 s feature matrix; not reconstructed from test results
+30,primary_completed,existing M1/Q0 feature matrix
+60,not_available,no equivalent precomputed 60 s feature matrix; not reconstructed from test results

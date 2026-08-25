@@ -754,3 +754,25 @@ C2a 本地产物位于：
 `D:\Project\厚粲杯\08_算法\output\40_正式实验\04_C2a_标签与样本单元审计\derived_20260826\`
 
 本轮只读盘点正式 probe/self-report、行为字段、候选窗口、毫米波字段和休息边界；不训练模型、不提取大规模 RGB/NIR 特征、不重做 HRV。行级 manifest、subject mapping 和问卷原始字段只留本地；GitHub 只接收脱敏汇总、schema、方法报告和审计脚本。
+
+## 2026-08-26 C2b task-focus baseline
+
+状态：`C2B_TASK_FOCUS_BASELINES_COMPLETE_WITH_WINDOW_BLOCKERS`
+
+本地输出目录：
+
+`D:\Project\厚粲杯\11_数据\derived\c2b_task_focus_baselines_v1\`
+
+本轮使用 30 s 主窗口、46 个 `group_subject_id` 的 5-fold `StratifiedGroupKFold`。实际可复用特征矩阵为 1,317 probes / 71 sessions，尚不是 C2a 完整 1,440 probes。10 s 和 60 s 等价特征矩阵尚不存在，已明确标为 `not_available`，没有根据测试结果改主窗口。
+
+本轮 GitHub 仅提交：
+
+- `scripts/run_c2b_task_focus_baselines.py`
+- `docs/results/c2b_baselines/C2B_BASELINE_REPORT.md`
+- 脱敏模型指标、schema、manifest、窗口状态和特征重要性汇总
+
+本轮只保留在本地、不上传：
+
+- `c2b_oof_predictions.csv`
+- `c2b_fold_assignments.csv`
+- 其他行级预测或可重识别数据
