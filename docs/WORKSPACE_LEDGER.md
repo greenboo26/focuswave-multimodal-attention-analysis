@@ -470,7 +470,45 @@ GPT 后续不再从大量 handoff 猜项目状态，固定顺序：
 
 状态：`CURRENT / 首轮正式行为结果已补齐；最终正文措辞待 BH-FDR、模型诊断和缺失模式复核`。
 
-### 10.5 C1b VS_DATASET 数据获取核查（CURRENT）
+### 10.5 北京 Probe 前状态分组比较（CURRENT）
+
+本轮复用现有 1,400 行 `probe_event_level_behavior.csv`，没有重新恢复身份或扫描时间线。新增入口：
+
+`D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825\scripts\run_beijing_preprobe_state_comparison_v1.py`
+
+结果目录：
+
+`D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\formal_behavior_longitudinal_v1\`
+
+新增文件：
+
+- `preprobe_state_group_descriptives.csv`
+- `preprobe_state_group_gee.csv`
+- `preprobe_state_group_report.md`
+- `fig_preprobe_state_group_comparison.png`
+- `preprobe_state_group_run_manifest.json`
+
+结果摘要：
+
+- 调整 `probe_progress + block_num` 后，完全任务聚焦与其他非完全任务聚焦状态前的错误率差异在 10/20/30 秒均保持，β 分别为 −.0342、−.0359、−.0325，BH 校正后均 < .001。
+- 调整后 RT 中位数的三种窗口均不显著，BH q 分别为 .934、.955、.878；RT 标准差也不显著，BH q 分别为 .221、.341、.462。
+- 结论仅是 Probe 前行为分化关联，不作因果解释；2/3/4 不统称为“走神”。
+
+状态：`CURRENT / 北京正式纵向行为结果新增 Probe 状态分组比较；毫米波/NIR 尚未进入本轮模型`。
+
+### 10.6 北京传感器接入预检（CURRENT / 尚未正式建模）
+
+已确认可以复用同一条北京时间轴的字段：`subject + probe_id + probe_onset_unix_ms`；现有 NIR 产物使用 Unix 毫秒对齐，并保留 `session_aligned_only` 状态。
+
+NIR 当前权威输入：
+
+`D:\Project\厚粲杯\11_数据\derived\c3_nir_qc_integration_v1\nir_probe_aligned.csv`
+
+当前限制：`participant_id` 为空、`participant_identity_status=unresolved`，因此可以做 session/probe 层面的覆盖和时间对齐检查，但不能进入参与者层面的正式重复测量或 LOSO 结论。
+
+现有多模态 join 规范仍以 `subject + probe_id` 为键，`probe_onset_ms` 只做绝对时间审计；毫米波目前先限于相位/微动、呼吸候选、质量/覆盖和 Probe 前动态，不把心脏候选称为 HRV。
+
+### 10.7 C1b VS_DATASET 数据获取核查（CURRENT）
 
 本轮为只读获取核查，未运行毫米波/ECG 算法，未下载或上传被试级数据。
 
