@@ -1,0 +1,33 @@
+{
+  "status": "C2A_DATASET_AUDIT_COMPLETE",
+  "subject_count": 72,
+  "group_subject_count_deterministically_mapped": 46,
+  "session_count": 72,
+  "probe_count": 1440,
+  "manifest_rows": 4320,
+  "candidate_windows_s": [
+    10,
+    30,
+    60
+  ],
+  "window_complete_counts": {
+    "10": 1420,
+    "30": 1420,
+    "60": 1420
+  },
+  "label_field": "probe_response",
+  "label_values": {
+    "1": 1064,
+    "2": 240,
+    "3": 51,
+    "4": 85
+  },
+  "do_not_train": true,
+  "do_not_enter_hrv": true,
+  "blockers": [
+    "probe_response semantic mapping is not independently validated in this audit",
+    "questionnaire-to-current-J-subject mapping is not deterministic for all records",
+    "timestamp coverage is not signal-quality validation",
+    "rest usability has temporal boundary evidence but no independent signal-quality validation"
+  ]
+}

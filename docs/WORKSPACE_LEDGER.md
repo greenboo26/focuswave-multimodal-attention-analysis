@@ -703,6 +703,32 @@ C1b 评价已使用相同 ECG Lead II、500 Hz、一对一匹配和 ±50/75/100/
 
 本节 supersede 本节原先的 `OFFICIAL_REPRO_TECHNICAL_BLOCKER` 描述。原始 MAT、官方仓库源码和大型派生结果不提交 GitHub；仅提交 adapter、评估脚本、报告、manifest 和可追溯状态文件。
 
+## 2026-08-26 C2a 心理状态标签与样本单元审计
+
+状态：`C2A_DATASET_AUDIT_COMPLETE`
+
+本地产物目录：
+
+`D:\Project\厚粲杯\08_算法\output\40_正式实验\04_C2a_标签与样本单元审计\derived_20260826\`
+
+本地、不得上传的资产：
+
+- `c2a_sample_manifest.csv`
+- `c2a_subject_group_map.csv`
+- `c2a_subject_manifest.json`
+- `c2a_behavior_field_stats.json`
+- `c2a_questionnaire_field_inventory.json`
+
+已交接到 GitHub 的脱敏资产：
+
+- `docs/results/c2a_audit/C2A_DATASET_AUDIT.md`
+- `docs/results/c2a_audit/c2a_label_summary.csv`
+- `docs/results/c2a_audit/c2a_modality_coverage.csv`
+- `docs/results/c2a_audit/c2a_manifest.json`
+- `scripts/audit_c2a_dataset.py`
+
+关键审计计数：72 session、46 个确定性重复被试 group、1,440 probe、10/30/60 s 各 1,420/1,440 时间覆盖。`probe_response` 保留原始四分类；C2b 尚未启动，不得按窗口随机切分，也不得把 IBI/RMSSD/SDNN 放入核心 baseline。
+
 ## 2026-08-26 C1 封存与 C2a 交接
 
 ### C1 封存状态

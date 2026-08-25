@@ -1,0 +1,5 @@
+﻿modality,n_probe,n_subject,n_session,coverage_definition,quality_status
+behavior,1440,72,72,probe manifest present,audit_only
+mmwave_raw_or_timestamp,1420,71,71,raw/timestamp presence in C2a manifest,not physiological validity
+RGB,not_per_probe,72,72,existing subject master raw RGB video flag,session_level_only
+NIR,see_prior_c3,see_prior_c3,see_prior_c3,prior C3 aligned asset; not recomputed in C2a,identity/quality must be joined explicitly
