@@ -603,3 +603,37 @@ NIR 当前权威输入：
 状态修正：`C1b = DATASET_LOCAL_READY / benchmark_not_run`。此前的本地缺失 blocker 已解除；尚未声称外部 benchmark 或 HRV 验证完成。
 
 下一步：只做数据清单、字段和许可记录，然后按已经冻结的 C1b 协议运行 24 被试、subject-disjoint 的 Radar–ECG beat/IBI benchmark；不调 VitalSense 示例，不改变 ±75 ms、时延拆分或评价指标协议。
+
+### 10.10 C1b VS_DATASET 正式 benchmark 已完成（CURRENT）
+
+本轮严格使用本地完整健康队列，未把 MAT 或大型派生结果提交到 GitHub。
+
+执行入口：
+
+`D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825\scripts\run_vitalsense_c1b_benchmark_v1.py`
+
+输入目录：
+
+`D:\Project\厚粲杯\11_数据\external_benchmarks\VS_DATASET_healthy_v1\`
+
+完整结果目录：
+
+`D:\Project\厚粲杯\11_数据\derived\vitalsense_c1b_benchmark_v1\`
+
+关键产物：
+
+- `field_manifest.csv`：48 对 Radar–Mindray 字段、采样率、时间范围和配对记录；
+- `pair_manifest.json`：48 对场次清单；
+- `benchmark_metrics_long.csv`：两条雷达基线 × 48 场 × ±50/75/100/150 ms；
+- `benchmark_metrics_primary.csv`：±75 ms 主结果及个体级记录；
+- `benchmark_summary_primary.csv`：Resting/Apnea 分层的均值、中位数、四分位数和范围；
+- `benchmark_report.md`：协议、字段异常和解释边界；
+- `run_config.json`、`status.json`：RUN_ID、固定延迟规则和完成状态。
+
+字段结果：48/48 Radar、48/48 Mindray 均可读取；Radar 的 `VitalSig`、`Radar.fs`、`Radar.t_frame` 和 Mindray 的 `ecg_lead2`、`Fs_ecg=500` 均完整。`VS24_Apnea_Mindray.pleth` 类型为 int16、`VS24_Resting_Mindray.respiration` 长度为 30,600，这两个差异不影响本轮 ECG–Radar 路线，已保留在 manifest 和报告中。
+
+正式状态：`BENCHMARK_COMPLETE`，`RUN_ID=C1B_VS_DATASET_20260825_V1`，48 对、24 名被试、Resting/Apnea 分开输出，主容差 ±75 ms，敏感性 ±50/100/150 ms；固定延迟仅由 VS01 Resting 校准一次，不进行逐窗口 lag 搜索。
+
+解释边界：本轮完成的是技术 benchmark 运行，不等于“HRV 已验证”。当前薄基线的逐搏覆盖/召回偏低，后续如要把该外部 benchmark 作为算法性能证据，应优先复核/改进逐搏检测器并保留本轮作为可复现 baseline；不能只依据 HR 误差较小就宣称 IBI/HRV 有效。
+
+状态替代关系：本节 supersede 10.9 中的 `DATASET_LOCAL_READY / benchmark_not_run`；10.8 的“数据未下载”状态保留为历史记录，不再作为 CURRENT。
