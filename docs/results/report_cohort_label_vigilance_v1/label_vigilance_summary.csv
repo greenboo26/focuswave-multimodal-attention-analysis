@@ -1,0 +1,17 @@
+﻿domain,level,count,denominator,percent,note
+cohort,natural_persons,46,,,
+cohort,sessions,70,,,
+cohort,valid_probes,1400,,,
+probe_state,fully_task_focused,1038,1400.0,74.14285714285714,
+probe_state,experiment_related_not_task_focused,226,1400.0,16.142857142857142,
+probe_state,task_unrelated_thought,51,1400.0,3.642857142857143,
+probe_state,no_specific_thought,85,1400.0,6.071428571428571,
+vigilance,very_sleepy,15,1400.0,1.0714285714285714,
+vigilance,rather_sleepy,181,1400.0,12.928571428571429,
+vigilance,rather_alert,569,1400.0,40.642857142857146,
+vigilance,very_alert,635,1400.0,45.357142857142854,
+source_scope,C2a_canonical_sessions,72,,,
+source_scope,C2a_canonical_probes,1440,,,
+exclusion,C2_session_without_valid_timeline,20,1440.0,1.3888888888888888,sub-099; not in REPORT_ANALYSIS_COHORT
+exclusion,valid_timeline_outside_C2_universe,20,,,"sub-067; not counted in C2a 1,440 source probes"
+coverage,fourth_or_later_session_probes_retained,20,1400.0,1.4285714285714286,retained in primary cohort
