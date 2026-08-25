@@ -14,7 +14,7 @@
 
 Thought probe 的效度不应主要依赖传统量表内部一致性，而应看其与理论相关行为、时间结构和其他构念之间是否形成一致关系。Kane 等（2021）在超过 1,000 名本科生中发现，probe-caught task-unrelated thought 与更高的反应时变异和更低的持续注意表现存在稳定的被试内关联，并同时检验了跨任务、回顾性自评和执行控制等构念关系。
 
-行为变化可能在 probe 前较短时间尺度内出现。Seli、Cheyne 和 Smilek（2013）报告走神前 5 个 trial 的反应变异增加；另一项连续行为研究发现，走神相关的反应时改变可集中出现在 probe 前约 2.5–10 s。因此，本项目预先保留 10、20、30 s 行为窗口是有理论依据的，但三种窗口必须作为同一预定义分析 family 报告，不能只保留结果最好看的窗口。
+行为变化可能在 probe 前较短时间尺度内出现。Seli、Cheyne 和 Smilek（2013）报告走神前 5 个 trial 的反应变异增加；Henríquez、Chica、Billeke 和 Bartolomeo（2016）发现，走神相关的反应时改变可集中出现在 probe 前约 2.5–10 s。因此，本项目预先保留 10、20、30 s 行为窗口是有理论依据的，但三种窗口必须作为同一预定义分析 family 报告，不能只保留结果最好看的窗口。
 
 Corcoran 等（2025）在持续注意任务中将行为、瞳孔和心脏指标按 probe 前 10 s epoch 分析，并使用广义加性混合效应模型（generalized additive mixed-effects model [GAMM]）控制 time-on-task 与参与者内时间结构。这支持本项目把 time-on-task 作为正式科学变量，并在必要时使用非线性时间建模，而不是只把它当作需要消除的混杂。
 
@@ -60,7 +60,7 @@ Corcoran 等（2025）在持续注意任务中将行为、瞳孔和心脏指标�
 
 预定义窗口：probe 前 10、20、30 s。
 
-统计原则：三个窗口属于同一 scientific family。优先报告效应方向、效应量、95% 置信区间（confidence interval [CI]）和经预先定义多重比较方法校正的显著性结果；不得只报告最低 p 值窗口。
+统计原则：三个窗口属于同一 scientific family。优先报告效应方向、效应量、95% 置信区间（confidence interval [CI]）和经预先定义多重比较方法校正的显著性结果；不得只报告最低 *p* 值窗口。
 
 ### RQ3：强制休息是否伴随 B2 起始恢复？【主问题】
 
@@ -92,7 +92,7 @@ Corcoran 等（2025）在持续注意任务中将行为、瞳孔和心脏指标�
 - 效应方向；
 - 估计值；
 - 标准误或 95% CI；
-- 经校正的 p 值（适用时）；
+- 经校正的 *p* 值（适用时）；
 - 原始样本量、参与者数、有效 probe/trial 数；
 - 缺失和排除原因。
 
@@ -146,6 +146,8 @@ Codex handoff 必须包含：
 ## 参考文献
 
 Corcoran, A. W., Le Coz, A., Hohwy, J., & Andrillon, T. (2025). When your heart isn’t in it anymore: Cardiac correlates of task disengagement. *Communications Biology, 8*, 1646. https://doi.org/10.1038/s42003-025-09026-3
+
+Henríquez, R. A., Chica, A. B., Billeke, P., & Bartolomeo, P. (2016). Fluctuating minds: Spontaneous psychophysical variability during mind-wandering. *PLOS ONE, 11*(2), e0147174. https://doi.org/10.1371/journal.pone.0147174
 
 Kane, M. J., Smeekens, B. A., Meier, M. E., Welhaf, M. S., & Phillips, N. E. (2021). Testing the construct validity of competing measurement approaches to probed mind-wandering reports. *Behavior Research Methods, 53*(6), 2372–2411. https://doi.org/10.3758/s13428-021-01557-x
 
