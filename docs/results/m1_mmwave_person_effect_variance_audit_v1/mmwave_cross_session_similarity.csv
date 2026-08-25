@@ -1,0 +1,4 @@
+﻿pair_type,n_pairs,mean_distance,median_distance,mean_cosine_similarity,median_cosine_similarity,mean_feature_profile_correlation,median_feature_profile_correlation,note
+between_person,1691,5.226009662899239,4.6348052356768115,0.678372462353612,0.750687119334979,0.6852220524505163,0.7594229947747304,
+within_person,20,3.8033277213281513,3.247904650215542,0.7840202787618011,0.8711898157249379,0.7672979783476885,0.8501225282815792,
+coverage,14,,,,,,,n_pairs is participants with at least two eligible formal sessions; pair rows are intentionally not exported
