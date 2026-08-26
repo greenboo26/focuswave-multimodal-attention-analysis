@@ -6,6 +6,7 @@ import json
 import shutil
 import subprocess
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -138,16 +139,25 @@ def run_stage(analysis_id: str, base_config: dict[str, Any], final_root: Path,
     root.mkdir(parents=True, exist_ok=True)
     resolved = build_stage_config(base_config, analysis_id, producer_output,
                                   final_root, machine_id, cfg)
-    resolved_path = root / "resolved_paths.local.json"
-    resolved_path.write_text(json.dumps(resolved, ensure_ascii=False, indent=2), encoding="utf-8")
+    temp_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".focuswave-paths.json", delete=False, encoding="utf-8"
+        ) as handle:
+            json.dump(resolved, handle, ensure_ascii=False, indent=2)
+            temp_path = Path(handle.name)
 
-    cmd = [sys.executable, str(LAUNCHER), analysis_id, "--paths", str(resolved_path)]
-    if dry_run:
-        cmd.append("--dry-run")
-    if force:
-        cmd.append("--force")
-    print("RUN\t" + "\t".join(cmd))
-    subprocess.run(cmd, cwd=REPO, check=True)
+        cmd = [sys.executable, str(LAUNCHER), analysis_id, "--paths", str(temp_path)]
+        if dry_run:
+            cmd.append("--dry-run")
+        if force:
+            cmd.append("--force")
+        print("RUN\t" + "\t".join(cmd))
+        subprocess.run(cmd, cwd=REPO, check=True)
+    finally:
+        if temp_path is not None:
+            temp_path.unlink(missing_ok=True)
+
     if dry_run:
         return
 
