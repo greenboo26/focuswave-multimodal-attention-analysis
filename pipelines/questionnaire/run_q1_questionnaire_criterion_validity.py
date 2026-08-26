@@ -27,6 +27,22 @@ QUESTION_KEY = "整个实验过程中，你走神"
 QUESTION_FIELD = "mind_wandering_ordinal"
 QUESTION_TITLE = "正式版第4题：整个实验过程中，你走神（想与任务无关的事情）的时间大概占多少"
 
+# Frozen canonical probe-label semantics.  Keep the bridge column mapping
+# explicit so a display-label correction cannot silently leave the upstream
+# derived columns interpreted under the old 3/4 ordering.
+LABEL_SEMANTICS = {
+    1: "fully task-focused",
+    2: "experiment-related but not task-focused",
+    3: "task-unrelated thought / mind wandering",
+    4: "mind blank",
+}
+LABEL_PROPORTION_COLUMNS = {
+    1: "专注_proportion",
+    2: "任务相关干扰_proportion",
+    3: "走神_proportion",
+    4: "大脑空白_proportion",
+}
+
 
 def bh(p: pd.Series) -> pd.Series:
     """Benjamini-Hochberg adjusted p values, with no hidden test expansion."""
@@ -72,8 +88,8 @@ def association_rows(data: pd.DataFrame) -> pd.DataFrame:
     planned = [
         ("probe", "label_1_complete_task_focus_proportion", "专注（label 1）比例", "专注_proportion"),
         ("probe", "label_2_task_related_interference_proportion", "任务相关干扰（label 2）比例", "任务相关干扰_proportion"),
-        ("probe", "label_3_mind_blank_proportion", "大脑空白（label 3）比例", "大脑空白_proportion"),
-        ("probe", "label_4_mind_wandering_proportion", "走神（label 4）比例", "走神_proportion"),
+        ("probe", "label_3_mind_wandering_proportion", "走神（label 3）比例", LABEL_PROPORTION_COLUMNS[3]),
+        ("probe", "label_4_mind_blank_proportion", "大脑空白（label 4）比例", LABEL_PROPORTION_COLUMNS[4]),
         ("behavior", "commission_error_rate", "NoGo 漏按/commission error rate", "behavior_commission_rate"),
         ("behavior", "preempt_rate", "预按率（辅助行为指标）", "behavior_preempt_rate"),
         ("behavior", "go_rt_median_ms", "Go trial 中位 RT（RT variability 无既有场次字段）", "behavior_go_rt_median_ms"),
@@ -205,6 +221,13 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=True)
     metadata, missing_rate, audit_n = item_metadata()
     data = pd.read_csv(BRIDGE)
+    required_label_columns = set(LABEL_PROPORTION_COLUMNS.values())
+    missing_label_columns = sorted(required_label_columns.difference(data.columns))
+    if missing_label_columns:
+        raise RuntimeError(f"upstream bridge missing canonical label columns: {missing_label_columns}")
+    # The bridge is the upstream source of the four probe proportions.  Verify
+    # the intended 3/4 column mapping before any association is calculated.
+    bridge_label_mapping = {str(label): column for label, column in LABEL_PROPORTION_COLUMNS.items()}
     eligible = data[(data["bridge_status"] == "linked_main_non_nir_session") & data[QUESTION_FIELD].notna()].copy()
     for column in [QUESTION_FIELD, "专注_proportion", "任务相关干扰_proportion", "大脑空白_proportion", "走神_proportion", "behavior_commission_rate", "behavior_preempt_rate", "behavior_go_rt_median_ms"]:
         eligible[column] = pd.to_numeric(eligible[column], errors="coerce")
@@ -223,7 +246,9 @@ def main() -> None:
     write_summary(out, metadata, missing_rate, audit_n, eligible, associations, mixed, figs)
     (out / "run_manifest.json").write_text(json.dumps({"scope": "derived-products-only; no raw questionnaire/trial/C2C/C3 read",
         "n_sessions": len(eligible), "n_participants": int(eligible['repeat_participant_id_questionnaire'].nunique()),
-        "inputs": [str(AUDIT_DIR), str(BRIDGE)], "bootstrap_draws": 5000, "seed": 20260826}, ensure_ascii=False, indent=2), encoding="utf-8")
+        "inputs": [str(AUDIT_DIR), str(BRIDGE)], "bootstrap_draws": 5000, "seed": 20260826,
+        "label_semantics": LABEL_SEMANTICS, "bridge_label_proportion_columns": bridge_label_mapping},
+        ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 if __name__ == "__main__":

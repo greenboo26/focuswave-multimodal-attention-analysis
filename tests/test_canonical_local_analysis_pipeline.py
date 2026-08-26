@@ -97,3 +97,55 @@ def test_c1_frozen_evaluator_basic_identity_case():
     assert out["recall"] == 1.0
     assert out["f1"] == 1.0
     assert out["timing_mae_ms"] == 0.0
+
+
+def test_q1_canonical_label_3_4_mapping_is_explicit():
+    import importlib.util
+
+    path = ROOT / "pipelines/questionnaire/run_q1_questionnaire_criterion_validity.py"
+    spec = importlib.util.spec_from_file_location("q1_mapping_test", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    assert module.LABEL_SEMANTICS[3] == "task-unrelated thought / mind wandering"
+    assert module.LABEL_SEMANTICS[4] == "mind blank"
+    assert module.LABEL_PROPORTION_COLUMNS[3] == "走神_proportion"
+    assert module.LABEL_PROPORTION_COLUMNS[4] == "大脑空白_proportion"
+
+
+def test_collector_rejects_scientific_signature_mismatch(tmp_path):
+    import importlib.util
+
+    path = ROOT / "scripts/canonical/collect_machine_packages.py"
+    spec = importlib.util.spec_from_file_location("collector_signature_test", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    base = {
+        "pipeline_version": "focuswave_canonical_v1", "producer": "p.py",
+        "source_ref": "archive/20260826/x", "frozen": {"seed": 1},
+        "result_unit": "probe", "merge_key": ["subject"],
+    }
+    one = {"analysis_id": "x", "relative_path": "x.csv", "machine_id": "a", "site": "Beijing", "merge_key": ["subject"], "scientific_signature": base, "path": tmp_path / "a.csv"}
+    two_sig = dict(base); two_sig["frozen"] = {"seed": 2}
+    two = dict(one); two["machine_id"] = "b"; two["scientific_signature"] = two_sig; two["path"] = tmp_path / "b.csv"
+    one["path"].write_text("subject,value\n1,1\n", encoding="utf-8")
+    two["path"].write_text("subject,value\n2,2\n", encoding="utf-8")
+    import pytest
+    with pytest.raises(RuntimeError, match="scientific signature mismatch"):
+        module.merge_group([one, two], tmp_path / "out.csv")
+
+
+def test_sensor_single_class_heldout_is_not_filtered_from_source():
+    source = (ROOT / "pipelines/mmwave/run_beijing_sensor_increment_v1.py").read_text(encoding="utf-8")
+    assert 'test["target_label1"].nunique() < 2' not in source
+    assert "single-class" in source
+
+
+def test_c2b_uses_behavior_and_mmwave_intersection_for_fusion():
+    source = (ROOT / "pipelines/mmwave/run_c2b_v2_canonical_reconstruction.py").read_text(encoding="utf-8")
+    assert 'use["behavior_available"].eq(1) & use["mmwave_available"].eq(1)' in source
+    assert "ΔAUC 约" not in source
+    assert "1,420" not in source
+    assert "1,317" not in source
+    assert "1,278" not in source

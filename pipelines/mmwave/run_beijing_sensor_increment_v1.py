@@ -45,7 +45,10 @@ def grouped_oof_auc(data, features):
     for group in sorted(groups.unique()):
         train = d[groups != group]
         test = d[groups == group]
-        if train["target_label1"].nunique() < 2 or test["target_label1"].nunique() < 2:
+        # Only the training fold must contain both classes. A single-class
+        # held-out participant still has valid probabilities and must remain in
+        # pooled OOF AUC/Brier evaluation.
+        if train["target_label1"].nunique() < 2:
             continue
         model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=2000, C=1.0, solver="liblinear"))
         with warnings.catch_warnings():

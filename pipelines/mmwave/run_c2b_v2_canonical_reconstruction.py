@@ -253,14 +253,14 @@ def evaluate_window(frame: pd.DataFrame, window_s: int, out: Path, seed: int = 2
     for feature_set, features in MODEL_SETS.items():
         # A model requires actual values for its modality. Missing feature values
         # within a present modality are imputed inside each training fold.
-        modality = "behavior_available" if feature_set in {"B", "C+B", "C+B+W"} else None
-        if feature_set.startswith("W") or feature_set in {"C+W_basic", "C+W_extended", "C+B+W"}:
-            modality = "mmwave_available"
         use = frame.copy()
-        if feature_set == "C":
-            use = use
-        elif modality and modality in use:
-            use = use[use[modality].eq(1)].copy()
+        if feature_set in {"B", "C+B"}:
+            use = use[use["behavior_available"].eq(1)].copy()
+        elif feature_set == "C+B+W":
+            # Fusion is defined on the true matched availability cohort.
+            use = use[use["behavior_available"].eq(1) & use["mmwave_available"].eq(1)].copy()
+        elif feature_set.startswith("W") or feature_set in {"C+W_basic", "C+W_extended"}:
+            use = use[use["mmwave_available"].eq(1)].copy()
         for model_name in ["dummy", "logistic", "HGB"]:
             pred_parts = []
             for fold in sorted(use.fold.unique()):
@@ -336,6 +336,26 @@ def strict_matched_metrics(preds: pd.DataFrame, window_s: int) -> pd.DataFrame:
 
 
 def write_report(out: Path, base: pd.DataFrame, metrics: pd.DataFrame, provenance_rows: pd.DataFrame) -> None:
+    old_rows = int(provenance_rows["old_matrix_rows_total"].iloc[0]) if len(provenance_rows) else 0
+    old_subjects = int(provenance_rows["old_matrix_subjects_total"].iloc[0]) if len(provenance_rows) else 0
+    timestamp_complete = int(provenance_rows["timestamp_full"].fillna(False).astype(bool).sum())
+    delta_path = out / "window_30s/paired_cluster_bootstrap.csv"
+    if delta_path.exists():
+        runtime_delta = pd.read_csv(delta_path)
+    else:
+        runtime_delta = pd.DataFrame()
+    if not runtime_delta.empty:
+        d = runtime_delta.iloc[0]
+        delta_text = (
+            f"30 s 的 `C+B` vs `C+B+W` paired group bootstrap："
+            f"ΔAUC={d.get('delta_roc_auc', np.nan):.3f}，"
+            f"95% CI [{d.get('delta_roc_auc_ci95_low', np.nan):.3f}, "
+            f"{d.get('delta_roc_auc_ci95_high', np.nan):.3f}]；"
+            f"common probes={int(d.get('n_common_probe', 0))}，"
+            f"common groups={int(d.get('n_common_group', 0))}。"
+        )
+    else:
+        delta_text = "30 s paired group bootstrap 未产生 runtime output。"
     lines = [
         "# C2b-v2 canonical feature reconstruction and window completion",
         "",
@@ -346,9 +366,8 @@ def write_report(out: Path, base: pd.DataFrame, metrics: pd.DataFrame, provenanc
         "## 样本与 provenance 对账",
         "",
         f"- C2a 母表：{len(base)} probes，{base.subject.nunique()} sessions，{base.group_subject_id.nunique()} group_subject_id。标签 1/2/3/4 = {base.label.value_counts().to_dict()}。",
-        "- 1,420：C2a 中可由当前时间戳字段支持的完整时间覆盖；20 个缺失集中在 sub-067。",
-        "- 1,317：旧 M1/Q0 矩阵的独立行数，来源为旧 1,297 行 + sub099 20 行。旧矩阵没有当前 C2a 的绝对 probe onset，且 probe_id 命名空间不同，因此本轮没有伪造逐行 join。",
-        "- 1,278：只出现在旧 C2a 报告正文，当前 manifest、coverage CSV 和脚本无法复现；本轮标记为 `unreproducible_legacy_claim`，不作为毫米波有效样本数。",
+        f"- 当前 provenance 中 timestamp_full 行数：{timestamp_complete}。",
+        f"- 旧 M1/Q0 矩阵：{old_rows} 行、{old_subjects} subjects；旧 namespace 无当前绝对 onset，未进行伪造逐行 join。",
         "",
         "## 窗口级真实毫米波提取",
         "",
@@ -384,7 +403,7 @@ def write_report(out: Path, base: pd.DataFrame, metrics: pd.DataFrame, provenanc
         "",
         "## 30 s strict matched cohort",
         "",
-        "以下才是行为与毫米波在同一批 probe 上的直接比较；full-cohort 的 C+B 数值不与 1,420 行 fusion 数值直接横比。",
+        "以下才是行为与毫米波在同一批 probe 上的直接比较；C+B+W 使用 behavior_available 与 mmwave_available 的交集。",
         "",
         "| feature set | n | groups | ROC-AUC | PR-AUC | balanced accuracy |",
         "|---|---:|---:|---:|---:|---:|",
@@ -408,12 +427,12 @@ def write_report(out: Path, base: pd.DataFrame, metrics: pd.DataFrame, provenanc
         "",
         "## 预设 matched 增量比较",
         "",
-        "30 s 的 `C+B` vs `C+B+W` paired group bootstrap：ΔAUC 约 −.040，95% CI 约 [−.074, −.003]；融合预测的组均值分数高于行为基线的 group 数为 22/46。该结果表示在本轮 canonical 特征和当前低复杂度模型下，没有观察到毫米波在行为之外的增量。它不等同于宣称毫米波在所有表示或所有任务中无效。",
+        delta_text + "所有数值来自本次 runtime output；不得将本报告中的数字复制为其他机器或数据集的固定事实。",
         "",
         "## 限制",
         "",
-        "1. 旧 1,317 矩阵与当前 1,440 C2a 母表没有可审计的绝对 onset 逐行键，本轮不把两者强行拼接。",
-        "2. 10 s 的许多原始时间段实际时长不足预设门槛，因此只有 980 个窗口进入 W 模型；这不是缺失值填补造成的。",
+        "1. 旧矩阵与当前 C2a 母表没有可审计的绝对 onset 逐行键，本轮不把两者强行拼接。",
+        "2. 各窗口有效行数、group 数和增量均以本次 runtime output 为准，不使用历史报告固定数字。",
         "3. 这轮沿用现有无标签 phase/motion/QC 特征，没有重新开发毫米波生理算法；HRV/IBI 不在 C2 核心。",
         "4. 本报告不自动触发 RGB/NIR 或复杂模型阶段。",
         "",
@@ -428,9 +447,9 @@ def write_report(out: Path, base: pd.DataFrame, metrics: pd.DataFrame, provenanc
 
     summary = pd.DataFrame([
         {"quantity": "c2a_probe_universe", "n": len(base), "meaning": "formal behavior probes"},
-        {"quantity": "c2a_timestamp_complete", "n": int(provenance_rows.timestamp_full.astype(bool).groupby(provenance_rows.subject).first().sum()) if False else 1420, "meaning": "manifest timestamp-complete probes"},
-        {"quantity": "old_m1_q0_matrix", "n": 1317, "meaning": "legacy matrix; old namespace, no current row join"},
-        {"quantity": "legacy_1278_claim", "n": 1278, "meaning": "not reproducible from synchronized manifest/script"},
+        {"quantity": "c2a_timestamp_complete", "n": timestamp_complete, "meaning": "manifest timestamp-complete rows"},
+        {"quantity": "old_m1_q0_matrix", "n": old_rows, "meaning": "legacy matrix; old namespace, no current row join"},
+        {"quantity": "old_m1_q0_subjects", "n": old_subjects, "meaning": "legacy matrix subject count"},
     ])
     summary.to_csv(out / "c2b_v2_provenance_summary.csv", index=False, encoding="utf-8-sig")
 

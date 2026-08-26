@@ -37,16 +37,37 @@ def collect_package(root: Path) -> list[dict[str, Any]]:
                     "machine_id": manifest["machine_id"],
                     "site": manifest["site"],
                     "merge_key": manifest.get("merge_key", []),
+                    "scientific_signature": scientific_signature(manifest),
                     "relative_path": rel,
                     "path": path,
                 })
     return rows
 
 
+def scientific_signature(manifest: dict[str, Any]) -> dict[str, Any]:
+    """Return the minimum semantic contract used for fail-closed merging."""
+    return {
+        "pipeline_version": manifest.get("pipeline_version"),
+        "producer": manifest.get("producer"),
+        "source_ref": manifest.get("source_ref"),
+        "frozen": manifest.get("frozen", {}),
+        "result_unit": manifest.get("result_unit"),
+        "merge_key": manifest.get("merge_key", []),
+    }
+
+
 def merge_group(items: list[dict[str, Any]], output: Path) -> dict[str, Any]:
     frames = []
     columns = None
+    signature = None
     for item in items:
+        if signature is None:
+            signature = item["scientific_signature"]
+        elif item["scientific_signature"] != signature:
+            raise RuntimeError(
+                f"scientific signature mismatch for {item['analysis_id']} / {item['relative_path']} "
+                f"from machine {item['machine_id']}: expected {signature}, got {item['scientific_signature']}"
+            )
         frame = pd.read_csv(item["path"])
         if columns is None:
             columns = list(frame.columns)
@@ -68,6 +89,7 @@ def merge_group(items: list[dict[str, Any]], output: Path) -> dict[str, Any]:
         "machines": sorted({x["machine_id"] for x in items}),
         "sites": sorted({x["site"] for x in items}),
         "merge_key": items[0].get("merge_key", []) if items else [],
+        "scientific_signature": signature or {},
     }
 
 
