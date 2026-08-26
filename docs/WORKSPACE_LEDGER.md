@@ -1,5 +1,9 @@
 # 厚粲杯项目工作区总账
 
+## 2026-08-26 FocusWave mainline restructure candidate
+
+Candidate worktree: `D:\Project\厚粲杯\08_算法_focuswave_mainline_restructure_v1`; branch: `codex/focuswave-mainline-restructure-v1`. Remote audit covered 32 `origin/*` branches, Sol latest `5704843ec5abbd51fad0aac68df228ac76e2965d`, canonicalization `ce4da877743132d6a8b4f21a298c58b1b06f3f5e`, and PR #2 head `0e756b275fd9cbbc7d7564531d3200425bf3be23`. No remote branch was deleted, no default branch/repository name was changed, `master` was not merged, and no new scientific analysis was started. Candidate architecture, dual-machine contract, final analysis surface, migration manifest and retirement matrix are under `docs/repository/` and `contracts/`.
+
 ## 2026-08-26 canonicalization snapshot
 
 当前 review worktree：`D:\Project\厚粲杯\08_算法_local_analysis_library_canonicalization_20260826`；分支：`codex/local-analysis-library-canonicalization-20260826`。目标：`FocusWave Multimodal Attention Analysis` 的本机事实审计与可复现性收口。入口：`docs/canonical/SOL_REVIEW_ENTRYPOINT_V1.md`。

@@ -1,138 +1,52 @@
-# 毫米波雷达生命体征提取算法
+# FocusWave Multimodal Analysis
 
-基于 8 通道复包络数据（npz）提取心率（HR）、呼吸率（BR）、心率变异性（HRV）。
-厚粲杯项目「毫米波多模态注意力测量」的信号处理与分析模块。
+这是 FocusWave 多模态注意力分析的正式分析总仓库入口候选。GitHub slug 暂保留为 `greenboo26/mmwave-hrv-analysis`；仓库主体不再定义为 HR、BR 或 HRV 算法项目。毫米波是当前已审计的一个传感器验证边界，NIR 与 RGB 的生产代码分别位于外部 `kyandi233-dev/Attention-Analysis` 的受控 ref，最终结果和跨站点推断在本仓库中央收口。
 
-## Current project scope
+## 当前科学状态
 
-项目显示名称为 `FocusWave Multimodal Attention Analysis`，覆盖实验协议/身份/cohort、行为、Probe response/vigilance、问卷、毫米波、NIR、RGB、增量/融合与北京—珠海跨站点验证。旧仓库名 `mmwave-hrv-analysis` 仅保留在历史 Git 引用中。
+- 北京报告 cohort：70 sessions、46 natural participants、1,400 probes；label 1 对 labels 2/3/4；C+B 主窗口 30 s，10/20 s 为行为敏感性；participant-disjoint 5-fold；这是当前北京 C+B 锚点，不是未来 Beijing+Zhuhai global folds。
+- Probe 四类语义固定为：1 完全任务聚焦，2 关注实验但未聚焦分拣，3 任务无关思维，4 思维空白。2/3/4 不得统称 mind-wandering。
+- NIR 当前只有 v1 PIR+OAR+QC/coverage 可作为时间戳恢复前的结果边界；68 sessions/44 participants/1,360 probes 是 `PRE_TIMESTAMP_RECOVERY_CURRENT_RESULT`，不是最终完整预测结果。sub-100/sub-178 仍受 capture-counter/AVI mapping 影响，NIR v2 需先完成 blink/PERCLOS 手工可行性检查。
+- RGB 目前是 `PIPELINE_ENGINEERING_PENDING / FORMAL_ANALYSIS_NOT_AUTHORIZED`。`rgb-amd`、`rgb-nvidia` 先完成工程和 parity；局部 parquet 不得当作正式统计结果。
+- mmWave C1 HRV 线已停止扩展，不能解释为硬件失败；C2B/C2C 没有稳定超越 C+B 的正增量，M1 作为 supporting person-effect audit，主线定位为 validation boundary/ablation。
+- 北京 B1+B2 与珠海 B1+B2 是 shared primary，珠海 B3 是 extension。`DEFERRED_EXTERNAL_STORAGE_NOT_AVAILABLE` 表示外部存储暂不可用，不表示数据不存在。
 
-本地规范化审查入口：`docs/canonical/SOL_REVIEW_ENTRYPOINT_V1.md`。当前分支为 `codex/local-analysis-library-canonicalization-20260826`；本轮未建立 AMD 分支、未授权另一台机器开始批量分析。原始数据、participant-level row data、NPZ/MAT/BIN/AVI、大型输出和缓存均不进入 GitHub。
+## 双机中央流程
 
-## 目录结构（2026-08-24 整理版）
-
-```
-08_算法/
-├── README.md
-├── CHANGELOG.md                 ← 修改说明 + 版本演进（git tag v1.7, 2026-08-14）
-├── scripts/                     ← 全部代码（21 个活跃脚本 + tools/ + archive_历史版本/）
-│   ├── process_vital_signs_v2/v3/v5/v9.py ← 管线基础模块（被 import, 勿删）
-│   ├── assess_preexp_quality.py ← 心跳质量评估（SPC 候选判据, 分析前置质量门）
-│   ├── diagnose_poor_windows.py ← poor 窗细分诊断
-│   ├── analyze_mmwave_hrv.py    ← HRV 核心（30s 窗×15s 步进, 行为轴截断, SPC 选 bin）
-│   ├── analyze_mmwave_full.py   ← 全程 × 行为联合分析（探针特征+时间线）
-│   ├── analyze_preexp_robustness.py ← 行为×毫米波相关稳健性检验
-│   ├── compare_preexp_hrv.py    ← 跨被试 HR/HRV/行为分布对比
-│   ├── hrv_nonlinear.py         ← 非线性特征（SampEn/DFA）
-│   ├── motion_gate.py           ← 摄像头运动量门（旁证, 非门卫）
-│   ├── export_window_matrix.py  ← 窗特征矩阵导出
-│   ├── gen_range_time_maps.py   ← 距离-时间热图
-│   ├── plot_vitalsign_pipeline_0813.py ← 生命体征 8 步流程图
-│   ├── gen_preexp_reports.py    ← 预实验报告批量生成
-│   ├── truncate_preexp_data.py / rename_preexp_subject.py ← 数据工具
-│   ├── validate_external_gold_0814.py / analyze_external_heartbeat_0814.py ← 外部金标准验证
-│   ├── tools/                   ← check_preexp_data / compare_all_datasets
-│   └── archive_历史版本/         ← 7 类归档（旧管线/31项A_B实验/旧批次/近场测试/一次性/预实验专项/更早）
-├── data/                         ← 可版本化的小型审计数据与元数据，不放原始采集数据
-│   └── 审计/
-├── docs/
-│   ├── 项目管理/                 ← 目标清单、需求—证据矩阵等项目级说明
-│   ├── 系统/                     ← 系统运行说明与对外使用边界
-│   ├── 运维/                     ← 错误日志和环境维护记录
-│   ├── 报告/                    ← ADC固件实测/测角校准/问卷深入分析 等
-│   ├── 方案/                    ← 正式实验设计建议.md（BBBB 定稿）/融合门控方案/近场测试方案
-│   ├── 决策/                    ← 优化决策记录.md（36 项实验）/规范备忘.md
-│   ├── 交付/                    ← 专家审查包/交付包/答疑清单
-│   └── 手册/                    ← 毫米波数据Q&A.md/脚本索引.md/信号处理算法文献.md/生理指标判断手册
-├── output/                      ← 批量分析产物（本地保留，原则上不进入 Git）
-│   ├── 预实验/                  ← 01_质量评估 / 02_全程窗 / 03_跨被试 / 04_汇总产物
-│   ├── 旧实验/                  ← 旧批次（08_旧批次-*）
-│   └── 外部数据集/              ← AgeBalanced 金标准验证产物
-└── .gitignore
+```text
+local raw data
+  -> local standardized derived/QC package + linkage evidence
+  -> central identity reconciliation
+  -> authoritative global_repeat_participant_id
+  -> global cohort and participant-disjoint folds
+  -> final pooled / site-held-out inference
 ```
 
-根目录只保留仓库级入口文件：`README.md`、`CHANGELOG.md`、`.gitignore`、`requirements.txt`。运行环境、缓存和原始数据不属于算法库版本；NIR 工程保留其独立仓库结构，模型权重使用 Git LFS 管理。
+NIR/RGB 外部仓库只负责受控的本机派生生产。AMD 或 NVIDIA 均不得独立冻结 global participant ID、global folds、跨站点 p-values/AUCs，也不得将两台机器的最终推断结果平均。完整约束见 `contracts/multimodal/DUAL_MACHINE_ANALYSIS_CONTRACT_V1.md`。
 
-## 算法资产分类
+## 目录入口
 
-| 类别 | 目录 | 内容与边界 |
-|---|---|---|
-| 核心算法 | `scripts/` | 毫米波生命体征、ECG/RSP 金标准清洗、质量门控、校准、正式分析和验证脚本 |
-| 交付与方法 | `docs/` | 清洗标准、算法说明、校准报告、交付包、运行手册和决策记录 |
-| 小型证据资产 | `data/` | 可追溯的小型审计数据、元数据和脚本输入，不包含原始波形或视频 |
-| 可再生成结果 | `output/` | CSV、JSON、图表和批处理结果，保留本地并由报告索引引用 |
-| NIR 工程 | `01_Attention-Analysis_nvidia-cuda/`、`external/` | 独立 NIR 工程及外部依赖，保留各自 Git 历史和运行说明 |
-| 历史算法 | `scripts/archive_历史版本/` | 已停用或仅用于追溯的算法版本，不作为当前主线入口 |
-
-## 版本同步规则
-
-- GitHub 远程仓库：`greenboo26/mmwave-hrv-analysis`。
-- 源码、说明、配置、小型审计资产和可复现模型权重纳入版本管理。
-- `.venv*`、`venv*`、`node_modules`、Python 缓存、批量输出和原始数据不纳入版本管理。
-- `.h5`、`.onnx`、`.pt`、`.pth` 等模型权重通过 Git LFS 上传，避免普通 Git 对大文件的限制。
-- 任何移动文件后，必须同步更新脚本中的路径、README、脚本索引和版本说明，并完成编译或路径检查。
-
-## Pipeline（分析架构 v1.7，2026-08-14 起）
-
-```
-摄像头运动量（motion_gate.py, 旁证） → 毫米波质量门（SPC 空间相位相干候选判据, 距离门控 bin 0-45）
-    → 可信窗（行为时间轴截断: sart_start→最后 block_stop, 默认强制）
-    → 呼吸谐波排除（n_harm=6 + 周期图谐波频点剔除）
-    → HR/BR/HRV（30s 窗 × 15s 步进; IBI 生理连续性过滤 250ms; 30s 窗不做频域 LF/HF）
-    → 行为分型（RT<150 预判 / 真误按 / 预判率）
-    → 统计（被试内 z 标准化, 跨被试比较）
+```text
+configs/       cohort、window、model 配置
+contracts/     identity、behavior、questionnaire、sensor、fusion contract
+schemas/       local derived、QC、central merge 的字段约定
+pipelines/     各 modality 的 canonical entrypoint/adaptor 索引
+results/       canonical、supporting、engineering reference、superseded index
+docs/          methods、decisions、provenance、reports、repository governance
+tests/         schema/path/contract smoke checks
 ```
 
-信号分离方法演进 v1-v8 与分析架构演进 v1.1→v1.7 见 `CHANGELOG.md`。
+本次重构只迁移 Git-safe 的索引、contract 和聚合结果入口，不移动 import-sensitive legacy producer；迁移边界见 `docs/repository/MIGRATION_MANIFEST_V1.csv`。原始数据、participant-level rows、NPZ/MAT/BIN/AVI、缓存、模型私有路径和大型输出均禁止进入 Git。
 
-## 用法
+## 从哪里开始
 
-当前分析阶段的稳定数据路径和本机正式数据路径配置见 [`configs/README.md`](configs/README.md)。新脚本应通过 `scripts/path_registry.py` 读取路径；正式数据移动硬盘只在本机配置，不写死盘符。
+1. 先读 `docs/repository/REPOSITORY_ARCHITECTURE_V1.md`、`docs/provenance/CROSS_REPO_PROVENANCE_V1.md` 和双机 contract。
+2. 只使用 `results/canonical/README.md` 作为当前正式结果入口；`results/supporting/` 与 `results/engineering_reference/` 不得升级为最终科学结论。
+3. 本地派生前执行 runbook/contract 的 preflight；中央身份、cohort、fold 和最终 inference 需要中央整合权限。
+4. 当前 candidate 尚未改变 GitHub 默认分支、仓库名或任何远端分支。
 
-当前预实验数据根目录为 `I:/预实验`（具体配置见 `configs/paths.local.json` 或 `paths.example.json`），输出统一到 `output/`。README 中的旧盘符只作为历史记录，不作为当前默认路径。
+## 复现和数据边界
 
-```bash
-cd scripts
+所有可运行模块必须记录 `machine_role`、`runtime_backend`、`pipeline_version`、`git_commit`、`model_hash`、`config_hash`、`schema_version`、`source_manifest_hash`。缺少这些字段的历史结果只可作为 supporting/reference，并在报告中显式写出不可复现限制。
 
-# 预实验分析主线（默认按行为时间轴截断）
-python assess_preexp_quality.py --subject 010 --data-root J:/预实验        # ① 质量门
-python analyze_mmwave_full.py --subject 010 --data-root J:/预实验 \
-    --output-dir 预实验/09_预实验-SUB010-FULL                             # ② 全程窗+探针特征
-python analyze_preexp_robustness.py --data-root J:/预实验                  # ③ 相关稳健性（全被试）
-python compare_preexp_hrv.py --data-root J:/预实验                         # ④ 跨被试分布对比
-
-# 数据工具
-python truncate_preexp_data.py --subject 004 --data-root J:/预实验         # 尾部无效数据截断
-python rename_preexp_subject.py --subject 005 --wrong-id 004               # 编号输入错误修正
-
-# 外部金标准验证（AgeBalanced 60GHz, Zenodo 10.5281/zenodo.16760683）
-python validate_external_gold_0814.py --data-root "J:/外部数据集_AgeBalanced_60GHz"
-```
-
-## 依赖
-
-```bash
-pip install -r requirements.txt
-```
-
-| 库 | 状态 | 用途 |
-|----|:--:|------|
-| numpy / scipy | 已用 | 信号处理基础 |
-| vmdpy | 已用 | VMD 分离心跳（K=4, alpha=1000） |
-| matplotlib | 已用 | 出图 |
-
-## 数据
-
-原始采集数据（npz 分片 / bin）**不随仓库分发**（体积 GB 级 + 被试隐私）。
-- 预实验数据：`J:\预实验\sub-XXX_\`（mmwave/ + beh/，000-010；分析集 003-010 共 8 名）
-- 旧批次数据：`E:\sub-XXX_\`（001/007/008/SXQ）
-- 外部数据集：`11_数据/外部数据集_AgeBalanced_60GHz/`（110 人 ECG 金标准）、`11_数据/外部数据集_mmWave_Heartbeat/`（TI 原始 ADC）
-- 历史数据：`11_数据/radar_collector/`
-
-## 可追溯
-
-- 图 → 脚本 → 版本对应：`01_管理/图表索引.md`（仓库外，项目根目录）
-- 分析记录：`01_管理/分析记录.md`（各次分析结论, 即时登记）
-- 资源索引：`01_管理/资源索引.md`（重点文件位置速查）
-- 算法版本演进与修改记录：`CHANGELOG.md`
-- 文献：`03_文献/`（毫米波 / 毫米波HRV / 生理指标 / 走神探针）
+正式审查入口：`docs/repository/REPOSITORY_CUTOVER_PLAN_V1.md`。本 candidate 只等待 GPT/Sol repository final review，不自行执行 branch retirement 或仓库切换。

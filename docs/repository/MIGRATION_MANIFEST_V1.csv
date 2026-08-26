@@ -1,0 +1,13 @@
+old_path,future_target_path,status,blocker
+docs/canonical/ANALYSIS_REGISTRY_V1.csv,configs/cohorts/ANALYSIS_REGISTRY_V1.csv,MAPPED_NOT_MOVED,retain canonical source until repository review
+docs/canonical/PRODUCER_PROVENANCE_V1.md,docs/provenance/CROSS_REPO_PROVENANCE_V1.md,MAPPED_NOT_MOVED,full SHA cleanup remains in source history
+docs/canonical/DERIVED_DATA_CONTRACT_V1.md,contracts/multimodal/DUAL_MACHINE_ANALYSIS_CONTRACT_V1.md,MIGRATED_SUMMARY,central/local scope must remain explicit
+docs/canonical/AMD_NVIDIA_SCIENTIFIC_CONTRACT_V1.md,contracts/nir/AMD_NVIDIA_SCIENTIFIC_CONTRACT_V1.md,MAPPED_NOT_MOVED,Gate 0 details require final review
+docs/canonical/analysis_cards/*.md,pipelines/*/README.md,MAPPED_INDEX_ONLY,legacy cards are not import-safe to move
+docs/canonical/RESULT_INDEX_V1.md,results/README.md,MIGRATED_SUMMARY,old index remains provenance
+docs/canonical/analysis_cards/behavior_baseline.md,results/canonical/BEIJING_C_B_BASELINE_V2.md,COPIED_GIT_SAFE_AGGREGATE,aggregate-only candidate entry
+docs/canonical/analysis_cards/probe_vigilance.md,results/canonical/REPORT_LABEL_VIGILANCE_VALIDITY.md,COPIED_GIT_SAFE_AGGREGATE,threshold sensitivity remains pending
+scripts/run_final_report_cohort_baseline_v2.py,pipelines/behavior/README.md,MAPPED_LEGACY_PRODUCER,import/path dependencies not moved
+scripts/run_report_cohort_label_vigilance_v1.py,pipelines/behavior/README.md,MAPPED_LEGACY_PRODUCER,producer remains on retained result branch
+external Attention-Analysis nvidia-cuda,pipelines/nir/README.md,EXTERNAL_REF_ONLY,external repository and local raw data
+external Attention-Analysis amd-DirectML,pipelines/nir/README.md,EXTERNAL_REF_ONLY,Gate 0 before bulk AMD production
