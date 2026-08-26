@@ -1,6 +1,6 @@
 # Repository cutover plan V1
 
-This is a future plan only. This fix pass does not create `main`, change the default branch, rename the repository, or delete `master`.
+This document records the approved cutover sequence. Stage 2C performs final governance and tree cleanup only; it does not start scientific analysis or delete the rollback branch `master`.
 
 1. Obtain explicit GPT/Sol approval for this candidate's final review fixes. The approved exact head of `codex/focuswave-mainline-restructure-v1`, not old `master`, becomes the source of the new `main`.
 2. Before cutover, create the immutable legacy tag `legacy/mmwave-hrv-master-pre-focuswave-20260826` at old `master@96525b19422b34291e4d87747fef214d1fec60d7`. A short-lived rollback ref may also be created.

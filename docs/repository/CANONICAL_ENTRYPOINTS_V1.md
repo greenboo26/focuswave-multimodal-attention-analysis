@@ -2,13 +2,13 @@
 
 | entrypoint | source ref/commit | role | status |
 |---|---|---|---|
-| report cohort, four-class, vigilance, Probe-vigilance | `codex/report-cohort-label-vigilance-20260826@67851bff212fc1e73b9611ac5de670581e316cc7` / `scripts/run_report_cohort_label_vigilance_v1.py` | Beijing validity family | canonical aggregate |
-| C+B baseline | `codex/final-report-cohort-baseline-v2@414a4f46c8d058961a87750345d06a7129afc9f2` / `scripts/run_final_report_cohort_baseline_v2.py` | Beijing report anchor | canonical aggregate |
-| questionnaire Q1 | `codex/q1-questionnaire-criterion-validity-20260826@ba7a2c652bea82c3fa58ad5858a7460ed933fb47` / `scripts/run_q1_questionnaire_criterion_validity.py` | convergent validity | supporting; corrected note pending |
-| repeat-session robustness | `codex/report-repeat-session-effects-20260826@c2de2af3ba6fd46d351c4da4fcf05e281f982cff` / `scripts/run_report_repeat_session_effects_v1.py` | supporting control | supporting |
+| report cohort, four-class, vigilance, Probe-vigilance | `archive/20260826/report-cohort-label-vigilance` / `results/canonical/REPORT_LABEL_VIGILANCE_VALIDITY.md` | Beijing validity family | canonical aggregate |
+| C+B baseline | `archive/20260826/final-report-cohort-baseline-v2` / `results/canonical/BEIJING_C_B_BASELINE_V2.md` | Beijing report anchor | canonical aggregate |
+| questionnaire Q1 | `archive/20260826/q1-questionnaire-criterion-validity` / supporting successor | convergent validity | supporting; corrected note pending |
+| repeat-session robustness | `archive/20260826/report-repeat-session-effects` / supporting successor | supporting control | supporting |
 | pre-Probe/longitudinal behavior | historical GPT handoff refs | behavior validity supplement | supporting/rerun canonical |
 | NIR local producer | external `Attention-Analysis@nvidia-cuda@36a2d596c55b93071a8b5c80459a56c876c06351` / `@amd-DirectML@d8e721079461ef7f71fafcd3edf819858fabbb16` | standardized local derived/QC | 69/72 complete; sub-100/sub-178 recoverable pending full QC/Probe alignment; Gate 0 required |
 | RGB local producer | external rgb-nvidia/rgb-amd family | engineering derived/QC | formal analysis pending |
 | fusion/cross-site | this repository central stage | global folds and final inference | global identity pending |
 
-Historical scripts not listed above remain provenance references until a path/import audit authorizes physical migration.
+Historical scripts and task branches not listed above are recoverable through immutable archive tags and are not current execution entrypoints.

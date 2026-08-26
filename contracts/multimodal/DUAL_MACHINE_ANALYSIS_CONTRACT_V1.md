@@ -1,6 +1,6 @@
 # Dual-machine analysis contract V1
 
-This contract is the boundary between local NIR/RGB production and central FocusWave inference. It is a candidate contract pending GPT/Sol final review.
+This contract is the boundary between local NIR/RGB production and central FocusWave inference. It is the current repository contract; global identity, global folds and final inference remain centrally gated.
 
 ## Local machine may do
 

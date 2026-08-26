@@ -1,6 +1,6 @@
 # FocusWave Multimodal Analysis
 
-这是 FocusWave 多模态注意力分析的正式分析总仓库入口候选，当前 GitHub repository 为 `greenboo26/focuswave-multimodal-attention-analysis`；仓库主体不再定义为 HR、BR 或 HRV 算法项目。毫米波是当前已审计的一个传感器验证边界，NIR 与 RGB 的生产代码分别位于外部 `kyandi233-dev/Attention-Analysis` 的受控 ref，最终结果和跨站点推断在本仓库中央收口。
+这是 FocusWave 多模态注意力分析的正式中央仓库：`FocusWave Multimodal Attention Analysis`。仓库主体不定义为 HR、BR 或 HRV 算法项目。毫米波是当前已审计的一个传感器验证边界，NIR 与 RGB 的生产代码位于外部 `kyandi233-dev/Attention-Analysis` 的受控 ref，最终结果和跨站点推断在本仓库中央收口。
 
 ## 当前科学状态
 
@@ -43,10 +43,10 @@ tests/         schema/path/contract smoke checks
 1. 先读 `docs/repository/REPOSITORY_ARCHITECTURE_V1.md`、`docs/provenance/CROSS_REPO_PROVENANCE_V1.md` 和双机 contract。
 2. 只使用 `results/canonical/README.md` 作为当前正式结果入口；`results/supporting/` 与 `results/engineering_reference/` 不得升级为最终科学结论。
 3. 本地派生前执行 runbook/contract 的 preflight；中央身份、cohort、fold 和最终 inference 需要中央整合权限。
-4. 当前 repository 已完成 Stage 2A rename 和 default branch 切换；旧 `master`、legacy tag 与 archive tags 仍保留，branch retirement 尚未执行。
+4. 当前 repository 已完成 rename、default branch 切换和 Stage 2B branch retirement；旧 `master`、legacy tag 与 archive tags 作为 rollback/provenance surface 保留。
 
 ## 复现和数据边界
 
 所有可运行模块必须记录 `machine_role`、`runtime_backend`、`pipeline_version`、`git_commit`、`model_hash`、`config_hash`、`schema_version`、`source_manifest_hash`。缺少这些字段的历史结果只可作为 supporting/reference，并在报告中显式写出不可复现限制。
 
-正式审查入口：`docs/repository/REPOSITORY_CUTOVER_PLAN_V1.md`。本 candidate 只等待 GPT/Sol repository final review，不自行执行 branch retirement 或仓库切换。
+正式治理入口：`docs/repository/CANONICAL_ENTRYPOINTS_V1.md`、`docs/repository/FINAL_REPOSITORY_TREE_V1.md` 和 `docs/repository/REPOSITORY_CUTOVER_PLAN_V1.md`。本仓库不上传原始数据、participant-level rows、NPZ/MAT/BIN/AVI、缓存或机器私有路径。

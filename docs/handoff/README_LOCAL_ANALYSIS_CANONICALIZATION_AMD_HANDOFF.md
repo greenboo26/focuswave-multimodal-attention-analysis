@@ -1,1 +1,0 @@
-Start execution by creating/switching to branch `codex/local-analysis-canonicalization-amd-handoff-20260826` from this handoff commit, then read `docs/handoff/LOCAL_ANALYSIS_CANONICALIZATION_AMD_HANDOFF_TASK_20260826.md` and execute it end-to-end.
