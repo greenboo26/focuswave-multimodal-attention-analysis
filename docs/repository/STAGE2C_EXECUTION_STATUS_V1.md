@@ -2,20 +2,20 @@
 
 ## Current state
 
-- Main cleanup commit: `f03bd30a4bf6f1504c56e5c165f388e983493979`.
+- Main cleanup commit: `43cd21a271c67856c98ef69d9a5e08bf7061fbbf`.
 - Pre-cleanup recovery tag: `archive/20260826/pre-stage2c-main` -> `579f6abcefc86363f62b8abccbac85e87d1a14e8`.
 - 57 `LEGACY_PROVENANCE_ONLY` scripts with 97 absolute-path hits were removed from the browsable main tree; no script contents were normalized.
 - Three governance branches were archived and deleted after live-ref verification.
-- The final repository baseline tag is intentionally not created yet.
+- The final repository baseline tag is created only after the final fresh-clone validation described below.
 
 ## PR closure blocker
 
-PR #1 and PR #2 were read from the live repository and both remain open and unmerged. GitHub read operations succeeded, but the available write endpoint returned HTTP 403 for both comment and `state=closed` updates. Because the required sequence is curated successor -> close PR -> delete PR head, neither PR head branch was deleted.
+PR #1 and PR #2 were read from the live repository, closed without merge, and their head branches were deleted only after successor/archive verification. An intermediate GitHub write response returned HTTP 403, but a subsequent live read confirmed the resulting closed state.
 
 | PR | head | base | state | disposition |
 |---|---|---|---|---|
-| #1 | `docs/rs6240-firmware-multichannel-plan-20250825@53c5814e518ebb43a6288860591f3f44feb17abd` | `master` | open | curated hardware successor present; close pending GitHub write access |
-| #2 | `chatgpt/multimodal-results-nir-diagnostic-20260826@0e756b275fd9cbbc7d7564531d3200425bf3be23` | `main` | open | curated diagnostic successors and archive tag present; close pending GitHub write access |
+| #1 | `docs/rs6240-firmware-multichannel-plan-20250825@53c5814e518ebb43a6288860591f3f44feb17abd` | `master` | closed, unmerged | curated hardware successor present; head branch deleted; retirement tag retained |
+| #2 | `chatgpt/multimodal-results-nir-diagnostic-20260826@0e756b275fd9cbbc7d7564531d3200425bf3be23` | `main` | closed, unmerged | curated diagnostic successors present; head branch deleted; archive tag retained |
 
 The PR bodies and scientific content were not merged. The curated successors are:
 
@@ -30,6 +30,6 @@ The remote no longer contains `vendor/attention-amd-DirectML` or `vendor/attenti
 
 ## Gate
 
-`FOCUSWAVE_CUTOVER_STAGE2C = BLOCKED_ON_PR_CLOSURE_API`
+`FOCUSWAVE_CUTOVER_STAGE2C = READY_FOR_FINAL_SMOKE_AND_BASELINE_TAG`
 
-No final `focuswave-repository-cutover-v1` tag is created until PR closure and PR-head deletion are completed and the final fresh-clone gate is rerun.
+The final `focuswave-repository-cutover-v1` tag must point to the exact `main` SHA that passes the final fresh-clone gate.
