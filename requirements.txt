@@ -1,6 +1,8 @@
 numpy>=1.24
+pandas>=2.1
 scipy>=1.10
 scikit-learn>=1.7
 matplotlib>=3.7
+statsmodels>=0.14
 vmdpy>=0.2
 bioread>=2025.5.2
