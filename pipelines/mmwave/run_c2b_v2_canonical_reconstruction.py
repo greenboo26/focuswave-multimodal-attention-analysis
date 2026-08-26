@@ -461,7 +461,7 @@ def main():
             ext.WINDOW_SECONDS = float(window)
             ext.MIN_WINDOW_SECONDS = max(0.8 * float(window), float(window) - 5.0)
             current = make_current(base)
-            matrix, audit = ext.build_raw_matrix(current, args.data_root, FULL_ROOT, None, {"056"}, wdir, True)
+            matrix, audit = ext.build_raw_matrix(current, args.data_root, FULL_ROOT, None, {"056"}, wdir)
             audit["window_definition"] = f"[probe_onset - {window:g} s, probe_onset), exact behavior Unix timestamp mapped to radar timestamp column 3"
             audit["window_seconds"] = float(window)
             matrix.to_csv(wdir / "mmwave_features_raw.csv", index=False, encoding="utf-8-sig")
