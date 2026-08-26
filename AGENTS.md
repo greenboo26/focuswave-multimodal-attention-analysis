@@ -1,6 +1,10 @@
 # FocusWave Multimodal Analysis repository instructions
 
-本仓库是 FocusWave 正式中央分析仓库，不是原始数据仓库，也不是单一毫米波 HRV 项目。任何机器 clone 后，先读取本文件、根目录 `README.md`、`PROJECT_STATUS.md`、相关 analysis card/contract；执行已完成本地分析的规范化复现时，再读取 `docs/repository/LOCAL_ANALYSIS_REPRODUCTION_RUNBOOK_V1.md`。
+跨客户端项目发现入口：先读根目录 `AI_PROJECT.md`。它只负责项目身份、canonical repository、中央治理/workspace 指针和 related-repository role boundary；本仓库科学/分析真相仍以本文件、`README.md`、`PROJECT_STATUS.md`、canonical method/runbook/contract 和当前 Git 证据为准。
+
+中央跨 AI 治理唯一来源是 `greenboo26/ai-governance@main`；workspace 注册表是 `greenboo26/project@august/PROJECT_INDEX.md`。本文件是项目级规则，可在中央 hard-rule 边界内做项目 specialization，但不是全局治理源。
+
+本仓库是 FocusWave 正式中央分析仓库，不是原始数据仓库，也不是单一毫米波 HRV 项目。任何机器 clone 后，先读取 `AI_PROJECT.md`、本文件、根目录 `README.md`、`PROJECT_STATUS.md`、相关 analysis card/contract；执行已完成本地分析的规范化复现时，再读取 `docs/repository/LOCAL_ANALYSIS_REPRODUCTION_RUNBOOK_V1.md`。
 
 机器外层的个人工作区规范（例如父目录 AGENTS/项目管理规范）如果存在可以补充读取，但不得作为本仓库可执行性的必需依赖。本仓库不得要求另一台机器存在某个固定 `D:\...` 工作区文件。
 
