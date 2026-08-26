@@ -1,18 +1,25 @@
 # FocusWave Multimodal Analysis repository instructions
 
-本仓库是正式分析总仓库 candidate，不是原始数据仓库，也不是单一毫米波 HRV 项目。修改前先读取根目录 `D:\Project\AGENTS.md`、`D:\Project\项目文件管理与AI执行规范.md`，再读取本 README、`docs/WORKSPACE_LEDGER.md` 和相关 contract。
+本仓库是 FocusWave 正式中央分析仓库，不是原始数据仓库，也不是单一毫米波 HRV 项目。任何机器 clone 后，先读取本文件、根目录 `README.md`、`PROJECT_STATUS.md`、相关 analysis card/contract；执行已完成本地分析的规范化复现时，再读取 `docs/repository/LOCAL_ANALYSIS_REPRODUCTION_RUNBOOK_V1.md`。
+
+机器外层的个人工作区规范（例如父目录 AGENTS/项目管理规范）如果存在可以补充读取，但不得作为本仓库可执行性的必需依赖。本仓库不得要求另一台机器存在某个固定 `D:\...` 工作区文件。
 
 ## Scope
 
 - 只提交 Git-safe 的脚本、配置、schema、聚合结果、方法、provenance 和索引。
 - 原始波形、视频、participant-level/row-level 数据、缓存、认证、机器私有路径和大型输出不入 Git。
+- 已经完成的北京行为、问卷、mmWave 等本地分析，应通过 `scripts/canonical/run_local_analysis.py` + 未跟踪的 `configs/paths.local.json` 绑定本机路径；禁止再靠聊天记忆或硬编码盘符作为正式入口。
 - NIR/RGB 外部代码仓库是生产源；本仓库保存 ref/commit、schema、contract、QC 和中央分析入口，不复制外部 raw data。
 - global identity、global cohort、participant-disjoint global folds 和最终跨站点 inference 只能在中央阶段冻结。
 
 ## Status vocabulary
 
-`CANONICAL` 只用于已核验、可追溯并允许进入当前报告的资产；`SUPPORTING` 是边界或稳健性证据；`ENGINEERING_REFERENCE` 不是正式科学结果；`SUPERSEDED` 只能经 provenance 引用；`PENDING/BLOCKED` 不得写成完成。
+`CANONICAL` 只用于已核验、可追溯并允许进入当前报告的资产；`CANONICAL_EXECUTABLE` 还必须通过规范化复跑及 aggregate equivalence gate；`RESTORED_CANONICALIZATION_CANDIDATE` 表示 producer 已恢复和参数化但尚未完成本机等价复跑；`SUPPORTING` 是边界或稳健性证据；`ENGINEERING_REFERENCE` 不是正式科学结果；`SUPERSEDED` 只能经 provenance 引用；`PENDING/BLOCKED` 不得写成完成。
 
 ## Change and verification
 
-不重跑探索性科学分析，不物理移动 import-sensitive legacy producer。新增路径必须更新 migration manifest 或 architecture index，并执行 CSV/Markdown/path smoke checks、`git diff --check` 与敏感文件扫描。提交前检查 staged paths，确认无 raw/row-level 数据。
+- 不重跑探索性科学分析，不改变既有 label/window/fold/seed/model/QC 定义来追求更好结果。
+- 历史 producer 可以从 immutable archive ref 恢复到 canonical pipeline surface，但必须保留 source ref/provenance，并只做执行层参数化。
+- 新增路径必须更新 architecture/runbook/registry，并执行 Python syntax/tests、JSON/CSV/path smoke checks、`git diff --check` 与敏感文件扫描。
+- 规范化复跑成功后必须写 `canonical_run_manifest.json`；随后用 `scripts/canonical/compare_reproduction.py` 对照已接受 aggregate package。equivalence 未通过前不得提升为 `CANONICAL_EXECUTABLE`。
+- 提交前检查 staged paths，确认无 raw/row-level 数据和机器私有 paths config。

@@ -1,0 +1,182 @@
+{
+  "schema_version": "focuswave-local-analysis-registry-v1",
+  "scope": "completed_local_analyses_only",
+  "science_change_allowed": false,
+  "analyses": {
+    "report_cohort_v1": {
+      "producer": "pipelines/behavior/run_report_cohort_label_vigilance_v1.py",
+      "source_ref": "archive/20260826/report-cohort-label-vigilance",
+      "role": "canonical_report_cohort_and_probe_state",
+      "frozen": {
+        "cohort": "Beijing report cohort",
+        "n_expected_probes": 1400,
+        "n_expected_sessions": 70,
+        "n_expected_participants": 46
+      },
+      "result_unit": "probe",
+      "merge_key": ["site", "session_id", "repeat_participant_id", "probe_onset_time"],
+      "aggregate_outputs": ["label_vigilance_summary.csv", "label_vigilance_models.csv"],
+      "merge_ready_outputs": ["report_analysis_cohort.csv"]
+    },
+    "behavior_longitudinal_v1": {
+      "producer": "pipelines/behavior/run_beijing_longitudinal_event_analysis_v1.py",
+      "source_ref": "archive/20260826/c1-alignment-protocol-repair",
+      "role": "canonical_behavior_longitudinal",
+      "frozen": {
+        "windows_s": [10, 20, 30],
+        "group": "repeat_participant_id",
+        "model_family": "participant_clustered_GEE",
+        "sensor_features_used": false
+      },
+      "result_unit": "trial_probe",
+      "merge_key": ["site", "subject", "repeat_participant_id", "probe_onset_time"],
+      "aggregate_outputs": ["model_results.csv", "descriptives.csv", "preprobe_window_trajectories.csv", "recovery_b1late_b2early.csv", "recovery_probe_b1late_b2early.csv"],
+      "merge_ready_outputs": ["probe_event_level_behavior.csv"]
+    },
+    "behavior_preprobe_v1": {
+      "producer": "pipelines/behavior/run_beijing_preprobe_state_comparison_v1.py",
+      "source_ref": "archive/20260826/c1-alignment-protocol-repair",
+      "role": "supporting_preprobe_behavior",
+      "frozen": {
+        "windows_s": [10, 20, 30],
+        "group": "repeat_participant_id",
+        "multiplicity": "BH_FDR_18_tests"
+      },
+      "result_unit": "probe_aggregate",
+      "merge_key": [],
+      "aggregate_outputs": ["preprobe_state_group_descriptives.csv", "preprobe_state_group_gee.csv"],
+      "merge_ready_outputs": []
+    },
+    "behavior_baseline_v2": {
+      "producer": "pipelines/behavior/run_final_report_cohort_baseline_v2.py",
+      "source_ref": "archive/20260826/final-report-cohort-baseline-v2",
+      "role": "canonical_behavior_anchor",
+      "frozen": {
+        "label": "1_vs_2_3_4",
+        "primary_window_s": 30,
+        "sensitivity_windows_s": [10, 20],
+        "folds": 5,
+        "group": "repeat_participant_id",
+        "model": "L2_logistic",
+        "seed": 20260826,
+        "bootstrap": 1000
+      },
+      "result_unit": "probe_model",
+      "merge_key": [],
+      "aggregate_outputs": ["final_baseline_metrics.csv", "REPORT_FOLDS_V1.csv"],
+      "merge_ready_outputs": []
+    },
+    "repeat_session_v1": {
+      "producer": "pipelines/behavior/run_report_repeat_session_effects_v1.py",
+      "source_ref": "archive/20260826/report-repeat-session-effects",
+      "role": "supporting_repeat_session_effects",
+      "frozen": {
+        "group": "repeat_participant_id",
+        "primary": "all_formal_sessions",
+        "sensitivity": "earliest_three_sessions",
+        "seed": 20260826
+      },
+      "result_unit": "session_probe_model",
+      "merge_key": [],
+      "aggregate_outputs": ["repeat_session_models.csv", "repeat_session_sensitivity.csv"],
+      "merge_ready_outputs": []
+    },
+    "questionnaire_q1_v1": {
+      "producer": "pipelines/questionnaire/run_q1_questionnaire_criterion_validity.py",
+      "source_ref": "archive/20260826/q1-questionnaire-criterion-validity",
+      "role": "supporting_questionnaire_criterion_validity",
+      "frozen": {
+        "question_field": "mind_wandering_ordinal",
+        "bootstrap": 5000,
+        "seed": 20260826,
+        "cluster": "repeat_participant_id_questionnaire",
+        "planned_spearman_family_n": 7,
+        "planned_ordinal_family_n": 3
+      },
+      "result_unit": "session",
+      "merge_key": ["site_questionnaire", "subject", "repeat_participant_id_questionnaire"],
+      "aggregate_outputs": ["questionnaire_probe_association.csv", "questionnaire_behavior_association.csv", "questionnaire_ordinal_clustered_model.csv", "questionnaire_item_metadata_reused.csv"],
+      "merge_ready_outputs": ["questionnaire_criterion_manifest.csv"]
+    },
+    "mmwave_c1_alignment_v1": {
+      "producer": "pipelines/mmwave/audit_c1_alignment_robustness.py",
+      "source_ref": "archive/20260826/c1-alignment-protocol-repair",
+      "role": "validation_boundary",
+      "frozen": {
+        "tolerances_ms": [50, 75, 100, 150],
+        "fixed_delay_ms": -18.000000000000682,
+        "lag_sweep_ms": [-250, 250, 5],
+        "hrv_development_authorized": false
+      },
+      "result_unit": "beat_validation",
+      "merge_key": [],
+      "aggregate_outputs": ["c1_alignment_lag_sweep_detail.csv", "c1_alignment_lag_sweep_primary_summary.csv", "c1_alignment_unavailable_methods.csv"],
+      "merge_ready_outputs": []
+    },
+    "mmwave_m1_v1": {
+      "producer": "pipelines/mmwave/build_evaluate_j_mmwave_m1_loso.py",
+      "source_ref": "archive/20260826/m1-mmwave-person-effect-audit",
+      "role": "supporting_raw_mmwave_audit",
+      "frozen": {
+        "window_s": 30,
+        "validation": "LOSO",
+        "seed": 20260824,
+        "bootstrap": 1000,
+        "model": "fixed_untuned_L2_logistic"
+      },
+      "result_unit": "probe",
+      "merge_key": ["subject", "probe_id"],
+      "aggregate_outputs": ["loso_results.csv", "incremental_deltas.csv"],
+      "merge_ready_outputs": ["m1_q0_probe_matrix.csv"]
+    },
+    "mmwave_c2b_v2": {
+      "producer": "pipelines/mmwave/run_c2b_v2_canonical_reconstruction.py",
+      "source_ref": "archive/20260826/c2b-v2-canonical",
+      "role": "canonical_mmwave_increment_test",
+      "frozen": {
+        "primary_window_s": 30,
+        "sensitivity_windows_s": [10, 60],
+        "group": "group_subject_id",
+        "folds": 5,
+        "no_hrv": true,
+        "no_nir_rgb": true
+      },
+      "result_unit": "probe",
+      "merge_key": ["subject", "probe_seq"],
+      "aggregate_outputs": ["c2b_v2_model_metrics.csv", "window_30s/strict_matched_metrics.csv", "window_30s/paired_cluster_bootstrap.csv"],
+      "merge_ready_outputs": ["window_30s/canonical_feature_matrix_local.csv"]
+    },
+    "mmwave_c2c_v1": {
+      "producer": "pipelines/mmwave/run_c2c_personalized_mmwave_calibration.py",
+      "source_ref": "archive/20260826/c2c-within-subject-normalization",
+      "role": "supporting_within_subject_normalization",
+      "frozen": {
+        "primary_window_s": 30,
+        "sensitivity_windows_s": [10, 60],
+        "bootstrap": 5000,
+        "seed": 20260826,
+        "resting_baseline_s": 180,
+        "no_hrv": true,
+        "no_nir_rgb": true
+      },
+      "result_unit": "probe",
+      "merge_key": ["subject", "probe_seq"],
+      "aggregate_outputs": ["c2c_model_metrics_aggregate.csv", "c2c_primary_increment_aggregate.csv", "c2c_calibration_coverage_aggregate.csv"],
+      "merge_ready_outputs": ["c2c_feature_matrix_local_30s.csv"]
+    },
+    "beijing_sensor_increment_v1": {
+      "producer": "pipelines/mmwave/run_beijing_sensor_increment_v1.py",
+      "source_ref": "archive/20260826/c1-alignment-protocol-repair",
+      "role": "existing_multisensor_increment_supporting_analysis",
+      "frozen": {
+        "identity_recovery": false,
+        "raw_processing": false,
+        "hrv_claim": false
+      },
+      "result_unit": "probe",
+      "merge_key": ["subject", "probe_onset_ms_behavior"],
+      "aggregate_outputs": ["common_probe_coverage.csv", "common_probe_incremental_models.csv", "sensor_state_group_summary_primary_common.csv"],
+      "merge_ready_outputs": ["beijing_behavior_nir_mmwave_common_probe.csv"]
+    }
+  }
+}

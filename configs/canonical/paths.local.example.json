@@ -1,0 +1,17 @@
+{
+  "paths": {
+    "project_root": "<LOCAL_PROJECT_ROOT>",
+    "raw_data_root": "<LOCAL_RAW_DATA_ROOT>",
+    "derived_root": "<LOCAL_DERIVED_ROOT>",
+    "legacy_output_root": "<LOCAL_LEGACY_OUTPUT_ROOT>",
+    "final_output_root": "<LOCAL_FINAL_OUTPUT_ROOT>",
+    "teammate_input_root": "<TEAMMATE_MACHINE_PACKAGE_ROOT>",
+    "combined_input_root": "<LOCAL_COMBINED_INPUT_ROOT>"
+  },
+  "machine": {
+    "machine_id": "<MACHINE_ID>",
+    "site": "<SITE_NAME>"
+  },
+  "analysis_input_overrides": {},
+  "analysis_output_overrides": {}
+}
