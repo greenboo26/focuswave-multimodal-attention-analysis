@@ -3,6 +3,12 @@
   "scope": "completed_local_analyses_only",
   "science_change_allowed": false,
   "analyses": {
+    "report_cohort_label_vigilance_v1": {
+      "producer": "pipelines/behavior/run_report_cohort_label_vigilance_v1.py",
+      "source_ref": "archive/20260826/report-cohort-label-vigilance",
+      "role": "canonical_report_cohort_and_validity_family",
+      "frozen": {"site": "Beijing", "n_sessions": 70, "n_participants": 46, "n_probes": 1400, "labels": [1, 2, 3, 4], "group": "repeat_participant_id", "identity_recovery": false, "raw_modalities_opened": false}
+    },
     "behavior_baseline_v2": {
       "producer": "pipelines/behavior/run_final_report_cohort_baseline_v2.py",
       "source_ref": "archive/20260826/final-report-cohort-baseline-v2",
@@ -20,6 +26,12 @@
       "source_ref": "archive/20260826/c1-alignment-protocol-repair",
       "role": "supporting_preprobe_behavior",
       "frozen": {"windows_s": [10, 20, 30], "group": "repeat_participant_id"}
+    },
+    "repeat_session_effects_v1": {
+      "producer": "pipelines/behavior/run_report_repeat_session_effects_v1.py",
+      "source_ref": "archive/20260826/report-repeat-session-effects",
+      "role": "supporting_repeat_session_control",
+      "frozen": {"site": "Beijing", "group": "repeat_participant_id", "primary": "all_formal_sessions_random_participant_intercept", "sensitivity": "earliest_three_sessions_per_participant", "seed": 20260826, "sensor_modalities_used": false}
     },
     "questionnaire_q1_v1": {
       "producer": "pipelines/questionnaire/run_q1_questionnaire_criterion_validity.py",
