@@ -110,6 +110,28 @@ python run_formal_batch.py --dry-run
 
 DirectML unavailability is a failure for the formal AMD runtime; it must not silently fall back to full-session CPU inference.
 
+### Critical protocol warning for the current AMD NIR config
+
+The currently audited `Attention-Analysis/runtime/nir-formal/config.yaml` is not a generic all-site configuration. It currently declares:
+
+```text
+focuswave_release: v3.1.3
+expected_formal_blocks: 2
+phases: baseline, instructions, practice, block1, block2
+```
+
+Therefore it is compatible with the currently documented two-formal-block runtime scope, but it must **not** be assumed to be correct for a Zhuhai `BBB_3x432_30probes` three-block session.
+
+If the teammate's mounted data are Zhuhai/BBB, the sequence is:
+
+1. verify the actual local protocol/timeline first;
+2. do not run the current two-block NIR formal config across the Zhuhai cohort;
+3. establish a reviewed site/protocol-specific NIR config or adapter that includes the correct third-block semantics and preserves the same NIR model/QC definitions;
+4. record that config/ref in provenance;
+5. only then authorize formal Zhuhai NIR production.
+
+A successful runtime execution with the wrong block/protocol config is a scientific failure, not a valid handoff result.
+
 ## 3. Local configuration in the central repository
 
 Never edit repository code to insert drive letters. Create the ignored local configuration instead:
@@ -132,26 +154,26 @@ Fill only machine-local paths and identity, for example:
     "combined_input_root": "<combined package root>"
   },
   "machine": {
-    "machine_id": "zhuhai-amd-main",
-    "site": "Zhuhai"
+    "machine_id": "<stable machine id, e.g. zhuhai-amd-main when the data are Zhuhai>",
+    "site": "<actual site>"
   },
   "analysis_input_overrides": {},
   "analysis_output_overrides": {}
 }
 ```
 
-`configs/paths.local.json` is private machine configuration and must not be committed.
+`configs/paths.local.json` is private machine configuration and must not be committed. Do not label a machine as Zhuhai merely because it uses AMD hardware; `site` follows the actual data, while `machine_id` identifies the workstation/package source.
 
 ## 4. What the teammate does first
 
-Do **not** start by blindly running `competition_core` on Zhuhai data. The current registry was built from analyses already completed on the Beijing workstation, and some producers contain Beijing-specific cohort assumptions.
+Do **not** start by blindly running `competition_core` on teammate data. The current registry was built from analyses already completed on the Beijing workstation, and some producers contain Beijing-specific cohort assumptions.
 
 The teammate first performs a local data/protocol audit:
 
 1. locate the actual local behavior, questionnaire and available sensor data roots;
 2. enumerate formal sessions and repeated participants using existing identifiers only;
 3. verify the actual behavior protocol from files/timelines instead of assuming the registration-table expectation;
-4. for Zhuhai, specifically verify whether the mounted formal sessions actually exhibit the expected `BBB_3x432_30probes` structure, and record any exceptions;
+4. if the data are Zhuhai, specifically verify whether the mounted formal sessions actually exhibit the expected `BBB_3x432_30probes` structure, and record any exceptions;
 5. verify probe timestamps/IDs and available master timelines;
 6. record which modalities are actually available per session;
 7. do not assign an exact historical FocusWave Git version to a session unless session-level commit/tag/package/hash evidence exists.
@@ -162,12 +184,12 @@ For Beijing, `BB_2x432_20probes` is already supported by the mounted behavior/ti
 
 The teammate's job is not to redesign the analysis. It is to convert their local data into the same scientific and package contract.
 
-- Behavior/questionnaire: use the central repository's frozen definitions only after the local inputs have been mapped to the expected canonical fields. Do not force Beijing-specific expected counts onto Zhuhai.
-- NIR/RGB: produce local standardized derived/QC outputs with the approved `Attention-Analysis` runtime/ref, then pass those outputs into the central contract. Do not duplicate NIR/RGB production code into the central repository.
+- Behavior/questionnaire: use the central repository's frozen definitions only after the local inputs have been mapped to the expected canonical fields. Do not force Beijing-specific expected counts onto another site.
+- NIR/RGB: produce local standardized derived/QC outputs with the approved `Attention-Analysis` runtime/ref **and a protocol-compatible config**, then pass those outputs into the central contract. Do not duplicate NIR/RGB production code into the central repository.
 - mmWave: run only if corresponding local mmWave inputs exist and the stage is explicitly applicable. Do not restart HRV development.
 - Missing modality/stage is allowed. Never fabricate a stage merely to make the package look complete.
 
-If a central producer is Beijing-specific and no Zhuhai adapter exists yet, stop at the standardized local derived/QC package and report the missing adapter as an integration task. Do not silently modify labels, windows, folds or feature definitions to make it run.
+If a central producer is Beijing-specific and no adapter exists for the teammate's actual site/protocol, stop at the standardized local derived/QC package and report the missing adapter as an integration task. Do not silently modify labels, windows, folds or feature definitions to make it run.
 
 ## 6. Required output format
 
@@ -183,18 +205,6 @@ Every machine uses the same package structure:
          ├─ aggregate/
          ├─ merge_ready/
          └─ stage_manifest.json
-```
-
-For the teammate this normally begins with:
-
-```text
-focuswave_canonical_v1/
-└─ zhuhai-amd-main/
-   └─ <analysis_id>/
-      ├─ producer_output/
-      ├─ aggregate/
-      ├─ merge_ready/
-      └─ stage_manifest.json
 ```
 
 The output **format and scientific signature** must be compatible across machines. The numerical results are not expected to be identical.
@@ -226,7 +236,8 @@ The teammate or their AI agent must not:
 - invent or infer a new identity mapping merely to satisfy a merge key;
 - call labels 2/3/4 collectively `mind-wandering`;
 - assign historical sessions to `v3.1.4` or any other exact software version without session-level evidence;
-- average Beijing and Zhuhai final AUC/p-values/coefficients;
+- apply a two-block runtime config to a verified three-block protocol without an approved adapter/config;
+- average Beijing and other-site final AUC/p-values/coefficients;
 - commit raw data, videos, NPZ/MAT/BIN/AVI, participant-level private data, `merge_ready` row-level secure-transfer tables, model secrets, or `configs/paths.local.json` to Git;
 - treat NIR/RGB engineering or partial local outputs as final cross-site inference.
 
@@ -240,7 +251,8 @@ A teammate is considered correctly onboarded when all of the following are true:
 - if NIR/RGB is needed, `Attention-Analysis` is checked out at the approved backend/ref and its own install/environment check passes;
 - required NIR model assets are present when NIR is run;
 - local formal sessions, repeated-participant identifiers, protocol structure and modality coverage are audited;
-- no Beijing-only expected count has been imposed on Zhuhai;
+- external sensor config is verified compatible with the actual site's protocol before formal production;
+- no Beijing-only expected count has been imposed on another site;
 - the first produced stage/package follows `focuswave_canonical_v1/<machine_id>/<analysis_id>/...`;
 - exact Git commits/runtime backend/config hashes are preserved in provenance.
 
