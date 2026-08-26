@@ -3,6 +3,12 @@
 基于 8 通道复包络数据（npz）提取心率（HR）、呼吸率（BR）、心率变异性（HRV）。
 厚粲杯项目「毫米波多模态注意力测量」的信号处理与分析模块。
 
+## Current project scope
+
+项目显示名称为 `FocusWave Multimodal Attention Analysis`，覆盖实验协议/身份/cohort、行为、Probe response/vigilance、问卷、毫米波、NIR、RGB、增量/融合与北京—珠海跨站点验证。旧仓库名 `mmwave-hrv-analysis` 仅保留在历史 Git 引用中。
+
+本地规范化审查入口：`docs/canonical/SOL_REVIEW_ENTRYPOINT_V1.md`。当前分支为 `codex/local-analysis-library-canonicalization-20260826`；本轮未建立 AMD 分支、未授权另一台机器开始批量分析。原始数据、participant-level row data、NPZ/MAT/BIN/AVI、大型输出和缓存均不进入 GitHub。
+
 ## 目录结构（2026-08-24 整理版）
 
 ```

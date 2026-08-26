@@ -1,5 +1,11 @@
 # 厚粲杯项目工作区总账
 
+## 2026-08-26 canonicalization snapshot
+
+当前 review worktree：`D:\Project\厚粲杯\08_算法_local_analysis_library_canonicalization_20260826`；分支：`codex/local-analysis-library-canonicalization-20260826`。目标：`FocusWave Multimodal Attention Analysis` 的本机事实审计与可复现性收口。入口：`docs/canonical/SOL_REVIEW_ENTRYPOINT_V1.md`。
+
+实际扫描了 repository、derived、formal NIR、RGB、`J:\Data`、`I:\预实验`、独立 NIR 工程和全部本地 worktree。Registry 29 项，状态计数见 `docs/canonical/ANALYSIS_REGISTRY_V1.md`；没有 `CANONICAL_FINAL`。AMD handoff 仅有 requirements draft，未批准执行。
+
 更新时间：2026-08-25
 维护角色：Codex 负责本地事实与路径更新；GPT 负责科研状态、优先级与解释边界更新。
 
