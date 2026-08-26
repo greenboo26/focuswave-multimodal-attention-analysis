@@ -4,7 +4,7 @@
 
 ## Remote implementation inventory
 
-Read-only ref audit of `kyandi233-dev/Attention-Analysis` on 2026-08-26: `nvidia-cuda=01af297676399dcf316c1eca8201b4d3aa892023`, `amd-DirectML=e519373f48c5665226d23334969d419181ccfdda`. The branches contain 6,038 and 6,069 files; 6,018 paths are common, 5,982 have identical blobs and 36 differ. Identical blobs include vendored/runtime files and are not by themselves scientific parity evidence. The 36 differing paths include `runtime/nir-formal`, `configs`, tests and documentation, so backend branch identity cannot be treated as equivalence.
+Read-only ref audit of `kyandi233-dev/Attention-Analysis` on 2026-08-26: `nvidia-cuda=36a2d596c55b93071a8b5c80459a56c876c06351`, `amd-DirectML=d8e721079461ef7f71fafcd3edf819858fabbb16`. NVIDIA now contains canonical sequential AVI timestamp mapping. The old sub-100/sub-178 frame-gap interpretation is invalid; both remain recoverable pending full fullclass/QC/Probe alignment. 69/72 formal fullclass completion is unchanged and sub-099 remains a master_timeline blocker. Backend branch identity is not scientific equivalence; Gate 0 remains required.
 
 ## Shared contract
 

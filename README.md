@@ -6,7 +6,7 @@
 
 - 北京报告 cohort：70 sessions、46 natural participants、1,400 probes；label 1 对 labels 2/3/4；C+B 主窗口 30 s，10/20 s 为行为敏感性；participant-disjoint 5-fold；这是当前北京 C+B 锚点，不是未来 Beijing+Zhuhai global folds。
 - Probe 四类语义固定为：1 完全任务聚焦，2 关注实验但未聚焦分拣，3 任务无关思维，4 思维空白。2/3/4 不得统称 mind-wandering。
-- NIR 当前只有 v1 PIR+OAR+QC/coverage 可作为时间戳恢复前的结果边界；68 sessions/44 participants/1,360 probes 是 `PRE_TIMESTAMP_RECOVERY_CURRENT_RESULT`，不是最终完整预测结果。sub-100/sub-178 仍受 capture-counter/AVI mapping 影响，NIR v2 需先完成 blink/PERCLOS 手工可行性检查。
+- NIR 当前 69/72 formal fullclass complete 仍未变化；68 sessions/44 participants/1,360 probes 是 timestamp recovery 前的 `PRE_TIMESTAMP_RECOVERY_CURRENT_RESULT`，不是最终完整预测结果。sub-100/sub-178 已证明不是真实 AVI frame-gap blocker，当前为 `RECOVERABLE_PENDING_FULL_RECOVERY_QC_PROBE_ALIGNMENT`；sub-099 仍为 `master_timeline` blocker。若 recovery 改变 matched cohort，必须按冻结规则 rerun，NIR v2 仍需先完成 blink/PERCLOS 手工可行性检查。
 - RGB 目前是 `PIPELINE_ENGINEERING_PENDING / FORMAL_ANALYSIS_NOT_AUTHORIZED`。`rgb-amd`、`rgb-nvidia` 先完成工程和 parity；局部 parquet 不得当作正式统计结果。
 - mmWave C1 HRV 线已停止扩展，不能解释为硬件失败；C2B/C2C 没有稳定超越 C+B 的正增量，M1 作为 supporting person-effect audit，主线定位为 validation boundary/ablation。
 - 北京 B1+B2 与珠海 B1+B2 是 shared primary，珠海 B3 是 extension。`DEFERRED_EXTERNAL_STORAGE_NOT_AVAILABLE` 表示外部存储暂不可用，不表示数据不存在。
