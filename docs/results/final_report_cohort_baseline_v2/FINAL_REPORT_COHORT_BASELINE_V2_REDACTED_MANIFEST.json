@@ -1,0 +1,16 @@
+{
+  "run_id": "FINAL_REPORT_COHORT_BASELINE_V2",
+  "producer": "scripts/run_final_report_cohort_baseline_v2.py",
+  "producer_branch": "codex/final-report-cohort-baseline-v2",
+  "producer_commit": "414a4f46c8d058961a87750345d06a7129afc9f2",
+  "cohort": {"n_probe": 1400, "n_session": 70, "n_participant": 46},
+  "endpoint": "label 1 vs labels 2/3/4",
+  "windows_s": {"primary": 30, "sensitivity": [10, 20]},
+  "model": "L2 logistic",
+  "validation": "5-fold StratifiedGroupKFold, participant-disjoint, group=repeat_participant_id",
+  "preprocessing": "training-fold only",
+  "bootstrap": "participant cluster, 1000 replicates",
+  "seed": 20260826,
+  "old_1440_fallback_used": false,
+  "row_level_data_uploaded": false
+}

@@ -39,3 +39,13 @@ Use only the actual local report/manifest for numbers. No number is invented her
 ## Repro command
 
 Read-only preflight: `python scripts/canonical/audit_local_analysis_library.py --repo . --derived-root <derived-root> --output work/local_library_audit.json`. Formal rerun is `NEEDS_PARAMETERIZED_ENTRYPOINT` when the registry points to a historical or unstable entry.
+
+## Correction-pass verified contract
+
+- **Question:** NIR+RGB 是否共同增加信息
+- **Producer:** future minimal fusion runner; not executed here
+- **Inputs / required columns:** complete multimodal common cohort
+- **Cohort and unit:** same probes/participants/folds for C+B/+N/+R/+N+R
+- **Model / validation:** L2 logistic primary; no large model search
+- **Execution role and boundary:** global-only inference
+- **Current evidence:** numbers and output files are limited to the referenced aggregate package or local manifest; no new result was generated in this correction pass.

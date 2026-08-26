@@ -56,7 +56,7 @@ SUBJECTS = ["011", "012", "013", "014", "015", "016"]  # 生理全 6 人
 # 短窗（探针前 30s）只用这三个指标: HR / RMSSD / BR（SDNN 需 ≥5min, 短窗不用）
 PROBE_FEATURES = ["hr_bpm", "rmssd_ms", "br_bpm"]
 FEATURE_CN = {"hr_bpm": "心率 HR (bpm)", "rmssd_ms": "RMSSD (ms)", "br_bpm": "呼吸率 BR (bpm)"}
-ATTENTION_LABELS = {"1": "专注", "2": "任务干扰", "3": "走神", "4": "大脑空白"}
+ATTENTION_LABELS = {"1": "完全任务聚焦", "2": "实验相关但未聚焦分拣任务", "3": "任务无关思维", "4": "思维空白"}
 VIGILANCE_LABELS = {1: "极度困倦", 2: "比较困倦", 3: "比较清醒", 4: "极度清醒"}
 
 

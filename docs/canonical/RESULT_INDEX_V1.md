@@ -5,6 +5,8 @@ This index points to local full results without uploading them. See `ANALYSIS_RE
 | analysis_id | status | Git description | local full result path | report use |
 |---|---|---|---|---|
 | BEIJING_BEHAVIOR | VALID_SUPPORTING | manifest/report schema only | `D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\formal_behavior_longitudinal_v1` | behavior results with diagnostics/FDR caveat |
+| BEHAVIOR_BASELINE | CANONICAL_BEIJING_REPORT_BASELINE | [aggregate baseline package](../results/final_report_cohort_baseline_v2) | `D:\Project\厚粲杯\11_数据\derived\final_report_cohort_baseline_v2` | current Beijing C+B anchor, 70/46/1400 |
+| PREPROBE_BEHAVIOR | VALID_SUPPORTING | [Probe-before aggregate package](../results/preprobe_behavior_validity) | `D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\formal_behavior_longitudinal_v1` | objective behavior validity |
 | C2B_V2 | VALID_SUPPORTING | canonical candidate contract | `D:\Project\厚粲杯\11_数据\derived\c2b_v2_canonical_baselines_20260826` | mmWave baseline, not final multimodal |
 | Q1_QUESTIONNAIRE | VALID_SUPPORTING | criterion report pointer | `D:\Project\厚粲杯\11_数据\derived\questionnaire_criterion_validity_v1` | questionnaire evidence with criterion limit |
 | M1 | VALID_SUPPORTING | person-effect audit pointer | `D:\Project\厚粲杯\11_数据\derived\m1_mmwave_person_effect_variance_audit_v1` | limitation/diagnostic |

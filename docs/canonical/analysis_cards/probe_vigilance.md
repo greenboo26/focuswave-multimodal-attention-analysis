@@ -39,3 +39,13 @@ Use only the actual local report/manifest for numbers. No number is invented her
 ## Repro command
 
 Read-only preflight: `python scripts/canonical/audit_local_analysis_library.py --repo . --derived-root <derived-root> --output work/local_library_audit.json`. Formal rerun is `NEEDS_PARAMETERIZED_ENTRYPOINT` when the registry points to a historical or unstable entry.
+
+## Correction-pass verified contract
+
+- **Question:** Probe state 与 vigilance 的关联是否支持构念效度
+- **Producer:** scripts/run_report_cohort_label_vigilance_v1.py, commit 67851bff212fc1e73b9611ac5de670581e316cc7
+- **Inputs / required columns:** report cohort probe/vigilance aggregate tables
+- **Cohort and unit:** report cohort
+- **Model / validation:** participant-clustered model with block/progress; BH family shared with validity module
+- **Execution role and boundary:** not an independent duplicate headline
+- **Current evidence:** numbers and output files are limited to the referenced aggregate package or local manifest; no new result was generated in this correction pass.

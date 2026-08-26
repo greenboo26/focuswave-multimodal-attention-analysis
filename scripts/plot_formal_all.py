@@ -227,7 +227,7 @@ def fig4_vigilance_dist():
 def fig5_vigilance_cross():
     """图5: 注意状态 × 警觉度 交叉（比例堆叠）。"""
     df = pd.read_csv(DATA_DIR / "vigilance_attention_cross.csv", encoding="utf-8-sig")
-    att_labels = {1: "专注", 2: "任务干扰", 3: "走神", 4: "大脑空白"}
+    att_labels = {1: "完全任务聚焦", 2: "实验相关但未聚焦分拣任务", 3: "任务无关思维", 4: "思维空白"}
     vig_labels = {1: "极度困倦", 2: "比较困倦", 3: "比较清醒", 4: "极度清醒"}
     df["attention_cn"] = df["attention"].map(att_labels)
     df["vigilance_cn"] = df["vigilance"].map(vig_labels)

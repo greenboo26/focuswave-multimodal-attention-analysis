@@ -39,3 +39,13 @@ Use only the actual local report/manifest for numbers. No number is invented her
 ## Repro command
 
 Read-only preflight: `python scripts/canonical/audit_local_analysis_library.py --repo . --derived-root <derived-root> --output work/local_library_audit.json`. Formal rerun is `NEEDS_PARAMETERIZED_ENTRYPOINT` when the registry points to a historical or unstable entry.
+
+## Correction-pass verified contract
+
+- **Question:** 模型能否跨北京/珠海迁移
+- **Producer:** future frozen cross-site runner; not executed here
+- **Inputs / required columns:** central merged standardized package
+- **Cohort and unit:** pooled shared primary plus Beijing->Zhuhai held-out
+- **Model / validation:** grouped CV vs site-held-out explicitly separated
+- **Execution role and boundary:** global-only inference; Zhuhai not tuning data
+- **Current evidence:** numbers and output files are limited to the referenced aggregate package or local manifest; no new result was generated in this correction pass.

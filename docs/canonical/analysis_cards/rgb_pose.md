@@ -39,3 +39,13 @@ Use only the actual local report/manifest for numbers. No number is invented her
 ## Repro command
 
 Read-only preflight: `python scripts/canonical/audit_local_analysis_library.py --repo . --derived-root <derived-root> --output work/local_library_audit.json`. Formal rerun is `NEEDS_PARAMETERIZED_ENTRYPOINT` when the registry points to a historical or unstable entry.
+
+## Correction-pass verified contract
+
+- **Question:** RGB pose 当前机位能否稳定提供目标特征
+- **Producer:** remote NIR/RGB engineering runner; parity pending
+- **Inputs / required columns:** 04_Attention-Analysis_nvidia-cuda_RGB frame outputs
+- **Cohort and unit:** available videos
+- **Model / validation:** engineering QC
+- **Execution role and boundary:** local derived only; shoulder reliability caveat
+- **Current evidence:** numbers and output files are limited to the referenced aggregate package or local manifest; no new result was generated in this correction pass.

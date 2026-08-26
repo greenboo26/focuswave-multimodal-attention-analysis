@@ -11,7 +11,7 @@ ROOT = Path(r"D:\Project\厚粲杯\08_算法\output\Formal_mmwave_FAST")
 data = json.loads((ROOT / "focus_discrimination.json").read_text(encoding="utf-8"))
 rows = [w for s in data["subjects"] for w in s["windows"]]
 labels = {int(k): v["label"] for k, v in data["summary"]["rmssd_by_attention"].items()}
-plot_labels = {1: "Fully focused", 2: "TRI", 3: "Mind wandering", 4: "Blank mind"}
+plot_labels = {1: "Fully task-focused", 2: "Experiment-related but not sorting-task-focused", 3: "Task-unrelated thought", 4: "Mind blank"}
 groups = {k: [float(w["rmssd_ms"]) for w in rows if w["attention"] == k] for k in labels}
 hr_groups = {k: [float(w["hr_med_bpm"]) for w in rows if w["attention"] == k] for k in labels}
 

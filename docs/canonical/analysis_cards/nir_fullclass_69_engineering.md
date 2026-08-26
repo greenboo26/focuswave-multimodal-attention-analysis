@@ -39,3 +39,13 @@ Use only the actual local report/manifest for numbers. No number is invented her
 ## Repro command
 
 Read-only preflight: `python scripts/canonical/audit_local_analysis_library.py --repo . --derived-root <derived-root> --output work/local_library_audit.json`. Formal rerun is `NEEDS_PARAMETERIZED_ENTRYPOINT` when the registry points to a historical or unstable entry.
+
+## Correction-pass verified contract
+
+- **Question:** 69-session NIR fullclass 是否仅代表工程完成
+- **Producer:** NIR fullclass engineering runner; manifest required
+- **Inputs / required columns:** nir_69session_final_probe_analysis_v1 QC/schema outputs
+- **Cohort and unit:** 69 source sessions
+- **Model / validation:** engineering QC only
+- **Execution role and boundary:** rename to NIR_FULLCLASS_69_ENGINEERING; no final prediction claim
+- **Current evidence:** numbers and output files are limited to the referenced aggregate package or local manifest; no new result was generated in this correction pass.

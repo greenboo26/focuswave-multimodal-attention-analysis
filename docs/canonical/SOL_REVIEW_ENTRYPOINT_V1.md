@@ -14,4 +14,4 @@
 
 重点复核：C2 binary endpoint 与四分类边界、participant-disjoint grouping、Beijing/Zhuhai cohort、C1 HRV blocker、C2C/M1 stopping logic、NIR/RGB engineering 与 scientific increment 的分离，以及所有 hard-coded path/历史 worktree 入口。
 
-当前 unresolved：无 `CANONICAL_FINAL`；多个历史入口未参数化；Python/package/model digest 不完整；NIR/RGB formal increment 未冻结；Zhuhai B3 仍是 extension；C1 alignment/HRV 未通过；global merged cohort 和 cross-site validation 未开始。达到 `READY_FOR_SOL_REVIEW` 的条件只要求本地事实审计、文档和自检完成，不表示科学结论已通过。
+本轮 correction 已解决/收口：北京 70/46/1400 baseline、Probe-before aggregate package、真实 producer provenance、local/global identity boundary、AMD/NVIDIA ref/blob audit 和最小 AMD module surface。剩余 review 重点：历史入口的完整可运行性、ordinal proportional-odds diagnostic、NIR/RGB parity execution evidence、global merged cohort。AMD 仍未建立，达到 `READY_FOR_SOL_REREVIEW` 不表示科学结论已自动批准。

@@ -39,3 +39,13 @@ Use only the actual local report/manifest for numbers. No number is invented her
 ## Repro command
 
 Read-only preflight: `python scripts/canonical/audit_local_analysis_library.py --repo . --derived-root <derived-root> --output work/local_library_audit.json`. Formal rerun is `NEEDS_PARAMETERIZED_ENTRYPOINT` when the registry points to a historical or unstable entry.
+
+## Correction-pass verified contract
+
+- **Question:** 协议/版本证据是否足以冻结 site、phase、program_family
+- **Producer:** scripts/probe_program_version_audit.py（producer historically verified in Sol task; current branch copy unresolved）
+- **Inputs / required columns:** session-level version_session_manifest.csv; required fields site, observed_protocol, candidate_program_family, evidence_level
+- **Cohort and unit:** session; protocol evidence gate
+- **Model / validation:** descriptive evidence audit; no inferential model
+- **Execution role and boundary:** historical/supporting; colleague does not rerun
+- **Current evidence:** numbers and output files are limited to the referenced aggregate package or local manifest; no new result was generated in this correction pass.

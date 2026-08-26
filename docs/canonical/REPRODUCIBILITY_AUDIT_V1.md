@@ -19,4 +19,6 @@
 
 The new canonical audit is parameterized for repo/data/derived/NIR/RGB/J roots, writes one JSON manifest, does not run science, and does not upload data. Many historical scripts remain non-reproducible without adaptation because they hard-code `D:\Project\厚粲杯\08_算法`, `D:\正式实验`, `D:\acq_mmwave_results`, `J:\预实验`, or another historical checkout. Several behavior and C1/C3 runners live only in prior worktrees. Some manifests lack code/config digest or package lock. These are unresolved and block `CANONICAL_FINAL`.
 
+Known historical syntax failure: `scripts/archive_历史版本/01_旧管线版本/process_vital_signs_v2_0.py:388` contains an incomplete expression. It is archived evidence only and is excluded from active-mainline validation; it was not repaired because Sol explicitly limited recovery to producers needed for retained/future modules.
+
 No overwrite safety can be asserted for every legacy script. A future canonical runner must require an explicit output root, refuse existing outputs unless `--force` is declared, write a manifest, and support site/session filters.

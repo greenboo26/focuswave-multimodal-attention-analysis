@@ -1,6 +1,6 @@
 # Analysis registry v1
 
-状态枚举严格使用：`CANONICAL_FINAL`、`VALID_SUPPORTING`、`PENDING_CANONICAL_RERUN`、`SUPERSEDED_INTERMEDIATE`、`ENGINEERING_ONLY`、`PLANNED_GLOBAL_ONLY`、`BLOCKED_EXTERNAL_STORAGE`。完整机器可读表见同目录 CSV。
+状态枚举使用 review matrix 的科学语义：`KEEP_MAIN`、`KEEP_SUPPORTING`、`REVISE_METHOD`、`RERUN_CANONICAL`、`CANONICAL_BEIJING_REPORT_BASELINE`、`VALIDATION_STOPPED`、`SUPERSEDED`、`SUPERSEDED_INTERMEDIATE`、`ENGINEERING_ONLY`、`PLANNED_GLOBAL_ONLY`、`DEFERRED_EXTERNAL_STORAGE_NOT_AVAILABLE`。完整机器可读表见同目录 CSV。
 
 本轮没有新的探索性科学分析。CSV 的每一行对应一个保留的实际分析或正式计划阶段，包含输入、输出、入口、RUN_ID、样本单位、cohort、身份键、site/protocol 和跨机器复现要求。`exact_executable_script` 若标为历史 worktree 或 `not yet stable`，即为复现审计发现，不是可执行承诺。
 
@@ -8,16 +8,22 @@
 
 | status | count |
 |---|---:|
-| `VALID_SUPPORTING` | 14 |
-| `PENDING_CANONICAL_RERUN` | 3 |
-| `BLOCKED_EXTERNAL_STORAGE` | 1 |
-| `ENGINEERING_ONLY` | 6 |
-| `PLANNED_GLOBAL_ONLY` | 5 |
-| `CANONICAL_FINAL` | 0 |
-| `SUPERSEDED_INTERMEDIATE` | 0 |
+| `REVISE_METHOD` | 6 |
+| `ENGINEERING_ONLY` | 4 |
+| `PLANNED_GLOBAL_ONLY` | 4 |
+| `VALID_SUPPORTING` | 3 |
+| `KEEP_MAIN` | 2 |
+| `KEEP_SUPPORTING` | 2 |
+| `SUPERSEDED_INTERMEDIATE` | 2 |
+| `RERUN_CANONICAL` | 1 |
+| `CANONICAL_BEIJING_REPORT_BASELINE` | 1 |
+| `SUPERSEDED` | 1 |
+| `VALIDATION_STOPPED` | 1 |
+| `PENDING_CANONICAL_RERUN` | 1 |
+| `DEFERRED_EXTERNAL_STORAGE_NOT_AVAILABLE` | 1 |
 | total | 29 |
 
-没有任何条目被提升为 `CANONICAL_FINAL`，因为 Sol 尚未审查，且最终多模态/跨站点分析尚未形成共同冻结入口。
+`BEHAVIOR_BASELINE` 已提升为 `CANONICAL_BEIJING_REPORT_BASELINE`，但这不等于 global canonical inference；最终多模态/跨站点分析仍需中央 identity reconciliation 和全局 folds。
 
 ## Interpretation rules
 

@@ -39,3 +39,13 @@ Use only the actual local report/manifest for numbers. No number is invented her
 ## Repro command
 
 Read-only preflight: `python scripts/canonical/audit_local_analysis_library.py --repo . --derived-root <derived-root> --output work/local_library_audit.json`. Formal rerun is `NEEDS_PARAMETERIZED_ENTRYPOINT` when the registry points to a historical or unstable entry.
+
+## Correction-pass verified contract
+
+- **Question:** 早期 NIR v1 结果如何归档
+- **Producer:** historical NIR producer; full provenance in local manifest
+- **Inputs / required columns:** c3_nir_qc_integration_v1 outputs
+- **Cohort and unit:** older session-aligned cohort
+- **Model / validation:** historical model outputs
+- **Execution role and boundary:** SUPERSEDED_INTERMEDIATE
+- **Current evidence:** numbers and output files are limited to the referenced aggregate package or local manifest; no new result was generated in this correction pass.

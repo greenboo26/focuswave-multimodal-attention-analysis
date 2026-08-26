@@ -39,3 +39,13 @@ Use only the actual local report/manifest for numbers. No number is invented her
 ## Repro command
 
 Read-only preflight: `python scripts/canonical/audit_local_analysis_library.py --repo . --derived-root <derived-root> --output work/local_library_audit.json`. Formal rerun is `NEEDS_PARAMETERIZED_ENTRYPOINT` when the registry points to a historical or unstable entry.
+
+## Correction-pass verified contract
+
+- **Question:** 主终点和四类 Probe 标签是否可审查且不泄漏
+- **Producer:** scripts/audit_label_coverage.py
+- **Inputs / required columns:** c2_evaluation_label_audit_v1/audit_predictions.csv; label, probe_id, subject, block_num
+- **Cohort and unit:** probe; frozen 1 vs 2/3/4
+- **Model / validation:** coverage and label audit
+- **Execution role and boundary:** supporting; 3=task-unrelated thought, 4=mind blank
+- **Current evidence:** numbers and output files are limited to the referenced aggregate package or local manifest; no new result was generated in this correction pass.

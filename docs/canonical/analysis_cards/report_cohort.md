@@ -39,3 +39,13 @@ Use only the actual local report/manifest for numbers. No number is invented her
 ## Repro command
 
 Read-only preflight: `python scripts/canonical/audit_local_analysis_library.py --repo . --derived-root <derived-root> --output work/local_library_audit.json`. Formal rerun is `NEEDS_PARAMETERIZED_ENTRYPOINT` when the registry points to a historical or unstable entry.
+
+## Correction-pass verified contract
+
+- **Question:** 70/46/1400 北京 cohort 是否是当前 baseline anchor
+- **Producer:** scripts/run_final_report_cohort_baseline_v2.py, commit 414a4f46c8d058961a87750345d06a7129afc9f2
+- **Inputs / required columns:** report_analysis_cohort.csv; label, repeat_participant_id, subject, probe_onset_ms
+- **Cohort and unit:** 70 sessions, 46 participants, 1400 probes
+- **Model / validation:** L2 logistic; 5-fold StratifiedGroupKFold; training-fold preprocessing; 1000 participant bootstrap
+- **Execution role and boundary:** canonical Beijing baseline; not global folds
+- **Current evidence:** numbers and output files are limited to the referenced aggregate package or local manifest; no new result was generated in this correction pass.

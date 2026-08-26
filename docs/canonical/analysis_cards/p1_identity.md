@@ -39,3 +39,13 @@ Use only the actual local report/manifest for numbers. No number is invented her
 ## Repro command
 
 Read-only preflight: `python scripts/canonical/audit_local_analysis_library.py --repo . --derived-root <derived-root> --output work/local_library_audit.json`. Formal rerun is `NEEDS_PARAMETERIZED_ENTRYPOINT` when the registry points to a historical or unstable entry.
+
+## Correction-pass verified contract
+
+- **Question:** 能否在跨盘合并前保留 participant-disjoint 所需身份证据
+- **Producer:** scripts/audit_source_inventory.py plus central reconciliation adapter
+- **Inputs / required columns:** analysis_tables_v2/subject_session_master_v2.csv; single_experiment_id, site, session_date_time, repeat_participant_id evidence
+- **Cohort and unit:** session; local linkage evidence only
+- **Model / validation:** no local global folds
+- **Execution role and boundary:** colleague emits linkage evidence; central process freezes global repeat_participant_id and folds
+- **Current evidence:** numbers and output files are limited to the referenced aggregate package or local manifest; no new result was generated in this correction pass.

@@ -1,0 +1,10 @@
+window_s,outcome,contrast,beta,ci_low,ci_high,p_raw,q_bh,model
+10,error_rate,focused_minus_other,-0.0342,-0.0460,-0.0225,<0.001,<0.001,adjusted_GEE
+20,error_rate,focused_minus_other,-0.0359,-0.0435,-0.0282,<0.001,<0.001,adjusted_GEE
+30,error_rate,focused_minus_other,-0.0325,-0.0397,-0.0253,<0.001,<0.001,adjusted_GEE
+10,rt_median_ms,focused_minus_other,-3.09,-31.37,25.18,0.830,0.934,adjusted_GEE
+20,rt_median_ms,focused_minus_other,1.73,-25.84,29.30,0.902,0.955,adjusted_GEE
+30,rt_median_ms,focused_minus_other,5.29,-16.49,27.06,0.634,0.878,adjusted_GEE
+10,rt_sd_ms,focused_minus_other,-8.08,-18.35,2.18,0.123,0.221,adjusted_GEE
+20,rt_sd_ms,focused_minus_other,-6.27,-16.03,3.50,0.208,0.341,adjusted_GEE
+30,rt_sd_ms,focused_minus_other,-5.48,-16.02,5.05,0.308,0.462,adjusted_GEE

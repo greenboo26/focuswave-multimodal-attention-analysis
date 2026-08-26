@@ -39,3 +39,13 @@ Use only the actual local report/manifest for numbers. No number is invented her
 ## Repro command
 
 Read-only preflight: `python scripts/canonical/audit_local_analysis_library.py --repo . --derived-root <derived-root> --output work/local_library_audit.json`. Formal rerun is `NEEDS_PARAMETERIZED_ENTRYPOINT` when the registry points to a historical or unstable entry.
+
+## Correction-pass verified contract
+
+- **Question:** 绝对 mmWave 特征是否提供行为/context 之外增量
+- **Producer:** historical C2B v2 producer; verified output manifest
+- **Inputs / required columns:** c2b_v2 canonical baselines aggregate outputs
+- **Cohort and unit:** frozen Beijing probe matrix
+- **Model / validation:** participant-disjoint grouped baseline/ablation
+- **Execution role and boundary:** supporting ablation; missing producer not required for AMD
+- **Current evidence:** numbers and output files are limited to the referenced aggregate package or local manifest; no new result was generated in this correction pass.

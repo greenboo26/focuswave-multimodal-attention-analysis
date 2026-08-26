@@ -39,3 +39,13 @@ Use only the actual local report/manifest for numbers. No number is invented her
 ## Repro command
 
 Read-only preflight: `python scripts/canonical/audit_local_analysis_library.py --repo . --derived-root <derived-root> --output work/local_library_audit.json`. Formal rerun is `NEEDS_PARAMETERIZED_ENTRYPOINT` when the registry points to a historical or unstable entry.
+
+## Correction-pass verified contract
+
+- **Question:** RGB motion 是否可作为标准派生 QC
+- **Producer:** scripts/evaluate_raw_motion_features.py
+- **Inputs / required columns:** current_j_rgb_motion_gate_v1 timestamp_ms, motion_frame_diff
+- **Cohort and unit:** available RGB sessions
+- **Model / validation:** descriptive QC
+- **Execution role and boundary:** local derived production only
+- **Current evidence:** numbers and output files are limited to the referenced aggregate package or local manifest; no new result was generated in this correction pass.

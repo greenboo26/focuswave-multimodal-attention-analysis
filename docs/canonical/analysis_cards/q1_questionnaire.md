@@ -39,3 +39,15 @@ Use only the actual local report/manifest for numbers. No number is invented her
 ## Repro command
 
 Read-only preflight: `python scripts/canonical/audit_local_analysis_library.py --repo . --derived-root <derived-root> --output work/local_library_audit.json`. Formal rerun is `NEEDS_PARAMETERIZED_ENTRYPOINT` when the registry points to a historical or unstable entry.
+
+## Correction-pass verified contract
+
+- **Question:** Q4/session-level questionnaire 是否与 Probe 结果收敛
+- **Producer:** scripts/run_q1_questionnaire_criterion_validity.py, commit ba7a2c6
+- **Inputs / required columns:** questionnaire_measurement_audit and questionnaire session-level aggregates; label mapping, q4 fields
+- **Cohort and unit:** valid questionnaire sessions
+- **Model / validation:** clustered association; ordinal proportional-odds assumption documented
+- **Execution role and boundary:** criterion/convergent support, not window ground truth
+- **Current evidence:** numbers and output files are limited to the referenced aggregate package or local manifest; no new result was generated in this correction pass.
+
+Ordinal documentation: the Q1 ordinal component uses a proportional-odds interpretation; the empty top category and the assumption must be reported. It is criterion/convergent support, not a gold standard for individual Probe windows.
