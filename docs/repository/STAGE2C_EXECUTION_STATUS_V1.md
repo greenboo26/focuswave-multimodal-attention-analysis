@@ -14,7 +14,7 @@ PR #1 and PR #2 were read from the live repository, closed without merge, and th
 
 | PR | head | base | state | disposition |
 |---|---|---|---|---|
-| #1 | `docs/rs6240-firmware-multichannel-plan-20250825@53c5814e518ebb43a6288860591f3f44feb17abd` | `master` | closed, unmerged | curated hardware successor present; head branch deleted; retirement tag retained |
+| #1 | live branch `docs/rs6240-firmware-multichannel-plan-20260825@53c5814e518ebb43a6288860591f3f44feb17abd` | `master` | closed, unmerged | GitHub PR metadata displayed the date-suffixed head as `20250825`; live remote ref was `20260825`; curated hardware successor present; actual live head deleted; retirement tag retained |
 | #2 | `chatgpt/multimodal-results-nir-diagnostic-20260826@0e756b275fd9cbbc7d7564531d3200425bf3be23` | `main` | closed, unmerged | curated diagnostic successors present; head branch deleted; archive tag retained |
 
 The PR bodies and scientific content were not merged. The curated successors are:
