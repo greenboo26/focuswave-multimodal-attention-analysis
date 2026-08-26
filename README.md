@@ -40,10 +40,26 @@ tests/         schema/path/contract smoke checks
 
 ## 从哪里开始
 
-1. 先读 `docs/repository/REPOSITORY_ARCHITECTURE_V1.md`、`docs/provenance/CROSS_REPO_PROVENANCE_V1.md` 和双机 contract。
-2. 只使用 `results/canonical/README.md` 作为当前正式结果入口；`results/supporting/` 与 `results/engineering_reference/` 不得升级为最终科学结论。
-3. 本地派生前执行 runbook/contract 的 preflight；中央身份、cohort、fold 和最终 inference 需要中央整合权限。
-4. 当前 repository 已完成 rename、default branch 切换和 Stage 2B branch retirement；旧 `master`、legacy tag 与 archive tags 作为 rollback/provenance surface 保留。
+### 同事、新机器或新 AI agent
+
+先读 `docs/canonical/TEAMMATE_ONBOARDING_V1.md`。它是当前正式的新机器入口，明确说明：
+
+- 中央仓库与 `kyandi233-dev/Attention-Analysis` 各自负责什么；
+- Windows / Git / Conda / Python 环境怎么准备；
+- AMD NIR 为什么使用外部 `runtime/nir-formal` 的 DirectML 安装说明；
+- `configs/paths.local.json` 怎么配置且为什么不能提交；
+- 珠海为什么必须先核验实际 BBB 协议/时间线，而不是直接套北京 cohort；
+- 标准机器包怎么输出、怎么交回、哪些科学规则不得修改。
+
+中央仓库推荐 Python 3.11 作为新机器共同基线，运行依赖在 `requirements.txt`，测试依赖在 `requirements-dev.txt`。
+
+### 已完成 onboarding 后
+
+1. 读 `docs/canonical/COMPETITION_DUAL_MACHINE_RUNBOOK_V1.md` 和相关 analysis/contract；不要在珠海数据上盲目运行北京专用 stage。
+2. 读 `docs/repository/REPOSITORY_ARCHITECTURE_V1.md`、`docs/provenance/CROSS_REPO_PROVENANCE_V1.md` 和双机 contract。
+3. 只使用 `results/canonical/README.md` 作为当前正式结果入口；`results/supporting/` 与 `results/engineering_reference/` 不得升级为最终科学结论。
+4. 本地派生前执行 runbook/contract 的 preflight；中央身份、cohort、fold 和最终 inference 需要中央整合权限。
+5. 当前 repository 已完成 runtime verification 和 teammate handoff gate；旧 `master`、legacy tag 与 archive tags 只作为 rollback/provenance surface 保留，不作为同事分析入口。
 
 ## 复现和数据边界
 
