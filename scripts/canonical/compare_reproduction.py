@@ -17,11 +17,13 @@ import pandas as pd
 FILES = {
     "behavior_baseline_v2": ["final_baseline_metrics.csv", "REPORT_FOLDS_V1.csv"],
     "behavior_longitudinal_v1": ["model_results.csv", "preprobe_window_trajectories.csv", "recovery_b1late_b2early.csv"],
+    "behavior_preprobe_v1": ["preprobe_state_group_descriptives.csv", "preprobe_state_group_gee.csv"],
     "questionnaire_q1_v1": ["questionnaire_probe_association.csv", "questionnaire_behavior_association.csv", "questionnaire_ordinal_clustered_model.csv"],
     "mmwave_c1_alignment_v1": ["c1_alignment_lag_sweep_detail.csv", "c1_alignment_lag_sweep_primary_summary.csv", "c1_alignment_unavailable_methods.csv"],
     "mmwave_m1_v1": ["loso_results.csv", "incremental_deltas.csv"],
     "mmwave_c2b_v2": ["c2b_v2_model_metrics.csv", "window_30s/strict_matched_metrics.csv", "window_30s/paired_cluster_bootstrap.csv"],
     "mmwave_c2c_v1": ["c2c_model_metrics_aggregate.csv", "c2c_primary_increment_aggregate.csv", "c2c_calibration_coverage_aggregate.csv"],
+    "beijing_sensor_increment_v1": ["common_probe_coverage.csv", "common_probe_incremental_models.csv", "sensor_state_group_summary_primary_common.csv"],
 }
 
 
