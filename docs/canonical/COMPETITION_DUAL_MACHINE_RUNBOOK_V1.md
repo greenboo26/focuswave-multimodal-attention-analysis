@@ -1,6 +1,6 @@
 # FocusWave 比赛版统一分析管线 V1
 
-状态：`IMPLEMENTED_CANDIDATE_FOR_LOCAL_EQUIVALENCE_RUN`
+状态：`RUNTIME_VERIFIED / TEAMMATE_HANDOFF_READY`
 
 ## 目标
 
@@ -163,10 +163,10 @@ python scripts/canonical/compare_reproduction.py <analysis_id> `
   --report <new_stage>/reproduction_equivalence.json
 ```
 
-离散/计数字段必须一致，浮点值使用预先声明容差。通过一次本机正式 equivalence run 后，再冻结环境 lock/tag；不要为了等待完美 lock 阻塞比赛主分析。
+离散/计数字段必须一致，浮点值使用预先声明容差。北京主机的正式 runtime verification 已完成；若某阶段是明确的 bug/语义 correction，则应核验修复后的科学口径和 runtime provenance，而不是强求与错误旧结果数值完全一致。
 
 ## 当前完成边界
 
-代码层已具备：历史 producer 恢复、统一 launcher、主链 stage graph、固定目录规范、运行 provenance、aggregate/merge-ready 分层、对方机器输入口和 schema-checked collector。
+代码层与北京本地 runtime 均已完成验收：历史 producer 恢复、统一 launcher、主链 stage graph、固定目录规范、运行 provenance、aggregate/merge-ready 分层、对方机器输入口、scientific-signature fail-closed collector，以及受修复影响阶段的最小正式重跑均已通过。
 
-仍需在有本地数据盘的机器上实际执行一次 `--dry-run` 和正式 `competition_core`，验证路径和结果 equivalence。GitHub 侧无法替代本地数据执行。
+PR #3 已完成最终 Sol runtime acceptance 并合并至 `main`。当前 teammate-handoff 基线为 `main@4c106ba885d81c01ade881beb21b55e0618f5193`；同事应以该正式基线为起点，在其本机只配置私有路径和实际可用数据，不重新调参、改标签、改窗口、改 fold 或改模型。北京已验证结果不要求同事复现出相同数值，但可合并产物必须满足统一 schema、merge key 与 scientific signature。
