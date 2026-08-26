@@ -1,6 +1,6 @@
 # FocusWave Multimodal Analysis
 
-这是 FocusWave 多模态注意力分析的正式分析总仓库入口候选。GitHub slug 暂保留为 `greenboo26/mmwave-hrv-analysis`；仓库主体不再定义为 HR、BR 或 HRV 算法项目。毫米波是当前已审计的一个传感器验证边界，NIR 与 RGB 的生产代码分别位于外部 `kyandi233-dev/Attention-Analysis` 的受控 ref，最终结果和跨站点推断在本仓库中央收口。
+这是 FocusWave 多模态注意力分析的正式分析总仓库入口候选，当前 GitHub repository 为 `greenboo26/focuswave-multimodal-attention-analysis`；仓库主体不再定义为 HR、BR 或 HRV 算法项目。毫米波是当前已审计的一个传感器验证边界，NIR 与 RGB 的生产代码分别位于外部 `kyandi233-dev/Attention-Analysis` 的受控 ref，最终结果和跨站点推断在本仓库中央收口。
 
 ## 当前科学状态
 
@@ -43,7 +43,7 @@ tests/         schema/path/contract smoke checks
 1. 先读 `docs/repository/REPOSITORY_ARCHITECTURE_V1.md`、`docs/provenance/CROSS_REPO_PROVENANCE_V1.md` 和双机 contract。
 2. 只使用 `results/canonical/README.md` 作为当前正式结果入口；`results/supporting/` 与 `results/engineering_reference/` 不得升级为最终科学结论。
 3. 本地派生前执行 runbook/contract 的 preflight；中央身份、cohort、fold 和最终 inference 需要中央整合权限。
-4. 当前 candidate 尚未改变 GitHub 默认分支、仓库名或任何远端分支。
+4. 当前 repository 已完成 Stage 2A rename 和 default branch 切换；旧 `master`、legacy tag 与 archive tags 仍保留，branch retirement 尚未执行。
 
 ## 复现和数据边界
 
