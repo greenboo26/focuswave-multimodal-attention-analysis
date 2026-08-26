@@ -1,0 +1,13 @@
+{
+  "run_id": "REPORT_FOLDS_V1",
+  "seed": 20260826,
+  "method": "5-fold StratifiedGroupKFold",
+  "group_key": "repeat_participant_id",
+  "n_participant": 46,
+  "folds": 5,
+  "assignment_reused_for_windows": [
+    10,
+    20,
+    30
+  ]
+}

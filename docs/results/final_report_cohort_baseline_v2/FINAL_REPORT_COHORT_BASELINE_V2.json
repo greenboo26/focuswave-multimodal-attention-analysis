@@ -1,0 +1,18 @@
+{
+  "run_id": "FINAL_REPORT_COHORT_BASELINE_V2",
+  "cohort_source": "D:\\Project\\厚粲杯\\11_数据\\derived\\report_cohort_label_vigilance_v1\\report_analysis_cohort.csv",
+  "cohort_sha256": "2513cd3c769235da64a8b1d6578876317012cadca62fbf5ba26171606b36ea16",
+  "n_probe": 1400,
+  "n_session": 70,
+  "n_participant": 46,
+  "label": "1 vs 2/3/4",
+  "primary_window_s": 30,
+  "sensitivity_windows_s": [
+    10,
+    20
+  ],
+  "model": "L2 logistic",
+  "validation": "5-fold StratifiedGroupKFold, participant-disjoint",
+  "bootstrap": "participant cluster, 1000 replicates",
+  "old_1440_fallback_used": false
+}
