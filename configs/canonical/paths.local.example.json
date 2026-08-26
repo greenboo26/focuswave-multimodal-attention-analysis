@@ -1,0 +1,8 @@
+{
+  "paths": {
+    "raw_data_root": "<LOCAL_RAW_DATA_ROOT>",
+    "derived_root": "<LOCAL_DERIVED_ROOT>",
+    "legacy_output_root": "<LOCAL_LEGACY_OUTPUT_ROOT>"
+  },
+  "analysis_output_overrides": {}
+}
