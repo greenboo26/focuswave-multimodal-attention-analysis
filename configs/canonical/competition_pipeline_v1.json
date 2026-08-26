@@ -1,0 +1,89 @@
+{
+  "schema_version": "focuswave-competition-pipeline-v1",
+  "pipeline_version": "focuswave_canonical_v1",
+  "strategy": {
+    "priority": "competition_completion_first",
+    "science_rule": "reuse completed analyses; do not retune models or change frozen windows/folds/labels",
+    "standard_stage_directory": "<final_output_root>/focuswave_canonical_v1/<machine_id>/<analysis_id>/",
+    "stage_subdirectories": ["producer_output", "aggregate", "merge_ready"],
+    "teammate_input_port": "<teammate_input_root>/focuswave_canonical_v1/<machine_id>/<analysis_id>/",
+    "combined_input_root": "<combined_input_root>/focuswave_combined_v1/<analysis_id>/"
+  },
+  "stages": {
+    "report_cohort_v1": {"depends_on": []},
+    "behavior_longitudinal_v1": {"depends_on": []},
+    "behavior_preprobe_v1": {
+      "depends_on": ["behavior_longitudinal_v1"],
+      "dependency_inputs": {
+        "probe_event_level": ["behavior_longitudinal_v1", "probe_event_level_behavior.csv"]
+      }
+    },
+    "behavior_baseline_v2": {
+      "depends_on": ["report_cohort_v1"],
+      "dependency_inputs": {
+        "cohort": ["report_cohort_v1", "report_analysis_cohort.csv"]
+      }
+    },
+    "repeat_session_v1": {"depends_on": []},
+    "questionnaire_q1_v1": {"depends_on": []},
+    "mmwave_m1_v1": {"depends_on": []},
+    "mmwave_c2b_v2": {
+      "depends_on": ["mmwave_m1_v1"],
+      "dependency_inputs": {
+        "old_matrix": ["mmwave_m1_v1", "m1_q0_probe_matrix.csv"]
+      }
+    },
+    "mmwave_c2c_v1": {
+      "depends_on": ["mmwave_c2b_v2"],
+      "dependency_inputs": {
+        "c2b_root": ["mmwave_c2b_v2", "."]
+      }
+    },
+    "mmwave_c1_alignment_v1": {"depends_on": []},
+    "beijing_sensor_increment_v1": {
+      "depends_on": ["behavior_longitudinal_v1"],
+      "dependency_inputs": {
+        "behavior": ["behavior_longitudinal_v1", "probe_event_level_behavior.csv"]
+      }
+    }
+  },
+  "profiles": {
+    "behavior_questionnaire": [
+      "report_cohort_v1",
+      "behavior_longitudinal_v1",
+      "behavior_preprobe_v1",
+      "behavior_baseline_v2",
+      "repeat_session_v1",
+      "questionnaire_q1_v1"
+    ],
+    "mmwave_core": [
+      "mmwave_m1_v1",
+      "mmwave_c2b_v2",
+      "mmwave_c2c_v1"
+    ],
+    "competition_core": [
+      "report_cohort_v1",
+      "behavior_longitudinal_v1",
+      "behavior_preprobe_v1",
+      "behavior_baseline_v2",
+      "repeat_session_v1",
+      "questionnaire_q1_v1",
+      "mmwave_m1_v1",
+      "mmwave_c2b_v2",
+      "mmwave_c2c_v1"
+    ],
+    "competition_full_existing": [
+      "report_cohort_v1",
+      "behavior_longitudinal_v1",
+      "behavior_preprobe_v1",
+      "behavior_baseline_v2",
+      "repeat_session_v1",
+      "questionnaire_q1_v1",
+      "mmwave_m1_v1",
+      "mmwave_c2b_v2",
+      "mmwave_c2c_v1",
+      "mmwave_c1_alignment_v1",
+      "beijing_sensor_increment_v1"
+    ]
+  }
+}
