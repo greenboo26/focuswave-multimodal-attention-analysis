@@ -169,4 +169,4 @@ python scripts/canonical/compare_reproduction.py <analysis_id> `
 
 代码层与北京本地 runtime 均已完成验收：历史 producer 恢复、统一 launcher、主链 stage graph、固定目录规范、运行 provenance、aggregate/merge-ready 分层、对方机器输入口、scientific-signature fail-closed collector，以及受修复影响阶段的最小正式重跑均已通过。
 
-PR #3 已完成最终 Sol runtime acceptance 并合并至 `main`。当前 teammate-handoff 基线为 `main@4c106ba885d81c01ade881beb21b55e0618f5193`；同事应以该正式基线为起点，在其本机只配置私有路径和实际可用数据，不重新调参、改标签、改窗口、改 fold 或改模型。北京已验证结果不要求同事复现出相同数值，但可合并产物必须满足统一 schema、merge key 与 scientific signature。
+PR #3 已完成最终 Sol runtime acceptance 并合并至 `main`。runtime 验收对应的科学 merge commit 为 `4c106ba885d81c01ade881beb21b55e0618f5193`；其后的 `main` 允许包含不改变科学代码的文档状态更新。同事应拉取当前 `main`，不得使用旧 `master`，并在其本机只配置私有路径和实际可用数据，不重新调参、改标签、改窗口、改 fold 或改模型。北京已验证结果不要求同事复现出相同数值，但可合并产物必须满足统一 schema、merge key 与 scientific signature。
