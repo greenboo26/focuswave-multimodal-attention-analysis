@@ -22,4 +22,6 @@
 
 `FOCUSWAVE_CUTOVER_STAGE2B = PASS`
 
-`FOCUSWAVE_CUTOVER_STAGE2C = IN_PROGRESS`
+`FOCUSWAVE_CUTOVER_STAGE2C = BLOCKED_ON_PR_CLOSURE_API`
+
+Current execution details are recorded in `docs/repository/STAGE2C_EXECUTION_STATUS_V1.md`. The final immutable repository baseline tag remains intentionally pending until PR #1/#2 can be closed and their head branches safely retired.
