@@ -36,7 +36,7 @@ The authoritative AMD NIR runtime installation entrypoints are:
 - `runtime/nir-formal/RUNBOOK_V1.md`
 - `runtime/nir-formal/requirements.txt`
 
-If an older root-level document conflicts with the formal runtime release/install documents, treat the runtime package documents as authoritative and report the discrepancy instead of guessing.
+Current audited AMD runtime documentation identifies package version `0.2.0`. The repository-level `AGENTS.md` still contains an older `0.1.0` package-version line. For actual AMD runtime installation/execution, the files under `runtime/nir-formal/` are authoritative. Report documentation conflicts instead of guessing or silently mixing versions.
 
 ## 2. Software to install on a fresh Windows machine
 
@@ -73,15 +73,42 @@ The central environment is CPU-compatible by default. A CUDA/DirectML runtime is
 
 ### AMD NIR runtime environment
 
-Follow `Attention-Analysis/runtime/nir-formal/INSTALL.md` rather than duplicating its dependency lock here. The current AMD runtime documentation uses:
+Follow `Attention-Analysis/runtime/nir-formal/INSTALL.md` for the exact runtime setup. At the current audited `amd-DirectML` state it specifies:
 
 - Python 3.11;
-- `onnxruntime-directml` for AMD/DirectML;
-- a DirectX 12 capable Windows system;
-- the required `b7.onnx` and `b8.onnx` model assets under `runtime/nir-formal/models/`;
-- the runtime-specific `requirements.txt`.
+- `onnxruntime-directml==1.24.4` via the runtime-specific requirements;
+- Windows 10 1903+ with a DirectX 12 capable GPU/driver;
+- no PyTorch, Ultralytics or CUDA requirement for formal DirectML inference;
+- formal package version `0.2.0`;
+- formal AMD model combination: YOLO fixed batch=8 + RITnet fixed batch=16.
+
+Current required/frozen runtime assets include:
+
+```text
+runtime/nir-formal/models/nir-eye-yolo26n-best.onnx        # b1 reference/diagnostic
+runtime/nir-formal/models/nir-eye-yolo26n-best-b8.onnx     # formal AMD YOLO
+runtime/nir-formal/models/ritnet-b16-fp32.onnx              # formal AMD RITnet
+runtime/nir-formal/models/ritnet-b16-fp32.onnx.data
+runtime/nir-formal/directml_runtime.py
+runtime/nir-formal/run_formal_batched.py
+runtime/nir-formal/run_formal_batch.py
+runtime/nir-formal/config.yaml
+```
 
 Do not install CUDA just because the Beijing/NVIDIA machine has CUDA. AMD and NVIDIA are different runtime backends.
+
+The current AMD runtime discovers formal data from configured `正式实验` / `Data` candidate roots and its `config.yaml` currently accounts for external drives appearing as `E:` or `F:`. These are external-runtime data-root rules, not central-repository path rules.
+
+Before formal NIR execution, the external runtime requires its own checks/dry-run, including the equivalent of:
+
+```powershell
+python -m pytest tests -q
+python run_pipeline.py check-env
+python run_pipeline.py discover --formal-only
+python run_formal_batch.py --dry-run
+```
+
+DirectML unavailability is a failure for the formal AMD runtime; it must not silently fall back to full-session CPU inference.
 
 ## 3. Local configuration in the central repository
 
