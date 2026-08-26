@@ -76,7 +76,7 @@ def copy_artifacts(producer_output: Path, target_root: Path,
     for rel in rels:
         src = producer_output / rel
         if not src.is_file():
-            continue
+            raise FileNotFoundError(f"declared stage artifact missing: {src}")
         dst = target_root / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dst)
