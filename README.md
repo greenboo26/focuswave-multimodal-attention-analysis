@@ -2,6 +2,8 @@
 
 这是 FocusWave 多模态注意力分析的正式中央仓库：`FocusWave Multimodal Attention Analysis`。仓库主体不定义为 HR、BR 或 HRV 算法项目。毫米波是当前已审计的一个传感器验证边界，NIR 与 RGB 的生产代码位于外部 `kyandi233-dev/Attention-Analysis` 的受控 ref，最终结果和跨站点推断在本仓库中央收口。
 
+> **任何新算法、新特征、新 producer 改动或高成本重跑之前，先读根目录 [`ANALYSIS_HISTORY_LEDGER.md`](ANALYSIS_HISTORY_LEDGER.md)。** 该账本汇总中央分析、FocusWave 采集、Attention-Analysis producer 与历史 workspace 中已经做过、采用、回退、被后续证据替代和仍缺证据的路线，用于避免重复花费计算/API预算。
+
 ## 当前科学状态
 
 - 北京报告 cohort：70 sessions、46 natural participants、1,400 probes；label 1 对 labels 2/3/4；C+B 主窗口 30 s，10/20 s 为行为敏感性；participant-disjoint 5-fold；这是当前北京 C+B 锚点，不是未来 Beijing+Zhuhai global folds。
@@ -50,11 +52,13 @@ tests/         schema/path/contract smoke checks
 
 ### 同事、新机器或新 AI agent
 
-第一份读：`docs/canonical/TEAMMATE_ONBOARDING_V1.md`。
+第一份读：`ANALYSIS_HISTORY_LEDGER.md`。
 
-第二份读：`docs/canonical/SCIENTIFIC_METHOD_REVIEW_V1.md`。
+第二份读：`docs/canonical/TEAMMATE_ONBOARDING_V1.md`。
 
-然后再进入 `docs/canonical/COMPETITION_DUAL_MACHINE_RUNBOOK_V1.md` 和具体 contract。这个顺序用于避免“环境装对了但科学协议跑错了”。
+第三份读：`docs/canonical/SCIENTIFIC_METHOD_REVIEW_V1.md`。
+
+然后再进入 `docs/canonical/COMPETITION_DUAL_MACHINE_RUNBOOK_V1.md` 和具体 contract。这个顺序用于同时避免“环境装对了但科学协议跑错了”和“历史上已经做过却再次重跑”。
 
 `TEAMMATE_ONBOARDING_V1.md` 明确说明：
 
