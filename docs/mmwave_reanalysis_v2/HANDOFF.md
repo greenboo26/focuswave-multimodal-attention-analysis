@@ -1,23 +1,18 @@
 # mmWave handoff — root-cause audit route
 
-Status: `ROOT_CAUSE_AUDIT_IN_PROGRESS_PARALLEL`
+Status: `OFFICIAL_REFERENCE_EXISTING_ROUTES_RETEST_COMPLETE_PARTIAL_STOP`
 
 Branch target: `codex/mmwave-formal-reanalysis-v2`
 
 Competition context: FocusWave / 厚粲杯心理学 × 人工智能测验产品。毫米波是多模态测量来源之一，不是整个项目的中心。
 
-## Why the route changed
+## Current conclusion
 
-Task 2S completed, but its result does not yet justify treating the HR algorithm line as fully explained. The central unresolved fact is the large discontinuity between historical and current benchmark results:
+The official AgeBalanced ECG FFT reference has now been applied to the previously tested development routes. The earlier 26.98–38.06 BPM values were produced with `ecg_reference_v1` and are superseded for AgeBalanced HR performance claims. Under the official reference, the comparable project route is 10.361 BPM pooled MAE at 30 s / 5 s; historical 25 s remains 10.493 BPM. Existing 50 s routes are near 9 BPM, but SSA+VMD's small MAE advantage is not stable across RMSE, extreme errors and lock counts.
 
-- historical 25 s development-equivalent session-MAE median ≈ **9.14 BPM**;
-- current 30 s product-window MAE ≈ **26.98 BPM**;
-- current 50 s project route MAE ≈ **29.02 BPM**;
-- current 60 s Task 2S project route MAE ≈ **37.12 BPM**.
+This handoff is therefore a completed development-only fairness retest. No new physiology optimization or held-out decision is authorized by this update.
 
-These values are not directly comparable because they differ in window construction, ECG scorer/reference, aggregation and session inclusion. Therefore the next authorized work is root-cause analysis, not another external algorithm trial.
-
-## Parallel tasks now active
+## Earlier audit task records
 
 Source-of-truth task documents:
 
@@ -55,6 +50,14 @@ The same 30 development participants / 60 Rest sessions, radar output, 5 s start
 - 30 s Official **10.361 / 8.575** (268 / 60; 100% / 100%); legacy **10.036 / 8.784** (268 / 60); `ecg_reference_v1` **26.983 / 13.803** (256 / 59; 95.5% / 98.3%).
 
 Official≈legacy is confirmed. Official versus `ecg_reference_v1` remains separated by 16.189 BPM (25 s) and 16.622 BPM (30 s) pooled MAE, confirming that the prior ~9→27 BPM discontinuity is primarily caused by the non-official `ecg_reference_v1` benchmark semantics, not window length. The AgeBalanced external HR contract is frozen to Official FFT as the unique primary reference; legacy is historical-only; `ecg_reference_v1` is internal QC/beat-only.
+
+## Existing routes retest under Official ECG — completed
+
+The already-tested AgeBalanced routes were rescored without changing radar algorithms or parameters. Official FFT results are: 30 s project **10.361 BPM pooled MAE / 8.575 median session-MAE** (268/268 windows, 60/60 sessions); 50 s project **9.292 / 7.813** (88/88, 60/60); 50 s SSA+VMD adapted **9.012 / 5.253** (88/88, 60/60); 60 s project **8.273 / 6.517** (14/14, 14 complete sessions); 60 s Lei SSA adapted **8.670 / 7.450** (14/14, 14 complete sessions). The 25 s official historical diagnostic remains **10.493 / 9.296** (328/328, 60/60).
+
+The former `ecg_reference_v1` values 26.983 (30 s), 29.02/28.12 (50 s project/SSA+VMD), and 37.1163/38.0582 (60 s project/Lei SSA) are superseded for AgeBalanced HR performance claims. They reflect the wrong external benchmark reference, not a demonstrated radar degradation. The 50 s SSA+VMD pooled MAE difference is only 0.280 BPM and is offset by worse RMSE, more extreme errors and a two-times lock; it is not a stable improvement. The 60 s comparison is limited by only 14 complete sessions. See `OFFICIAL_REFERENCE_EXISTING_ROUTES_RESULT.md`.
+
+Recommendation after this fairness retest: retain the existing project route with Official AgeBalanced ECG as the interpretable 30 s benchmark; do not start another mmWave physiology task or held-out run automatically. Signal/quality/motion features remain supporting modality evidence.
 
 ## Task A — benchmark discontinuity
 
@@ -119,6 +122,7 @@ Primary review must choose exactly one:
 - 25 s historical-equivalence development result: session-MAE median 9.14 BPM.
 - P003 field-level smoke test matched historical source commit `f4a8c74`.
 - 30 s current result: coverage 95.5%, MAE 26.98, median AE 13.79, RMSE 41.13 BPM.
+- The 26.98 BPM figure is superseded for AgeBalanced HR performance by the official-reference result above; it remains only as reference-sensitivity evidence.
 
 ### Task 2R
 
@@ -131,6 +135,8 @@ Primary review must choose exactly one:
 - 60 s project route: MAE 37.1163 BPM on 12 ECG-QC-scored complete-session windows.
 - Lei 2025 SSA core adapted route: MAE 38.0582 BPM.
 - No multi-metric rescue; AgeBalanced has no RSP, so respiratory-harmonic removal itself was not directly reference-assessable.
+
+The 60 s values above are also superseded for AgeBalanced HR performance by the Official FFT rescore (8.273 / 8.670 BPM); the old values remain as `ecg_reference_v1` sensitivity diagnostics.
 
 These results motivate the root-cause audit; they do not by themselves identify the cause of the historical-to-current discontinuity.
 

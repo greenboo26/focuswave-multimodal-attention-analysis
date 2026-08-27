@@ -31,6 +31,7 @@
 - 毫米波任务2已完成但状态为 `BLOCKED`：唯一允许的 SSA+VMD 外部路线的公开 `L=400` 参数不适配冻结 30 s 输入，未生成外部 development score；建议 `DOWNGRADE_PHYSIOLOGY`，保留信号级 supporting route。
 - Task 2R 50 s development 同条件比较已完成：项目方案 MAE 29.02，SSA+VMD adapted MAE 28.12，均 coverage 92.05%，未达到 HR gate；锁频总数未下降。状态 `PARTIAL`，建议 `DOWNGRADE_PHYSIOLOGY`，不自动进入 80 人。
 - Task 2S Lei 2025 SSA 核心 60 s development 比较已完成：实际 14 个 session 有完整 60 s 输入，项目路线 12/14 scored、MAE 37.12；Lei SSA 12/14 scored、MAE 38.06，coverage 不变但 RMSE/相关性/P90 恶化，未达到约 20% 一致改善门槛。状态 `PARTIAL`，建议 `STOP_PHYSIOLOGY_RND`，不自动进入 80 人。
+- Issue #9 后续官方 AgeBalanced ECG reference 已用于既有路线公平重测：30 s project route 为 10.361 BPM pooled MAE / 8.575 median session-MAE；50 s project/SSA+VMD 为 9.292/7.813 与 9.012/5.253；60 s project/Lei SSA 为 8.273/6.517 与 8.670/7.450，但60 s仅14个完整session。此前使用 `ecg_reference_v1` 的约27–38 BPM数字对AgeBalanced HR性能判断已标记 `SUPERSEDED`。不自动启动新毫米波任务或80人。
 - BR→HR→HRV 分层冻结；HRV 仍为 `BLOCKED`，正式 cohort 只能在外部 ECG/RSP benchmark 门通过后进入。
 
 ## J 盘目标锁定审计

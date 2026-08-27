@@ -6,6 +6,26 @@
 
 ---
 
+## 2026-08-27 — fix(mmwave): rescore existing AgeBalanced routes with official ECG reference
+
+### 背景
+
+Issue #9 confirmed that the large 9–10 to 27–38 BPM discontinuity was driven primarily by using `ecg_reference_v1` instead of the AgeBalanced official ECG FFT benchmark reference.
+
+### 改动
+
+- 复用此前已运行的 project、SSA+VMD adapted 和 Lei SSA adapted 路线，仅替换 AgeBalanced HR 评分端点为官方 Zenodo 16760684 `ExampleCode.ipynb` ECG FFT。
+- 仅使用 development 30 participants；覆盖25/30/50/60 s既有路线；不读取80人、`J:\\Data`、HRV，不引入新算法族。
+- 新增公平重测结果、路由清单、Git-safe provenance 和结果状态；旧 `ecg_reference_v1` 数字保留为 sensitivity evidence，不再作为AgeBalanced HR性能结论。
+
+### 验证
+
+- 30 s project route：10.361 pooled MAE / 8.575 median session-MAE；50 s project/SSA+VMD：9.292/7.813 与 9.012/5.253；均为development-only。
+- 50 s SSA+VMD仅比项目路线低0.280 BPM pooled MAE，但RMSE、极端误差和锁频不支持稳定改进；60 s比较仅14个完整session。
+- 状态 `PASS_DEVELOPMENT_ONLY_STOP`；完成后停止，不自动创建新的毫米波任务。
+
+---
+
 ## 2026-08-27 — result(mmwave): complete bounded Task 2S Lei-2025 SSA comparison
 
 ### 背景

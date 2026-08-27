@@ -65,3 +65,7 @@ Local derived outputs are not committed. Their hashes are:
 - `task2r_config.json`: `4d4694786e952d42f65468da6c063e570796384e1ff5295353679d4e1a24f4ce`
 
 Task 2R is complete. Stop here; do not automatically run 80-person held-out or any later calibration.
+
+## Official AgeBalanced ECG correction
+
+The values in this historical Task 2R report used `ecg_reference_v1` and are retained only as reference-sensitivity diagnostics. The same 50 s radar outputs and routes were rescored with the frozen Official AgeBalanced ECG FFT: project route **9.292 BPM pooled MAE / 7.813 median session-MAE**; SSA+VMD adapted **9.012 / 5.253**; both 88/88 windows and 60/60 sessions. These corrected values supersede 29.02 / 28.12 for AgeBalanced HR performance claims. The small 0.280 BPM pooled difference is not stable across RMSE, extreme errors or lock counts; see `OFFICIAL_REFERENCE_EXISTING_ROUTES_RESULT.md`.

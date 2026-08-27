@@ -52,3 +52,7 @@ B 实现了论文公开的核心结构：`L=floor(n/2)`；第一次 SSA 前两�
 - config：`configs/mmwave_reanalysis_v2/task2s_lei2025_ssa_harmonic_removal_v1.json`
 - schema outputs：`D:\Project\厚粲杯\11_数据\derived\mmwave_reanalysis_v2_task2s_lei2025_60s_20260827_schema\method_native_lei2025_60s_project_rows.jsonl` 与 `method_native_lei2025_60s_lei_rows.jsonl`
 - summary：`D:\Project\厚粲杯\11_数据\derived\mmwave_reanalysis_v2_task2s_lei2025_60s_20260827_schema\task2s_summary.json`
+
+## Official AgeBalanced ECG correction
+
+The 37.1163 / 38.0582 BPM values above used `ecg_reference_v1` and are not valid AgeBalanced HR performance values. With the frozen Official AgeBalanced ECG FFT, the same 60 s derived-input route gives project **8.273 BPM** and Lei SSA adapted **8.670 BPM** pooled MAE, each 14/14 attempted windows from only 14 complete 60 s sessions. The old values remain only as reference-sensitivity diagnostics; this small 60 s subset is not a basis for generalization.
