@@ -1,0 +1,1 @@
+Task B source-of-truth pointer only. See `PARALLEL_WORKSTREAMS_2026-08-27.md` Workstream B.
