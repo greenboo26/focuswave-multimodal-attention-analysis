@@ -6,6 +6,25 @@
 
 ---
 
+## 2026-08-27 — feat(mmwave): execute bounded Phase 2B-1 historical-baseline reproduction
+
+### 背景
+
+在不改写 Phase 2A Decision V1、且不访问 held-out、`J:\\Data`、HRV 或新候选算法的限制下，需要验证统一 benchmark 基础设施能否承载历史 AgeBalanced baseline。
+
+### 改动
+
+- 实现并测试 `ecg_reference_v1`，新增历史 baseline adapter、冻结配置哈希和 30 s `per_window_benchmark_v1` 输出。
+- 开发集（30 participants/60 Rest sessions）完成 25 s/5 s 历史等价性诊断及 30 s/5 s schema-valid baseline；原始逐窗口输出只保留本地 Git-safe provenance/hash。
+- 新增 Phase 2B-1 差异审计，明确 25 s window 与 V1 schema 不兼容，以及历史 quality/harmonic aggregation 的 `MISSING_EVIDENCE`。
+
+### 验证
+
+- `ecg_reference_v1` 测试通过；开发集 60/60 session 的 full-session ECG QC 通过；30 s 输出逐行通过 schema 验证。
+- 本阶段状态 `PARTIAL_DEVELOPMENT_ONLY`：没有将 60-session 结果虚报为全体 220-session 复现，也没有更改任何 frozen threshold/split/QC。
+
+---
+
 ## 2026-08-27 — docs(mmwave): freeze Phase 2A benchmark contract before held-out scoring
 
 ### 背景

@@ -1,6 +1,6 @@
 {
   "schema_version": "focuswave-mmwave-formal-reanalysis-v2-manifest",
-  "status": "PASS_PHASE_2A_BENCHMARK_CONTRACT_FROZEN",
+  "status": "PARTIAL_PHASE_2B_1_DEVELOPMENT_BASELINE_REPRODUCED",
   "branch": "codex/mmwave-formal-reanalysis-v2",
   "base_repository": "greenboo26/focuswave-multimodal-attention-analysis",
   "base_commit": "eeb9954358d8074d53ff6a17cf4ade620f17e604",
@@ -9,7 +9,8 @@
   "benchmark_contract": "configs/mmwave_reanalysis_v2/benchmark_decision_v1.json",
   "per_window_schema": "schemas/mmwave/per_window_benchmark_v1.schema.json",
   "held_out_scoring_started": false,
-  "phase_2b_authorized": false,
+  "phase_2b_authorized": true,
+  "phase_2b1_execution": "completed_development_only; see docs/mmwave_reanalysis_v2/PHASE2B1_HISTORICAL_BASELINE_REPRODUCTION.md",
   "formal_cohort_execution_authorized": false,
   "hrv_authorized": false,
   "primary_window_s": 30,

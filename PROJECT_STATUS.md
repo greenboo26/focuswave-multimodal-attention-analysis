@@ -27,7 +27,7 @@
 - 独立分支 `codex/mmwave-formal-reanalysis-v2` 建立第一阶段资产审计与执行体系；不覆盖旧 C1/M1/C2B/C2C/v1-v9/C1b 结果。
 - 新增 `docs/mmwave_reanalysis_v2/`：evidence ledger、dataset/method/parameter/failure matrices、benchmark plan、validation gates、formal cohort plan、open gaps 和 handoff。
 - Phase 2A 状态 `PASS`：`BENCHMARK_DECISION_V1` 已在 held-out 评分前冻结；AgeBalanced 110/440 与历史 220 Rest sessions 已完成逐文件 provenance 对账；统一 per-window schema 和测试已落地。
-- 尚未执行 historical baseline reproduction、候选算法 benchmark 或任何 held-out 评分；Phase 2B 必须等待下一轮明确授权。
+- Phase 2B-1 为 `PARTIAL`：仅在冻结 development split 完成历史 25 s 等价性诊断（60 Rest sessions；session-MAE median 9.14 BPM）和 schema-valid 30 s baseline（256/268 scored；median AE 13.79 BPM）。25 s 与 V1 schema 窗口枚举不兼容；完整 220-session 历史复现仍需明确 held-out 授权。详见 `docs/mmwave_reanalysis_v2/PHASE2B1_HISTORICAL_BASELINE_REPRODUCTION.md`。
 - BR→HR→HRV 分层冻结；HRV 仍为 `BLOCKED`，正式 cohort 只能在外部 ECG/RSP benchmark 门通过后进入。
 
 ## J 盘目标锁定审计

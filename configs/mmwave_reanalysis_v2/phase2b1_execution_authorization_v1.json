@@ -1,0 +1,21 @@
+{
+  "phase": "2B-1 Historical Baseline Reproduction",
+  "status": "PARTIAL_DEVELOPMENT_ONLY",
+  "authorization": "Explicit user authorization dated 2026-08-27",
+  "allowed": [
+    "ecg_reference_v1 implementation and tests",
+    "historical AgeBalanced baseline on frozen development participants only",
+    "25 s / 5 s historical-equivalence diagnostic",
+    "30 s / 5 s schema-valid development baseline"
+  ],
+  "prohibited": [
+    "held_out participants",
+    "new candidate algorithms",
+    "formal J:\\Data cohort",
+    "HRV computation or validation",
+    "modifying Phase 2A Decision V1 thresholds, QC, or split"
+  ],
+  "contract_exception": {
+    "legacy_equivalence_25s": "diagnostic only; it is not a per_window_benchmark_v1 artifact because frozen schema window_length_s excludes 25"
+  }
+}
