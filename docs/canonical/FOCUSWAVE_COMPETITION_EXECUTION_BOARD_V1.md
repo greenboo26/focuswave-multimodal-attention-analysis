@@ -9,7 +9,7 @@ Status: `ACTIVE_EXECUTION_BOARD`
 | A. NIR producer | RUNNING / REPAIRING | 修复后批量重跑 | 汇总 coverage / failure / quality | 有稳定派生特征 + 质量字段 + 可用率报告 |
 | B. Behavior / probe | ACTIVE | 保持 canonical 主分析 | 整合 time-on-task、vigilance、RT/RTV、错误 | 形成不依赖生理模态也成立的测验骨架 |
 | C. 事后问卷 | ACTIVE / NEEDS_INTEGRATION | 整理效标与条目语义 | 对接整体专注、疲劳、走神、持续时间等产品指标 | 形成外部效标/收敛效度表，不夸大为标准化量表 |
-| D. mmWave | TASK2 COMPLETE / BLOCKED | SSA+VMD 因论文参数与 30s/10Hz 输入不兼容而停止；HR 当前不得作为已验证产品输出 | 跳过外部算法继续搜索与 80 人算法考试，进入一次 RS6240 + BIOPAC 设备匹配校准 | 在约10小时上限内确定 HR、BR 各自是 physiology 输出还是 supporting signal；HRV 非必需 |
+| D. mmWave | TASK2R READY | Task 2 在30s条件下因 SSA `L=400` 与300点输入不兼容而停止；该结果不否定外部方法 | 在 AgeBalanced development 30 人上续跑 50s method-native comparison：项目历史方案 vs SSA+VMD | 若50s比较可复现且至少一个方案值得外部泛化，再进入80 held-out；否则停止 physiology 算法扩展 |
 | E. 多模态 AI | WAITING_FOR_MODALITY_OUTPUTS | 保持 folds/cohort 规则 | Behavior-only → +NIR → +RGB → +mmWave → multimodal | 同 folds OOF 证明是否存在稳定增量价值 |
 | F. 信度/效度 | ACTIVE DESIGN | 证据框架已确定 | 汇总重复被试、阶段稳定性、probe、行为、问卷、增量效度 | 至少一类可靠性证据 + 两类方向一致效度证据支撑核心产品输出 |
 | G. 产品评分 | NOT_YET_NAMED | 暂不提前命名 | 等信效度结果后定义核心分数与探索性分数 | 每个核心分数可解释、可追溯、有质量提示 |
@@ -28,17 +28,18 @@ mmWave可信变量 ────────┤
 
 ## 当前最近三个关键节点
 
-### 节点 1 — mmWave 设备匹配校准
+### 节点 1 — mmWave 50 s 外部方法续跑
 
-Task 2 已结束：外部 SSA+VMD 路线是 `BLOCKED`，原因是可恢复论文参数要求 SSA `L=400`，而当前 30 s / 10 Hz 输入只有约 300 点；在没有作者代码或参数依据的情况下，不为完成任务擅自改 `L`、补零或改变重构规则。
+Task 2 的 `BLOCKED` 只发生在 **30 s 输入条件**：30 s × 10 Hz 约300点，而已恢复 SSA 参数要求 `L=400`。因此它不能解释为“SSA+VMD 无效”或“毫米波 HR 已经判死”。
 
-这不是“SSA+VMD 很差”，也不是“毫米波绝对测不了 HR”。比赛路线因此改为：
+现在采用双轨窗口：
 
-- 停止继续搜索新的外部算法家族；
-- 暂不进行 80 held-out 算法考试，因为当前没有值得晋级的外部候选；
-- 直接用本项目自己的 RS6240 与同步 BIOPAC ECG/RSP 做一次设备匹配校准；
-- HR 与 BR 分开决定：谁通过可信度验证就保留谁，谁不过就降级；
-- 若设备匹配校准仍不能支持可靠生理量，则正式停止 physiology 研发，把 mmWave 保留为 motion / phase / quality 等 supporting signal。
+- **30 s**：FocusWave 产品/主分析窗口，继续保留，不因外部论文改变；
+- **50 s**：AgeBalanced 外部方法原生比较窗口，用于尽量按论文公开参数运行 SSA+VMD。
+
+50 s 比较必须让项目历史方案和 SSA+VMD 都在相同 50 s / 5 s、相同 development 30 人、相同 ECG reference 下运行。不能拿项目30s结果直接和外部50s结果排名。
+
+若 development 50s 显示至少一个可复现方案值得继续，才进入80 held-out，并用已经确定的50s配置一次性外部验证；否则不为形式完整强行跑80。
 
 ### 节点 2 — NIR 重跑结束
 
@@ -63,16 +64,21 @@ Task 2 已结束：外部 SSA+VMD 路线是 `BLOCKED`，原因是可恢复论文
 
 问卷用于效度和解释，不直接泄漏到 probe 标签预测。
 
-## mmWave 当前决定
+## mmWave 当前证据层级
 
-Task 2 的 `DOWNGRADE_PHYSIOLOGY` 解释为**当前产品声明降级**，而不是永久科学结论：
+### AgeBalanced
 
-- 当前不得宣称 mmWave HR 已验证；
-- 当前不得将 HR/HRV 作为核心心理测量变量；
-- 允许一次设备匹配的 ECG/RSP 校准作为最后高收益检查；
-- 若仅 BR 通过，则产品只保留 BR 生理解释；若仅 HR 通过，则只保留 HR；
-- 若二者都不过，则 mmWave 只进入信号级 supporting features；
-- HRV 只有逐搏验证自然通过时才考虑，否则不输出。
+110 个不同参与者，具有 ECG，可承担 HR 的多被试外部泛化证据。当前 30/80 participant split 保留：30 development，80 held-out。
+
+### 本地 RS6240 + BIOPAC
+
+已核对 `kyandi233-dev/FocusWave@ecg`：
+
+- `11-calibrate-mmwave-ecg.py`：静息5min → 深呼吸2min → 屏息45s → 静息5min；
+- `12-test-breath-focus.py`：同一被试机械按键 vs 专注 SART 交替；
+- 两者都是专门机制/校准程序，与正式实验不同。
+
+因此本地 BIOPAC 数据定位为**设备/机制/压力测试证据**，可用于理解呼吸谐波、屏息、明显生理变化和动作条件，但不能替代 AgeBalanced 的跨被试外部有效性证据，也不能单独决定产品级 HR/BR 是否成立。
 
 ## 比赛级止损规则
 
@@ -80,8 +86,9 @@ Task 2 的 `DOWNGRADE_PHYSIOLOGY` 解释为**当前产品声明降级**，而不
 - 复杂 AI 不稳定优于简单模型：保留简单模型；
 - 心理指标信度不足：只称动态状态，不称能力/特质；
 - 只有单一证据来源支持的产品分数：标探索性；
-- 毫米波超出约10小时完善预算：停止新增算法家族；
-- Task 2 后不再为外部方法改 benchmark 规则或开放式搜索参数；
+- 毫米波总研究/完善预算约10小时；
+- 允许50s论文原生外部比较，但不开放无限算法家族搜索；
+- 50s外部结果不能冒充30s产品性能；
 - HRV 未通过逐搏验证：不输出 HRV。
 
 ## 比赛最终最小可交付版本
