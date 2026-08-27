@@ -1,0 +1,41 @@
+{
+  "task": "Task 2S",
+  "status": "COMPLETED_PARTIAL_DEVELOPMENT_ONLY_STOP_PHYSIOLOGY_RND",
+  "result": "docs/mmwave_reanalysis_v2/TASK2S_LEI2025_SSA_HARMONIC_REMOVAL_RESULT.md",
+  "execution_output": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_reanalysis_v2_task2s_lei2025_60s_20260827_schema",
+  "config_sha256": "76d1913c6bf1d1907e0b48b6841965a80373b3939ab4db96dd0d0f032ae7478a",
+  "implementation": "pipelines/mmwave/lei2025_ssa_harmonic_removal_v1.py",
+  "runner": "scripts/mmwave_reanalysis_v2/run_task2s_lei2025_60s_v1.py",
+  "dataset": "AgeBalanced_60GHz",
+  "split": "development",
+  "participants": 30,
+  "session_scope": "Lying/Rest and Sitting/Rest",
+  "window_s": 60,
+  "step_s": 5,
+  "radar_sampling_rate_hz": 10,
+  "reference": "ecg_reference_v1",
+  "comparison": {
+    "A": "project_historical_route_60s",
+    "B": "project_route_plus_lei2025_ssa_core_adapted"
+  },
+  "ssa": {
+    "L": "floor(n/2)",
+    "first_rank": 2,
+    "harmonics": [2, 3],
+    "amplitude_rule": "std(first_two_SSA_respiratory_components)",
+    "phase_rule": "zero_phase",
+    "second_ssa_harmonic_components": 2,
+    "denoise_rule": "singular_value_ge_all_singular_value_mean"
+  },
+  "harmonic_lock": {
+    "hr_proxy_classes": ["two_x", "half_x", "none"],
+    "respiratory_harmonic": "NOT_ASSESSABLE_WITHOUT_RSP"
+  },
+  "evidence_limits": [
+    "paper_reimplementation/adapted; author code unavailable",
+    "amplitude/phase and exact component-index rule are missing evidence",
+    "development-only; no held-out participants",
+    "no RSP, therefore no BR validation",
+    "not a product-window contract"
+  ]
+}

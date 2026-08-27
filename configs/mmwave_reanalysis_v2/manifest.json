@@ -1,6 +1,6 @@
 {
   "schema_version": "focuswave-mmwave-formal-reanalysis-v2-manifest",
-  "status": "PARTIAL_TASK2R_50S_DEVELOPMENT_COMPARISON_COMPLETE",
+  "status": "PARTIAL_TASK2S_60S_DEVELOPMENT_COMPARISON_COMPLETE_STOP_PHYSIOLOGY_RND",
   "branch": "codex/mmwave-formal-reanalysis-v2",
   "base_repository": "greenboo26/focuswave-multimodal-attention-analysis",
   "base_commit": "eeb9954358d8074d53ff6a17cf4ade620f17e604",
@@ -13,6 +13,7 @@
   "phase_2b1_execution": "completed_development_only; see docs/mmwave_reanalysis_v2/PHASE2B1_HISTORICAL_BASELINE_REPRODUCTION.md",
   "task_2_execution": "completed_blocked; see docs/mmwave_reanalysis_v2/TASK2_EXTERNAL_REFERENCE_SPRINT_RESULT.md",
   "task_2r_execution": "completed_partial_development_only; see docs/mmwave_reanalysis_v2/TASK2R_EXTERNAL_REFERENCE_50S_RESULT.md",
+  "task_2s_execution": "completed_partial_development_only_stop_physiology_rnd; see docs/mmwave_reanalysis_v2/TASK2S_LEI2025_SSA_HARMONIC_REMOVAL_RESULT.md",
   "formal_cohort_execution_authorized": false,
   "hrv_authorized": false,
   "primary_window_s": 30,

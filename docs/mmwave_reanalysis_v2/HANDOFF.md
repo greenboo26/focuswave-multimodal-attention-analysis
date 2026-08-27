@@ -1,6 +1,6 @@
 # mmWave handoff — competition-bounded route
 
-Status: `TASK2R_COMPLETED_PARTIAL_DOWNGRADE_PHYSIOLOGY`
+Status: `TASK2S_COMPLETED_PARTIAL_STOP_PHYSIOLOGY_RND`
 
 Branch target: `codex/mmwave-formal-reanalysis-v2`
 
@@ -81,15 +81,7 @@ Competition context: FocusWave / 厚粲杯心理学 × 人工智能测验产品�
 
 ## 当前下一步
 
-执行 `TASK2R_EXTERNAL_REFERENCE_50S_CONTINUATION.md`：
-
-1. 只用 AgeBalanced development 30 人；
-2. 50 s / 5 s；
-3. 项目历史方案 + SSA+VMD 同条件运行；
-4. 不看80；
-5. 不访问 `J:\Data`；
-6. 不扩第二个外部算法家族；
-7. 完成后只决定是否值得进入80 held-out。
+Task 2S 已完成并停止。没有下一步自动执行项；任何重新进入外部方法或 80 held-out 的工作都必须由新的明确任务授权。
 
 主线程建议 GPT-5.6 Terra / medium；默认不使用 Sol/high。
 
@@ -100,3 +92,11 @@ Competition context: FocusWave / 厚粲杯心理学 × 人工智能测验产品�
 - SSA+VMD `paper_reimplementation/adapted`：81/88 scored，coverage 92.05%，MAE 28.12、median AE 15.74、RMSE 41.72 BPM；MAE 改善 0.90 BPM，但未达到 HR gate，锁频总数未下降。
 - 推荐 `DOWNGRADE_PHYSIOLOGY`；50 s 不作为 30 s 产品 claim，任务完成后停止，不自动进入 80 人。
 - 详见 `TASK2R_EXTERNAL_REFERENCE_50S_RESULT.md`。
+
+## Task 2S 结果
+
+- 已在 AgeBalanced development 30 人的 60 个 Rest session 上完成 60 s / 5 s 项目历史路线 vs Lei 2025 SSA 核心适配路线的限定比较。
+- 实际 14 个 session 有完整 60 s 输入；两条路线均 12/14 scored，coverage 85.71%。项目 MAE 37.1163 BPM，Lei SSA MAE 38.0582 BPM；RMSE 49.1288 vs 52.1817，Pearson 0.5123 vs 0.2470，P90 77.1656 vs 84.7620，均未改善；median AE 单项由 22.1045 降至 17.8957 BPM，half-frequency locks 由 0 增至 2。
+- 作者代码、增强正弦的唯一幅相规则和精确二次 SSA 分量索引仍是 `MISSING_EVIDENCE`；本轮按预先记录的非 ECG 驱动最小适配规则执行，不能称为官方复现。
+- AgeBalanced 无 RSP，BR 与 respiratory-harmonic 不能评分。任务状态 `PARTIAL_DEVELOPMENT_ONLY_STOP_PHYSIOLOGY_RND`；不自动进入 80 人、不访问 `J:\Data`、不恢复 HRV。
+- 详见 `TASK2S_LEI2025_SSA_HARMONIC_REMOVAL_RESULT.md`；本轮完成后停止。

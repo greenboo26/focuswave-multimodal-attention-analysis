@@ -6,6 +6,25 @@
 
 ---
 
+## 2026-08-27 — result(mmwave): complete bounded Task 2S Lei-2025 SSA comparison
+
+### 背景
+
+Task 2R 的 adapted SSA+VMD 不能代表 Lei 2025 的 SSA 呼吸谐波去除核心，因此按单一外部参考任务补做 60 s method-native development comparison。
+
+### 改动
+
+- 新增 Lei 2025 SSA 核心的 `paper_reimplementation/adapted` 实现、测试、runner、配置和结果报告。
+- 仅使用 AgeBalanced development 30 人/60 Rest session，60 s/5 s；不改变 Phase 2A contract，不访问 held-out、`J:\\Data`、BR 或 HRV。
+- 作者代码及论文未唯一规定的幅相/分量选择保留为 `MISSING_EVIDENCE`，结果只作为限定开发证据。
+
+### 验证
+
+- 14 个 session 有完整 60 s 输入，12 个窗口通过统一 ECG QC；项目 MAE 37.1163，Lei SSA MAE 38.0582 BPM，coverage 均 85.71%。
+- Lei 路线未达到约 20% 一致改善门槛，且 RMSE、相关性、P90 恶化；状态 `PARTIAL_DEVELOPMENT_ONLY_STOP_PHYSIOLOGY_RND`，完成后停止，不自动进入80人。
+
+---
+
 ## 2026-08-27 — result(mmwave): complete bounded Task 2R 50 s comparison
 
 ### 背景

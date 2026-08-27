@@ -1,6 +1,6 @@
 # 毫米波 Task 2S：Lei 2025 SSA 呼吸谐波去除最后验证
 
-Status: `READY_TO_DISPATCH`
+Status: `COMPLETED_PARTIAL_DEVELOPMENT_ONLY_STOP_PHYSIOLOGY_RND`
 
 Competition context: FocusWave / 厚粲杯心理学 × 人工智能测评产品。
 
