@@ -4,7 +4,9 @@
 
 中央跨 AI 治理唯一来源是 `greenboo26/ai-governance@main`；workspace 注册表是 `greenboo26/project@august/PROJECT_INDEX.md`。本文件是项目级规则，可在中央 hard-rule 边界内做项目 specialization，但不是全局治理源。
 
-本仓库是 FocusWave 正式中央分析仓库，不是原始数据仓库，也不是单一毫米波 HRV 项目。任何机器 clone 后，先读取 `AI_PROJECT.md`、本文件、根目录 `README.md`、`PROJECT_STATUS.md`、相关 analysis card/contract；执行已完成本地分析的规范化复现时，再读取 `docs/repository/LOCAL_ANALYSIS_REPRODUCTION_RUNBOOK_V1.md`。
+本仓库是 FocusWave 正式中央分析仓库，不是原始数据仓库，也不是单一毫米波 HRV 项目。任何机器 clone 后，先读取 `AI_PROJECT.md`、本文件、根目录 `ANALYSIS_HISTORY_LEDGER.md`、`README.md`、`PROJECT_STATUS.md`、相关 analysis card/contract；执行已完成本地分析的规范化复现时，再读取 `docs/repository/LOCAL_ANALYSIS_REPRODUCTION_RUNBOOK_V1.md`。
+
+`ANALYSIS_HISTORY_LEDGER.md` 是任何新算法、新特征、新 producer 改动或高成本重跑前的强制 Reuse Gate。必须先检查同类路线是否已经运行、采用、回退、被后续证据替代或存在 `MISSING_EVIDENCE`。若要重复已有路线，任务开头必须写明旧证据为什么不能回答当前问题；写不出来时默认不重复计算。
 
 机器外层的个人工作区规范（例如父目录 AGENTS/项目管理规范）如果存在可以补充读取，但不得作为本仓库可执行性的必需依赖。本仓库不得要求另一台机器存在某个固定 `D:\...` 工作区文件。
 
@@ -27,3 +29,4 @@
 - 新增路径必须更新 architecture/runbook/registry，并执行 Python syntax/tests、JSON/CSV/path smoke checks、`git diff --check` 与敏感文件扫描。
 - 规范化复跑成功后必须写 `canonical_run_manifest.json`；随后用 `scripts/canonical/compare_reproduction.py` 对照已接受 aggregate package。equivalence 未通过前不得提升为 `CANONICAL_EXECUTABLE`。
 - 提交前检查 staged paths，确认无 raw/row-level 数据和机器私有 paths config。
+- 任何实际运行若产生“采用 / 放弃 / 结果无效 / reference 被替代 / 输入语义修复”等新历史决策，同一次交付必须更新 `ANALYSIS_HISTORY_LEDGER.md`，避免后续智能体重复运行。
