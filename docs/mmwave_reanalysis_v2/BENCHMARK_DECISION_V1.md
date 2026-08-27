@@ -8,10 +8,15 @@ Machine contract: `configs/mmwave_reanalysis_v2/benchmark_decision_v1.json`
 
 This decision freezes Phase 2 benchmark rules before historical baseline reproduction or any new held-out candidate score is inspected. It does not authorize Phase 2B, formal `J:\Data` analysis, HRV, or a candidate-method benchmark.
 
+Amendment note: before any held-out result was generated or inspected, the held-out-use wording was clarified. The 30/80 participant split is unchanged. Pre-registered, fully frozen methods may all be evaluated once on the same 80 held-out participants for a final head-to-head comparison. Held-out results may report comparative ranking, but they may not trigger retuning, QC/threshold/delay changes, candidate-set changes, or a second claim of untouched held-out validation. If a primary confirmatory method is needed for a scientific claim, it must be designated before held-out scoring; other frozen methods are secondary comparative benchmarks.
+
 ## Frozen cohort and split
 
 - AgeBalanced primary benchmark: all 110 participants, exactly the two `Rest` sessions per participant (`Lying/Rest`, `Sitting/Rest`), 220 sessions. The 220 Post-exercise sessions are a separately labelled stress sensitivity set and cannot be pooled into primary selection.
 - The participant split is frozen in `configs/mmwave_reanalysis_v2/agebalanced_split_v1.json`: seed `20260827`; deterministic SHA-256 ranking; 30 development participants and 80 held-out participants. Every session/window from one participant stays in one split.
+- Development participants are the only data allowed for adapter implementation, hyperparameter tuning, fixed-delay calibration, method-specific rule development, or any other change to a method/configuration.
+- The 80 held-out participants form one untouched final comparison cohort. Every method evaluated there must have its method identity, parameters, config hash, QC, thresholds, delay rule and output contract frozen before held-out scoring begins.
+- Multiple pre-registered frozen methods may be scored on the same 80 held-out participants to support a final head-to-head benchmark. This does not authorize any post-held-out retuning or candidate-set revision.
 - VS_DATASET is a secondary external generalization source only when its 48 source pairs and hashes are available. It does not replace the AgeBalanced held-out comparison.
 - RS6240 ECG/RSP calibration is a device-matched validation source only after its raw-to-derived session linkage is frozen.
 - Sources without raw RSP cannot score BR. Sources without QC-passed ECG-derived beats cannot score beat endpoints. HRV remains unauthorized.
@@ -41,7 +46,13 @@ Radar quality strata are reference-blind. The common QC target is the maximum re
 
 Every endpoint reports coverage, MAE, median AE, RMSE, Pearson and Spearman correlation, Bland–Altman bias/limits, 90th-percentile AE and quality strata. Beat endpoints add precision, recall, F1, timing MAE and IBI agreement. Confidence intervals use 2,000 participant-cluster bootstrap resamples with seed `20260827`.
 
-Hard thresholds are frozen in `VALIDATION_THRESHOLD_JUSTIFICATION.md` and the machine contract. HR and BR are selected separately. An algorithm must first have a usable license/permission, reproducible provenance, fixed config hash, schema-valid output, and pass every endpoint-specific hard gate. Among eligible methods, the primary rank is held-out participant-macro MAE. A difference below 0.5 bpm/rpm whose paired participant-bootstrap 95% CI includes zero is a tie; the tie-break order is existing validated implementation, clear permissive license, lower compute, then fewer device assumptions. Held-out results cannot trigger retuning.
+Hard thresholds are frozen in `VALIDATION_THRESHOLD_JUSTIFICATION.md` and the machine contract. HR and BR are evaluated separately. An algorithm must first have usable license/permission, reproducible provenance, a fixed config hash and schema-valid output before entering the held-out comparison.
+
+The 80-participant held-out cohort is a one-shot final comparison set for methods that were pre-registered and frozen before scoring. Participant-macro MAE is the primary comparative ranking metric among methods that satisfy the predeclared eligibility and endpoint gates. A difference below 0.5 bpm/rpm whose paired participant-bootstrap 95% CI includes zero is a tie; the tie-break order is existing validated implementation, clear permissive license, lower compute, then fewer device assumptions.
+
+Held-out ranking is a valid final head-to-head benchmark result, but it cannot trigger any change to method parameters, preprocessing, QC, thresholds, fixed delay, candidate membership, or ranking rules. Any method changed after held-out results are inspected is a new development iteration and cannot reuse the same 80 participants as an untouched confirmatory test.
+
+If a later paper/product claim requires one **primary confirmatory method**, that primary method must be designated before held-out scoring. Other pre-registered frozen methods may still be reported on the same held-out cohort as **secondary comparative benchmarks**. A secondary method outperforming the primary on held-out data may be reported as such, but it does not retroactively become a pre-specified confirmatory primary.
 
 ## Harmonic-lock definition
 
