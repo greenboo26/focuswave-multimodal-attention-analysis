@@ -149,7 +149,7 @@ AI 的核心不定义为“用了复杂毫米波信号算法”，而定义为�
 1. **数据可用性**：NIR/RGB producer 修复与正式可用率；
 2. **心理测量主干**：Behavior + probe + 事后问卷；
 3. **AI 基线与增量分析**：Behavior-only → 单模态增量 → multimodal；
-4. **mmWave 必要可信度验证**：决定它是 physiology 还是 supporting signal；
+4. **mmWave 必要可信度验证**：决定哪些毫米波变量有资格进入多模态；
 5. **信度/效度证据整合**；
 6. **产品级评分与解释**；
 7. **展示、案例和答辩材料**。
@@ -211,29 +211,58 @@ AI 的核心不定义为“用了复杂毫米波信号算法”，而定义为�
 
 ## 8. 毫米波 10 小时上限路线
 
-当前已完成：
+### 8.1 已完成
 
 - 历史资产/证据整理；
-- AgeBalanced benchmark 规则确定；
+- AgeBalanced 110 人数据对账与 30 development / 80 held-out participant split；
 - ECG reference v1 实现；
 - 项目历史方案 development 30 人的 25 s 历史等价性核验：session-MAE median 9.14 BPM；
-- 30 s / 5 s development 起点：MAE 26.98 BPM，coverage 95.5%。
+- 项目历史方案 30 s / 5 s product-window development 起点：coverage 95.5%，MAE 26.98 BPM，median AE 13.79 BPM，RMSE 41.13 BPM；
+- 原 Task 2：SSA+VMD 在 30 s / 10 Hz 条件下因 SSA `L=400` > 300点输入而 `BLOCKED`。
 
-后续仅保留高收益步骤：
+原 Task 2 的 `BLOCKED` 只说明**论文原参数与30 s输入不兼容**，不能解释成 SSA+VMD 已被证明效果差，也不能直接用来判定毫米波 physiology 失败。
 
-1. **任务2（约 2.5 h，已发出）**：development 上只接入 1 个针对主要失败模式的外部参考方案，与项目历史方案同条件比较；
-2. **任务3（约 1–1.5 h）**：依据任务2结果，确定继续哪条方案；不做开放式多算法搜索；
-3. **任务4（约 1 h）**：80 held-out 一次统一比较，结果后不再据此调整算法；
-4. **任务5（约 1.5–2 h）**：RS6240 + BIOPAC ECG/RSP 设备匹配校准；
-5. **任务6（约 1–1.5 h）**：决定正式数据允许输出哪些 HR/BR/信号级变量；
-6. **任务7（余量）**：生成供 AI/心理测量使用的变量、质量字段与证据摘要。
+### 8.2 双轨窗口
+
+**30 s 产品轨道**
+
+- 继续作为 FocusWave 主产品/主分析时间窗口；
+- 用于回答产品如果按30 s尺度更新，毫米波变量是否可用；
+- 不因外部算法需要50 s而修改。
+
+**50 s AgeBalanced 外部方法轨道**
+
+- 专门用于更接近论文输入条件地运行 SSA+VMD；
+- 50 s × 10 Hz ≈ 500点，可容纳 SSA `L=400`；
+- 项目历史方案也必须同步跑50 s，才能做同条件算法比较；
+- 50 s外部结果不得冒充30 s产品性能。
+
+### 8.3 后续高收益步骤
+
+1. **Task 2R（约2–2.5 h）**：AgeBalanced development 30人，50 s / 5 s；项目历史方案 vs SSA+VMD 同条件比较；
+2. **80 held-out（约1 h，条件执行）**：只有50 s development显示至少一个方案值得外部泛化验证，且实现/参数已确定，才在80人上按已经确定的50 s条件一次性比较；
+3. **本地 RS6240 + BIOPAC（可选，机制/压力测试）**：不再承担跨人产品有效性判决，只在需要解释呼吸谐波、屏息、动作/专注差异或设备差异时执行；
+4. **正式数据变量确定**：把有证据支持的 HR/BR 或 signal-level features 接回 `J:\Data`，并与 Behavior/NIR/RGB 做增量分析；
+5. **HRV**：只有逐搏验证通过时才考虑，不是比赛必须 KPI。
+
+### 8.4 本地 BIOPAC 证据定位
+
+已核对 `kyandi233-dev/FocusWave@ecg`：
+
+- `11-calibrate-mmwave-ecg.py`：静息5min → 深呼吸2min → 屏息45s → 静息5min；
+- `12-test-breath-focus.py`：同一被试机械按键 vs 专注 SART 交替；
+- 两套程序都是专门机制/校准实验，与正式实验不同。
+
+因此本地 BIOPAC 数据是**单被试、多条件的设备/机制/压力测试证据**，不能把多个 session 当独立被试，也不能替代 AgeBalanced 多被试 ECG 的外部泛化证据。
 
 止损原则：
 
-- 外部算法实现成本明显超过比赛收益 → 停止；
-- RS6240 校准后 HR/BR 仍不可靠 → physiology 降级；
-- HRV 逐搏 gate 未通过 → 不输出 HRV；
-- 不继续追加 NOMP、CEEMDAN、beamforming、多 MUSIC 变体等开放式算法研究。
+- Task 2R 后仍无法可靠实现 SSA+VMD → 停止该外部路线，不再无限扩算法家族；
+- 50 s development 没有值得进入80的方案 → 不为形式完整强行跑80；
+- 50 s结果不能用于声称30 s产品性能；
+- mmWave总研究/完善预算约10小时；
+- HRV逐搏验证未通过 → 不输出HRV；
+- 不继续追加 NOMP、CEEMDAN、beamforming、多 MUSIC 变体等开放式搜索。
 
 ---
 
@@ -246,7 +275,7 @@ Behavior/probe ──────┤                         ↑
                      │                         │
 事后问卷 ────────────┘────────> 效度验证 ──────┤
                                                │
-mmWave 10h 冲刺 ──> 可信变量/支持信号 ──────────┘
+mmWave限时验证 ──> 可信变量/支持信号 ───────────┘
 
 重复被试 / cohort / fold 规则贯穿全部路径。
 ```
@@ -287,7 +316,9 @@ mmWave 10h 冲刺 ──> 可信变量/支持信号 ─────────�
 - 多模态 AI：`ACTIVE / WAITING_FOR_MODALITY_OUTPUTS`；
 - NIR producer：`RUNNING / REPAIRING`，由 producer owner repo 管理；
 - RGB：`AVAILABLE_AS_SUPPORTING_MODALITY / QUALITY_DEPENDENT`；
-- mmWave：`PARTIAL_DEVELOPMENT_ONLY`，任务2已发出；
+- mmWave：`TASK2R_READY_50S_EXTERNAL_COMPARISON`；
+- AgeBalanced 80 held-out：`CONDITIONAL_WAITING_FOR_TASK2R`；
+- 本地 RS6240 + BIOPAC：`DEFERRED_MECHANISM_ONLY`；
 - HRV：`BLOCKED`，不是比赛必需交付项；
 - 产品评分：`NOT_YET_NAMED`，等待信效度结果。
 
