@@ -463,3 +463,8 @@ HRV（仅供参考）：SDNN 49~173ms，RMSSD 40~223ms。
 
 - `scripts/analyze_mmwave_hrv.py`
 - `scripts/process_vital_signs_v9.py`（谐波陷波模块）
+## 2026-08-27 — docs(mmwave): complete Issue #7 existing-asset and failure audit
+
+- 新增 `docs/mmwave_reanalysis_v2/ISSUE_7_ROOT_CAUSE_B_AUDIT.md`，将历史 v1–v9/v3.1.1、七项 A/B、AgeBalanced、VitalSense、RS6240 采集实现和当前 benchmark contract 串成可追溯复用矩阵。
+- 将 F-001–F-010 失败模式映射到具体代码/报告/提交，并冻结复用、排除、阻塞和停止边界。
+- 本任务未运行新生理 benchmark，未访问 held-out/J:\\Data/HRV，未引入原始或逐行数据。
