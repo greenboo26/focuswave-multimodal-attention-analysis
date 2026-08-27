@@ -1,6 +1,6 @@
 # mmWave handoff — competition-bounded route
 
-Status: `READY_TASK2_COMPETITION_SPRINT`
+Status: `TASK2_BLOCKED_EXTERNAL_REFERENCE`
 
 Branch target: `codex/mmwave-formal-reanalysis-v2`
 
@@ -32,15 +32,15 @@ Competition context: FocusWave / 厚粲杯心理学 × 人工智能测验产品�
 3. 当前更重要的是在有限时间内判断：一个成熟外部方案能否明显改善项目历史方案的主要失败模式；
 4. 毫米波从当前阶段起受约 10 小时总研究/完善上限约束，后续时间必须为多模态 AI、心理测量信效度和产品交付让路。
 
-## 下一步：任务2
+## 任务2结果
 
-执行 `TASK2_EXTERNAL_REFERENCE_SPRINT.md`。
+已执行 `TASK2_EXTERNAL_REFERENCE_SPRINT.md`。SSA+VMD 是唯一允许的外部方案，但其可恢复参数 `SSA L=400` 不适配冻结的 30 s、10 Hz AgeBalanced 输入（约 300 点）；没有作者代码，也不能自行改 L、补零或改重构秩。因此外部方案在 adapter gate 被 `BLOCKED`，没有生成外部 development score。
 
-目标：只在 AgeBalanced development 30 participants 上，接入 **1 个**高价值外部参考方案并与项目历史方案比较。
+结果：项目历史 baseline 仍为 coverage 95.5%、MAE 26.98、median AE 13.79、RMSE 41.13 BPM；SSA+VMD 为 `NOT_RUN / BLOCKED`，不能声称改善或恶化。
 
-首选：SSA + VMD / EE-PCC-VMD 路线，因为它直接针对噪声、模态混叠和呼吸谐波问题，同时能最大化复用本项目已有 VMD/SSA 资产。
+建议：`DOWNGRADE_PHYSIOLOGY`。毫米波保留为 motion/phase/quality supporting-signal 路线，不把 HR 包装为已验证生理输出。
 
-任务2约 2.5 小时预算；主线程 GPT-5.6 Terra / medium。机械 schema/test/对账可用 Luna/low；默认不使用 Sol/high。
+任务2结果与参数审计见 `TASK2_EXTERNAL_REFERENCE_SPRINT_RESULT.md` 和 `configs/mmwave_reanalysis_v2/task2_external_reference_sprint_v1.json`。主线程使用 GPT-5.6 Terra / medium；未升级 Sol/high。
 
 ## 任务2禁止事项
 
@@ -61,4 +61,4 @@ Competition context: FocusWave / 厚粲杯心理学 × 人工智能测验产品�
 - commit SHA；
 - `PASS / PARTIAL / BLOCKED`。
 
-任务2完成后停止，不自动进入 80 人最终比较、RS6240 校准或正式 `J:\Data`。
+任务2已完成并停止，不自动进入 80 人最终比较、RS6240 校准或正式 `J:\Data`。

@@ -1,0 +1,57 @@
+{
+  "task": "mmwave_task2_single_external_reference_sprint",
+  "status": "BLOCKED_EXTERNAL_REFERENCE_NOT_ADAPTABLE_WITHOUT_NEW_ASSUMPTIONS",
+  "scope": {
+    "dataset": "agebalanced_60ghz_ecg",
+    "split": "development_only",
+    "participants": 30,
+    "sessions": 60,
+    "window_s": 30,
+    "step_s": 5,
+    "reference": "ecg_reference_v1",
+    "br": "not_run_no_rsp",
+    "hrv": "blocked"
+  },
+  "selected_reference": {
+    "id": "ssa_vmd",
+    "implementation_class": "paper_reimplementation",
+    "primary_paper": {
+      "title": "An innovative approach for FMCW radar vital sign monitoring with removal of respiratory harmonics",
+      "doi": "10.1016/j.dsp.2024.104911",
+      "url": "https://doi.org/10.1016/j.dsp.2024.104911",
+      "author_code": "not_found"
+    },
+    "parameter_supporting_paper": {
+      "title": "SSA-VMD for UWB Radar Sensor Vital Sign Extraction",
+      "doi": "10.3390/s23020756",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9861067/",
+      "parameters": {
+        "ssa_window_L": 400,
+        "ssa_reconstruction_rule": "paper singular-value rule; threshold described as 0.1*L position",
+        "vmd_K": 5,
+        "vmd_alpha": 1000,
+        "vmd_tau": 0,
+        "vmd_DC": 1,
+        "vmd_init": 0,
+        "vmd_tol": 1e-6
+      }
+    }
+  },
+  "compatibility_audit": {
+    "paper_input": "UWB echo-derived one-dimensional signal; approximately 50 s resting recording",
+    "project_input": "10 Hz decoded range-FFT tensor; 30 s window gives approximately 300 slow-time samples",
+    "blocking_fact": "published L=400 exceeds the project 30 s sample count; changing L, padding, or reconstruction rank would be a new unverified method rule",
+    "vmd_component": "PASS_direct_module_smoke_existing_reuse_gate",
+    "combined_adapter": "NOT_RUN",
+    "decision": "BLOCKED_NO_DEVELOPMENT_SCORE"
+  },
+  "project_baseline_for_context": {
+    "coverage": 0.9552238805970149,
+    "mae_bpm": 26.982657419182825,
+    "median_ae_bpm": 13.791268165057666,
+    "rmse_bpm": 41.132174936280244,
+    "source": "phase2b1_agebalanced_dev_20260827/phase2b1_summary.json"
+  },
+  "recommendation": "DOWNGRADE_PHYSIOLOGY",
+  "recommendation_boundary": "The recommendation is based on the project baseline failing the frozen HR gate and the only time-bounded external route being non-adaptable without invented parameters; it is not an external-method performance claim."
+}

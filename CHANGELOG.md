@@ -6,6 +6,26 @@
 
 ---
 
+## 2026-08-27 — decision(mmwave): bound Task 2 to one external SSA+VMD reference
+
+### 背景
+
+比赛主线要求在约 2.5 小时内判断一个成熟外部方案是否值得继续，而不是扩展开放式算法搜索。
+
+### 改动
+
+- 对唯一允许的 SSA+VMD / EE-PCC-VMD 路线完成论文、参数、实现类别和输入兼容性审计。
+- 记录 `SSA L=400`、VMD `K=5/alpha=1000/DC=1/init=0/tol=1e-6` 及与 AgeBalanced 30 s/10 Hz 输入的冲突；不自行修改参数、不补零、不切换候选。
+- 生成 Task 2 机器可读决策与结果报告，保留项目 baseline 作为唯一已测 development 结果。
+
+### 验证
+
+- 外部路线在 adapter compatibility gate 被标记 `BLOCKED`，没有生成候选 benchmark 分数。
+- 项目 baseline 仍为 coverage 95.5%、MAE 26.98、median AE 13.79、RMSE 41.13 BPM，未达到冻结 HR gate。
+- Task 2 停止；建议 `DOWNGRADE_PHYSIOLOGY`，不自动进入 held-out、RS6240 或 `J:\\Data`。
+
+---
+
 ## 2026-08-27 — feat(mmwave): execute bounded Phase 2B-1 historical-baseline reproduction
 
 ### 背景

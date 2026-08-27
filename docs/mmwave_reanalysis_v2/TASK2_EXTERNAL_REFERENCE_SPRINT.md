@@ -1,8 +1,10 @@
 # 毫米波任务2：单一外部参考方案限时比较
 
-Status: `IN_PROGRESS`
+Status: `COMPLETED_BLOCKED_EXTERNAL_REFERENCE`
 
 Dispatched: 2026-08-27
+
+Completed: 2026-08-27
 
 Competition context: FocusWave / 厚粲杯心理学 × 人工智能测验产品。
 
