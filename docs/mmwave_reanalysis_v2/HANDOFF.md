@@ -30,6 +30,20 @@ GitHub issues:
 - #6 Root cause A — explain 9→27–37 BPM discontinuity;
 - #7 Root cause B — audit existing mmWave assets and failures;
 - #8 Root cause C — rank targeted HR improvements after diagnosis.
+- #9 Benchmark decomposition — unified ECG scorer and aggregation; completed below.
+
+## Issue #9 completed decomposition
+
+Status: `PASS` for the authorized development-only benchmark decomposition. See `BENCHMARK_DECOMPOSITION_RESULT.md` for the full 2×2 tables.
+
+On the same 30-participant / 60-session development split and same radar route:
+
+- 25 s legacy ECG: pooled MAE 10.315 BPM; session-MAE median 9.147 BPM.
+- 25 s `ecg_reference_v1`: pooled MAE 26.682 BPM; session-MAE median 12.143 BPM.
+- 30 s legacy ECG: pooled MAE 10.036 BPM; session-MAE median 8.784 BPM.
+- 30 s `ecg_reference_v1`: pooled MAE 26.983 BPM; session-MAE median 13.803 BPM.
+
+The scorer/reference change explains the large historical-to-current separation; aggregation is secondary and window length is negligible under the legacy scorer. The decision is `FIX_BENCHMARK_AND_RETEST_EXISTING_ROUTE`. No held-out 80, `J:\Data`, HRV, physiology tuning, or new algorithm family was used.
 
 ## Task A — benchmark discontinuity
 
