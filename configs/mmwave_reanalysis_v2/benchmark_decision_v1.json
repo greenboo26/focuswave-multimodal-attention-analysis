@@ -47,8 +47,8 @@
     "algorithm": "sort SHA256('focuswave-mmwave-v2|20260827|subject_id'); first 30 development, remaining 80 held_out",
     "manifest": "configs/mmwave_reanalysis_v2/agebalanced_split_v1.json",
     "leakage_rule": "all sessions and windows from one participant remain in one split",
-    "development_use": "adapter implementation, hyperparameter selection and fixed delay calibration only",
-    "held_out_use": "one-shot final scoring after method config hashes are frozen"
+    "development_use": "adapter implementation, hyperparameter selection, method-specific rule development, fixed delay calibration and all other tuning before held-out scoring",
+    "held_out_use": "one-shot final head-to-head scoring for pre-registered frozen methods after all method config hashes, QC, thresholds and delay rules are frozen"
   },
   "windows": {
     "primary": {"length_s": 30, "step_s": 5, "eligible_endpoints": ["hr", "br", "beat"]},
@@ -139,11 +139,13 @@
     "beat_future_gate": {"authorization": "FROZEN_FOR_FUTURE_GATE_BUT_HRV_REMAINS_BLOCKED", "coverage_min": 0.8, "precision_min": 0.9, "recall_min": 0.9, "f1_min": 0.9, "timing_mae_ms_max": 50.0, "ibi_mae_ms_max": 50.0, "absolute_ibi_bias_ms_max": 10.0, "ibi_loa_lower_ms_min": -100.0, "ibi_loa_upper_ms_max": 100.0}
   },
   "algorithm_selection": {
-    "eligibility": "clear license/permission, reproducible source or explicit paper_reimplementation, fixed config hash, schema-valid output, G0-G2 pass, endpoint-specific hard thresholds pass",
-    "separate_endpoints": "HR and BR winners are selected separately; no undocumented composite score",
-    "ranking": "lowest held-out participant-macro MAE among eligible methods",
+    "eligibility": "clear license/permission, reproducible source or explicit paper_reimplementation, fixed config hash, schema-valid output, G0-G2 pass; all method identity, parameters, QC, thresholds, delay rules and ranking rules must be frozen before held-out scoring",
+    "separate_endpoints": "HR and BR are evaluated separately; no undocumented composite score",
+    "held_out_comparison": "all pre-registered frozen methods may be scored once on the same 80 held-out participants for a final head-to-head comparison",
+    "ranking": "lowest held-out participant-macro MAE among methods that satisfy the predeclared eligibility and endpoint gates",
     "tie": "if absolute macro-MAE difference <0.5 bpm/rpm and the paired participant-bootstrap 95% CI includes zero, prefer in order: existing validated implementation, clear permissive license, lower compute, fewer device assumptions",
-    "one_shot": "held-out results may select a winner but may not trigger retuning; any revision creates benchmark_decision_v2 and a new untouched held-out set",
+    "primary_confirmatory_rule": "if a primary confirmatory method is required, it must be designated before held-out scoring; other frozen methods are secondary comparative benchmarks and cannot retroactively become the pre-specified primary",
+    "one_shot": "held-out results may report final comparative ranking but may not trigger retuning, QC/threshold/delay changes, candidate-set changes, method revisions or ranking-rule changes; any post-heldout revision is a new development iteration and cannot reuse the same 80 participants as an untouched confirmatory test",
     "quality_rule": "a method cannot pass on high-quality windows alone; overall coverage and all quality strata must be reported"
   },
   "output_contract": {
@@ -151,5 +153,13 @@
     "schema_version": "per_window_benchmark_v1",
     "format": "JSON Lines canonical; CSV export permitted only as a lossless projection",
     "tests": "tests/test_mmwave_benchmark_contract_v1.py"
+  },
+  "amendment": {
+    "date": "2026-08-27",
+    "reason": "clarify held-out comparison semantics before any held-out result was generated or inspected",
+    "split_changed": false,
+    "thresholds_changed": false,
+    "windows_changed": false,
+    "scientific_results_seen": false
   }
 }
