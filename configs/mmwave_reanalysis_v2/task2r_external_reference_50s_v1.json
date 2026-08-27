@@ -1,0 +1,59 @@
+{
+  "schema_version": "task2r-external-reference-50s-v1",
+  "status": "READY_TO_DISPATCH",
+  "competition_context": "FocusWave psychology x AI assessment competition",
+  "dataset": "AgeBalanced",
+  "scope": "development_only",
+  "participants": 30,
+  "sessions": "Lying/Rest + Sitting/Rest",
+  "window_s": 50,
+  "step_s": 5,
+  "radar_hz": 10,
+  "comparison_role": "method_native_external",
+  "product_window_claim": false,
+  "ecg_reference": "ecg_reference_v1",
+  "methods": [
+    {
+      "id": "project_historical_route_50s",
+      "role": "project_reference",
+      "source_commit": "f4a8c74d89ec28e005c537cbd5280a15dcb584e1"
+    },
+    {
+      "id": "ssa_vmd_ee_pcc_50s",
+      "role": "external_reference",
+      "implementation_status": "paper_reimplementation",
+      "parameters": {
+        "ssa_L": 400,
+        "vmd_K": 5,
+        "vmd_alpha": 1000
+      }
+    }
+  ],
+  "heldout_80_access": false,
+  "formal_J_data_access": false,
+  "local_biopac_tuning": false,
+  "hrv": false,
+  "allow_second_external_family": false,
+  "primary_metrics": [
+    "coverage",
+    "mae_bpm",
+    "median_ae_bpm",
+    "rmse_bpm",
+    "pearson_r",
+    "spearman_rho",
+    "bland_altman_bias",
+    "bland_altman_loa",
+    "p90_ae_bpm",
+    "two_x_hr_lock",
+    "half_x_hr_lock",
+    "quality_strata"
+  ],
+  "respiratory_harmonic_status": "NOT_ASSESSABLE_WITHOUT_RSP",
+  "advance_to_heldout_rule": "Only if the 50s development implementation is reproducible, both methods run under the same 50s conditions, and at least one route has realistic external-generalization value. Fix all method rules before any heldout result is seen.",
+  "time_budget_hours": 2.5,
+  "model_route": {
+    "primary": "gpt-5.6-terra",
+    "effort": "medium",
+    "default_sol_high": false
+  }
+}
