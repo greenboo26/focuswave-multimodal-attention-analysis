@@ -16,9 +16,17 @@
       "include": "110 participants; Lying/Rest and Sitting/Rest only; 220 sessions",
       "exclude": ["Post-exercise from primary selection", "missing expected source file", "failed ECG reference QC", "failed radar decode/timestamp QC"],
       "post_exercise_role": "predeclared stress sensitivity only; never pooled with primary or used to tune after held-out scoring",
-      "hr_reference": "raw ECG after ecg_reference_v1 QC",
+      "hr_reference": "Official AgeBalanced Rest ECG FFT reference; ecg_reference_v1 retained for internal beat/QC only",
       "br_reference": "NOT_AVAILABLE_NO_RSP",
-      "beat_reference": "R peaks derived by ecg_reference_v1; no source annotations",
+      "beat_reference": "R peaks derived by ecg_reference_v1; no source annotations; not the external HR ground truth",
+      "external_hr_reference_contract": {
+        "source": "Zenodo 16760684 ExampleCode.ipynb",
+        "notebook_md5": "204768fa033176b12baae016ccef19b1",
+        "sampling_rate_hz": 256,
+        "rest_filter": "4th-order Butterworth b,a bandpass 0.8-2.0 Hz via normalized Nyquist cutoffs; scipy.signal.filtfilt",
+        "window_hr": "np.fft.fft(window); set fft[0]=0; retain positive half-spectrum; np.argmax(abs(fft)); frequency*60",
+        "extra_processing": "no window function, detrending, normalization, peak detector, RR/IBI rule, or interpolation"
+      },
       "provenance": "configs/mmwave_reanalysis_v2/agebalanced_provenance_v1.json"
     },
     "vs_dataset_secondary": {

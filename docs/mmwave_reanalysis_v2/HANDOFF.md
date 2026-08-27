@@ -45,6 +45,17 @@ On the same 30-participant / 60-session development split and same radar route:
 
 The scorer/reference change explains the large historical-to-current separation; aggregation is secondary and window length is negligible under the legacy scorer. The decision is `FIX_BENCHMARK_AND_RETEST_EXISTING_ROUTE`. No held-out 80, `J:\Data`, HRV, physiology tuning, or new algorithm family was used.
 
+## Official AgeBalanced ECG reference alignment — completed
+
+Issue #9's follow-up was completed on this same branch. The official Zenodo 16760684 `ExampleCode.ipynb` (MD5 `204768fa033176b12baae016ccef19b1`) was read directly. Rest ECG uses 256 Hz, a fourth-order Butterworth `b,a` bandpass at 0.8–2.0 Hz through the helper's normalized Nyquist cutoffs and `scipy.signal.filtfilt`; each window then uses `np.fft.fft`, DC removal, positive half-spectrum, maximum magnitude bin, and Hz×60. No window function, extra detrending, normalization, peak detector, RR/IBI rule, or interpolation is used.
+
+The same 30 development participants / 60 Rest sessions, radar output, 5 s starts, 25 s / 30 s windows and aggregation were reused. Results are pooled MAE / median session-MAE (BPM):
+
+- 25 s Official **10.493 / 9.296** (328 windows / 60 sessions; 100% / 100% coverage); legacy **10.315 / 9.147** (328 / 60); `ecg_reference_v1` **26.682 / 12.143** (314 / 59; 95.7% / 98.3%).
+- 30 s Official **10.361 / 8.575** (268 / 60; 100% / 100%); legacy **10.036 / 8.784** (268 / 60); `ecg_reference_v1` **26.983 / 13.803** (256 / 59; 95.5% / 98.3%).
+
+Official≈legacy is confirmed. Official versus `ecg_reference_v1` remains separated by 16.189 BPM (25 s) and 16.622 BPM (30 s) pooled MAE, confirming that the prior ~9→27 BPM discontinuity is primarily caused by the non-official `ecg_reference_v1` benchmark semantics, not window length. The AgeBalanced external HR contract is frozen to Official FFT as the unique primary reference; legacy is historical-only; `ecg_reference_v1` is internal QC/beat-only.
+
 ## Task A — benchmark discontinuity
 
 Must isolate on common sessions/windows wherever possible:
@@ -52,7 +63,7 @@ Must isolate on common sessions/windows wherever possible:
 1. input semantics / units / sample rate;
 2. historical vs current adapter;
 3. 25/30/50/60 s window construction;
-4. historical ECG scorer vs `ecg_reference_v1`;
+4. official AgeBalanced FFT ECG vs historical ECG scorer vs `ecg_reference_v1`;
 5. pooled-window MAE vs session-MAE-median aggregation;
 6. exact session inclusion/intersection;
 7. range-bin, phase, multi-bin and frequency-axis logic;

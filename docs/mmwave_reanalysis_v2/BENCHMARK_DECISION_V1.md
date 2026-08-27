@@ -31,6 +31,16 @@ The common radar input is the source-hashed, decoded complex range-FFT tensor pl
 
 Reference processing runs on the reference stream before any radar score is computed.
 
+For the AgeBalanced external HR endpoint, the unique primary reference is now the
+official Rest ECG FFT implementation from Zenodo `16760684` `ExampleCode.ipynb`
+(MD5 `204768fa033176b12baae016ccef19b1`). In each scored window it uses the raw
+ECG values at 256 Hz, a fourth-order Butterworth `b, a` bandpass at 0.8–2.0 Hz
+using the notebook helper's normalized Nyquist cutoffs and `scipy.signal.filtfilt`,
+then `np.fft.fft`, sets the DC bin to zero, keeps the positive half-spectrum,
+selects `np.argmax(abs(fft))`, and converts Hz to BPM. It uses no window function,
+additional detrending, normalization, peak detector, RR/IBI rule, or interpolation.
+The legacy ECG scorer remains only as a historical-reproduction reference.
+
 - `ecg_reference_v1`: raw ECG; monotonic timestamps ≥99.5%; finite samples ≥99.9%; third-order zero-phase Butterworth 0.5–40 Hz; robust median/MAD normalization; both polarities evaluated; `find_peaks` minimum distance 0.30 s and normalized prominence 0.25; IBI 300–2000 ms; at least 10 reference beats and ≥80% valid intervals per scored window. HR is `60 / median(valid IBI)`.
 - The historical “adjacent IBI change >20%” rule is retained as a flag, not an automatic deletion. It can otherwise discard real respiratory sinus arrhythmia. Physiologic-range or detector/morphology failure is required for automatic deletion.
 - `rsp_reference_v1`: raw respiratory-belt waveform only; monotonic timestamps ≥99.5%; finite samples ≥99.9%; fourth-order zero-phase Butterworth 0.1–0.7 Hz; robust normalization; `find_peaks` minimum distance 0.50 s and normalized prominence 0.20; 6–42 rpm; at least three complete cycles and ≥80% valid cycles. The historical 17% adjacent-cycle rule is not an automatic rejection rule.

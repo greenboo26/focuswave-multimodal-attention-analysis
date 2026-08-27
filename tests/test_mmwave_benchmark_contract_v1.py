@@ -2,8 +2,16 @@ import copy
 import json
 from pathlib import Path
 
+import numpy as np
 import pytest
 from jsonschema import Draft202012Validator, ValidationError
+
+from scripts.mmwave_reanalysis_v2.run_benchmark_decomposition_issue9 import (
+    OFFICIAL_ECG_BAND_HZ,
+    OFFICIAL_ECG_FILTER_ORDER,
+    OFFICIAL_ECG_FS_HZ,
+    official_agebalanced_ecg_hr_bpm,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -113,3 +121,13 @@ def test_decision_is_frozen_and_hrv_remains_blocked():
     assert decision["authorization"]["hrv"] is False
     assert decision["windows"]["primary"]["length_s"] == 30
     assert decision["windows"]["primary"]["step_s"] == 5
+
+
+def test_official_agebalanced_ecg_fft_reference_matches_notebook_contract():
+    fs = OFFICIAL_ECG_FS_HZ
+    time = np.arange(0.0, 25.0, 1.0 / fs)
+    signal = 0.2 + 0.5 * np.sin(2 * np.pi * 0.2 * time) + np.sin(2 * np.pi * 1.2 * time)
+    hr = official_agebalanced_ecg_hr_bpm(time, signal, 0.0, 25.0)
+    assert OFFICIAL_ECG_BAND_HZ == (0.8, 2.0)
+    assert OFFICIAL_ECG_FILTER_ORDER == 4
+    assert hr == pytest.approx(72.0)
