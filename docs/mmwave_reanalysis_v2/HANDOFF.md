@@ -1,6 +1,6 @@
 # mmWave handoff — competition-bounded route
 
-Status: `TASK3_READY_DEVICE_MATCHED_CALIBRATION`
+Status: `TASK2R_READY_50S_EXTERNAL_COMPARISON`
 
 Branch target: `codex/mmwave-formal-reanalysis-v2`
 
@@ -10,74 +10,85 @@ Competition context: FocusWave / 厚粲杯心理学 × 人工智能测验产品�
 
 ### Phase 1 / 2A
 
-- 历史资产、数据集、方法、参数、失败模式和外部参考方案已完成证据化整理。
-- AgeBalanced 110 participants / 440 total sessions 已对账；当前 benchmark 使用 30 development + 80 held-out participant split。
-- ECG/RSP reference、窗口、同步、质量分层、指标、谐波错误和算法比较规则已经确定。
-- `per_window_benchmark_v1` JSON Schema 与测试已建立。
+- 历史资产、数据集、方法、参数、失败模式和外部参考方案已整理。
+- AgeBalanced 110 participants / 440 total sessions 已对账；30 development + 80 held-out participant split 保留。
+- ECG reference、质量、同步、指标和 held-out 使用规则已确定。
 
 ### Phase 2B-1
 
-- `ecg_reference_v1` 已实现并通过测试；AgeBalanced development 60/60 Rest sessions 的全程 ECG QC 通过。
-- 项目历史方案在 25 s / 5 s 历史等价性条件下，development 60 sessions 的 session-MAE median = **9.14 BPM**；与历史全体 220-session 记录约 9.5 BPM 接近。
-- 对 `P003_lying_rest` 的字段级 smoke test 与历史 source commit `f4a8c74d89ec28e005c537cbd5280a15dcb584e1` 完全一致，因此没有证据指向算法转写错误。
-- 同一项目历史方案接入统一 30 s / 5 s development benchmark 后：256/268 scored，coverage 95.5%，MAE 26.98 BPM，median AE 13.79 BPM，RMSE 41.13 BPM；这是当前可重复起点，不支持 HR 有效性结论。
-- 详情见 `PHASE2B1_HISTORICAL_BASELINE_REPRODUCTION.md`。
+- `ecg_reference_v1` 已实现并通过测试；development 60/60 Rest sessions 全程 ECG QC 通过。
+- 项目历史方案在 25 s / 5 s 历史等价条件下，development 60 sessions 的 session-MAE median = **9.14 BPM**；接近历史全体 220-session 约 9.5 BPM。
+- P003 字段级 smoke test 与历史 source commit `f4a8c74d89ec28e005c537cbd5280a15dcb584e1` 一致，没有证据表明算法转写错误。
+- 同一项目历史方案在 30 s / 5 s product-window development 条件下：coverage 95.5%，MAE 26.98 BPM，median AE 13.79 BPM，RMSE 41.13 BPM。
 
-## 任务2结果
+注意：9.14 与 26.98 来自不同窗口、不同 ECG 评分/聚合口径，不能直接解释为“算法突然差了三倍”。
 
-已执行 `TASK2_EXTERNAL_REFERENCE_SPRINT.md`。SSA+VMD 是唯一允许的外部方案，但其可恢复参数 `SSA L=400` 不适配当前 30 s、10 Hz AgeBalanced 输入（约 300 点）；没有作者代码，也不能自行改 L、补零或改重构秩。因此外部方案在 adapter gate 被 `BLOCKED`，没有生成外部 development score。
+## 原 Task 2 的结论如何解释
 
-结果：项目历史 baseline 仍为 coverage 95.5%、MAE 26.98、median AE 13.79、RMSE 41.13 BPM；SSA+VMD 为 `NOT_RUN / BLOCKED`，不能声称改善或恶化。
+原 Task 2 仅允许 30 s / 10 Hz 输入。SSA 公开参数要求 `L=400`，而30 s只有约300点，因此 SSA+VMD 在该输入条件下无法按公开参数直接运行，任务状态为 `BLOCKED`。
 
-任务2给出的 `DOWNGRADE_PHYSIOLOGY` 是**当前产品声明降级**，不是“毫米波永远不能测 HR”的科学结论：当前不能把 HR 作为已验证产品输出，也不再继续做开放式外部算法搜索。
+这个结论仍然保留，但含义仅限于：
 
-任务2结果与参数审计见 `TASK2_EXTERNAL_REFERENCE_SPRINT_RESULT.md` 和 `configs/mmwave_reanalysis_v2/task2_external_reference_sprint_v1.json`。
+> **论文原参数与30 s输入不兼容。**
 
-## 比赛路线调整
+它不等于：
 
-从任务2之后：
+- SSA+VMD 已被证明效果差；
+- 外部算法不值得验证；
+- 项目毫米波 HR 已经被科学判死。
 
-1. 不再追完整 220-session 历史等价性；
-2. 暂不运行 80 held-out 算法考试，因为没有外部候选值得晋级；
-3. 不继续扩展 DR-MUSIC、Harmonic MUSIC、NOMP、CEEMDAN、beamforming 等算法家族；
-4. 允许一次**设备匹配校准**，直接回答我们自己的 RS6240 在同步 BIOPAC ECG/RSP 下能否可靠输出 HR 或 BR；
-5. HR 与 BR 分开决定；某一个通过不要求另一个也通过；
-6. 如果设备匹配校准仍不支持可靠 physiology，则毫米波正式转为 motion / phase / spectral / quality 等 supporting-signal 路线，把剩余时间转给多模态 AI 与心理测量。
+## 当前路线：双轨窗口
 
-## 下一步：任务3
+### 30 s 产品轨道
 
-任务文档：`TASK3_RS6240_DEVICE_MATCHED_CALIBRATION.md`
+- FocusWave 产品/主分析仍以 30 s 为主要时间窗口；
+- 30 s 结果用于回答“产品如果按这个时间尺度更新，算法是否可用”；
+- 不因为外部论文需要50 s就修改产品主窗口。
 
-Status: `READY`
+### 50 s AgeBalanced 外部方法轨道
 
-目标：在约 1.5–2 小时内，用已有 11 个 RS6240 + BIOPAC 校准 session 做设备匹配验证。
+- AgeBalanced 是外部验证数据；
+- 新增 50 s / 5 s method-native comparison，使 50 s × 10 Hz ≈ 500 点，可按 SSA `L=400` 运行；
+- 项目历史方案和 SSA+VMD 都必须使用同一 50 s、同一 development 30 人、同一 ECG reference 比较；
+- 50 s 输出单独标记为 external method comparison，不能冒充30 s产品性能。
 
-已知资产：
+任务文档：`TASK2R_EXTERNAL_REFERENCE_50S_CONTINUATION.md`。
 
-- 11/11 有 raw ECG；
-- 10/11 有 raw RSP；
-- BIOPAC 约 2000 Hz；
-- radar 原始数据约 98–99 fps；
-- 2 个 identifier mismatch 必须先核对；
-- raw-to-derived 精确映射与部分 BIN hash 仍有缺口，无法证明时应跳过而不是猜测。
+## 80 held-out 的角色
 
-任务3只允许四种产品决定：
+80 人没有取消。只有在 50 s development 完成后，若至少一个方案具备现实外部泛化价值，才进入80人。
 
-- `KEEP_HR_AND_BR`
-- `KEEP_HR_ONLY`
-- `KEEP_BR_ONLY`
-- `SUPPORTING_SIGNAL_ONLY`
+进入80前必须已经确定：
+
+- 外部实现规则；
+- 项目方案50 s配置；
+- SSA/VMD关键参数与选择规则；
+- 评价指标与比较方式。
+
+之后两种方案可在同一80人上按确定后的50 s条件一次性比较。不能看完80结果后再调整方法并继续把80称为 untouched held-out。
+
+## 本地 RS6240 + BIOPAC 重新定位
+
+已核对 `kyandi233-dev/FocusWave@ecg`：
+
+- `02-tools/11-calibrate-mmwave-ecg.py`：静息5min → 深呼吸2min → 屏息45s → 静息5min，专门用于 HR/HRV/呼吸谐波机制校准；
+- `02-tools/12-test-breath-focus.py`：同一被试机械按键 vs 专注 SART 交替，专门区分“呼吸率锁低是算法问题还是真实专注/屏息现象”；
+- 两者明确不同于正式实验。
+
+因此本地 BIOPAC 数据后续只作为**设备/机制/压力测试证据**，不能替代 AgeBalanced 多被试 ECG 外部泛化证据，也不能把多个 session 当多个独立被试。
+
+原 `TASK3_RS6240_DEVICE_MATCHED_CALIBRATION.md` 暂缓，不再作为当前下一步，也不再承担“产品级生理资格最终判决”的角色。
+
+## 当前下一步
+
+执行 `TASK2R_EXTERNAL_REFERENCE_50S_CONTINUATION.md`：
+
+1. 只用 AgeBalanced development 30 人；
+2. 50 s / 5 s；
+3. 项目历史方案 + SSA+VMD 同条件运行；
+4. 不看80；
+5. 不访问 `J:\Data`；
+6. 不扩第二个外部算法家族；
+7. 完成后只决定是否值得进入80 held-out。
 
 主线程建议 GPT-5.6 Terra / medium；默认不使用 Sol/high。
-
-## 当前禁止事项
-
-- 不再接入新的外部算法家族；
-- 不看 AgeBalanced 80 held-out；
-- 不跑完整 220-session 历史等价性；
-- 不访问正式 `J:\Data` cohort；
-- 不为了保留 physiology 放宽 ECG/RSP reference、QC 或评价门槛；
-- 不恢复 HRV，除非逐搏验证作为自然副产物已经明确通过；
-- 不让毫米波阻塞 Behavior、NIR/RGB、AI、信效度主线。
-
-任务3完成后必须停止，等待是否进入正式数据提取的下一轮决定。
