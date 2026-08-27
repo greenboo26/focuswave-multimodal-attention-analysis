@@ -6,6 +6,23 @@
 
 ---
 
+## 2026-08-27 — docs(mmwave): establish MMWAVE_FORMAL_REANALYSIS_V2 evidence surface
+
+### 背景
+
+现有毫米波工作分散在历史 v1-v9、外部金标准、C1/M1/C2B/C2C 和正式数据审计中；历史“做过”记录不能直接等同于生理验证通过。
+
+### 改动
+
+- 在独立分支 `codex/mmwave-formal-reanalysis-v2` 新增 Git-safe V2 证据账本、数据集/方法/参数/失败模式矩阵、benchmark 计划、验证门、正式 cohort 计划、缺口清单和交接文件。
+- 新增 `configs/mmwave_reanalysis_v2/manifest.json`，冻结当前阶段的执行边界：不启动正式 cohort、不恢复 HRV、不提交原始或逐行数据。
+- 仅做指针式状态更新；旧分析和旧结果保持不变。
+
+### 验证
+
+- 已核验治理、workspace registry、中央仓库身份、当前 main 基线、现有毫米波注册项、历史提交/脚本、VitalSense benchmark 预检/复现和本地数据根存在性。
+- Phase 1 没有运行新的科学 benchmark；状态为 `PARTIAL`。
+
 ## 2026-08-25 — audit(mmwave): J 盘目标锁定与 RGB 门控状态同步
 
 ### 背景

@@ -1,0 +1,17 @@
+{
+  "schema_version": "focuswave-mmwave-formal-reanalysis-v2-manifest",
+  "status": "PARTIAL_PHASE_1_ASSET_AUDIT_COMPLETE",
+  "branch": "codex/mmwave-formal-reanalysis-v2",
+  "base_repository": "greenboo26/focuswave-multimodal-attention-analysis",
+  "base_commit": "eeb9954358d8074d53ff6a17cf4ade620f17e604",
+  "science_change_allowed": false,
+  "formal_cohort_execution_authorized": false,
+  "hrv_authorized": false,
+  "primary_window_s": 30,
+  "sensitivity_windows_s": [10, 60],
+  "required_reference": {"hr": "ECG", "br": "RSP", "hrv": "ECG beat/IBI"},
+  "required_metrics": ["coverage", "mae", "median_ae", "rmse", "correlation", "bland_altman", "harmonic_lock_rate", "half_frequency_lock_rate"],
+  "candidate_order": ["dual_band_baseline", "v3_1_1", "vitalsense_matched_filter", "v9_harmonic_notch", "ssa_vmd", "dr_music", "harmonic_music_sparse", "multi_bin_spatial_fusion"],
+  "evidence_directory": "docs/mmwave_reanalysis_v2",
+  "data_policy": "provenance_only_no_raw_or_row_level_data"
+}

@@ -22,6 +22,13 @@
 - 毫米波目标锁定验证先于 HR、BR、HRV；全场合理距离峰不是充分质量条件。
 - 尚未宣称毫米波 HR、BR 或 HRV 已经准确。
 
+## 2026-08-27 MMWAVE_FORMAL_REANALYSIS_V2
+
+- 独立分支 `codex/mmwave-formal-reanalysis-v2` 建立第一阶段资产审计与执行体系；不覆盖旧 C1/M1/C2B/C2C/v1-v9/C1b 结果。
+- 新增 `docs/mmwave_reanalysis_v2/`：evidence ledger、dataset/method/parameter/failure matrices、benchmark plan、validation gates、formal cohort plan、open gaps 和 handoff。
+- 当前状态 `PARTIAL`：已完成本地历史资产与 Reuse Gate 设计审计，尚未执行新的外部 benchmark，也未启动正式 cohort。
+- BR→HR→HRV 分层冻结；HRV 仍为 `BLOCKED`，正式 cohort 只能在外部 ECG/RSP benchmark 门通过后进入。
+
 ## J 盘目标锁定审计
 
 - 26 个全场距离初筛候选已完成首/中/末分片审计，共 78 条记录。

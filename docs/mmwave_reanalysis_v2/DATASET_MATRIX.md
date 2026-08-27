@@ -1,0 +1,11 @@
+# Dataset matrix
+
+| Dataset / source | Format and expected content | Reference | Available state | Intended use | Current boundary |
+|---|---|---|---|---|---|
+| AgeBalanced 60 GHz ECG | project-specific external radar + ECG package; exact file schema must be read from local manifest | `CHANGELOG.md` v1.7 and `scripts/validate_external_gold_0814.py` | local derived assets reported; manifest reconciliation pending | HR benchmark | do not mix with VS_DATASET or claim 220-session provenance until reconciled |
+| VS_DATASET healthy | Radar MAT (`VitalSig`, `Radar.fs`, `Radar.t_frame`) + Mindray MAT (`ecg_lead2`, `Fs_ecg`, `respiration`, `Fs_resp`); 24 subjects x Resting/Apnea expected | `docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/` | official 48-session route completed in historical reproduction | HR/beat benchmark; BR only where RSP field passes QC | reference fields and quality need per-session audit |
+| VitalSense2024 examples | MAT, frame-level radar and optional ECG, no RSP/subject metadata | same preflight | sample assets available | adapter/I-O smoke test | never pooled as a benchmark cohort |
+| TI/phish-tech ADC | raw ADC / device-specific binary route, different from RS6240 and POSSUMIC | `scripts/analyze_external_heartbeat_0814.py`; `CHANGELOG.md` | historical 10-file run reported | format portability / engineering reference | not an ECG/RSP benchmark unless paired reference is verified |
+| RS6240 ECG/RSP calibration | local derived NPZ/CSV/JSON and ECG/RSP references; 8-channel distance-domain complex data | `docs/金标准清洗标准.md`, `docs/报告/毫米波ECG双机校准_结果与决策_0815.md` | local calibration assets present | symmetric BR/HR validation and sync audit | exact session manifest and raw-to-derived mapping must be recovered |
+| Early pre-experiment | RS6240 `.npz` shards, timestamps, metadata; ~99 Hz, 256 bins, 8 TX/RX channels | historical delivery package at `164d51e` | local outputs and historical scripts | development/failure-mode analysis | not formal cohort evidence |
+| Formal J:\\Data | per-subject mmWave data and timestamps, aligned with behavior and other modalities | local `J:\\Data` inventory and target-lock docs | raw folders present for many subjects | post-freeze formal cohort audit | no HR/BR output before benchmark freeze |
