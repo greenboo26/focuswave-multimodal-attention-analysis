@@ -1,102 +1,112 @@
-# mmWave handoff — competition-bounded route
+# mmWave handoff — root-cause audit route
 
-Status: `TASK2S_COMPLETED_PARTIAL_STOP_PHYSIOLOGY_RND`
+Status: `ROOT_CAUSE_AUDIT_IN_PROGRESS_PARALLEL`
 
 Branch target: `codex/mmwave-formal-reanalysis-v2`
 
-Competition context: FocusWave / 厚粲杯心理学 × 人工智能测验产品。毫米波是多模态测量来源之一，不是整个项目的中心。总比赛交付主线见 `docs/canonical/FOCUSWAVE_COMPETITION_DELIVERY_PLAN_V1.md`，执行状态见 `docs/canonical/FOCUSWAVE_COMPETITION_EXECUTION_BOARD_V1.md`。
+Competition context: FocusWave / 厚粲杯心理学 × 人工智能测验产品。毫米波是多模态测量来源之一，不是整个项目的中心。
 
-## 已完成
+## Why the route changed
 
-### Phase 1 / 2A
+Task 2S completed, but its result does not yet justify treating the HR algorithm line as fully explained. The central unresolved fact is the large discontinuity between historical and current benchmark results:
 
-- 历史资产、数据集、方法、参数、失败模式和外部参考方案已整理。
-- AgeBalanced 110 participants / 440 total sessions 已对账；30 development + 80 held-out participant split 保留。
-- ECG reference、质量、同步、指标和 held-out 使用规则已确定。
+- historical 25 s development-equivalent session-MAE median ≈ **9.14 BPM**;
+- current 30 s product-window MAE ≈ **26.98 BPM**;
+- current 50 s project route MAE ≈ **29.02 BPM**;
+- current 60 s Task 2S project route MAE ≈ **37.12 BPM**.
+
+These values are not directly comparable because they differ in window construction, ECG scorer/reference, aggregation and session inclusion. Therefore the next authorized work is root-cause analysis, not another external algorithm trial.
+
+## Parallel tasks now active
+
+Source-of-truth task documents:
+
+- `ROOT_CAUSE_AUDIT_MASTER_PLAN.md`
+- `PARALLEL_WORKSTREAMS_2026-08-27.md`
+- `KNOWLEDGE_NOTES_MM_WAVE_HR_2026-08-27.md`
+
+GitHub issues:
+
+- #6 Root cause A — explain 9→27–37 BPM discontinuity;
+- #7 Root cause B — audit existing mmWave assets and failures;
+- #8 Root cause C — rank targeted HR improvements after diagnosis.
+
+## Task A — benchmark discontinuity
+
+Must isolate on common sessions/windows wherever possible:
+
+1. input semantics / units / sample rate;
+2. historical vs current adapter;
+3. 25/30/50/60 s window construction;
+4. historical ECG scorer vs `ecg_reference_v1`;
+5. pooled-window MAE vs session-MAE-median aggregation;
+6. exact session inclusion/intersection;
+7. range-bin, phase, multi-bin and frequency-axis logic;
+8. quality/trajectory/harmonic corrections;
+9. error type: correct / 0.5x / 2x / other lock / unexplained.
+
+No new algorithm family.
+
+## Task B — reuse / repository archaeology
+
+Inspect current central evidence and historical commits first. Existing evidence already records:
+
+- v1–v8 historical comparisons;
+- v3.1/v3.1.1 HR/IBI development;
+- seven prior A/B trials (SPC/Hampel/phase-difference/CFAR/SSA/envelope/CEEMDAN);
+- historical AgeBalanced v1.7 external validation;
+- multi-bin/spatial/harmonic/quality failure modes;
+- acquisition facts in `kyandi233-dev/FocusWave@ecg`.
+
+Stable workspace registry marks `mmwave-hrv-analysis` as legacy, not canonical. Use it only if a specific historical artifact is actually accessible.
+
+## Acquisition truth worth preserving
+
+`kyandi233-dev/FocusWave@ecg/01-MainProgram/core/mmwave_capture.py` documents formal RS6240 capture as raw complex IQ + timestamps, 2T4R, 256 range FFT, nominal 10 ms frame period (~100 fps), 57 GHz start frequency and 37 mm range resolution. This input is materially different from AgeBalanced's 10 Hz derived radar representation. Algorithm portability must not silently conflate them.
+
+The local BIOPAC special programs remain mechanism/stress-test evidence rather than independent-subject product validation.
+
+## Task C — improvement ranking
+
+Do not implement algorithms. Rank at most three targeted directions after A/B evidence:
+
+1. fix benchmark/reference/adapter defect if present;
+2. restore/reuse project logic that current benchmark may have dropped;
+3. authorize one targeted signal-processing repair only if a localized true failure remains.
+
+No algorithm fishing.
+
+## Decision after A/B/C
+
+Primary review must choose exactly one:
+
+- `FIX_BENCHMARK_AND_RETEST_EXISTING_ROUTE`
+- `ONE_TARGETED_SIGNAL_REPAIR`
+- `STOP_HR_RND`
+
+80-person heldout stays untouched during the audit. No formal `J:\Data` physiology run and no HRV work are authorized.
+
+## Previous completed evidence remains valid with boundaries
 
 ### Phase 2B-1
 
-- `ecg_reference_v1` 已实现并通过测试；development 60/60 Rest sessions 全程 ECG QC 通过。
-- 项目历史方案在 25 s / 5 s 历史等价条件下，development 60 sessions 的 session-MAE median = **9.14 BPM**；接近历史全体 220-session 约 9.5 BPM。
-- P003 字段级 smoke test 与历史 source commit `f4a8c74d89ec28e005c537cbd5280a15dcb584e1` 一致，没有证据表明算法转写错误。
-- 同一项目历史方案在 30 s / 5 s product-window development 条件下：coverage 95.5%，MAE 26.98 BPM，median AE 13.79 BPM，RMSE 41.13 BPM。
+- `ecg_reference_v1` implemented and tested.
+- 25 s historical-equivalence development result: session-MAE median 9.14 BPM.
+- P003 field-level smoke test matched historical source commit `f4a8c74`.
+- 30 s current result: coverage 95.5%, MAE 26.98, median AE 13.79, RMSE 41.13 BPM.
 
-注意：9.14 与 26.98 来自不同窗口、不同 ECG 评分/聚合口径，不能直接解释为“算法突然差了三倍”。
+### Task 2R
 
-## 原 Task 2 的结论如何解释
+- 50 s project route: MAE 29.02 BPM.
+- adapted SSA+VMD route: MAE 28.12 BPM; small improvement only, no gate-relevant rescue.
+- This was not an official reproduction of Lei 2025.
 
-原 Task 2 仅允许 30 s / 10 Hz 输入。SSA 公开参数要求 `L=400`，而30 s只有约300点，因此 SSA+VMD 在该输入条件下无法按公开参数直接运行，任务状态为 `BLOCKED`。
+### Task 2S
 
-这个结论仍然保留，但含义仅限于：
+- 60 s project route: MAE 37.1163 BPM on 12 ECG-QC-scored complete-session windows.
+- Lei 2025 SSA core adapted route: MAE 38.0582 BPM.
+- No multi-metric rescue; AgeBalanced has no RSP, so respiratory-harmonic removal itself was not directly reference-assessable.
 
-> **论文原参数与30 s输入不兼容。**
+These results motivate the root-cause audit; they do not by themselves identify the cause of the historical-to-current discontinuity.
 
-它不等于：
-
-- SSA+VMD 已被证明效果差；
-- 外部算法不值得验证；
-- 项目毫米波 HR 已经被科学判死。
-
-## 当前路线：双轨窗口
-
-### 30 s 产品轨道
-
-- FocusWave 产品/主分析仍以 30 s 为主要时间窗口；
-- 30 s 结果用于回答“产品如果按这个时间尺度更新，算法是否可用”；
-- 不因为外部论文需要50 s就修改产品主窗口。
-
-### 50 s AgeBalanced 外部方法轨道
-
-- AgeBalanced 是外部验证数据；
-- 新增 50 s / 5 s method-native comparison，使 50 s × 10 Hz ≈ 500 点，可按 SSA `L=400` 运行；
-- 项目历史方案和 SSA+VMD 都必须使用同一 50 s、同一 development 30 人、同一 ECG reference 比较；
-- 50 s 输出单独标记为 external method comparison，不能冒充30 s产品性能。
-
-任务文档：`TASK2R_EXTERNAL_REFERENCE_50S_CONTINUATION.md`。
-
-## 80 held-out 的角色
-
-80 人没有取消。只有在 50 s development 完成后，若至少一个方案具备现实外部泛化价值，才进入80人。
-
-进入80前必须已经确定：
-
-- 外部实现规则；
-- 项目方案50 s配置；
-- SSA/VMD关键参数与选择规则；
-- 评价指标与比较方式。
-
-之后两种方案可在同一80人上按确定后的50 s条件一次性比较。不能看完80结果后再调整方法并继续把80称为 untouched held-out。
-
-## 本地 RS6240 + BIOPAC 重新定位
-
-已核对 `kyandi233-dev/FocusWave@ecg`：
-
-- `02-tools/11-calibrate-mmwave-ecg.py`：静息5min → 深呼吸2min → 屏息45s → 静息5min，专门用于 HR/HRV/呼吸谐波机制校准；
-- `02-tools/12-test-breath-focus.py`：同一被试机械按键 vs 专注 SART 交替，专门区分“呼吸率锁低是算法问题还是真实专注/屏息现象”；
-- 两者明确不同于正式实验。
-
-因此本地 BIOPAC 数据后续只作为**设备/机制/压力测试证据**，不能替代 AgeBalanced 多被试 ECG 外部泛化证据，也不能把多个 session 当多个独立被试。
-
-原 `TASK3_RS6240_DEVICE_MATCHED_CALIBRATION.md` 暂缓，不再作为当前下一步，也不再承担“产品级生理资格最终判决”的角色。
-
-## 当前下一步
-
-Task 2S 已完成并停止。没有下一步自动执行项；任何重新进入外部方法或 80 held-out 的工作都必须由新的明确任务授权。
-
-主线程建议 GPT-5.6 Terra / medium；默认不使用 Sol/high。
-
-## Task 2R 结果
-
-- 已在 30 development participants / 60 Rest sessions 上完成 50 s / 5 s 同条件比较。
-- 项目历史方案：81/88 scored，coverage 92.05%，MAE 29.02、median AE 15.03、RMSE 43.10 BPM。
-- SSA+VMD `paper_reimplementation/adapted`：81/88 scored，coverage 92.05%，MAE 28.12、median AE 15.74、RMSE 41.72 BPM；MAE 改善 0.90 BPM，但未达到 HR gate，锁频总数未下降。
-- 推荐 `DOWNGRADE_PHYSIOLOGY`；50 s 不作为 30 s 产品 claim，任务完成后停止，不自动进入 80 人。
-- 详见 `TASK2R_EXTERNAL_REFERENCE_50S_RESULT.md`。
-
-## Task 2S 结果
-
-- 已在 AgeBalanced development 30 人的 60 个 Rest session 上完成 60 s / 5 s 项目历史路线 vs Lei 2025 SSA 核心适配路线的限定比较。
-- 实际 14 个 session 有完整 60 s 输入；两条路线均 12/14 scored，coverage 85.71%。项目 MAE 37.1163 BPM，Lei SSA MAE 38.0582 BPM；RMSE 49.1288 vs 52.1817，Pearson 0.5123 vs 0.2470，P90 77.1656 vs 84.7620，均未改善；median AE 单项由 22.1045 降至 17.8957 BPM，half-frequency locks 由 0 增至 2。
-- 作者代码、增强正弦的唯一幅相规则和精确二次 SSA 分量索引仍是 `MISSING_EVIDENCE`；本轮按预先记录的非 ECG 驱动最小适配规则执行，不能称为官方复现。
-- AgeBalanced 无 RSP，BR 与 respiratory-harmonic 不能评分。任务状态 `PARTIAL_DEVELOPMENT_ONLY_STOP_PHYSIOLOGY_RND`；不自动进入 80 人、不访问 `J:\Data`、不恢复 HRV。
-- 详见 `TASK2S_LEI2025_SSA_HARMONIC_REMOVAL_RESULT.md`；本轮完成后停止。
+Completion vocabulary: `PASS / PARTIAL / BLOCKED`.
