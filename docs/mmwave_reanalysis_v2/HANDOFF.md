@@ -1,6 +1,6 @@
 # mmWave handoff — competition-bounded route
 
-Status: `TASK2R_READY_50S_EXTERNAL_COMPARISON`
+Status: `TASK2R_COMPLETED_PARTIAL_DOWNGRADE_PHYSIOLOGY`
 
 Branch target: `codex/mmwave-formal-reanalysis-v2`
 
@@ -92,3 +92,11 @@ Competition context: FocusWave / 厚粲杯心理学 × 人工智能测验产品�
 7. 完成后只决定是否值得进入80 held-out。
 
 主线程建议 GPT-5.6 Terra / medium；默认不使用 Sol/high。
+
+## Task 2R 结果
+
+- 已在 30 development participants / 60 Rest sessions 上完成 50 s / 5 s 同条件比较。
+- 项目历史方案：81/88 scored，coverage 92.05%，MAE 29.02、median AE 15.03、RMSE 43.10 BPM。
+- SSA+VMD `paper_reimplementation/adapted`：81/88 scored，coverage 92.05%，MAE 28.12、median AE 15.74、RMSE 41.72 BPM；MAE 改善 0.90 BPM，但未达到 HR gate，锁频总数未下降。
+- 推荐 `DOWNGRADE_PHYSIOLOGY`；50 s 不作为 30 s 产品 claim，任务完成后停止，不自动进入 80 人。
+- 详见 `TASK2R_EXTERNAL_REFERENCE_50S_RESULT.md`。

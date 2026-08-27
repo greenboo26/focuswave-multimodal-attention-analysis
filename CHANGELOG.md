@@ -6,6 +6,26 @@
 
 ---
 
+## 2026-08-27 — result(mmwave): complete bounded Task 2R 50 s comparison
+
+### 背景
+
+Task 2 的 30 s 长度冲突通过独立的 50 s method-native external track 处理；该轨道不代表 FocusWave 30 s 产品输出。
+
+### 改动
+
+- 在 AgeBalanced development 30 人、60 个 Rest session 上，以 50 s/5 s 同条件运行项目历史方案和 SSA+VMD `paper_reimplementation/adapted`。
+- 修复 500 帧数据经过相位差分后被错误缩成 499 点的长度对齐问题；两种方法共用相同窗口与 ECG reference。
+- 固定配置 hash `29977811e91aea54eb94b69a4ba0587db0a80049cca89aab87df183b1695e57c`，输出保留本地 hash，不提交原始/逐窗口数据。
+
+### 验证
+
+- 两种方法均 81/88 scored，coverage 92.05%；项目 MAE 29.02，SSA+VMD MAE 28.12 BPM，改善 0.90 BPM。
+- Median AE 略差，相关接近零，2x/0.5x 总锁频未下降；两者均未达到 HR gate。
+- Task 2R 状态 `PARTIAL_DEVELOPMENT_ONLY`，建议 `DOWNGRADE_PHYSIOLOGY`，不自动进入 80 人。
+
+---
+
 ## 2026-08-27 — decision(mmwave): bound Task 2 to one external SSA+VMD reference
 
 ### 背景

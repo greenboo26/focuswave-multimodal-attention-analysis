@@ -1,6 +1,6 @@
 # 毫米波任务 2R：AgeBalanced 50 s 外部方法续跑
 
-Status: `READY_TO_DISPATCH`
+Status: `COMPLETED_PARTIAL_DEVELOPMENT_ONLY`
 
 Competition context: FocusWave / 厚粲杯心理学 × 人工智能测验产品。
 

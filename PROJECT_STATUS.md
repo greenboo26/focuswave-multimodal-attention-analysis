@@ -29,6 +29,7 @@
 - Phase 2A 状态 `PASS`：`BENCHMARK_DECISION_V1` 已在 held-out 评分前冻结；AgeBalanced 110/440 与历史 220 Rest sessions 已完成逐文件 provenance 对账；统一 per-window schema 和测试已落地。
 - Phase 2B-1 为 `PARTIAL`：仅在冻结 development split 完成历史 25 s 等价性诊断（60 Rest sessions；session-MAE median 9.14 BPM）和 schema-valid 30 s baseline（256/268 scored；median AE 13.79 BPM）。25 s 与 V1 schema 窗口枚举不兼容；完整 220-session 历史复现仍需明确 held-out 授权。详见 `docs/mmwave_reanalysis_v2/PHASE2B1_HISTORICAL_BASELINE_REPRODUCTION.md`。
 - 毫米波任务2已完成但状态为 `BLOCKED`：唯一允许的 SSA+VMD 外部路线的公开 `L=400` 参数不适配冻结 30 s 输入，未生成外部 development score；建议 `DOWNGRADE_PHYSIOLOGY`，保留信号级 supporting route。
+- Task 2R 50 s development 同条件比较已完成：项目方案 MAE 29.02，SSA+VMD adapted MAE 28.12，均 coverage 92.05%，未达到 HR gate；锁频总数未下降。状态 `PARTIAL`，建议 `DOWNGRADE_PHYSIOLOGY`，不自动进入 80 人。
 - BR→HR→HRV 分层冻结；HRV 仍为 `BLOCKED`，正式 cohort 只能在外部 ECG/RSP benchmark 门通过后进入。
 
 ## J 盘目标锁定审计

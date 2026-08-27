@@ -1,6 +1,6 @@
 {
   "schema_version": "task2r-external-reference-50s-v1",
-  "status": "READY_TO_DISPATCH",
+  "status": "COMPLETED_PARTIAL_DEVELOPMENT_ONLY",
   "competition_context": "FocusWave psychology x AI assessment competition",
   "dataset": "AgeBalanced",
   "scope": "development_only",
@@ -9,6 +9,7 @@
   "window_s": 50,
   "step_s": 5,
   "radar_hz": 10,
+  "phase_difference_alignment": "np.diff with first-sample prepend; preserves N radar frames",
   "comparison_role": "method_native_external",
   "product_window_claim": false,
   "ecg_reference": "ecg_reference_v1",
@@ -24,8 +25,15 @@
       "implementation_status": "paper_reimplementation",
       "parameters": {
         "ssa_L": 400,
+        "ssa_rank": 40,
         "vmd_K": 5,
-        "vmd_alpha": 1000
+        "vmd_alpha": 1000,
+        "vmd_tau": 0,
+        "vmd_DC": 1,
+        "vmd_init": 0,
+        "vmd_tol": 1e-6,
+        "mode_selection": "maximal_non_dc_HR_band_power; no_ECG_selection",
+        "frequency_estimator": "periodogram_HR_band_peak"
       }
     }
   ],
@@ -51,6 +59,9 @@
   "respiratory_harmonic_status": "NOT_ASSESSABLE_WITHOUT_RSP",
   "advance_to_heldout_rule": "Only if the 50s development implementation is reproducible, both methods run under the same 50s conditions, and at least one route has realistic external-generalization value. Fix all method rules before any heldout result is seen.",
   "time_budget_hours": 2.5,
+  "execution_config_sha256": "29977811e91aea54eb94b69a4ba0587db0a80049cca89aab87df183b1695e57c",
+  "result_document": "docs/mmwave_reanalysis_v2/TASK2R_EXTERNAL_REFERENCE_50S_RESULT.md",
+  "recommendation": "DOWNGRADE_PHYSIOLOGY",
   "model_route": {
     "primary": "gpt-5.6-terra",
     "effort": "medium",
