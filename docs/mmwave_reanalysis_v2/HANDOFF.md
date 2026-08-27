@@ -1,19 +1,19 @@
-# Phase 1 handoff
+# Phase 2A handoff
 
-Status: `PARTIAL`
+Status: `PASS_PHASE_2A`
 
 Branch target: `codex/mmwave-formal-reanalysis-v2`
 
 Base: `greenboo26/focuswave-multimodal-attention-analysis@main`, local base commit `eeb9954358d8074d53ff6a17cf4ade620f17e604`.
 
-## Completed
+## Completed in Phase 2A
 
-- Verified governance checkout `greenboo26/ai-governance@main` at `fd32852b2470b239f5c71c8d8e3db339fa534264`.
-- Verified workspace registry `greenboo26/project@august/PROJECT_INDEX.md` at `65b98251b13b0fc6651015ca261e26fb62df72d8`.
-- Confirmed the central scientific repository and preserved its existing main branch/results.
-- Audited existing mmWave contracts, registry entries, historical scripts/commits, benchmark preflight, official VitalSense reproduction and local data-root presence.
-- Applied Reuse Gate and recorded candidate methods, provenance and compatibility limits.
-- Added the V2 evidence/benchmark/validation documentation and machine-readable manifest.
+- Preserved Phase 1 without repeating the historical asset audit.
+- Reconciled AgeBalanced 110 participants, 440 total sessions and historical 220 Rest sessions; froze 2,424 file hashes and a deterministic 30/80 participant split.
+- Audited ECG/RSP/R-peak availability and froze reference-first QC. AgeBalanced BR is blocked; RS6240 has ECG in 11/11 and RSP in 10/11, with two identifier mismatches retained.
+- Froze Decision V1: data rules, windows, common radar input, synchronization, quality strata, metrics, harmonic locks, numerical thresholds and algorithm selection.
+- Implemented `per_window_benchmark_v1` JSON Schema and tests.
+- Completed implementation-level Reuse Gate with fixed commits/licenses and honest `paper_reimplementation` labels.
 
 ## Not done by design
 
@@ -22,6 +22,6 @@ Base: `greenboo26/focuswave-multimodal-attention-analysis@main`, local base comm
 - No raw/row-level data or local path configuration committed.
 - No claim that any candidate method is validated or selected.
 
-## Next authorized step
+## Stop boundary
 
-Reconcile dataset manifests and implement Phase 2 benchmark adapters/tests. The first executable benchmark must be external ECG/RSP-backed and must produce aggregate plus per-window provenance before any formal cohort application.
+Do not automatically enter Phase 2B. The recommended next authorized step, only after explicit instruction, is historical baseline reproduction on development participants through the frozen schema. Candidate algorithms, held-out scoring, HRV and formal `J:\Data` remain unauthorized.

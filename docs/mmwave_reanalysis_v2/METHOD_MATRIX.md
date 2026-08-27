@@ -1,5 +1,7 @@
 # Method matrix and Reuse Gate
 
+Implementation-level repository, commit, license and adapter decisions are frozen in `REUSE_IMPLEMENTATION_AUDIT_V1.md` and `configs/mmwave_reanalysis_v2/reuse_gate_v1.json`. A paper-only method is `paper_reimplementation`, never an official reproduction.
+
 | Method | Problem addressed | Local prior art | External provenance | Input / parameter burden | Fit decision |
 |---|---|---|---|---|---|
 | Dual-bin bandpass | transparent BR/HR baseline | v1/v2/v3/v5; 0.1–0.5 Hz BR, 0.8–2.5 Hz HR | Alizadeh 2019; Paterniani 2023 | phase waveform, target bin | retain as benchmark baseline |

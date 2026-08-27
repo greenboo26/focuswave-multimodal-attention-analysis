@@ -6,6 +6,26 @@
 
 ---
 
+## 2026-08-27 — docs(mmwave): freeze Phase 2A benchmark contract before held-out scoring
+
+### 背景
+
+Phase 1 资产审计已经完成；在复现历史 baseline 或查看任何新算法 held-out 成绩前，需要先冻结数据、reference、窗口、质量门、指标、数值阈值和选择规则。
+
+### 改动
+
+- 新增 `BENCHMARK_DECISION_V1.md` 和机器可读 Decision V1；冻结 AgeBalanced 30/80 被试切分、30 s/5 s 主窗口、ECG/RSP reference-first QC、同步、质量分层、指标、谐波误锁与算法选择规则。
+- 新增阈值依据、reference audit 和实现级 Reuse Gate；无原作者代码的方法统一标为 `paper_reimplementation`，缺许可证/不兼容实现保留为 blocked。
+- AgeBalanced 逐文件对账得到 110 participants、440 total sessions、220 historical Rest sessions；记录 2,424 文件哈希。RS6240 reference inventory 确认 ECG 11/11、RSP 10/11，并保留两个 ID mismatch。
+- 新增 `per_window_benchmark_v1` JSON Schema、测试及 Git-safe provenance manifests。
+
+### 验证
+
+- Phase 2A 只执行 provenance/reference 审计、合同冻结和 schema 测试；未运行历史 baseline、候选算法 benchmark、held-out 评分或 `J:\Data` 正式 cohort。
+- HRV 与 Phase 2B 均未授权；旧 canonical 结果没有被覆盖。
+
+---
+
 ## 2026-08-27 — docs(mmwave): establish MMWAVE_FORMAL_REANALYSIS_V2 evidence surface
 
 ### 背景

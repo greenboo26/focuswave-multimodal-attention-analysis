@@ -1,0 +1,112 @@
+{
+  "schema_version": "focuswave-mmwave-reuse-gate-v1",
+  "status": "PASS_AUDIT_WITH_BLOCKED_CANDIDATES",
+  "freeze_date": "2026-08-27",
+  "candidates": [
+    {
+      "id": "ssa_vmd",
+      "paper": {"title": "A heartbeat signal extraction method based on SSA and VMD", "doi": "10.1016/j.dsp.2024.104911", "url": "https://www.sciencedirect.com/science/article/pii/S1051200424005359"},
+      "author_code": null,
+      "implementation_class": "paper_reimplementation",
+      "reusable_component": {"repository": "https://github.com/vrcarva/vmdpy", "commit": "47ca3e83f3d5acb36d6eb68c224cbcdba9cca098", "license": "MIT"},
+      "input_requirements": "one-dimensional displacement/phase signal; SSA and VMD parameters must be frozen",
+      "dependencies": ["numpy", "scipy", "vmdpy implementation"],
+      "sampling_array_assumptions": "algorithmic paper route; no RS6240 antenna geometry requirement",
+      "rs6240_compatibility": "ADAPTER_PLAUSIBLE",
+      "adapter_smoke_test": "VMD_COMPONENT_PASS_DIRECT_MODULE; SSA_PLUS_VMD_NOT_IMPLEMENTED",
+      "decision": "ELIGIBLE_ONLY_AS_PAPER_REIMPLEMENTATION"
+    },
+    {
+      "id": "dr_music",
+      "paper": {"title": "A robust heart rate estimation method using RLS and MUSIC", "doi": "10.1038/s41598-024-77683-1", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11513112/"},
+      "author_code": null,
+      "implementation_class": "paper_reimplementation",
+      "input_requirements": "phase/displacement series, respiration reference estimated from radar, RLS order/step and MUSIC model order",
+      "dependencies": ["numpy", "scipy linear algebra"],
+      "sampling_array_assumptions": "single displacement series; MUSIC covariance support must be valid at project sampling rate",
+      "rs6240_compatibility": "ADAPTER_PLAUSIBLE_REQUIRES_DEVELOPMENT_SMOKE",
+      "adapter_smoke_test": "NOT_RUN_NO_AUTHOR_CODE",
+      "decision": "ELIGIBLE_ONLY_AS_PAPER_REIMPLEMENTATION"
+    },
+    {
+      "id": "harmonic_music",
+      "paper": {"title": "Heart Rate Estimation Using Harmonic MUSIC for Millimeter-Wave Radar", "doi": null, "url": "https://arxiv.org/abs/2408.01951"},
+      "author_code": null,
+      "implementation_class": "paper_reimplementation",
+      "input_requirements": "phase/displacement series and frozen harmonic/model-order assumptions",
+      "dependencies": ["numpy", "scipy linear algebra"],
+      "sampling_array_assumptions": "single or fused radar series; covariance length must fit 30 s at project rate",
+      "rs6240_compatibility": "ADAPTER_PLAUSIBLE_REQUIRES_DEVELOPMENT_SMOKE",
+      "adapter_smoke_test": "NOT_RUN_NO_AUTHOR_CODE",
+      "decision": "ELIGIBLE_ONLY_AS_PAPER_REIMPLEMENTATION"
+    },
+    {
+      "id": "sparse_dct_vital_signs",
+      "paper": {"title": "DCT-based sparse decomposition vital-sign route", "doi": null, "url": "https://github.com/Z-H-XU/DCT-Vital-Signs"},
+      "repository": "https://github.com/Z-H-XU/DCT-Vital-Signs",
+      "commit": "470b68dfd12cc5bf3f8c7fb81a7317b370bb5813",
+      "license": "NO_OSI_LICENSE; files state all rights reserved/nonprofit restriction",
+      "implementation_class": "mature_external_repository",
+      "input_requirements": "raw I/Q sampled at 2560 Hz plus external respiration sensor in demo",
+      "dependencies": ["MATLAB", "opaque SparseOptimization.p"],
+      "sampling_array_assumptions": "not RS6240 range-FFT 10/100 Hz route",
+      "rs6240_compatibility": "BLOCKED_FORMAT_AND_PERMISSION",
+      "adapter_smoke_test": "BLOCKED_OPAQUE_PCODE_AND_LICENSE",
+      "decision": "EXCLUDED_UNLESS_PERMISSION_AND_TRANSPARENT_IMPLEMENTATION_RECOVERED"
+    },
+    {
+      "id": "mmvital",
+      "paper": {"title": "mmVital multi-antenna vital-sign implementation", "doi": null, "url": "https://github.com/Ubiweb-lab/mmVital"},
+      "repository": "https://github.com/Ubiweb-lab/mmVital",
+      "commit": "c559da1302bc872451c513b89ba72e9900ee9842",
+      "license": "MISSING_EVIDENCE_NO_LICENSE_FILE",
+      "implementation_class": "mature_external_repository",
+      "input_requirements": "TI IWR1443/IWR1843 raw adc_data.bin, 4 antennas, 128 ADC samples and beam-steering calibration",
+      "dependencies": ["MATLAB", "partial Python port"],
+      "sampling_array_assumptions": "5 ms source frames downsampled to 10 Hz; TI geometry and raw ADC are assumed",
+      "rs6240_compatibility": "BLOCKED_RAW_ADC_GEOMETRY_MISMATCH",
+      "adapter_smoke_test": "BLOCKED_LICENSE_AND_INCOMPLETE_PYTHON_PORT",
+      "decision": "EXCLUDED_FROM_PHASE_2B"
+    },
+    {
+      "id": "mmvital_signs_ti_demo",
+      "repository": "https://github.com/KylinC/mmVital-Signs",
+      "commit": "ac2bf212f90a86b844adef8782fa2f66f2615135",
+      "license": "Apache-2.0",
+      "implementation_class": "mature_external_repository",
+      "input_requirements": "TI xWR14xx/16xx/68xx hardware TLV/UART stream and SDK configuration",
+      "dependencies": ["TI mmWave SDK 3.5", "Python 3.6 host demo"],
+      "sampling_array_assumptions": "20 fps hardware demo; no offline RS6240 range-FFT adapter",
+      "rs6240_compatibility": "NOT_DIRECTLY_COMPATIBLE",
+      "adapter_smoke_test": "NOT_RUN_NO_OFFLINE_ADAPTER",
+      "decision": "ENGINEERING_REFERENCE_ONLY"
+    },
+    {
+      "id": "vitalsense_official",
+      "paper": {"title": "VitalSense official adaptive matched-filter implementation", "doi": null, "url": "https://github.com/Rc-W024/VitalSense2024"},
+      "repository": "https://github.com/Rc-W024/VitalSense2024",
+      "commit": "d9f71f96800da7ed2192ff1dc0cba0f0ef5b6de6",
+      "license": "MIT",
+      "implementation_class": "official_repository",
+      "input_requirements": "VitalSig frame-level signal and MATLAB route",
+      "dependencies": ["MATLAB R2024b", "Signal Processing Toolbox"],
+      "sampling_array_assumptions": "dataset-specific VitalSig input; not raw RS6240 multi-bin tensor",
+      "rs6240_compatibility": "REQUIRES_EXPLICIT_ADAPTER",
+      "adapter_smoke_test": "PASS_OFFICIAL_SAMPLE_AND_HISTORICAL_48_SESSION_REPRODUCTION",
+      "decision": "REPRODUCIBLE_SECONDARY_BASELINE_WHEN_SOURCE_DATA_AVAILABLE"
+    },
+    {
+      "id": "multi_bin_spatial_rs6240",
+      "paper": null,
+      "author_code": null,
+      "implementation_class": "paper_reimplementation",
+      "input_requirements": "calibrated antenna geometry, channel mapping, complex multi-bin tensor and compatible raw phase",
+      "dependencies": ["candidate-specific"],
+      "sampling_array_assumptions": "RS6240 Tx/Rx mapping and array calibration are currently unresolved",
+      "rs6240_compatibility": "BLOCKED_O007",
+      "adapter_smoke_test": "NOT_RUN_INPUT_CONTRACT_UNRESOLVED",
+      "decision": "DEFER_UNTIL_O007; NO_NEW_ALGORITHM_IN_PHASE_2B_BASELINE"
+    }
+  ],
+  "reuse_rule": "No candidate is called official unless the fixed repository is attributable to the authors/maintainers. A method reconstructed from equations is paper_reimplementation. Missing or restrictive license blocks adoption even when source is visible."
+}

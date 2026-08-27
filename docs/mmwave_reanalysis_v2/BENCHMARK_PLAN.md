@@ -1,5 +1,7 @@
 # Benchmark plan
 
+Protocol status: **FROZEN** by `BENCHMARK_DECISION_V1.md` and `configs/mmwave_reanalysis_v2/benchmark_decision_v1.json`. This file remains the high-level execution order; machine values take precedence.
+
 ## Common protocol
 
 1. Build a per-session manifest containing source file, subject/session, sampling rates, time origin, target fields, ECG/RSP availability and immutable source hash.

@@ -1,10 +1,15 @@
 {
   "schema_version": "focuswave-mmwave-formal-reanalysis-v2-manifest",
-  "status": "PARTIAL_PHASE_1_ASSET_AUDIT_COMPLETE",
+  "status": "PASS_PHASE_2A_BENCHMARK_CONTRACT_FROZEN",
   "branch": "codex/mmwave-formal-reanalysis-v2",
   "base_repository": "greenboo26/focuswave-multimodal-attention-analysis",
   "base_commit": "eeb9954358d8074d53ff6a17cf4ade620f17e604",
   "science_change_allowed": false,
+  "benchmark_contract_frozen": true,
+  "benchmark_contract": "configs/mmwave_reanalysis_v2/benchmark_decision_v1.json",
+  "per_window_schema": "schemas/mmwave/per_window_benchmark_v1.schema.json",
+  "held_out_scoring_started": false,
+  "phase_2b_authorized": false,
   "formal_cohort_execution_authorized": false,
   "hrv_authorized": false,
   "primary_window_s": 30,
@@ -13,5 +18,11 @@
   "required_metrics": ["coverage", "mae", "median_ae", "rmse", "correlation", "bland_altman", "harmonic_lock_rate", "half_frequency_lock_rate"],
   "candidate_order": ["dual_band_baseline", "v3_1_1", "vitalsense_matched_filter", "v9_harmonic_notch", "ssa_vmd", "dr_music", "harmonic_music_sparse", "multi_bin_spatial_fusion"],
   "evidence_directory": "docs/mmwave_reanalysis_v2",
-  "data_policy": "provenance_only_no_raw_or_row_level_data"
+  "provenance_manifests": [
+    "configs/mmwave_reanalysis_v2/agebalanced_provenance_v1.json",
+    "configs/mmwave_reanalysis_v2/agebalanced_split_v1.json",
+    "configs/mmwave_reanalysis_v2/rs6240_reference_inventory_v1.json",
+    "configs/mmwave_reanalysis_v2/reuse_gate_v1.json"
+  ],
+  "data_policy": "provenance_only; file/session inventory permitted; no raw signal values, participant measurements, demographics or credentials"
 }

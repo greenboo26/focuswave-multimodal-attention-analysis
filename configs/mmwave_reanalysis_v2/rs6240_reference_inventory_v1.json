@@ -1,0 +1,1120 @@
+{
+  "schema_version": "rs6240-biopac-reference-inventory-v1",
+  "status": "PARTIAL",
+  "scope": "read-only Phase 2A source/reference inventory; no signal scoring",
+  "summary": {
+    "session_directories": 11,
+    "raw_ecg_sessions": 11,
+    "raw_rsp_sessions": 10,
+    "identifier_mismatches": 2
+  },
+  "boundary": "Radar BIN hashes and exact raw-to-derived window mapping remain MISSING_EVIDENCE; sub-2 has ECG but no RSP and cannot score BR.",
+  "sessions": [
+    {
+      "subject_directory": "sub-2_",
+      "declared_session": "CAL",
+      "identifier_consistency": {
+        "folder": "2",
+        "acq_filename": "2",
+        "radar_meta": "2",
+        "status": "PASS"
+      },
+      "reference": {
+        "raw_ecg": true,
+        "raw_rsp": false,
+        "preannotated_r_peaks": false,
+        "channels": [
+          {
+            "name": "ECG100C",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2650026
+          },
+          {
+            "name": "Digital (STP Input 0)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2650026
+          },
+          {
+            "name": "Digital (STP Input 1)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2650026
+          },
+          {
+            "name": "Digital (STP Input 2)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2650026
+          },
+          {
+            "name": "Digital (STP Input 3)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2650026
+          },
+          {
+            "name": "Digital (STP Input 4)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2650026
+          },
+          {
+            "name": "Digital (STP Input 5)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2650026
+          },
+          {
+            "name": "Digital (STP Input 6)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2650026
+          },
+          {
+            "name": "Digital (STP Input 7)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2650026
+          }
+        ]
+      },
+      "radar": {
+        "transport": "SPI",
+        "frame_count": 99146,
+        "duration_s": 1004.27,
+        "fps": 98.7,
+        "range_fft": 256,
+        "doppler_fft": 32,
+        "tx_ant": 2,
+        "rx_ant": 4,
+        "npz_file_count": 100
+      },
+      "sources": {
+        "acq": {
+          "relative_path": "sub-2_/sub2.acq",
+          "size_bytes": 47837149,
+          "sha256": "09fbe7ff6a92f7b917e5aa8168f4225ff0ecf9ec77b25f8a3b57eed6cfc0fc79"
+        },
+        "radar_meta": {
+          "relative_path": "sub-2_/mmwave/sub-2_mmwave.meta.json",
+          "size_bytes": 300,
+          "sha256": "fc74023549684a65701bfbde094f4a00048de3c9416f543195e3dc41039f2012"
+        },
+        "radar_timestamps": {
+          "relative_path": "sub-2_/mmwave/sub-2_mmwave_timestamps.csv",
+          "size_bytes": 3569256,
+          "sha256": "bdeb142614ec5f8cead9ef0c600be6d29332a36e0d4de099d520d78b53a48eda"
+        },
+        "radar_bin": {
+          "relative_path": "sub-2_/mmwave/sub-2_mmwave.datacube.bin",
+          "size_bytes": 813393816,
+          "sha256": "MISSING_EVIDENCE_NOT_HASHED_PHASE_2A"
+        }
+      },
+      "status": "PARTIAL_RAW_LINK_PRESENT_DERIVED_MAPPING_NOT_FROZEN"
+    },
+    {
+      "subject_directory": "sub-3_",
+      "declared_session": "CAL",
+      "identifier_consistency": {
+        "folder": "3",
+        "acq_filename": "3",
+        "radar_meta": "3",
+        "status": "PASS"
+      },
+      "reference": {
+        "raw_ecg": true,
+        "raw_rsp": true,
+        "preannotated_r_peaks": false,
+        "channels": [
+          {
+            "name": "RSP, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1600987
+          },
+          {
+            "name": "ECG, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1600987
+          },
+          {
+            "name": "Digital (STP Input 0)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1600987
+          },
+          {
+            "name": "Digital (STP Input 1)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1600987
+          },
+          {
+            "name": "Digital (STP Input 2)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1600987
+          },
+          {
+            "name": "Digital (STP Input 3)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1600987
+          },
+          {
+            "name": "Digital (STP Input 4)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1600987
+          },
+          {
+            "name": "Digital (STP Input 5)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1600987
+          },
+          {
+            "name": "Digital (STP Input 6)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1600987
+          },
+          {
+            "name": "Digital (STP Input 7)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1600987
+          }
+        ]
+      },
+      "radar": {
+        "transport": "SPI",
+        "frame_count": 77333,
+        "duration_s": 783.04,
+        "fps": 98.8,
+        "range_fft": 256,
+        "doppler_fft": 32,
+        "tx_ant": 2,
+        "rx_ant": 4,
+        "npz_file_count": 78
+      },
+      "sources": {
+        "acq": {
+          "relative_path": "sub-3_/sub3.acq",
+          "size_bytes": 32158007,
+          "sha256": "87c65a0b19585ae9c9ed98e3e91c674a38f0ab2759afb1f9f42c8b4a808c3e50"
+        },
+        "radar_meta": {
+          "relative_path": "sub-3_/mmwave/sub-3_mmwave.meta.json",
+          "size_bytes": 299,
+          "sha256": "78b7db15b667fc7ffc6196784cd427a1513ee272b97a7f28c33ac6381d0bc706"
+        },
+        "radar_timestamps": {
+          "relative_path": "sub-3_/mmwave/sub-3_mmwave_timestamps.csv",
+          "size_bytes": 2698635,
+          "sha256": "1a44e7fd2ff2d9b0713fec4d7f7687b639c80fb658c4ad0ab4217b7a93a058e2"
+        },
+        "radar_bin": {
+          "relative_path": "sub-3_/mmwave/sub-3_mmwave.datacube.bin",
+          "size_bytes": 634439964,
+          "sha256": "MISSING_EVIDENCE_NOT_HASHED_PHASE_2A"
+        }
+      },
+      "status": "PARTIAL_RAW_LINK_PRESENT_DERIVED_MAPPING_NOT_FROZEN"
+    },
+    {
+      "subject_directory": "sub-4_",
+      "declared_session": "CAL",
+      "identifier_consistency": {
+        "folder": "4",
+        "acq_filename": "4",
+        "radar_meta": "4",
+        "status": "PASS"
+      },
+      "reference": {
+        "raw_ecg": true,
+        "raw_rsp": true,
+        "preannotated_r_peaks": false,
+        "channels": [
+          {
+            "name": "RSP, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1862202
+          },
+          {
+            "name": "ECG, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1862202
+          },
+          {
+            "name": "Digital (STP Input 0)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1862202
+          },
+          {
+            "name": "Digital (STP Input 1)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1862202
+          },
+          {
+            "name": "Digital (STP Input 2)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1862202
+          },
+          {
+            "name": "Digital (STP Input 3)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1862202
+          },
+          {
+            "name": "Digital (STP Input 4)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1862202
+          },
+          {
+            "name": "Digital (STP Input 5)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1862202
+          },
+          {
+            "name": "Digital (STP Input 6)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1862202
+          },
+          {
+            "name": "Digital (STP Input 7)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1862202
+          }
+        ]
+      },
+      "radar": {
+        "transport": "SPI",
+        "frame_count": 93612,
+        "duration_s": 948.01,
+        "fps": 98.7,
+        "range_fft": 256,
+        "doppler_fft": 32,
+        "tx_ant": 2,
+        "rx_ant": 4,
+        "npz_file_count": 94
+      },
+      "sources": {
+        "acq": {
+          "relative_path": "sub-4_/sub4.acq",
+          "size_bytes": 37392321,
+          "sha256": "3a9e6df04b39bb282dece83f6a1c8f775487201de94e90ccb71f264d80967ddb"
+        },
+        "radar_meta": {
+          "relative_path": "sub-4_/mmwave/sub-4_mmwave.meta.json",
+          "size_bytes": 299,
+          "sha256": "935ac0f1cc81d27a655b6553d04b5e30f66f14bfae9883d0ff2da4c2b9743815"
+        },
+        "radar_timestamps": {
+          "relative_path": "sub-4_/mmwave/sub-4_mmwave_timestamps.csv",
+          "size_bytes": 3281984,
+          "sha256": "efdc783f063d5bd3cbcc7bfbe6d2a32bd88062893f0fd8ec5533691b6d7884ab"
+        },
+        "radar_bin": {
+          "relative_path": "sub-4_/mmwave/sub-4_mmwave.datacube.bin",
+          "size_bytes": 767992880,
+          "sha256": "MISSING_EVIDENCE_NOT_HASHED_PHASE_2A"
+        }
+      },
+      "status": "PARTIAL_RAW_LINK_PRESENT_DERIVED_MAPPING_NOT_FROZEN"
+    },
+    {
+      "subject_directory": "sub-5_",
+      "declared_session": "CAL",
+      "identifier_consistency": {
+        "folder": "5",
+        "acq_filename": "5",
+        "radar_meta": "5",
+        "status": "PASS"
+      },
+      "reference": {
+        "raw_ecg": true,
+        "raw_rsp": true,
+        "preannotated_r_peaks": false,
+        "channels": [
+          {
+            "name": "RSP, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1634482
+          },
+          {
+            "name": "ECG, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1634482
+          },
+          {
+            "name": "Digital (STP Input 0)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1634482
+          },
+          {
+            "name": "Digital (STP Input 1)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1634482
+          },
+          {
+            "name": "Digital (STP Input 2)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1634482
+          },
+          {
+            "name": "Digital (STP Input 3)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1634482
+          },
+          {
+            "name": "Digital (STP Input 4)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1634482
+          },
+          {
+            "name": "Digital (STP Input 5)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1634482
+          },
+          {
+            "name": "Digital (STP Input 6)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1634482
+          },
+          {
+            "name": "Digital (STP Input 7)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1634482
+          }
+        ]
+      },
+      "radar": {
+        "transport": "SPI",
+        "frame_count": 80731,
+        "duration_s": 825.53,
+        "fps": 97.8,
+        "range_fft": 256,
+        "doppler_fft": 32,
+        "tx_ant": 2,
+        "rx_ant": 4,
+        "npz_file_count": 81
+      },
+      "sources": {
+        "acq": {
+          "relative_path": "sub-5_/sub5.acq",
+          "size_bytes": 32828271,
+          "sha256": "341c8480ac9cba6a96f34d3a2b9248b9d0191193b2c46fe7d84b9e72ce2b6f73"
+        },
+        "radar_meta": {
+          "relative_path": "sub-5_/mmwave/sub-5_mmwave.meta.json",
+          "size_bytes": 299,
+          "sha256": "db0d5948309b15ea58e741841748cf6eb1eeec411b394879ce467d8ba2df18cc"
+        },
+        "radar_timestamps": {
+          "relative_path": "sub-5_/mmwave/sub-5_mmwave_timestamps.csv",
+          "size_bytes": 2822233,
+          "sha256": "ba01167a7f6bc88af0ac682efb41134e3dd485276244fb95c63a90af3e59eeb9"
+        },
+        "radar_bin": {
+          "relative_path": "sub-5_/mmwave/sub-5_mmwave.datacube.bin",
+          "size_bytes": 662317156,
+          "sha256": "MISSING_EVIDENCE_NOT_HASHED_PHASE_2A"
+        }
+      },
+      "status": "PARTIAL_RAW_LINK_PRESENT_DERIVED_MAPPING_NOT_FROZEN"
+    },
+    {
+      "subject_directory": "sub-6_",
+      "declared_session": "CAL",
+      "identifier_consistency": {
+        "folder": "6",
+        "acq_filename": "6",
+        "radar_meta": "6",
+        "status": "PASS"
+      },
+      "reference": {
+        "raw_ecg": true,
+        "raw_rsp": true,
+        "preannotated_r_peaks": false,
+        "channels": [
+          {
+            "name": "RSP, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1854351
+          },
+          {
+            "name": "ECG, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1854351
+          },
+          {
+            "name": "Digital (STP Input 0)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1854351
+          },
+          {
+            "name": "Digital (STP Input 1)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1854351
+          },
+          {
+            "name": "Digital (STP Input 2)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1854351
+          },
+          {
+            "name": "Digital (STP Input 3)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1854351
+          },
+          {
+            "name": "Digital (STP Input 4)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1854351
+          },
+          {
+            "name": "Digital (STP Input 5)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1854351
+          },
+          {
+            "name": "Digital (STP Input 6)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1854351
+          },
+          {
+            "name": "Digital (STP Input 7)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 1854351
+          }
+        ]
+      },
+      "radar": {
+        "transport": "SPI",
+        "frame_count": 83596,
+        "duration_s": 846.58,
+        "fps": 98.7,
+        "range_fft": 256,
+        "doppler_fft": 32,
+        "tx_ant": 2,
+        "rx_ant": 4,
+        "npz_file_count": 84
+      },
+      "sources": {
+        "acq": {
+          "relative_path": "sub-6_/sub6.acq",
+          "size_bytes": 37230918,
+          "sha256": "720a9044d856dfd1e4cf7180fe5a1bd6d98578040488db5db1661c8292253cf9"
+        },
+        "radar_meta": {
+          "relative_path": "sub-6_/mmwave/sub-6_mmwave.meta.json",
+          "size_bytes": 299,
+          "sha256": "2ffe5a0ccab07126b78e3c798df45da29c5906310319c5db5cda29fb154d7c07"
+        },
+        "radar_timestamps": {
+          "relative_path": "sub-6_/mmwave/sub-6_mmwave_timestamps.csv",
+          "size_bytes": 2994464,
+          "sha256": "800e8f2e9bed0e84ce05a913c36b5eca007b0c7cae7af1fd9ca1a2a57f76e6c2"
+        },
+        "radar_bin": {
+          "relative_path": "sub-6_/mmwave/sub-6_mmwave.datacube.bin",
+          "size_bytes": 685821616,
+          "sha256": "MISSING_EVIDENCE_NOT_HASHED_PHASE_2A"
+        }
+      },
+      "status": "PARTIAL_RAW_LINK_PRESENT_DERIVED_MAPPING_NOT_FROZEN"
+    },
+    {
+      "subject_directory": "sub-97792_",
+      "declared_session": "SART",
+      "identifier_consistency": {
+        "folder": "97792",
+        "acq_filename": "97792",
+        "radar_meta": "97792",
+        "status": "PASS"
+      },
+      "reference": {
+        "raw_ecg": true,
+        "raw_rsp": true,
+        "preannotated_r_peaks": false,
+        "channels": [
+          {
+            "name": "RSP, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 566978
+          },
+          {
+            "name": "ECG, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 566978
+          },
+          {
+            "name": "Digital (STP Input 0)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 566978
+          },
+          {
+            "name": "Digital (STP Input 1)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 566978
+          },
+          {
+            "name": "Digital (STP Input 2)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 566978
+          },
+          {
+            "name": "Digital (STP Input 3)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 566978
+          },
+          {
+            "name": "Digital (STP Input 4)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 566978
+          },
+          {
+            "name": "Digital (STP Input 5)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 566978
+          },
+          {
+            "name": "Digital (STP Input 6)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 566978
+          },
+          {
+            "name": "Digital (STP Input 7)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 566978
+          }
+        ]
+      },
+      "radar": {
+        "transport": "SPI",
+        "frame_count": 30771,
+        "duration_s": 312.77,
+        "fps": 98.4,
+        "range_fft": 256,
+        "doppler_fft": 32,
+        "tx_ant": 2,
+        "rx_ant": 4,
+        "npz_file_count": 31
+      },
+      "sources": {
+        "acq": {
+          "relative_path": "sub-97792_/97792.acq",
+          "size_bytes": 11477805,
+          "sha256": "31377429c9e251c66fc144ec720bfb8ddb86902fb0a805d45424d70aa749108f"
+        },
+        "radar_meta": {
+          "relative_path": "sub-97792_/mmwave/sub-97792_mmwave.meta.json",
+          "size_bytes": 312,
+          "sha256": "1daf316b5e185b70a49920b59228e4bf449c5fe41583610b1b2114335c790073"
+        },
+        "radar_timestamps": {
+          "relative_path": "sub-97792_/mmwave/sub-97792_mmwave_timestamps.csv",
+          "size_bytes": 1107756,
+          "sha256": "776c8490cc8b8152bfbc2771c1d22ac2e3336222cc67ff7768903c57a67feda1"
+        },
+        "radar_bin": {
+          "relative_path": "sub-97792_/mmwave/sub-97792_mmwave.datacube.bin",
+          "size_bytes": 252445316,
+          "sha256": "MISSING_EVIDENCE_NOT_HASHED_PHASE_2A"
+        }
+      },
+      "status": "PARTIAL_RAW_LINK_PRESENT_DERIVED_MAPPING_NOT_FROZEN"
+    },
+    {
+      "subject_directory": "sub-97793_",
+      "declared_session": "SART",
+      "identifier_consistency": {
+        "folder": "97793",
+        "acq_filename": "97793",
+        "radar_meta": "97793",
+        "status": "PASS"
+      },
+      "reference": {
+        "raw_ecg": true,
+        "raw_rsp": true,
+        "preannotated_r_peaks": false,
+        "channels": [
+          {
+            "name": "RSP, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3350154
+          },
+          {
+            "name": "ECG, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3350154
+          },
+          {
+            "name": "Digital (STP Input 0)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3350154
+          },
+          {
+            "name": "Digital (STP Input 1)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3350154
+          },
+          {
+            "name": "Digital (STP Input 2)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3350154
+          },
+          {
+            "name": "Digital (STP Input 3)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3350154
+          },
+          {
+            "name": "Digital (STP Input 4)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3350154
+          },
+          {
+            "name": "Digital (STP Input 5)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3350154
+          },
+          {
+            "name": "Digital (STP Input 6)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3350154
+          },
+          {
+            "name": "Digital (STP Input 7)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3350154
+          }
+        ]
+      },
+      "radar": {
+        "transport": "SPI",
+        "frame_count": 162924,
+        "duration_s": 1649.52,
+        "fps": 98.8,
+        "range_fft": 256,
+        "doppler_fft": 32,
+        "tx_ant": 2,
+        "rx_ant": 4,
+        "npz_file_count": 163
+      },
+      "sources": {
+        "acq": {
+          "relative_path": "sub-97793_/97793.acq",
+          "size_bytes": 67141325,
+          "sha256": "09b1bcc9e05333e253551acdaacac3d8d0efec808c5366b1a59cac888e409fc1"
+        },
+        "radar_meta": {
+          "relative_path": "sub-97793_/mmwave/sub-97793_mmwave.meta.json",
+          "size_bytes": 314,
+          "sha256": "891c3e03673cf60aec931b2d500c09b6f2db143ceef8e03d229fe29b4a05be1f"
+        },
+        "radar_timestamps": {
+          "relative_path": "sub-97793_/mmwave/sub-97793_mmwave_timestamps.csv",
+          "size_bytes": 5865264,
+          "sha256": "e4cc7ac10fd034e8916be57f9fa20fe863b3b5a9543e502d09cde593dbe507e3"
+        },
+        "radar_bin": {
+          "relative_path": "sub-97793_/mmwave/sub-97793_mmwave.datacube.bin",
+          "size_bytes": 1336628528,
+          "sha256": "MISSING_EVIDENCE_NOT_HASHED_PHASE_2A"
+        }
+      },
+      "status": "PARTIAL_RAW_LINK_PRESENT_DERIVED_MAPPING_NOT_FROZEN"
+    },
+    {
+      "subject_directory": "sub-97795_",
+      "declared_session": "BREATH",
+      "identifier_consistency": {
+        "folder": "97795",
+        "acq_filename": "97995",
+        "radar_meta": "97795",
+        "status": "MISMATCH_REQUIRES_ADJUDICATION"
+      },
+      "reference": {
+        "raw_ecg": true,
+        "raw_rsp": true,
+        "preannotated_r_peaks": false,
+        "channels": [
+          {
+            "name": "RSP, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3051259
+          },
+          {
+            "name": "ECG, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3051259
+          },
+          {
+            "name": "Digital (STP Input 0)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3051259
+          },
+          {
+            "name": "Digital (STP Input 1)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3051259
+          },
+          {
+            "name": "Digital (STP Input 2)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3051259
+          },
+          {
+            "name": "Digital (STP Input 3)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3051259
+          },
+          {
+            "name": "Digital (STP Input 4)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3051259
+          },
+          {
+            "name": "Digital (STP Input 5)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3051259
+          },
+          {
+            "name": "Digital (STP Input 6)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3051259
+          },
+          {
+            "name": "Digital (STP Input 7)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3051259
+          }
+        ]
+      },
+      "radar": {
+        "transport": "SPI",
+        "frame_count": 140648,
+        "duration_s": 1448.49,
+        "fps": 97.1,
+        "range_fft": 256,
+        "doppler_fft": 32,
+        "tx_ant": 2,
+        "rx_ant": 4,
+        "npz_file_count": 141
+      },
+      "sources": {
+        "acq": {
+          "relative_path": "sub-97795_/97995.acq",
+          "size_bytes": 61171350,
+          "sha256": "c35c9de7d5a499c14ff19fb73bfa859dbb898d5c791d429d3f6b6d685dc6cfd1"
+        },
+        "radar_meta": {
+          "relative_path": "sub-97795_/mmwave/sub-97795_mmwave.meta.json",
+          "size_bytes": 316,
+          "sha256": "4a0da879c4ec79f9fd043d480c58387ecdfde657f1b200b322ec91d6f4700449"
+        },
+        "radar_timestamps": {
+          "relative_path": "sub-97795_/mmwave/sub-97795_mmwave_timestamps.csv",
+          "size_bytes": 5106793,
+          "sha256": "e200b53d84a2c079dc51a619f143732f995bfa24dc3a3482a97602d14e4ef5ff"
+        },
+        "radar_bin": {
+          "relative_path": "sub-97795_/mmwave/sub-97795_mmwave.datacube.bin",
+          "size_bytes": 1153876224,
+          "sha256": "MISSING_EVIDENCE_NOT_HASHED_PHASE_2A"
+        }
+      },
+      "status": "PARTIAL_RAW_LINK_PRESENT_DERIVED_MAPPING_NOT_FROZEN"
+    },
+    {
+      "subject_directory": "sub-97796_",
+      "declared_session": "BREATH",
+      "identifier_consistency": {
+        "folder": "97796",
+        "acq_filename": "97796",
+        "radar_meta": "97796",
+        "status": "PASS"
+      },
+      "reference": {
+        "raw_ecg": true,
+        "raw_rsp": true,
+        "preannotated_r_peaks": false,
+        "channels": [
+          {
+            "name": "RSP, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2965579
+          },
+          {
+            "name": "ECG, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2965579
+          },
+          {
+            "name": "Digital (STP Input 0)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2965579
+          },
+          {
+            "name": "Digital (STP Input 1)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2965579
+          },
+          {
+            "name": "Digital (STP Input 2)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2965579
+          },
+          {
+            "name": "Digital (STP Input 3)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2965579
+          },
+          {
+            "name": "Digital (STP Input 4)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2965579
+          },
+          {
+            "name": "Digital (STP Input 5)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2965579
+          },
+          {
+            "name": "Digital (STP Input 6)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2965579
+          },
+          {
+            "name": "Digital (STP Input 7)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2965579
+          }
+        ]
+      },
+      "radar": {
+        "transport": "SPI",
+        "frame_count": 141395,
+        "duration_s": 1465.84,
+        "fps": 96.5,
+        "range_fft": 256,
+        "doppler_fft": 32,
+        "tx_ant": 2,
+        "rx_ant": 4,
+        "npz_file_count": 142
+      },
+      "sources": {
+        "acq": {
+          "relative_path": "sub-97796_/97796.acq",
+          "size_bytes": 59457750,
+          "sha256": "7b6847a21b074641ffcd8056a149387125f7f19b6c50d20d6df6e982b61aac51"
+        },
+        "radar_meta": {
+          "relative_path": "sub-97796_/mmwave/sub-97796_mmwave.meta.json",
+          "size_bytes": 316,
+          "sha256": "9db0571695d10c5ea6a76d03ca24b1e120c2696283ea573c584cc2b120ab71cb"
+        },
+        "radar_timestamps": {
+          "relative_path": "sub-97796_/mmwave/sub-97796_mmwave_timestamps.csv",
+          "size_bytes": 5231615,
+          "sha256": "3a06ee181c45f4d0e7b6da7473cc84973a6893f3cb8d19ec834587b7ec3acc57"
+        },
+        "radar_bin": {
+          "relative_path": "sub-97796_/mmwave/sub-97796_mmwave.datacube.bin",
+          "size_bytes": 1160004612,
+          "sha256": "MISSING_EVIDENCE_NOT_HASHED_PHASE_2A"
+        }
+      },
+      "status": "PARTIAL_RAW_LINK_PRESENT_DERIVED_MAPPING_NOT_FROZEN"
+    },
+    {
+      "subject_directory": "sub-9779_",
+      "declared_session": "SART",
+      "identifier_consistency": {
+        "folder": "9779",
+        "acq_filename": "9779",
+        "radar_meta": "9779",
+        "status": "PASS"
+      },
+      "reference": {
+        "raw_ecg": true,
+        "raw_rsp": true,
+        "preannotated_r_peaks": false,
+        "channels": [
+          {
+            "name": "RSP, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3233138
+          },
+          {
+            "name": "ECG, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3233138
+          },
+          {
+            "name": "Digital (STP Input 0)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3233138
+          },
+          {
+            "name": "Digital (STP Input 1)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3233138
+          },
+          {
+            "name": "Digital (STP Input 2)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3233138
+          },
+          {
+            "name": "Digital (STP Input 3)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3233138
+          },
+          {
+            "name": "Digital (STP Input 4)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3233138
+          },
+          {
+            "name": "Digital (STP Input 5)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3233138
+          },
+          {
+            "name": "Digital (STP Input 6)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3233138
+          },
+          {
+            "name": "Digital (STP Input 7)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 3233138
+          }
+        ]
+      },
+      "radar": {
+        "transport": "SPI",
+        "frame_count": 155557,
+        "duration_s": 1574.41,
+        "fps": 98.8,
+        "range_fft": 256,
+        "doppler_fft": 32,
+        "tx_ant": 2,
+        "rx_ant": 4,
+        "npz_file_count": 156
+      },
+      "sources": {
+        "acq": {
+          "relative_path": "sub-9779_/9779.acq",
+          "size_bytes": 64801005,
+          "sha256": "46f3fb30b56df94df9e6739217a55e53911ae6298819e92a1dd65b916deba94f"
+        },
+        "radar_meta": {
+          "relative_path": "sub-9779_/mmwave/sub-9779_mmwave.meta.json",
+          "size_bytes": 311,
+          "sha256": "8f5617a8a10dd91067feac98186d715375980c7bf5ba925ad2c68c59bcb06e50"
+        },
+        "radar_timestamps": {
+          "relative_path": "sub-9779_/mmwave/sub-9779_mmwave_timestamps.csv",
+          "size_bytes": 5524122,
+          "sha256": "80c9acd586ead02ef22967be8c180a8314142a54b9e998d7969d3c9544962929"
+        },
+        "radar_bin": {
+          "relative_path": "sub-9779_/mmwave/sub-9779_mmwave.datacube.bin",
+          "size_bytes": 1276189660,
+          "sha256": "MISSING_EVIDENCE_NOT_HASHED_PHASE_2A"
+        }
+      },
+      "status": "PARTIAL_RAW_LINK_PRESENT_DERIVED_MAPPING_NOT_FROZEN"
+    },
+    {
+      "subject_directory": "sub-97994_",
+      "declared_session": "BREATH",
+      "identifier_consistency": {
+        "folder": "97994",
+        "acq_filename": "97794",
+        "radar_meta": "97994",
+        "status": "MISMATCH_REQUIRES_ADJUDICATION"
+      },
+      "reference": {
+        "raw_ecg": true,
+        "raw_rsp": true,
+        "preannotated_r_peaks": false,
+        "channels": [
+          {
+            "name": "RSP, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2946116
+          },
+          {
+            "name": "ECG, X, RSPEC-R",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2946116
+          },
+          {
+            "name": "Digital (STP Input 0)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2946116
+          },
+          {
+            "name": "Digital (STP Input 1)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2946116
+          },
+          {
+            "name": "Digital (STP Input 2)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2946116
+          },
+          {
+            "name": "Digital (STP Input 3)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2946116
+          },
+          {
+            "name": "Digital (STP Input 4)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2946116
+          },
+          {
+            "name": "Digital (STP Input 5)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2946116
+          },
+          {
+            "name": "Digital (STP Input 6)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2946116
+          },
+          {
+            "name": "Digital (STP Input 7)",
+            "sampling_rate_hz": 2000.0,
+            "n_samples": 2946116
+          }
+        ]
+      },
+      "radar": {
+        "transport": "SPI",
+        "frame_count": 133139,
+        "duration_s": 1425.19,
+        "fps": 93.4,
+        "range_fft": 256,
+        "doppler_fft": 32,
+        "tx_ant": 2,
+        "rx_ant": 4,
+        "npz_file_count": 134
+      },
+      "sources": {
+        "acq": {
+          "relative_path": "sub-97994_/97794.acq",
+          "size_bytes": 59068490,
+          "sha256": "592aa31401c2ed07997c3b9db60c3337ba2a7889595b038a71987491224aec5b"
+        },
+        "radar_meta": {
+          "relative_path": "sub-97994_/mmwave/sub-97994_mmwave.meta.json",
+          "size_bytes": 316,
+          "sha256": "6f4957999d207c82da51cbca3b292f70787526b3c52215d8dd734605166968c9"
+        },
+        "radar_timestamps": {
+          "relative_path": "sub-97994_/mmwave/sub-97994_mmwave_timestamps.csv",
+          "size_bytes": 4719056,
+          "sha256": "3c35b207b2646de41704b84a7029a1a0fd930a88cba9c743e0ce1de62a25866f"
+        },
+        "radar_bin": {
+          "relative_path": "sub-97994_/mmwave/sub-97994_mmwave.datacube.bin",
+          "size_bytes": 1092272388,
+          "sha256": "MISSING_EVIDENCE_NOT_HASHED_PHASE_2A"
+        }
+      },
+      "status": "PARTIAL_RAW_LINK_PRESENT_DERIVED_MAPPING_NOT_FROZEN"
+    }
+  ]
+}

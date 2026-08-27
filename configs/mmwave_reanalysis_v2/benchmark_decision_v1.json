@@ -1,0 +1,155 @@
+{
+  "schema_version": "focuswave-mmwave-benchmark-decision-v1",
+  "status": "FROZEN_BEFORE_HELDOUT_SCORING",
+  "freeze_date": "2026-08-27",
+  "freeze_parent_commit": "12c94756d895894e55194a7d4b5e7a40e25c38be",
+  "authorization": {
+    "phase": "2A_BENCHMARK_CONTRACT_FREEZE",
+    "historical_baseline_reproduction": false,
+    "candidate_benchmark": false,
+    "formal_cohort": false,
+    "hrv": false
+  },
+  "dataset_rules": {
+    "agebalanced_primary": {
+      "dataset_id": "agebalanced_60ghz_ecg",
+      "include": "110 participants; Lying/Rest and Sitting/Rest only; 220 sessions",
+      "exclude": ["Post-exercise from primary selection", "missing expected source file", "failed ECG reference QC", "failed radar decode/timestamp QC"],
+      "post_exercise_role": "predeclared stress sensitivity only; never pooled with primary or used to tune after held-out scoring",
+      "hr_reference": "raw ECG after ecg_reference_v1 QC",
+      "br_reference": "NOT_AVAILABLE_NO_RSP",
+      "beat_reference": "R peaks derived by ecg_reference_v1; no source annotations",
+      "provenance": "configs/mmwave_reanalysis_v2/agebalanced_provenance_v1.json"
+    },
+    "vs_dataset_secondary": {
+      "dataset_id": "vs_dataset_healthy",
+      "include": "24 participants x Resting/Apnea when all source files and hashes are available",
+      "hr_reference": "raw Mindray ecg_lead2 after ecg_reference_v1 QC",
+      "br_reference": "raw Mindray respiration after rsp_reference_v1 QC",
+      "beat_reference": "R peaks derived by ecg_reference_v1; no source annotations",
+      "role": "secondary external generalization; not a substitute for AgeBalanced held-out selection",
+      "current_state": "BLOCKED_SOURCE_ACCESS_O002"
+    },
+    "rs6240_calibration": {
+      "dataset_id": "rs6240_ecg_rsp_calibration",
+      "include": "only sessions with a frozen raw-to-derived manifest and verified ECG, RSP, radar and timestamp linkage",
+      "hr_reference": "raw BIOPAC ECG after ecg_reference_v1 QC",
+      "br_reference": "raw BIOPAC RSP after rsp_reference_v1 QC",
+      "role": "device-matched symmetric HR/BR validation",
+      "current_state": "PARTIAL_EXACT_SESSION_MANIFEST_MISSING"
+    },
+    "engineering_only": ["vitalsense_examples", "ti_phishtech_adc", "unpaired_rs6240"],
+    "prohibition": "A source without raw RSP cannot score BR; a source without QC-passed ECG-derived beats cannot score beat metrics; no source may score HRV while authorization.hrv=false."
+  },
+  "participant_split": {
+    "unit": "participant",
+    "seed": 20260827,
+    "algorithm": "sort SHA256('focuswave-mmwave-v2|20260827|subject_id'); first 30 development, remaining 80 held_out",
+    "manifest": "configs/mmwave_reanalysis_v2/agebalanced_split_v1.json",
+    "leakage_rule": "all sessions and windows from one participant remain in one split",
+    "development_use": "adapter implementation, hyperparameter selection and fixed delay calibration only",
+    "held_out_use": "one-shot final scoring after method config hashes are frozen"
+  },
+  "windows": {
+    "primary": {"length_s": 30, "step_s": 5, "eligible_endpoints": ["hr", "br", "beat"]},
+    "sensitivities": [
+      {"length_s": 10, "step_s": 5, "eligible_endpoints": ["hr"], "br_status": "NOT_SCORABLE_TOO_FEW_CYCLES"},
+      {"length_s": 60, "step_s": 5, "eligible_endpoints": ["hr", "br", "beat"]}
+    ],
+    "boundary_rule": "half-open [start,end); no padding; incomplete final windows are rejected",
+    "historical_equivalence": "25 s / 5 s is allowed only for labelled historical equivalence reproduction and is ineligible for candidate selection"
+  },
+  "radar_common_input": {
+    "representation": "decoded complex range-FFT tensor with source timestamps",
+    "operations": ["verify source hash", "decode without value interpolation", "normalize axis order to time x channel x range_bin", "crop documented physical ROI to 0.30-3.50 m", "segment by frozen windows", "record finite and timestamp QC"],
+    "not_common_operations": ["phase unwrap", "bandpass", "range-bin selection", "channel selection", "beamforming", "VMD", "SSA", "MUSIC", "harmonic cancellation"],
+    "method_rule": "method-specific operations must be declared and config-hashed; they may not inspect ECG/RSP or held-out outcomes",
+    "missing_frame_rule": "no silent interpolation; reject or emit an explicit missing-input status"
+  },
+  "reference_qc": {
+    "execution_order": "full-session reference QC before radar scoring, then window eligibility",
+    "ecg_reference_v1": {
+      "required_source": "raw ECG waveform and timestamps",
+      "timestamp_monotonic_ratio_min": 0.995,
+      "finite_ratio_min": 0.999,
+      "filter": "third-order Butterworth SOS 0.5-40 Hz, zero-phase",
+      "normalization": "subtract median and divide by 1.4826*MAD; fail if robust scale is zero",
+      "peak_detector": "scipy find_peaks on both polarities; choose polarity with larger median prominence; minimum distance 0.30 s; normalized prominence 0.25",
+      "ibi_range_ms": [300, 2000],
+      "rr_jump_rule": "adjacent IBI change >20% is a flag, not an automatic deletion; automatic deletion requires physiologic-range failure or detector/morphology QC failure",
+      "window_min_reference_beats": 10,
+      "window_valid_ratio_min": 0.8,
+      "hr_definition": "60 / median QC-passed IBI in the window",
+      "r_peak_source_label": "derived_events"
+    },
+    "rsp_reference_v1": {
+      "required_source": "raw respiratory belt waveform and timestamps; accelerometer is not accepted as RSP",
+      "timestamp_monotonic_ratio_min": 0.995,
+      "finite_ratio_min": 0.999,
+      "filter": "fourth-order Butterworth SOS 0.1-0.7 Hz, zero-phase",
+      "normalization": "subtract median and divide by 1.4826*MAD; fail if robust scale is zero",
+      "peak_detector": "scipy find_peaks; minimum distance 0.50 s; normalized prominence 0.20",
+      "physiologic_range_rpm": [6, 42],
+      "cycle_jump_rule": "the historical 17% adjacent-cycle rule is not used for automatic rejection",
+      "window_min_complete_cycles": 3,
+      "window_valid_ratio_min": 0.8,
+      "br_definition": "60 / median QC-passed respiratory peak interval in the window"
+    }
+  },
+  "synchronization": {
+    "rate_metrics": "source timestamps define identical half-open windows; no lag optimization",
+    "beat_metrics": {
+      "primary_match_tolerance_ms": 75,
+      "sensitivity_tolerances_ms": [50, 100, 150],
+      "matching": "chronological one-to-one matching",
+      "fixed_offset": "one scalar per dataset x method, estimated on development participants only as the robust median matched delay within +/-250 ms, then config-hashed and applied unchanged to held_out",
+      "minimum_offset_calibration": "at least 100 development matches from at least 5 participants; otherwise corrected beat scoring is BLOCKED",
+      "forbidden": ["per-window lag search", "per-session held-out lag tuning", "using held-out ECG to revise offset"]
+    }
+  },
+  "quality_strata": {
+    "common_target_for_qc": "maximum residual-power channel/bin inside the physical ROI after per-window complex-mean removal; used only for QC, never reference-guided",
+    "target_snr_db": "10*log10(target residual power / median residual power of non-adjacent ROI bins)",
+    "target_coherence": "magnitude of the circular mean of unit phase increments for the common QC target",
+    "high": {"timestamp_coverage_min": 0.99, "finite_ratio_min": 0.999, "max_gap_s_max": 0.2, "target_snr_db_min": 10.0, "target_coherence_min": 0.8},
+    "medium": {"timestamp_coverage_min": 0.95, "finite_ratio_min": 0.995, "max_gap_s_max": 0.5, "target_snr_db_min": 3.0, "target_coherence_min": 0.5},
+    "low": "decoded window that fails medium but does not meet rejected criteria",
+    "rejected": {"timestamp_coverage_below": 0.8, "finite_ratio_below": 0.95, "max_gap_s_above": 1.0, "or": ["decode failure", "no target candidate in ROI"]},
+    "motion": "if an independent motion reference exists, motion fail forces low; not_available is retained and never silently treated as pass",
+    "reporting": "all attempted reference-valid windows form the coverage denominator; primary errors use scored high+medium windows; high, medium, low/rejected counts are always separate"
+  },
+  "metrics": {
+    "aggregation": "window metrics plus participant-macro metrics; participant is the resampling cluster",
+    "rate": ["coverage", "mae", "median_ae", "rmse", "pearson_r", "spearman_rho", "bland_altman_bias", "bland_altman_lower_loa", "bland_altman_upper_loa", "p90_absolute_error"],
+    "beat": ["coverage", "precision", "recall", "f1", "timing_mae_ms", "ibi_mae_ms", "ibi_bias_ms", "ibi_lower_loa_ms", "ibi_upper_loa_ms"],
+    "confidence_intervals": "participant-cluster bootstrap, 2000 resamples, seed 20260827, percentile 95% CI"
+  },
+  "harmonic_lock": {
+    "tolerance": "max(3 bpm, 5% of the candidate harmonic rate)",
+    "priority": "correct HR if within 3 bpm; otherwise two_x_hr, half_x_hr, resp_h2, resp_h3, resp_h4; ties are ambiguous",
+    "two_x_hr": "estimate within tolerance of 2*ECG_HR",
+    "half_x_hr": "estimate within tolerance of 0.5*ECG_HR",
+    "resp_harmonic": "estimate within tolerance of k*RSP_BR for k=2,3,4 and not within 3 bpm of ECG_HR",
+    "missing_rsp": "respiratory-harmonic class is NOT_ASSESSABLE, never assumed absent"
+  },
+  "validation_thresholds": {
+    "minimum_held_out_participant_coverage": 0.8,
+    "hr": {"window_coverage_min": 0.8, "mae_bpm_max": 5.0, "median_ae_bpm_max": 3.0, "rmse_bpm_max": 8.0, "pearson_r_min": 0.85, "spearman_rho_min": 0.85, "absolute_bias_bpm_max": 2.0, "loa_lower_bpm_min": -10.0, "loa_upper_bpm_max": 10.0, "p90_ae_bpm_max": 10.0, "two_x_lock_rate_max": 0.01, "half_x_lock_rate_max": 0.01, "resp_harmonic_lock_rate_max_when_rsp_available": 0.02},
+    "br": {"window_coverage_min": 0.8, "mae_rpm_max": 2.0, "median_ae_rpm_max": 1.5, "rmse_rpm_max": 3.0, "pearson_r_min": 0.8, "spearman_rho_min": 0.8, "absolute_bias_rpm_max": 1.0, "loa_lower_rpm_min": -5.0, "loa_upper_rpm_max": 5.0, "p90_ae_rpm_max": 5.0},
+    "beat_future_gate": {"authorization": "FROZEN_FOR_FUTURE_GATE_BUT_HRV_REMAINS_BLOCKED", "coverage_min": 0.8, "precision_min": 0.9, "recall_min": 0.9, "f1_min": 0.9, "timing_mae_ms_max": 50.0, "ibi_mae_ms_max": 50.0, "absolute_ibi_bias_ms_max": 10.0, "ibi_loa_lower_ms_min": -100.0, "ibi_loa_upper_ms_max": 100.0}
+  },
+  "algorithm_selection": {
+    "eligibility": "clear license/permission, reproducible source or explicit paper_reimplementation, fixed config hash, schema-valid output, G0-G2 pass, endpoint-specific hard thresholds pass",
+    "separate_endpoints": "HR and BR winners are selected separately; no undocumented composite score",
+    "ranking": "lowest held-out participant-macro MAE among eligible methods",
+    "tie": "if absolute macro-MAE difference <0.5 bpm/rpm and the paired participant-bootstrap 95% CI includes zero, prefer in order: existing validated implementation, clear permissive license, lower compute, fewer device assumptions",
+    "one_shot": "held-out results may select a winner but may not trigger retuning; any revision creates benchmark_decision_v2 and a new untouched held-out set",
+    "quality_rule": "a method cannot pass on high-quality windows alone; overall coverage and all quality strata must be reported"
+  },
+  "output_contract": {
+    "schema": "schemas/mmwave/per_window_benchmark_v1.schema.json",
+    "schema_version": "per_window_benchmark_v1",
+    "format": "JSON Lines canonical; CSV export permitted only as a lossless projection",
+    "tests": "tests/test_mmwave_benchmark_contract_v1.py"
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://focuswave.local/schemas/mmwave/per_window_benchmark_v1.schema.json",
+  "title": "FocusWave per-window mmWave benchmark record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "run_id", "dataset_id", "dataset_version", "subject_id",
+    "session_id", "split", "window_id", "window_start_s", "window_end_s",
+    "window_length_s", "method", "radar_qc", "reference_qc", "sync", "hr",
+    "br", "beat", "harmonic_lock", "outcome_status", "rejection_reason"
+  ],
+  "properties": {
+    "schema_version": {"const": "per_window_benchmark_v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "dataset_version": {"type": "string", "minLength": 1},
+    "subject_id": {"type": "string", "minLength": 1},
+    "session_id": {"type": "string", "minLength": 1},
+    "split": {"enum": ["development", "held_out", "external_only"]},
+    "window_id": {"type": "string", "minLength": 1},
+    "window_start_s": {"type": "number", "minimum": 0},
+    "window_end_s": {"type": "number", "exclusiveMinimum": 0},
+    "window_length_s": {"enum": [10, 30, 60]},
+    "method": {"$ref": "#/$defs/method"},
+    "radar_qc": {"$ref": "#/$defs/radar_qc"},
+    "reference_qc": {"$ref": "#/$defs/reference_qc"},
+    "sync": {"$ref": "#/$defs/sync"},
+    "hr": {"$ref": "#/$defs/rate_result"},
+    "br": {"$ref": "#/$defs/rate_result"},
+    "beat": {"$ref": "#/$defs/beat_result"},
+    "harmonic_lock": {"$ref": "#/$defs/harmonic_lock"},
+    "outcome_status": {"enum": ["scored", "rejected", "not_applicable"]},
+    "rejection_reason": {
+      "type": ["string", "null"],
+      "pattern": "^(MISSING_INPUT|RADAR_QC_FAIL|ECG_QC_FAIL|RSP_QC_FAIL|SYNC_FAIL|METHOD_REJECTED|REFERENCE_NOT_AVAILABLE|WINDOW_NOT_SCORABLE)(:[A-Z0-9_]+)?$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"reference_qc": {"properties": {"ecg": {"properties": {"available": {"const": false}}}}}}},
+      "then": {
+        "properties": {
+          "hr": {"properties": {"scorable": {"const": false}}},
+          "beat": {"properties": {"scorable": {"const": false}}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"reference_qc": {"properties": {"rsp": {"properties": {"available": {"const": false}}}}}}},
+      "then": {"properties": {"br": {"properties": {"scorable": {"const": false}}}}}
+    },
+    {
+      "if": {"properties": {"outcome_status": {"const": "scored"}}},
+      "then": {"properties": {"rejection_reason": {"type": "null"}}},
+      "else": {"properties": {"rejection_reason": {"type": "string"}}}
+    }
+  ],
+  "$defs": {
+    "nullable_number": {"type": ["number", "null"]},
+    "qc_status": {"enum": ["pass", "fail", "not_available", "not_run"]},
+    "method": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "implementation_class", "source_commit", "config_sha256", "input_sha256"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "implementation_class": {"enum": ["project_existing", "official_repository", "mature_external_repository", "paper_reimplementation"]},
+        "source_commit": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+        "config_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "input_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "radar_qc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "quality_stratum", "timestamp_coverage", "finite_ratio", "max_gap_s", "target_snr_db", "target_coherence", "motion_status", "rejection_reason"],
+      "properties": {
+        "status": {"$ref": "#/$defs/qc_status"},
+        "quality_stratum": {"enum": ["high", "medium", "low", "rejected"]},
+        "timestamp_coverage": {"$ref": "#/$defs/nullable_number"},
+        "finite_ratio": {"$ref": "#/$defs/nullable_number"},
+        "max_gap_s": {"$ref": "#/$defs/nullable_number"},
+        "target_snr_db": {"$ref": "#/$defs/nullable_number"},
+        "target_coherence": {"$ref": "#/$defs/nullable_number"},
+        "motion_status": {"enum": ["pass", "fail", "not_available"]},
+        "rejection_reason": {"type": ["string", "null"]}
+      }
+    },
+    "reference_stream_qc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["available", "status", "sampling_rate_hz", "valid_ratio", "source_kind", "rejection_reason"],
+      "properties": {
+        "available": {"type": "boolean"},
+        "status": {"$ref": "#/$defs/qc_status"},
+        "sampling_rate_hz": {"$ref": "#/$defs/nullable_number"},
+        "valid_ratio": {"$ref": "#/$defs/nullable_number"},
+        "source_kind": {"enum": ["raw_waveform", "preannotated_events", "derived_events", "none"]},
+        "rejection_reason": {"type": ["string", "null"]}
+      }
+    },
+    "reference_qc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ecg", "rsp", "r_peaks"],
+      "properties": {
+        "ecg": {"$ref": "#/$defs/reference_stream_qc"},
+        "rsp": {"$ref": "#/$defs/reference_stream_qc"},
+        "r_peaks": {"$ref": "#/$defs/reference_stream_qc"}
+      }
+    },
+    "sync": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "timestamp_origin", "offset_ms", "offset_source", "per_window_search_used"],
+      "properties": {
+        "status": {"enum": ["pass", "fail", "not_required"]},
+        "timestamp_origin": {"type": "string", "minLength": 1},
+        "offset_ms": {"$ref": "#/$defs/nullable_number"},
+        "offset_source": {"enum": ["source_timestamps", "development_fixed", "documented_device_constant", "none"]},
+        "per_window_search_used": {"const": false}
+      }
+    },
+    "rate_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scorable", "reference_value", "estimate_value", "absolute_error"],
+      "properties": {
+        "scorable": {"type": "boolean"},
+        "reference_value": {"$ref": "#/$defs/nullable_number"},
+        "estimate_value": {"$ref": "#/$defs/nullable_number"},
+        "absolute_error": {"$ref": "#/$defs/nullable_number"}
+      }
+    },
+    "beat_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scorable", "status", "match_tolerance_ms", "reference_count", "estimate_count", "matched_count", "precision", "recall", "f1", "timing_mae_ms", "ibi_mae_ms"],
+      "properties": {
+        "scorable": {"type": "boolean"},
+        "status": {"enum": ["matched", "unmatched", "not_scorable", "blocked_hrv"]},
+        "match_tolerance_ms": {"type": "number", "enum": [50, 75, 100, 150]},
+        "reference_count": {"type": ["integer", "null"], "minimum": 0},
+        "estimate_count": {"type": ["integer", "null"], "minimum": 0},
+        "matched_count": {"type": ["integer", "null"], "minimum": 0},
+        "precision": {"$ref": "#/$defs/nullable_number"},
+        "recall": {"$ref": "#/$defs/nullable_number"},
+        "f1": {"$ref": "#/$defs/nullable_number"},
+        "timing_mae_ms": {"$ref": "#/$defs/nullable_number"},
+        "ibi_mae_ms": {"$ref": "#/$defs/nullable_number"}
+      }
+    },
+    "harmonic_lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "reference_basis", "tolerance_bpm"],
+      "properties": {
+        "classification": {"enum": ["none", "two_x_hr", "half_x_hr", "resp_h2", "resp_h3", "resp_h4", "not_assessable", "ambiguous"]},
+        "reference_basis": {"enum": ["ecg_hr", "rsp_br", "ecg_hr_and_rsp_br", "none"]},
+        "tolerance_bpm": {"$ref": "#/$defs/nullable_number"}
+      }
+    }
+  }
+}
