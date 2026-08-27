@@ -8,9 +8,9 @@
 
 - 北京报告 cohort：70 sessions、46 natural participants、1,400 probes；label 1 对 labels 2/3/4；C+B 主窗口 30 s，10/20 s 为行为敏感性；participant-disjoint 5-fold；这是当前北京 C+B 锚点，不是未来 Beijing+Zhuhai global folds。
 - Probe 四类语义固定为：1 完全任务聚焦，2 关注实验但未聚焦分拣，3 任务无关思维，4 思维空白。2/3/4 不得统称 mind-wandering。
-- NIR 当前 69/72 formal fullclass complete 仍未变化；68 sessions/44 participants/1,360 probes 是 timestamp recovery 前的 `PRE_TIMESTAMP_RECOVERY_CURRENT_RESULT`，不是最终完整预测结果。sub-100/sub-178 已证明不是真实 AVI frame-gap blocker，当前为 `RECOVERABLE_PENDING_FULL_RECOVERY_QC_PROBE_ALIGNMENT`；sub-099 仍为 `master_timeline` blocker。若 recovery 改变 matched cohort，必须按冻结规则 rerun，NIR v2 仍需先完成 blink/PERCLOS 手工可行性检查。
-- RGB 目前是 `PIPELINE_ENGINEERING_PENDING / FORMAL_ANALYSIS_NOT_AUTHORIZED`。`rgb-amd`、`rgb-nvidia` 先完成工程和 parity；局部 parquet 不得当作正式统计结果。
-- mmWave C1 HRV 线已停止扩展，不能解释为硬件失败；C2B/C2C 没有稳定超越 C+B 的正增量，M1 作为 supporting person-effect audit，主线定位为 validation boundary/ablation。
+- NIR producer 已完成 2026-08-26 timestamp mapping 修复：`sub-100`、`sub-178` 经 sequential AVI-frame mapping 恢复，当前 source/formal fullclass 成功数为 **71/72**；matched cohort 为 **71 sessions / 1,420 unique probes**，其中 primary coverage `>=0.80` 为 1,174 probes。`sub-099` 仍因缺失有效 `master_timeline.csv` 阻塞。旧 68-session/1,360-probe NIR v1 科学分析在 cohort 扩大后没有自动重跑，因此旧增量结果只能作为 historical/pre-recompute evidence，不能冒充最终 NIR increment。
+- RGB 当前主线为 **Face + Pose + Motion** 连续行为测量，不直接输出 Attention Score，rPPG/HR/HRV 不在正式 RGB 主链。NVIDIA 侧共享科学层已进入 `nvidia-cuda`，但 `sub-130` native CPU ↔ CUDA parity、gap stress、primary-face/blink/PERCLOS gate、direct full-video runner 与统一正式 schema 尚未全部完成；在这些 Gate 完成前不进行 NVIDIA RGB 正式全量，局部 parquet/pilot 不得当作正式统计结果。
+- mmWave C1 HRV 线已停止扩展，不能解释为硬件失败；C2B/C2C 没有稳定超越 C+B 的正增量，M1 作为 supporting person-effect audit，主线定位为 validation boundary/ablation。AgeBalanced reanalysis 已确认旧约 27–38 BPM 断层主要来自把内部 `ecg_reference_v1` 错当官方 benchmark ground truth；按官方 AgeBalanced ECG FFT 重算，现有 project route 30 s development pooled MAE 为 **10.361 BPM**。该结果只修正外部 HR benchmark 口径，不等于 HRV 已验证，也没有打开 held-out 80。
 - 北京 B1+B2 与珠海 B1+B2 是 shared primary，珠海 B3 是 extension。`DEFERRED_EXTERNAL_STORAGE_NOT_AVAILABLE` 表示外部存储暂不可用，不表示数据不存在。
 
 ## 科学方法终审
