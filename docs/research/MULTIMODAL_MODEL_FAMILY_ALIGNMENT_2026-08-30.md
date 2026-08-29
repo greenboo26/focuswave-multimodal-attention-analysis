@@ -101,10 +101,21 @@ No scientific model, #16, NIR/RGB producer, or raw-data operation is authorized 
 
 ## 7. Time-budgeted execution priority
 
-These are implementation/runtime estimates assuming the matched feature matrix, target labels, QC fields, and LOSO fold contract are already ready. They are planning estimates, not measured benchmark results.
+The project already collects behavior + mmWave + NIR + RGB within the same acquisition session, and every modality has timestamps for temporal alignment. A participant/session/probe mother table already exists. Therefore the project must **not** budget time as if cross-source identity reconstruction or de-novo multimodal alignment were required.
 
-- Data alignment / matched-cohort build / leakage checks: typically 2–6 hours if schemas already line up; this can expand to 1–2 days if NIR/RGB outputs, missingness, participant/session/probe keys, or QC semantics need repair. This is the highest schedule risk.
-- Regularized logistic 8-subset ladder + LOSO + incremental deltas: about 1–3 hours once the matrix is ready. Shapley and pairwise interaction are cheap after the 8 models exist and usually add well under 1 hour.
+The remaining merge step is narrower:
+
+- attach each producer's formal feature/QC outputs to the existing mother-table/probe timeline;
+- verify timestamp/window mapping and probe labels;
+- audit missing/QC cases;
+- freeze the common matched denominator and participant-level LOSO folds.
+
+If the producer outputs already expose the required timestamps/probe identifiers and formal features, this merge/audit step should normally be a short task (roughly tens of minutes to ~1–2 hours), not the dominant schedule bottleneck. Longer delays would indicate producer/schema/QC readiness problems rather than a fundamental multimodal alignment problem.
+
+Implementation/runtime estimates after formal modality outputs are ready:
+
+- Existing mother-table attach + timestamp/QC/missingness verification + matched cohort freeze: roughly 0.5–2 hours when schemas are clean.
+- Regularized logistic 8-subset ladder + LOSO + incremental deltas: about 1–3 hours. Shapley and pairwise interaction are cheap after the 8 models exist and usually add well under 1 hour.
 - Random forest on the same folds/subsets: about 1–3 hours including a restrained hyperparameter grid and reporting. It is optional if the deadline is severe.
 - Simple MLP concatenation: about 2–4 hours including implementation, training, basic tuning, convergence checks, and report generation.
 - Quality-aware gated fusion: about 3–6 hours after the MLP pipeline works, because it adds model code, QC/availability inputs, stability checks, and comparison against simple fusion.
@@ -113,9 +124,9 @@ These are implementation/runtime estimates assuming the matched feature matrix, 
 
 Time-priority decision under a tight deadline:
 
-1. Must do: matched cohort + participant-safe LOSO + logistic 8-subset ladder + incremental contribution/complementarity summary.
+1. Must do: reuse existing mother table + timestamp-aligned formal outputs, freeze matched cohort and participant-safe LOSO, run logistic 8-subset ladder, and compute incremental contribution/complementarity.
 2. Strongly preferred if time remains: random forest OR simple MLP. If only one can be added, prefer the simple MLP when the project needs an explicit AI model, and prefer random forest when the priority is methodological robustness with minimum implementation risk.
 3. Optional: gated fusion only after the simple MLP baseline is stable and there is enough time for a fair held-out comparison.
 4. Skip under deadline pressure: cross-modal attention / Transformer and LightGBM expansion.
 
-The main schedule bottleneck is therefore not the logistic/random-forest training itself; it is getting a trustworthy, versioned, matched mmWave+NIR+RGB feature matrix and QC/alignment contract. If that input is clean, the core multimodal analysis can plausibly be completed within one working day; if the producer/alignment layer is not ready, model complexity should be reduced rather than spending the remaining time on deeper architectures.
+Given the existing synchronized acquisition/timestamps and mother table, the likely schedule bottleneck is now **formal NIR/RGB producer readiness and feature/QC availability**, not multimodal temporal alignment itself.
