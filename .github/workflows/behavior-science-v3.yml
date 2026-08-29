@@ -1,0 +1,30 @@
+name: behavior-science-v3-synthetic
+
+on:
+  push:
+    branches:
+      - codex/behavior-formal-v3-rejected-baseline-fix
+  pull_request:
+    branches:
+      - codex/behavior-science-v3-baseline
+
+jobs:
+  synthetic-contract-and-implementation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install test dependencies
+        run: >-
+          python -m pip install --upgrade pip pytest
+          numpy pandas scipy scikit-learn matplotlib statsmodels
+      - name: Compile behavior v3
+        run: python -m compileall -q pipelines/behavior/behavior_science_v3 tests/test_behavior_science_v3_contract.py tests/test_behavior_science_v3_analysis.py
+      - name: Run synthetic-only behavior v3 tests
+        env:
+          MPLBACKEND: Agg
+        run: python -m pytest tests/test_behavior_science_v3_contract.py tests/test_behavior_science_v3_analysis.py -q
