@@ -12,7 +12,13 @@ from pipelines.behavior.formal_bb.group_validation import (
     build_group_kfold_assignments,
     fit_transform_train_only,
 )
-from pipelines.behavior.formal_bb.producer import _sdt, produce
+from pipelines.behavior.formal_bb.producer import (
+    _load_inputs,
+    _prepare_trials,
+    _sdt,
+    _select_probe_preceding_trials,
+    produce,
+)
 from tests.fixtures.formal_bb.build_fixture import build
 
 
@@ -62,6 +68,89 @@ def test_probe_window_is_left_closed_and_anchor_exclusive(tmp_path: Path):
     assert probe.window_end_s_exclusive - probe.window_start_s == 5
 
 
+def test_probe_windows_contain_only_prior_behavior_trials_within_session_and_block(
+    tmp_path: Path,
+):
+    manifest, identity, config = build(tmp_path / "fixture")
+    fixture_root = manifest.parent
+
+    # Deliberately place the questionnaire/probe onset after its anchored trial.
+    # A time-only half-open filter would incorrectly include the anchor trial.
+    b1_path = fixture_root / "syn-001_B1.csv"
+    b1 = pd.read_csv(b1_path)
+    anchor_mask = b1.is_probe.eq(1)
+    b1.loc[anchor_mask, "probe_onset_time"] = (
+        pd.to_numeric(b1.loc[anchor_mask, "absolute_onset_time"]) + 500
+    )
+    b1.to_csv(b1_path, index=False, encoding="utf-8-sig")
+
+    # Add overlapping timestamps in another Block and another session.
+    b2 = b1.copy()
+    b2["block_num"] = 2
+    b2["is_probe"] = 0
+    b2["probe_response"] = ""
+    b2["probe_vigilance"] = ""
+    b2["probe_onset_time"] = ""
+    b2_path = fixture_root / "syn-001_B2.csv"
+    b2.to_csv(b2_path, index=False, encoding="utf-8-sig")
+    manifest_frame = pd.read_csv(manifest, dtype=str).fillna("")
+    manifest_frame = pd.concat([
+        manifest_frame,
+        pd.DataFrame([{
+            "session_id": "syn-001",
+            "block_id": "B2",
+            "behavior_path": b2_path.name,
+            "include": "true",
+            "exclusion_reason": "",
+            "source_contract": "focuswave_raw_behavior_bb_v1",
+        }]),
+    ], ignore_index=True)
+    manifest_frame.to_csv(manifest, index=False, encoding="utf-8-sig")
+
+    s2_path = fixture_root / "syn-002_B1.csv"
+    s2 = pd.read_csv(s2_path)
+    s2["absolute_onset_time"] = pd.to_numeric(s2["absolute_onset_time"]) - 100_000
+    s2_probe = s2["probe_onset_time"].notna()
+    s2.loc[s2_probe, "probe_onset_time"] = (
+        pd.to_numeric(s2.loc[s2_probe, "probe_onset_time"]) - 100_000
+    )
+    s2.to_csv(s2_path, index=False, encoding="utf-8-sig")
+
+    out = tmp_path / "out"
+    produce(manifest, identity, config, out)
+    windows = pd.read_csv(out / "window_metrics.csv")
+    repaired = windows[
+        windows.session_id.eq("syn-001")
+        & windows.block_id.eq("B1")
+        & windows.window_type.eq("probe_preceding_seconds")
+    ].iloc[0]
+    assert repaired.total_trial_opportunities == 4
+
+    cfg = json.loads(config.read_text(encoding="utf-8"))
+    _, _, raw_trials = _load_inputs(manifest, identity, cfg)
+    trials = _prepare_trials(raw_trials, cfg)
+    probes = trials[trials.is_probe.eq(1)]
+    for probe in probes.itertuples(index=False):
+        anchor = (
+            probe.probe_time_s
+            if np.isfinite(probe.probe_time_s)
+            else probe.trial_time_s
+        )
+        for width in cfg["probe_window_seconds"]:
+            selected = _select_probe_preceding_trials(
+                trials,
+                probe,
+                start=float(anchor) - float(width),
+                end=float(anchor),
+            )
+            assert selected.is_probe.eq(0).all()
+            assert selected.trial_key.ne(probe.trial_key).all()
+            assert selected.trial_time_s.ge(float(anchor) - float(width)).all()
+            assert selected.trial_time_s.lt(anchor).all()
+            assert selected.session_id.eq(probe.session_id).all()
+            assert selected.block_id.eq(probe.block_id).all()
+
+
 def test_extreme_proportions_are_finite_and_low_opportunities_are_rejected():
     cfg = {"sdt_min_go_opportunities": 4, "sdt_min_nogo_opportunities": 2}
     perfect = _sdt(8, 8, 0, 4, cfg)
@@ -80,6 +169,19 @@ def test_legacy_bbb_contract_is_rejected(tmp_path: Path):
     frame.loc[0, "source_contract"] = "legacy_bbb_v3"
     frame.to_csv(manifest, index=False)
     with pytest.raises(ValueError, match="source_contract"):
+        produce(manifest, identity, config, tmp_path / "out")
+
+
+@pytest.mark.parametrize("legacy_component", ["BBB", "050-sart-formal"])
+def test_legacy_behavior_paths_are_rejected(
+    tmp_path: Path,
+    legacy_component: str,
+):
+    manifest, identity, config = build(tmp_path / "fixture")
+    frame = pd.read_csv(manifest, dtype=str).fillna("")
+    frame.loc[0, "behavior_path"] = f"{legacy_component}/legacy.csv"
+    frame.to_csv(manifest, index=False, encoding="utf-8-sig")
+    with pytest.raises(ValueError, match="legacy BBB/050-sart-formal"):
         produce(manifest, identity, config, tmp_path / "out")
 
 
