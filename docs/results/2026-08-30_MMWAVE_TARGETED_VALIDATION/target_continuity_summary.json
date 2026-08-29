@@ -1,0 +1,21 @@
+{
+  "status": "TARGETED_CONTINUITY_COMPLETE",
+  "sessions": [
+    "97793",
+    "9779",
+    "97795"
+  ],
+  "windows_per_session": 5,
+  "transition_count": 4,
+  "scope": "first 6000 frames only; five overlapping 20-second windows; no full batch",
+  "hr_bin_hops": 8,
+  "br_bin_hops": 9,
+  "hr_channel_switches": 11,
+  "br_channel_switches": 9,
+  "transition_count_total": 12,
+  "phase_jump_comparable_rows": 0,
+  "phase_jump_flag_gt_1rad": 0,
+  "motion_evidence": "not_available; no no-motion inference made",
+  "formal_bin_spacing_used_only_for_displacement_reporting_m": 0.037,
+  "algorithm_change": false
+}

@@ -47,6 +47,8 @@ PNGs remain local-only.
 | NIR completed audit | ENGINEERING_ONLY / PRODUCER_REPO_OWNED | existing NIR cards and manifests | `D:\Project\厚粲杯\11_数据\01_Attention-Analysis_nvidia-cuda_formal_NIR` | not a final NIR increment; no cross-repo merge | producer worktree |
 | multimodal LOSO | PLANNED_GLOBAL_ONLY | `docs/canonical/analysis_cards/multimodal_fusion.md` | matched multimodal inputs | final result MISSING; not run in this assimilation | canonical fusion contract |
 
+| MMWAVE_TARGETED_VALIDATION_20260830 | PASS / MMWAVE_MERGE_READY_CONTRACT_FROZEN | `../results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_TARGETED_VALIDATION_REPORT_2026-08-30.md` plus diagnostic CSV/JSON/manifest | `D:\acq_mmwave_data\sub-97793_`, `sub-9779_`, `sub-97795_`; first 6000 frames only | continuity measured but unstable; B not promoted; external RSP validation-only; HR/BR HOLD, HRV/IBI EXCLUDE, structural missing/loadability ALLOW | producer reference `640cacea31ee54a63de348ddf11ba87834cb0db6` |
+
 Explicitly MISSING at this checkpoint: full-cohort ECG/RSP vital validation,
 C1 full-cohort HRV validation, RGB derived-window features, and final
 multimodal LOSO results.

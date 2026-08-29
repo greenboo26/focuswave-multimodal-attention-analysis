@@ -470,3 +470,9 @@ HRV（仅供参考）：SDNN 49~173ms，RMSSD 40~223ms。
 - 恢复并重新绑定此前 RS6240 firmware/manual/SDK 审计：正式镜像 `mrs6240_p2512.img` 的 `fft_mode=2`、37 mm、256 点和 2T×4R 1D DataCube 路径已形成 primary-linked evidence。
 - 新增逐逻辑块审计、文献—项目 stage matrix、gap/decision ledger 和 source-controlled Mermaid flowchart；明确 lower-layer window/calibration、Tx/Rx timing、target continuity、active harmonic gate 和 HRV beat evidence 的缺口。
 - 不运行新科学分析、不运行 #16、不修改原始数据或 NIR/RGB producer。
+
+## 2026-08-30 — audit(mmwave): freeze targeted validation merge contract
+
+- 完成三场、首 6000 帧、五重叠窗口的 target/bin/channel continuity diagnostic；记录 HR/BR bin hopping、channel switching、phase comparability 和 provenance/QC 边界，不改 producer 数值路径。
+- 完成 current A、radar-only BR guard B、external-RSP diagnostic C；B 相对 A 无触发、无改善，不进入 producer；external RSP 仅作验证参考。
+- 冻结 portable V2 的 ALLOW/HOLD/EXCLUDE：结构性 missing/loadability `ALLOW`，HR/BR/RR 与 continuity/phase/motion QC `HOLD`，HRV/IBI 与外部 ECG/RSP 值 `EXCLUDE`；HRV 仍 `BLOCKED`，Issue #16 仍 `PAUSED`。

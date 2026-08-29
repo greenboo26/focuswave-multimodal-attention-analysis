@@ -1,0 +1,34 @@
+{
+  "methods": {
+    "A": {
+      "n_rows_with_error": 15,
+      "coverage_pct": 100.0,
+      "mae_bpm": 9.392482,
+      "median_abs_error_bpm": 3.147731,
+      "p95_abs_error_bpm": 27.664038,
+      "max_abs_error_bpm": 32.418778,
+      "external_harmonic_n": 3,
+      "external_harmonic_mae_bpm": 27.336009,
+      "non_harmonic_n": 12,
+      "non_harmonic_mae_bpm": 4.9066,
+      "b_rejections": null
+    },
+    "B": {
+      "n_rows_with_error": 15,
+      "coverage_pct": 100.0,
+      "mae_bpm": 9.392482,
+      "median_abs_error_bpm": 3.147731,
+      "p95_abs_error_bpm": 27.664038,
+      "max_abs_error_bpm": 32.418778,
+      "external_harmonic_n": 3,
+      "external_harmonic_mae_bpm": 27.336009,
+      "non_harmonic_n": 12,
+      "non_harmonic_mae_bpm": 4.9066,
+      "b_rejections": 0
+    }
+  },
+  "harmonic_definition": "external RSP C-only relation; +/-5 bpm around 2x/3x",
+  "catastrophic_error_definition": "not frozen; quantile/extreme summaries only",
+  "decision": "B_not_proposed_for_producer_from_this_targeted_sample",
+  "external_RSP_role": "validation_oracle_only_never_production_input"
+}

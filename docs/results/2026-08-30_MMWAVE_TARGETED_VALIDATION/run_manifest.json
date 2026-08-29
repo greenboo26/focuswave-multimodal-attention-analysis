@@ -1,0 +1,75 @@
+{
+  "status": "MMWAVE_TARGETED_VALIDATION_COMPLETE",
+  "producer_algorithm_modified": false,
+  "portable_repo_modified": false,
+  "issue_16": "PAUSED",
+  "hrv": "BLOCKED",
+  "external_rsp": "C_only_validation_reference_not_production_input",
+  "producer_reference_commit": "90269da3f5d687c10bc50ec27abc41b38df3b306",
+  "diagnostic_script_sha256": "28e829d236be92faa5949f6e9b037e2c49d91dd24bf83407a18590550dd28093",
+  "producer_script_sha256": "e25e3f137360a78df1841c65ac442fba9fbb85508079e019d474a5d168014cfd",
+  "inputs": [
+    "D:\\acq_mmwave_data\\sub-97793_",
+    "D:\\acq_mmwave_data\\sub-9779_",
+    "D:\\acq_mmwave_data\\sub-97795_"
+  ],
+  "a_current_outputs": [
+    "D:\\Project\\厚粲杯\\08_算法\\output\\20_生理金标准验证\\05_毫米波参照_FAST\\sub-97793_\\sub-97793_ses-SART_mmwave_vital_signs.json",
+    "D:\\Project\\厚粲杯\\08_算法\\output\\20_生理金标准验证\\05_毫米波参照_FAST\\sub-9779_\\_selection_60s\\sub-9779_ses-SART_mmwave_vital_signs.json",
+    "D:\\Project\\厚粲杯\\08_算法\\output\\20_生理金标准验证\\05_毫米波参照_FAST\\sub-97795_\\_selection_60s\\sub-97795_ses-SART_mmwave_vital_signs.json"
+  ],
+  "input_frame_range": {
+    "start": 0,
+    "end_exclusive": 6000,
+    "window_frames": [
+      [
+        0,
+        2000
+      ],
+      [
+        1000,
+        3000
+      ],
+      [
+        2000,
+        4000
+      ],
+      [
+        3000,
+        5000
+      ],
+      [
+        4000,
+        6000
+      ]
+    ]
+  },
+  "window_seconds_at_100hz": [
+    [
+      0.0,
+      20.0
+    ],
+    [
+      10.0,
+      30.0
+    ],
+    [
+      20.0,
+      40.0
+    ],
+    [
+      30.0,
+      50.0
+    ],
+    [
+      40.0,
+      60.0
+    ]
+  ],
+  "continuity_csv": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_merge_ready_20260830\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\target_continuity_diagnostic.csv",
+  "harmonic_csv": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_merge_ready_20260830\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\harmonic_abc_window_metrics.csv",
+  "sha256_target_continuity_diagnostic.csv": "eddf316c2afcaa7d87d49d3aa755398ce9a463fc34c208a76e044eb3bcedcdb7",
+  "sha256_harmonic_abc_window_metrics.csv": "3eb750d347303c79796cad77f3d36ea9ff4df097d3c9b0aa8524edae932bd4f8",
+  "sha256_target_continuity_summary.json": "4afdf558d08383a05094954a0d387f59b2f2ebab3199af8fd7cce1bdaf11d7af",
+  "sha256_harmonic_abc_summary.json": "f708ccf3fe27c4f4e65a4f2a3dc4d3c979e44d12e159233c57142f858ed9e413"
+}

@@ -111,3 +111,11 @@ For any new mmWave task, report in this order:
 6. what remains blocked.
 
 Do not replace project-state evidence with chat-memory reconstruction.
+
+## 2026-08-30 targeted execution state
+
+The ordered mmWave targeted validation is complete as `PASS / MMWAVE_MERGE_READY_CONTRACT_FROZEN`. The small diagnostic sample found frequent target-selection switching rather than a stable cross-window target history: HR bin 8/12 hops, BR bin 9/12 hops, HR channel 11/12 switches, and BR channel 9/12 switches. No same-target phase transition was comparable, and independent motion evidence was unavailable; no movement attribution is permitted.
+
+The radar-internal BR harmonic guard B was run against current A on the same 15 windows. It triggered zero times and did not improve A. External RSP C identified three 3x diagnostic windows only; it is not a production input. Therefore HR and BR/RR are `HOLD`, continuity/phase/motion fields are diagnostic `HOLD`, HRV/IBI is `EXCLUDE`, and structural missing/loadability metadata is `ALLOW` under the portable V2 contract. HRV remains blocked at radar beat–ECG R-peak synchronization and paired IBI agreement; Issue #16 remains paused.
+
+Evidence package: `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`. This package supersedes the prior “instrumentation required / no rerun” status for this narrow representative diagnostic only; it does not authorize a full batch or a new target-lock method.

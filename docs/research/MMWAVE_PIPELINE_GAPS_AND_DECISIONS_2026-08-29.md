@@ -114,3 +114,21 @@ No formal batch, #16, C2B/C2C, NIR/RGB producer change, raw-data modification, o
 ## Next authorized gate
 
 The next action may only be chosen after preserving this audit record. If a future task seeks a scientific rerun, it must first name the exact changed input/semantic question, use the corrected formal distance contract, record the caller and producer commit, and preserve the same session denominator. No rerun follows from this document alone.
+
+## 2026-08-30 targeted validation closure
+
+### D-AUDIT-20260830-07 — continuity diagnostic is complete but does not pass the physiological feature gate
+
+The authorized diagnostic was run on `97793`, `9779`, and `97795`, using only frames 0–5999 and five overlapping 20-second windows per session. Across 12 adjacent transitions, HR bin hops were 8/12, BR bin hops 9/12, HR channel switches 11/12, and BR channel switches 9/12. No transition retained the same HR bin/channel pair for a directly comparable raw phase boundary diagnostic. Independent motion evidence was not present, so these switches cannot be attributed to participant movement.
+
+Decision: the continuity question is now measured for the representative set, but it is not stable enough to promote HR or BR/RR as formal physiological merge features. Keep the continuity table as diagnostic QC, mark HR and BR/RR `HOLD`, and do not introduce a tracker, target-lock redesign, AoA, beamforming, multi-bin search, or full-batch rerun in this cycle.
+
+### D-AUDIT-20260830-08 — targeted harmonic A/B/C does not justify a producer change
+
+The same 15 elapsed-time windows were compared against `.acq` ECG/RSP references. A is the current standalone radar result. B uses radar-derived BR only with a ±5 bpm 2x/3x guard and a radar-time fallback only when non-harmonic. C uses external RSP only as a diagnostic oracle. B triggered zero times and was identical to A (MAE 9.392 bpm; p95 absolute error 27.664 bpm); C marked three external-RSP 3x windows where A/B harmonic-window MAE was 27.336 bpm versus 4.907 bpm in the 12 non-harmonic windows.
+
+Decision: B is `NOT_PROPOSED_FOR_PRODUCER` from this targeted set. External RSP remains `VALIDATION_ONLY`; its observed harmonic relation cannot be used as a production input or as proof of physiology validity. HRV remains blocked and no new beat-level work is authorized by this result.
+
+### D-AUDIT-20260830-09 — merge-ready contract frozen with conservative feature dispositions
+
+The canonical integration contract is frozen for the read-only portable V2 target: structural missing/loadability metadata is `ALLOW`; HR, BR/RR, continuity QC, phase-stability QC, and motion/QC proxy are `HOLD` with explicit diagnostic-only semantics; HRV/IBI and external ECG/RSP values are `EXCLUDE`. `missing != 0 != success`, HR/RR remain separate, and no external reference value enters the final mmWave feature table. This closes the ordered task as `PASS / MMWAVE_MERGE_READY_CONTRACT_FROZEN` without upgrading any physiological claim.

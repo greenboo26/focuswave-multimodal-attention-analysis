@@ -279,3 +279,9 @@ This audit is **not complete** merely because it was explained in chat. Completi
 - descriptive commit.
 
 This gate is now complete in GitHub as `PIPELINE_SCIENTIFIC_AUDIT = PASS` for evidence recovery and source-level audit. The separate scientific sensitivity analysis in Issue #16 remains paused.
+
+## 2026-08-30 targeted-validation literature binding
+
+The targeted run binds the existing literature decisions rather than creating a new method claim. The literature-supported concern that range-bin choice and continuity affect vital-sign estimation is reflected in the measured 8/12 HR-bin and 9/12 BR-bin hops; it supports retaining continuity as a QC gate, not an unvalidated tracker. The literature-supported 2x/3x respiration-harmonic ambiguity is reflected in the three external-RSP 3x diagnostic windows. Because a true HR can itself lie near a respiration multiple, the internal radar-BR guard is not promoted from this sample and external RSP remains validation-only. The earliest HRV blocker remains paired radar-beat/ECG-R-peak and IBI evidence, consistent with the L8–L11 evidence boundary.
+
+Decision ledger update: `D-AUDIT-20260830-07` continuity is measured but not passed; `D-AUDIT-20260830-08` B is not a producer proposal; `D-AUDIT-20260830-09` freezes the conservative portable merge contract. HRV remains `BLOCKED` and Issue #16 remains `PAUSED`.

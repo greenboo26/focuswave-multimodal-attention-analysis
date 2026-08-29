@@ -201,3 +201,14 @@ The producer stores radar peak indices in NPZ and derives adjacent radar IBI-sha
 ### 7.5 Ordered execution result
 
 Overall status: **PARTIAL**. A has explicit source-level statuses but lacks formal-device deployment binding; B cannot provide a continuity rate without the specified instrumentation; C is inactive in the standard formal runner; D identifies the earliest missing HRV layer. No model run, #16, C2B/C2C, target-lock rerun, raw-data change, NIR/RGB change, or device burn was performed. Issue #16 remains **PAUSED**.
+
+## 7.6 Targeted execution addendum — supersedes the pre-instrumentation stop above
+
+The previous 7.2/7.5 text recorded the absence of continuity history before the authorized diagnostic. The targeted package `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/` now supplies that small-sample history without changing the producer call or numerical output path.
+
+- Scope: sessions `97793`, `9779`, `97795`; first 6000 frames; five overlapping 20-second windows per session; 12 adjacent transitions; no full formal batch.
+- Instrumented fields: current/previous HR and BR bin/channel, bin displacement and 0.037 m reporting conversion, switch flags, current selection scores/rationale, phase comparability status, and provenance/QC boundary.
+- Result: HR bin hops 8/12; BR bin hops 9/12; HR channel switches 11/12; BR channel switches 9/12. There were zero same-target HR transitions for raw phase boundary comparison. Motion evidence was unavailable and no movement inference was made.
+- Interpretation: continuity is measured but not stable; HR and BR/RR remain `HOLD` for portable physiological feature ingestion. The diagnostic table is not a new target tracker and does not authorize target-lock/AoA/beamforming/multi-bin expansion.
+
+The A/B/C harmonic package is also complete. B uses radar BR only and is identical to A in this sample; C uses external RSP only to label validation windows. B is not promoted, external RSP is not a production dependency, and the standard runner remains free of `acq_path/ext_br_bpm` input. HRV remains `BLOCKED` at radar-beat to ECG-R-peak synchronization and paired IBI agreement. The overall ordered task is therefore `PASS / MMWAVE_MERGE_READY_CONTRACT_FROZEN`, with the conservative ALLOW/HOLD/EXCLUDE table in the targeted report.

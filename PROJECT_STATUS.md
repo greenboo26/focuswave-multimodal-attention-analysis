@@ -124,3 +124,12 @@ producer worktree 仍然保留。
 - Interpretation remains bounded: target lock is a mixed heuristic, standard formal execution does not activate the optional scalar RSP harmonic check, HRV is not ECG R-peak aligned, and corrected `33/37/2` tiers are current-pipeline QC eligibility strata rather than acquisition-quality, participant-compliance, or physiology-validity labels.
 - This was a read-only scientific audit. No model run, C2B/C2C rerun, target-lock rerun, raw-data change, NIR/RGB change, or Issue #16 execution occurred. Issue #16 remains paused.
 
+## 2026-08-30 targeted mmWave validation — PASS / MMWAVE_MERGE_READY_CONTRACT_FROZEN
+
+- Completed the ordered targeted validation on `97793`, `9779`, and `97795`, using only the first 6000 frames and five overlapping windows per session; no full formal batch was run.
+- Firmware identity is `CONFIRMED_WITH_PROVENANCE_LIMITATION`: the operator confirms `mrs6240_p2512.img` was used throughout formal acquisition; the machine burn/boot/version receipt remains missing. Remaining upstream engineering items retain explicit `UNRESOLVED` or `SDK/MANUAL_ONLY` status.
+- Current target-selection continuity is not stable in the targeted sample: HR bin hops 8/12, BR bin hops 9/12, HR channel switches 11/12, BR channel switches 9/12. No same-target phase transition was available for comparison and independent motion evidence is absent; no movement attribution is made.
+- A/B/C harmonic validation completed. B used radar-derived BR only and was identical to A (MAE 9.392 bpm; no trigger/rejection); C identified three external-RSP 3x windows with A/B harmonic-window MAE 27.336 bpm. B is not proposed for producer promotion; external RSP remains validation-only.
+- Frozen portable-V2 contract: HR and BR/RR `HOLD`; HRV/IBI `EXCLUDE`; continuity/phase/motion fields `HOLD` as diagnostic QC only; missing/loadability `ALLOW` as structural metadata. HRV remains blocked at radar beat–ECG R-peak synchronization and paired IBI agreement.
+- Evidence package: `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`. Issue #16 remains `PAUSED`; portable V2 was read-only and unchanged.
+
