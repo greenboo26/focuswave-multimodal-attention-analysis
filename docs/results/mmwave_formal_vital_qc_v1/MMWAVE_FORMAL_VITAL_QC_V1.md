@@ -42,9 +42,13 @@ Tier1=33、Tier2=37、Tier3=2。该状态不把 Tier1 写成 ground-truth valida
 
 ## Use-tier definitions and gates
 
-### 先澄清“17 场”
+### Historical pre-37 mm QC：`HISTORICAL_PRE_37MM_QC_V1`
 
-“17 场”不是“生命体征可用”，也不是 ECG/RSP 对照通过。它表示 **Tier 1 QC-eligible candidate**：在现有 formal 产物中，`window_quality_pct >= 80`、`probe_quality_pct >= 80`，且没有已有 target-lock 几何/相位不稳定标记。它们具有可进入后续综合分析的质量候选资格；HR/RR 只能标为 `candidate_only`，HRV 为 `no`，attention model 为 `no`。严格说，它们的主归因仍是 `U_unresolved`（未能从现有证据进一步定位失败原因），不是 usable。
+旧 **17/53/2** 是 corrected distance audit 前的历史 QC v1 口径，不是当前结论。旧 17 场曾被列为 Tier 1 QC-eligible candidate，旧 53 场曾被列为 motion/quality-only；这些数字仅用于解释历史决策和结果迁移，统一标记为 `HISTORICAL_PRE_37MM_QC_V1`，不得作为当前 #16 输入。
+
+### Current corrected 37 mm QC gate
+
+当前正式口径只使用 corrected distance `0.037 m/bin`：Tier1=`33`、Tier2=`37`、Tier3=`2`。Tier1 是 QC-eligible candidate，不等于 HR/BR ground-truth validated；Tier2 仅作 motion/quality 或预定义 sensitivity 对照；Tier3（067/099）不进入 formal #16 生理输入。
 
 ### 三个 use-tier 的 gate
 
@@ -56,17 +60,22 @@ Tier1=33、Tier2=37、Tier3=2。该状态不把 Tier1 写成 ground-truth valida
 
 补充限制：D (`hrv_too_strict_not_supported`) 适用于有 HRV 数值但无充分逐搏 ECG 验证的 session；E (`construct_validity_not_sensor_quality`) 表示独立 ECG/RSP 揭示的构念效度/谐波风险。D/E 不是传感器质量 pass，也不是 Tier 1 的放行证明。上述 gate 适用于 formal 主队列；ECG/RSP 小样本只用于参照协议和归因，不把 5 场扩展为 70 场金标准覆盖。
 
-### “只能用于微动/体动：53 场”的具体含义
+### Historical pre-37 mm interpretation：旧“只能用于微动/体动：53 场”
 
-53 场 = B 类 44 场 + C 类 9 场，均不是因为“缺 ECG/RSP”这一单一原因。B 由 `target_lock_status` 中的 `distance_implausible`、`plausible_distance_phase_unstable` 或 `plausible_distance_low_signal_presence` 决定；C 由既有输出存在但 `window_quality_pct <80` 或 `probe_quality_pct <80` 决定。它们可以保留已有毫米波信号/相位变化作微动或体动层描述，但本 QC 不授权将其 HR/RR 解释为有效生命体征。
+旧 53 场 = B 类 44 场 + C 类 9 场，均不是因为“缺 ECG/RSP”这一单一原因。B 由 `target_lock_status` 中的 `distance_implausible`、`plausible_distance_phase_unstable` 或 `plausible_distance_low_signal_presence` 决定；C 由既有输出存在但 `window_quality_pct <80` 或 `probe_quality_pct <80` 决定。它们可以保留已有毫米波信号/相位变化作微动或体动层描述，但这一旧分类不得作为当前 #16 输入。
 
 ### 1,297/1,400 到底是什么 pass
 
-`1,297/1,400` 是既有 70 场主队列的 **probe-level mmWave quality flag**（`probe_quality_pct` 的分子/分母）：表示探针对应窗口在既有毫米波质量产物中被标记为 `ok`。它不是文件完整性 pass、不是 timestamp/sync pass、不是 ECG/RSP 对照 pass，也不是 HR/RR/HRV 生理准确性 pass。它与本批分层的关系是：它支持 probe 层覆盖描述；只有同时满足 window ≥80%、probe ≥80% 且无 B 标记，才进入 Tier 1 的 17 场。其余主队列场次进入 Tier 2 或更低，不应把 1,297/1,400 改写为“毫米波生命体征可用”。
+`1,297/1,400` 是既有 70 场主队列的 **probe-level mmWave quality flag**（`probe_quality_pct` 的分子/分母）：表示探针对应窗口在既有毫米波质量产物中被标记为 `ok`。它不是文件完整性 pass、不是 timestamp/sync pass、不是 ECG/RSP 对照 pass，也不是 HR/RR/HRV 生理准确性 pass。当前 corrected 分层中，满足既有联合 gate 的 Tier 1 为 `33` 场；不能把 1,297/1,400 改写为“毫米波生命体征可用”。
 
-### Session crosswalk
+### Current corrected 37 mm session crosswalk
 
-完整交叉表另存为 `mmwave_session_use_tier_crosswalk.csv`；以下为同一表的可读版本：
+当前 session crosswalk 必须使用：`D:\Project\厚粲杯\08_算法\docs\results\mmwave_formal_vital_qc_v1\mmwave_session_use_tier_crosswalk_corrected37mm.csv`。
+该表的 `new_tier` 计数为 Tier1=33、Tier2=37、Tier3=2；Tier3 为 `067`、`099`。该 corrected 表替代旧 crosswalk 作为当前 #16 输入依据。
+
+### Historical pre-37 mm session crosswalk：`HISTORICAL_PRE_37MM_QC_V1`
+
+以下旧表完整保留，仅用于历史追溯；它不是当前 #16 输入：
 
 | session_id | probe_count | qc_probe_pass_count | failure_mode | use_tier | can_use_for_motion | can_use_for_rr | can_use_for_hr | can_use_for_hrv | can_use_for_attention_model | reason |
 |---|---:|---:|---|---|---|---|---|---|---|---|
@@ -145,15 +154,15 @@ Tier1=33、Tier2=37、Tier3=2。该状态不把 Tier1 写成 ground-truth valida
 
 ## Session 分层结果
 
-### Tier 1：QC-eligible candidate（不是生命体征已用）
+### Current corrected Tier 1：QC-eligible candidate（不是生命体征已用）
 
-共 **17** 场：`074, 078, 082, 083, 091, 094, 095, 098, 106, 107, 114, 119, 124, 125, 126, 129, 134`
+共 **33** 场：`071,072,074,076,078,082,083,086,088,089,091,093,094,095,096,098,100,106,107,109,110,114,116,119,124,125,126,129,130,134,139,143,170`
 
 判定：窗口质量和 probe 覆盖均 ≥80%，且未被已有 target-lock 几何/相位标记阻断。HR/RR 仅作为后续研究候选；BR 仍为 supporting sensitivity；HRV 统一标记 D，不进入确认性主结论。不得写成“生命体征可用”。
 
-### Tier 2：只能用于微动/体动
+### Current corrected Tier 2：只能用于质量分层对照/微动体动
 
-共 **53** 场。包括主归因 B 的几何/相位/低信号证据，以及主归因 C 的窗口或 probe 覆盖不足场次。它们可保留相位变化、微动或体动层面的描述性信息，不应直接解释为 HR/BR/HRV。
+共 **37** 场。包括 corrected distance、几何/相位/低信号或既有 coverage 条件未达到 Tier1 的场次。它们可作为 #16 预定义 quality-stratified 对照，但不得直接解释为 validated HR/BR/HRV。
 
 ### Tier 3：不可用于 formal v1
 
@@ -171,9 +180,8 @@ Tier1=33、Tier2=37、Tier3=2。该状态不把 Tier1 写成 ground-truth valida
 
 ## 报告书可直接粘贴的毫米波 QC 结论段
 
-本研究对正式毫米波记录实施了预先冻结的分层质量控制：ECG/RSP 参考侧采用带通、逐搏/逐周期异常剔除及 ≥80% 正常比例判定；毫米波侧沿用既有 v3.1.1 producer 与行为时间门控，对 10 s 信号存在性窗和 probe 覆盖进行审计，并将缺失/同步、雷达几何或运动、生命体征输出门控失败、HRV 逐搏证据不足、构念效度风险和未解析状态分开记录。QC v1 将 17 场列为 Tier 1 质量候选（**不是生命体征已用**），53 场仅保留微动/体动层信息，2 场因输入或时间轴 linkage 不足不可用于 formal 主分析。独立 BIOPAC 参照显示，毫米波 HR course 的窗口级误差低于逐峰 HR，但 BR 峰值与 HRV 仍存在明显不一致；尤其呼吸二/三次谐波可在信号稳定时产生“强而错”的心跳锁定。因此，本研究不以“数据质量差”或笼统“算法问题”概括结果，而按证据层级限制毫米波 HR/RR 的研究性使用，并不将 HRV 作为已验证生理指标或专注效标输入。
+本研究对正式毫米波记录实施了预先冻结的分层质量控制：ECG/RSP 参考侧采用带通、逐搏/逐周期异常剔除及 ≥80% 正常比例判定；毫米波侧沿用既有 v3.1.1 producer 与行为时间门控，对 10 s 信号存在性窗和 probe 覆盖进行审计，并将缺失/同步、雷达几何或运动、生命体征输出门控失败、HRV 逐搏证据不足、构念效度风险和未解析状态分开记录。corrected 37 mm QC 将 **33 场**列为 Tier 1 质量候选（**不是生命体征已验证**），**37 场**列为 Tier 2 质量/运动对照，**2 场**因输入或时间轴 linkage 不足不可用于 formal 主分析。旧 17/53/2 仅为 `HISTORICAL_PRE_37MM_QC_V1`，不得作为当前 #16 输入。独立 BIOPAC 参照显示，毫米波 HR course 的窗口级误差低于逐峰 HR，但 BR 峰值与 HRV 仍存在明显不一致；尤其呼吸二/三次谐波可在信号稳定时产生“强而错”的心跳锁定。因此，本研究不以“数据质量差”或笼统“算法问题”概括结果，而按证据层级限制毫米波 HR/RR 的研究性使用，并不将 HRV 作为已验证生理指标或专注效标输入。
 
 ## 验证与限制
 
 本批读取并核对了既有 matrix、formal output audit、subject summary、segment quality、ECG/RSP 参考比较与规则脚本；输出 CSV/JSON/Markdown 均可读。未提交、未推送；工作区原有大量用户修改保持不变。治理主 checkout 未能在本机解析，故治理基线的独立复核仍是限制。
-
