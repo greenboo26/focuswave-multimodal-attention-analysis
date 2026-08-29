@@ -7,6 +7,7 @@ For local migration, first freeze a session manifest from the current raw BB sou
 Downstream code that expects the existing 12 probe features can initially read the compatibility aliases in `window_metrics.csv`. New code should migrate to the explicit canonical names and use opportunity/status fields. Block/session consumers should read those same canonical metric names rather than copying probe-window aliases. Q1 remains nominal four-class and Q2 remains ordered four-level; neither is a focus-total score.
 
 For prediction, generate `GroupKFold` assignments from `anonymous_participant_group_id`. All sessions in one anonymous group must use one fold. Within each fold, fit missing-value handling, scaling, feature selection, and the estimator on training rows only; transform the held-out fold afterward. Save fold assignments and fitted configuration provenance locally with the run manifest.
+
 ## Required regeneration after the anchor-exclusion repair
 
 Outputs produced from PR #19 baseline commit `0423beba1813bf81b16d4d7d7e9c7ac4763920e6` must not be reused when a probe row can fall inside its own pre-probe time interval. Regenerate all selected outputs from the same frozen manifest, identity map, and unchanged window configuration. The repaired membership rule is: same session, same Block, left-closed/right-open time interval, `is_probe=0`, and anchor `trial_key` excluded.
