@@ -1,5 +1,24 @@
 # 修改说明
 
+## 2026-08-29 — chore: enforce existing workspace traceability entry
+
+### 背景
+
+跨仓库工作曾把临时 worktree、结果位置和本机项目管理文件留在聊天或未登记目录中，下一次任务难以区分 canonical 入口、临时副本和历史快照。
+
+### 改动
+
+- 在根级 `AGENTS.md` 明确先读既有项目/目录规范，不新造平行状态、平行 `output/` 或临时 Git 仓库；
+- 强制实质进展同步到既有历史账本、当前进度、脚本/结果索引、manifest/provenance、CHANGELOG 和 handoff；
+- 强制提交说明包含修改、脚本/入口、结果位置、tracked/local-only 边界、验证、决策/阶段变化和下一步；
+- 明确 Git worktree、临时 clone、运行态、原始数据和大型输出的清理边界。
+
+### 验证与边界
+
+- 本次只改入口纪律文档，未运行科学分析，未改变 label/window/fold/seed/model/QC 或科学结果；
+- 脚本/生成结果：N/A；验证为 `git diff --check`、入口文本读取和 staged-path 检查；
+- 本地 `D:\Project\厚粲杯\08_算法` 的未提交用户内容不在本次提交范围内。
+
 > 格式参照 FocusWave（F:/FocusWave_1.3.6/04-docs/CHANGELOG.md）：每条 = 日期 + v版本 主题，结构 = 背景 / 改动 / 验证 / 涉及文件。
 > 2026-08-10 起本文件同时承担原 `docs/版本说明.md` 的版本演进记录（已合并，版本说明.md 删除）。
 > 版本号对应 `git tag v{版本}`（提交规范见 `docs/规范备忘.md`）。

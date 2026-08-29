@@ -6,6 +6,16 @@
 
 本仓库是 FocusWave 正式中央分析仓库，不是原始数据仓库，也不是单一毫米波 HRV 项目。任何机器 clone 后，先读取 `AI_PROJECT.md`、本文件、根目录 `ANALYSIS_HISTORY_LEDGER.md`、`README.md`、`PROJECT_STATUS.md`、相关 analysis card/contract；执行已完成本地分析的规范化复现时，再读取 `docs/repository/LOCAL_ANALYSIS_REPRODUCTION_RUNBOOK_V1.md`。
 
+## 既有项目结构与实质进展追溯门
+
+进入项目后先服从本仓库已有的 `ANALYSIS_HISTORY_LEDGER.md`、`docs/canonical/`、`PROJECT_STATUS.md`、`docs/`、`scripts/`、`results/`、contract 和 manifest 结构。不得新造平行状态文档、平行 `output/` 结构或临时 Git 仓库；组织文件不能替代项目已有的历史账本、当前状态地图和结果 provenance。
+
+任何新脚本、重跑、结果变化、方法决定、否决路线或输入语义修正，只要产生实质进展，必须在同一次工作中更新适用的历史账本/当前进度、脚本索引或 runbook、结果/图表/表格索引、manifest/provenance、`CHANGELOG.md` 和 handoff。每次材料性提交还必须明确：修改路径、脚本/入口路径、结果路径、tracked 与 local-only 输出边界、验证方式、决策/阶段变化和下一步。没有某类资产时明确写 `N/A`，不得把路径只留在聊天或临时 agent 输出中。
+
+若本仓库通过 `D:\Project\厚粲杯\08_算法` 的本机工作副本协作，外层工作区规则可作为补充：使用已经存在的 `D:\Project\厚粲杯\01_管理` 管理文件和 `08_算法/docs/00_治理/` 规范，不复制出第二套状态或结果体系；该路径不是远程 clone 的必需依赖。
+
+Git worktree、临时 clone、运行态、原始数据和大型结果在归档证据、唯一提交、旧路径引用和活动任务核验完成前不得移动或删除；不得用 `reset`、`clean` 或普通文件操作制造同步假象。
+
 `ANALYSIS_HISTORY_LEDGER.md` 是任何新算法、新特征、新 producer 改动或高成本重跑前的强制 Reuse Gate。必须先检查同类路线是否已经运行、采用、回退、被后续证据替代或存在 `MISSING_EVIDENCE`。若要重复已有路线，任务开头必须写明旧证据为什么不能回答当前问题；写不出来时默认不重复计算。
 
 机器外层的个人工作区规范（例如父目录 AGENTS/项目管理规范）如果存在可以补充读取，但不得作为本仓库可执行性的必需依赖。本仓库不得要求另一台机器存在某个固定 `D:\...` 工作区文件。
