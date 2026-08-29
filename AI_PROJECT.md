@@ -1,42 +1,12 @@
-# AI Project Discovery — FocusWave Multimodal Attention Analysis
+# AI project pointer
 
-Status: CANONICAL_PROJECT_POINTER
+- project_identity: FocusWave multimodal attention analysis
+- canonical_repository: https://github.com/greenboo26/focuswave-multimodal-attention-analysis.git
+- canonical_branch: main
+- repository_role: canonical analysis integration, contracts, documentation, reproducible audits, and cross-modal inference
+- central_governance: https://github.com/greenboo26/ai-governance; read `rules/repository-sync.yaml`
+- workspace_registry: `greenboo26/project@august/PROJECT_INDEX.md`
+- local_startup_files: `AGENTS.md` if present, then `README.md`, `docs/00_治理/`, and current status/handoff
+- related_repository_roles: `FocusWave` owns experiment production; `Attention-Analysis` owns NIR/RGB producer engineering; local `11_数据` owns data payloads
 
-## Identity
-
-- project system: FocusWave / 厚粲杯 multimodal attention
-- canonical repository: `greenboo26/focuswave-multimodal-attention-analysis`
-- canonical branch: `main`
-- repository role: **central scientific and multimodal analysis integration truth**
-
-This repository owns central analysis contracts, canonical/supporting result classification, cross-modality integration, participant/cohort/fold rules, central inference, provenance and current scientific-analysis state. It is not merely a millimeter-wave HRV repository.
-
-## Governance and workspace
-
-- central cross-AI governance: `greenboo26/ai-governance@main`
-- coordinated governance baseline at pointer creation: `b25577f7cb9d7e247bfbe56b73beaa3edd7cd94b` / v0.1.5
-- workspace registry: `greenboo26/project@august/PROJECT_INDEX.md`
-
-These are navigation/authority pointers. Scientific/project truth remains in this repository.
-
-## Startup order
-
-1. Resolve central governance or use the verified client startup block.
-2. Read this `AI_PROJECT.md`.
-3. Read root `AGENTS.md` and `CLAUDE.md` when applicable.
-4. Read `README.md` and `PROJECT_STATUS.md`.
-5. For scientific work, read `docs/canonical/SCIENTIFIC_METHOD_REVIEW_V1.md` and the relevant canonical runbook/contract before execution.
-6. Verify current branch/commit and current repository evidence before material writes or conclusions.
-
-## Related repositories and role boundaries
-
-- `kyandi233-dev/FocusWave` — experiment/acquisition application and program implementation; not central analysis truth.
-- `kyandi233-dev/Attention-Analysis` — NIR/RGB producer/runtime engineering under controlled refs; not final central scientific inference.
-- `greenboo26/FocusWave-Design-System` — design/interaction/prototype truth; not scientific analysis truth.
-- `greenboo26/project` — workspace coordination/registry only.
-
-Do not silently substitute any related repository for this repository's central analysis role.
-
-## Data boundary
-
-Raw participant data, row-level sensitive data, video, large sensor payloads, machine-local paths, credentials and runtime state remain outside Git unless explicitly allowed by this repository's existing contracts. `AI_PROJECT.md` must never contain those payloads.
+This file is navigation only. Current scientific and engineering truth remains in this repository's rules, status, handoff, tests, and evidence.
