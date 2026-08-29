@@ -98,3 +98,24 @@ Primary questions remain:
 Do not run the final multimodal ladder or AI model until NIR/RGB formal producer contracts, the mmWave allowed feature block, target/label, matched denominator, and participant-safe fold contract are frozen.
 
 No scientific model, #16, NIR/RGB producer, or raw-data operation is authorized by this document.
+
+## 7. Time-budgeted execution priority
+
+These are implementation/runtime estimates assuming the matched feature matrix, target labels, QC fields, and LOSO fold contract are already ready. They are planning estimates, not measured benchmark results.
+
+- Data alignment / matched-cohort build / leakage checks: typically 2–6 hours if schemas already line up; this can expand to 1–2 days if NIR/RGB outputs, missingness, participant/session/probe keys, or QC semantics need repair. This is the highest schedule risk.
+- Regularized logistic 8-subset ladder + LOSO + incremental deltas: about 1–3 hours once the matrix is ready. Shapley and pairwise interaction are cheap after the 8 models exist and usually add well under 1 hour.
+- Random forest on the same folds/subsets: about 1–3 hours including a restrained hyperparameter grid and reporting. It is optional if the deadline is severe.
+- Simple MLP concatenation: about 2–4 hours including implementation, training, basic tuning, convergence checks, and report generation.
+- Quality-aware gated fusion: about 3–6 hours after the MLP pipeline works, because it adds model code, QC/availability inputs, stability checks, and comparison against simple fusion.
+- Missing-modality robustness/ablation: about 1–3 hours once the trained pipeline exists.
+- Small cross-modal attention / Transformer-like model: roughly 0.5–1.5 additional working days including implementation, tuning, overfitting checks, and fair comparison. This is not deadline-critical and should be skipped unless simpler neural fusion has already produced a reproducible gain.
+
+Time-priority decision under a tight deadline:
+
+1. Must do: matched cohort + participant-safe LOSO + logistic 8-subset ladder + incremental contribution/complementarity summary.
+2. Strongly preferred if time remains: random forest OR simple MLP. If only one can be added, prefer the simple MLP when the project needs an explicit AI model, and prefer random forest when the priority is methodological robustness with minimum implementation risk.
+3. Optional: gated fusion only after the simple MLP baseline is stable and there is enough time for a fair held-out comparison.
+4. Skip under deadline pressure: cross-modal attention / Transformer and LightGBM expansion.
+
+The main schedule bottleneck is therefore not the logistic/random-forest training itself; it is getting a trustworthy, versioned, matched mmWave+NIR+RGB feature matrix and QC/alignment contract. If that input is clean, the core multimodal analysis can plausibly be completed within one working day; if the producer/alignment layer is not ready, model complexity should be reduced rather than spending the remaining time on deeper architectures.
