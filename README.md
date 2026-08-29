@@ -6,6 +6,17 @@
 
 ## 当前科学状态
 
+### 行为科学 v3 网页修复基线
+
+本分支 `codex/behavior-science-v3-baseline` 是网页普通聊天修复行为科学脚本的公开审阅 base。`v2` 结果已被监督判退，不得发布、上传、复制到本仓库或据此创建结果 PR。
+
+- 判退缺陷规范：[`docs/methods/行为科学v3判退缺陷规范.md`](docs/methods/行为科学v3判退缺陷规范.md)
+- v3 机器可读契约：[`contracts/behavior/行为科学v3分析契约.json`](contracts/behavior/行为科学v3分析契约.json)
+- 合成测试骨架：[`tests/test_behavior_science_v3_contract.py`](tests/test_behavior_science_v3_contract.py)
+- 判退脚本副本：[`scripts/rejected_baselines/behavior/generate_behavior_science_analysis_v2_rejected_baseline.py`](scripts/rejected_baselines/behavior/generate_behavior_science_analysis_v2_rejected_baseline.py)
+
+该分支只接受网页代码修复审阅和合成测试，不接受真实数据、具体匿名组键、PII、v2 结果表/图/报告。网页修复完成后必须使用独立分支和 PR；本地真实数据执行由监督放行后在独立环境中进行。
+
 - 北京报告 cohort：70 sessions、46 natural participants、1,400 probes；label 1 对 labels 2/3/4；C+B 主窗口 30 s，10/20 s 为行为敏感性；participant-disjoint 5-fold；这是当前北京 C+B 锚点，不是未来 Beijing+Zhuhai global folds。
 - Probe 四类语义固定为：1 完全任务聚焦，2 关注实验但未聚焦分拣，3 任务无关思维，4 思维空白。2/3/4 不得统称 mind-wandering。
 - NIR producer 已完成 2026-08-26 timestamp mapping 修复：`sub-100`、`sub-178` 经 sequential AVI-frame mapping 恢复，当前 source/formal fullclass 成功数为 **71/72**；matched cohort 为 **71 sessions / 1,420 unique probes**，其中 primary coverage `>=0.80` 为 1,174 probes。`sub-099` 仍因缺失有效 `master_timeline.csv` 阻塞。旧 68-session/1,360-probe NIR v1 科学分析在 cohort 扩大后没有自动重跑，因此旧增量结果只能作为 historical/pre-recompute evidence，不能冒充最终 NIR increment。

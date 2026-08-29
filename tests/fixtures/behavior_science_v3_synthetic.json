@@ -1,0 +1,31 @@
+{
+  "synthetic": true,
+  "description": "仅用于契约和测试骨架的合成行为数据，不代表真实样本或研究结果。",
+  "primary_probe_rows": [
+    {"event_id": "synthetic-event-a1", "session_id": "synthetic-session-a1", "participant_cluster_ref": "synthetic-cluster-a", "cycle_id": "synthetic-cycle-1", "block_id": "synthetic-block-1", "q1_nominal_4class": 1, "q2_ordinal_4level": 1, "metric_value": 0.10},
+    {"event_id": "synthetic-event-a2", "session_id": "synthetic-session-a1", "participant_cluster_ref": "synthetic-cluster-a", "cycle_id": "synthetic-cycle-1", "block_id": "synthetic-block-1", "q1_nominal_4class": 2, "q2_ordinal_4level": 2, "metric_value": 0.20},
+    {"event_id": "synthetic-event-a3", "session_id": "synthetic-session-a2", "participant_cluster_ref": "synthetic-cluster-a", "cycle_id": "synthetic-cycle-2", "block_id": "synthetic-block-2", "q1_nominal_4class": 3, "q2_ordinal_4level": 3, "metric_value": 0.30},
+    {"event_id": "synthetic-event-a4", "session_id": "synthetic-session-a2", "participant_cluster_ref": "synthetic-cluster-a", "cycle_id": "synthetic-cycle-2", "block_id": "synthetic-block-2", "q1_nominal_4class": 4, "q2_ordinal_4level": 4, "metric_value": 0.40},
+    {"event_id": "synthetic-event-b1", "session_id": "synthetic-session-b1", "participant_cluster_ref": "synthetic-cluster-b", "cycle_id": "synthetic-cycle-1", "block_id": "synthetic-block-1", "q1_nominal_4class": 1, "q2_ordinal_4level": 2, "metric_value": 0.15},
+    {"event_id": "synthetic-event-b2", "session_id": "synthetic-session-b1", "participant_cluster_ref": "synthetic-cluster-b", "cycle_id": "synthetic-cycle-1", "block_id": "synthetic-block-1", "q1_nominal_4class": 2, "q2_ordinal_4level": 3, "metric_value": 0.25},
+    {"event_id": "synthetic-event-b3", "session_id": "synthetic-session-b2", "participant_cluster_ref": "synthetic-cluster-b", "cycle_id": "synthetic-cycle-2", "block_id": "synthetic-block-2", "q1_nominal_4class": 3, "q2_ordinal_4level": 3, "metric_value": 0.35},
+    {"event_id": "synthetic-event-b4", "session_id": "synthetic-session-b2", "participant_cluster_ref": "synthetic-cluster-b", "cycle_id": "synthetic-cycle-2", "block_id": "synthetic-block-2", "q1_nominal_4class": 4, "q2_ordinal_4level": 4, "metric_value": 0.45}
+  ],
+  "window_sensitivity_rows": [
+    {"event_id": "synthetic-event-a1", "window_seconds_nominal": 10, "metric_value": 0.09},
+    {"event_id": "synthetic-event-a1", "window_seconds_nominal": 20, "metric_value": 0.10},
+    {"event_id": "synthetic-event-a1", "window_seconds_nominal": 30, "metric_value": 0.11},
+    {"event_id": "synthetic-event-a2", "window_seconds_nominal": 10, "metric_value": 0.19},
+    {"event_id": "synthetic-event-a2", "window_seconds_nominal": 20, "metric_value": 0.20},
+    {"event_id": "synthetic-event-a2", "window_seconds_nominal": 30, "metric_value": 0.21},
+    {"event_id": "synthetic-event-b1", "window_seconds_nominal": 10, "metric_value": 0.14},
+    {"event_id": "synthetic-event-b1", "window_seconds_nominal": 20, "metric_value": 0.15},
+    {"event_id": "synthetic-event-b1", "window_seconds_nominal": 30, "metric_value": 0.16}
+  ],
+  "error_event_rows": [
+    {"error_event_id": "synthetic-error-a1", "session_id": "synthetic-session-a1", "participant_cluster_ref": "synthetic-cluster-a", "trial_offset": -1, "error_metric": 0.20, "within_participant_centered_error_metric": -0.05},
+    {"error_event_id": "synthetic-error-a2", "session_id": "synthetic-session-a2", "participant_cluster_ref": "synthetic-cluster-a", "trial_offset": 1, "error_metric": 0.30, "within_participant_centered_error_metric": 0.05},
+    {"error_event_id": "synthetic-error-b1", "session_id": "synthetic-session-b1", "participant_cluster_ref": "synthetic-cluster-b", "trial_offset": -1, "error_metric": 0.25, "within_participant_centered_error_metric": -0.05},
+    {"error_event_id": "synthetic-error-b2", "session_id": "synthetic-session-b2", "participant_cluster_ref": "synthetic-cluster-b", "trial_offset": 1, "error_metric": 0.35, "within_participant_centered_error_metric": 0.05}
+  ]
+}

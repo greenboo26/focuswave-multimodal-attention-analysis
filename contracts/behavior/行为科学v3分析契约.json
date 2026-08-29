@@ -1,0 +1,85 @@
+{
+  "contract_id": "focuswave.behavior.science.v3",
+  "status": "web-repair-base",
+  "language": "zh-CN",
+  "publication_policy": {
+    "v2_status": "rejected",
+    "v2_results_publishable": false,
+    "formal_report_is_separate_from_process_report": true
+  },
+  "privacy": {
+    "real_data_allowed": false,
+    "real_identity_mapping_allowed": false,
+    "concrete_anonymous_group_values_allowed": false,
+    "fixture_must_be_explicitly_synthetic": true
+  },
+  "units": {
+    "primary_event_row": "每个 probe 事件一行，不把窗口复制行当作独立主观测",
+    "probe": "事件级观测单位",
+    "session": "一次完整场次级观测单位",
+    "participant_group": "重复场次的聚类单位，不在契约或结果中写入具体键值",
+    "window_sensitivity": "10、20、30 秒分别运行和标记，不合并为一个独立样本量"
+  },
+  "required_fields": {
+    "primary_probe": [
+      "synthetic_or_authorized_event_id",
+      "session_id",
+      "participant_cluster_ref",
+      "cycle_id",
+      "block_id",
+      "q1_nominal_4class",
+      "q2_ordinal_4level"
+    ],
+    "window_sensitivity": [
+      "synthetic_or_authorized_event_id",
+      "window_seconds_nominal",
+      "metric_value"
+    ],
+    "error_event": [
+      "session_id",
+      "participant_cluster_ref",
+      "error_event_id",
+      "trial_offset",
+      "error_metric",
+      "within_participant_centered_error_metric"
+    ]
+  },
+  "sensitivity_windows_seconds": [10, 20, 30],
+  "questions": {
+    "q1": {
+      "outcome_type": "nominal_four_class",
+      "model_requirement": "名义类别模型，不得用有序或连续折线替代",
+      "dependence_requirement": "按 session 和 participant 聚类或使用等价重复测量结构"
+    },
+    "q2": {
+      "outcome_type": "ordinal_four_level",
+      "model_requirement": "重复测量有序模型，或明确说明并验证的 cluster 方法",
+      "ordered_model_without_cluster": "forbidden"
+    },
+    "b1_b2": {
+      "contrast": "session 内配对差值",
+      "uncertainty": "participant cluster",
+      "session_and_participant_levels_must_be_distinguished": true
+    }
+  },
+  "hierarchy": {
+    "required_nesting": ["cycle within block", "block within session", "session within participant_cluster"],
+    "required_interaction": "block_by_cycle",
+    "error_events": "nested within session and participant_cluster",
+    "error_centering": "within_participant_centering_required",
+    "leakage_control": "participant_cluster_split_before_model_fit"
+  },
+  "reporting": {
+    "n_labels": ["probe_n", "session_n", "participant_group_n"],
+    "forest_plot": "按观测单位分面，重复对比标签必须与模型单位一致",
+    "qc_counts": "每个计数必须带单位和对应分母",
+    "effect_plots": "按单位分面，不混合 probe/session/participant",
+    "process_report": "记录输入、契约、QC、模型、失败和限制",
+    "formal_report": "只引用已通过监督门和正式证据门的结果"
+  },
+  "fixture_policy": {
+    "source": "tests/fixtures/behavior_science_v3_synthetic.json",
+    "real_data": false,
+    "identity_values": "仅使用明确标记的 synthetic 值"
+  }
+}
