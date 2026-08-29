@@ -1,8 +1,10 @@
 # mmWave block-reset and ECG alignment contract — 2026-08-30
 
-Status: `DECISION_FROZEN / IMPLEMENTATION_NOT_RUN`
+Status: `DECISION_FROZEN / TARGETED_IMPLEMENTATION_RUN_PARTIAL`
 
 Purpose: define the correct continuity boundary for any future mmWave target-tracking comparison and the exact block/ECG alignment anchors to use. This contract is downstream of the targeted validation closure and does not authorize a new formal batch, Issue #16, C2B/C2C, NIR/RGB producer changes, or portable-V2 edits.
+
+Implementation note (2026-08-30): the bounded targeted rerun is complete for the available complete blocks and is recorded as `PARTIAL`; see `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_TARGETED_VALIDATION_REPORT_2026-08-30.md`. The decision rules below remain frozen; the status change does not promote HR/BR or close the ECG/mmWave alignment limitations.
 
 ## 1. Operator/protocol evidence: posture can legitimately reset between blocks
 

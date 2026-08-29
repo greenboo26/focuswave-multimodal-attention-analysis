@@ -1,21 +1,55 @@
 {
-  "status": "TARGETED_CONTINUITY_COMPLETE",
-  "sessions": [
-    "97793",
-    "9779",
-    "97795"
-  ],
-  "windows_per_session": 5,
-  "transition_count": 4,
-  "scope": "first 6000 frames only; five overlapping 20-second windows; no full batch",
-  "hr_bin_hops": 8,
-  "br_bin_hops": 9,
-  "hr_channel_switches": 11,
-  "br_channel_switches": 9,
-  "transition_count_total": 12,
-  "phase_jump_comparable_rows": 0,
-  "phase_jump_flag_gt_1rad": 0,
-  "motion_evidence": "not_available; no no-motion inference made",
-  "formal_bin_spacing_used_only_for_displacement_reporting_m": 0.037,
-  "algorithm_change": false
+  "status": "PARTIAL / BLOCK_LOCAL_CONTINUITY_RETEST_COMPLETE_ECG_ALIGNMENT_LIMITS_RETAINED",
+  "complete_blocks": 8,
+  "incomplete_blocks": 4,
+  "window_count": 335,
+  "transition_count": 327,
+  "current_hr_bin_hops": 243,
+  "current_hr_channel_switches": 246,
+  "current_br_bin_hops": 267,
+  "current_br_channel_switches": 245,
+  "local_hr_bin_hops": 164,
+  "local_hr_channel_switches": 158,
+  "local_br_bin_hops": 177,
+  "local_br_channel_switches": 196,
+  "method_metrics": {
+    "current": {
+      "hr_mae_bpm": 25.958,
+      "hr_n": 335,
+      "br_mae_bpm": 3.723,
+      "br_n": 329
+    },
+    "local": {
+      "hr_mae_bpm": 24.885,
+      "hr_n": 335,
+      "br_mae_bpm": 4.237,
+      "br_n": 329
+    }
+  },
+  "alignment_summary": {
+    "complete_blocks": 8,
+    "exact_complete_blocks": 7,
+    "marker_mismatch_blocks": [
+      "97793/block1 (index 73: event 103 vs physical 102)"
+    ],
+    "ecg_p95_median_ms": 2.295799,
+    "ecg_max_max_ms": 25.668139,
+    "mmwave_raw_p95_median_ms": 943.0,
+    "mmwave_raw_max_max_ms": 2016.0,
+    "mmwave_fit_residual_p95_median_ms": 6.132642,
+    "mmwave_fit_residual_max_max_ms": 96.310059,
+    "mmwave_tick_gap_n_abs_over_100ms": 730
+  },
+  "legacy_summary": {
+    "n_total": 12,
+    "inside_complete_block_transitions": 0,
+    "cross_rest_or_block_transitions": 0,
+    "baseline_or_preblock_transitions": 12
+  },
+  "hrv": "BLOCKED",
+  "issue_16": "PAUSED",
+  "external_rsp_role": "validation_reference_only",
+  "producer_modified": false,
+  "portable_repo_modified": false,
+  "raw_data_modified": false
 }

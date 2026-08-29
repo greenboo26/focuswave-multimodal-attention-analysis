@@ -124,7 +124,7 @@ producer worktree 仍然保留。
 - Interpretation remains bounded: target lock is a mixed heuristic, standard formal execution does not activate the optional scalar RSP harmonic check, HRV is not ECG R-peak aligned, and corrected `33/37/2` tiers are current-pipeline QC eligibility strata rather than acquisition-quality, participant-compliance, or physiology-validity labels.
 - This was a read-only scientific audit. No model run, C2B/C2C rerun, target-lock rerun, raw-data change, NIR/RGB change, or Issue #16 execution occurred. Issue #16 remains paused.
 
-## 2026-08-30 targeted mmWave validation — PASS / MMWAVE_MERGE_READY_CONTRACT_FROZEN
+## 2026-08-30 targeted mmWave validation — SUPERSEDED / historical pre-contract run
 
 - Completed the ordered targeted validation on `97793`, `9779`, and `97795`, using only the first 6000 frames and five overlapping windows per session; no full formal batch was run.
 - Firmware identity is `CONFIRMED_WITH_PROVENANCE_LIMITATION`: the operator confirms `mrs6240_p2512.img` was used throughout formal acquisition; the machine burn/boot/version receipt remains missing. Remaining upstream engineering items retain explicit `UNRESOLVED` or `SDK/MANUAL_ONLY` status.
@@ -132,4 +132,14 @@ producer worktree 仍然保留。
 - A/B/C harmonic validation completed. B used radar-derived BR only and was identical to A (MAE 9.392 bpm; no trigger/rejection); C identified three external-RSP 3x windows with A/B harmonic-window MAE 27.336 bpm. B is not proposed for producer promotion; external RSP remains validation-only.
 - Frozen portable-V2 contract: HR and BR/RR `HOLD`; HRV/IBI `EXCLUDE`; continuity/phase/motion fields `HOLD` as diagnostic QC only; missing/loadability `ALLOW` as structural metadata. HRV remains blocked at radar beat–ECG R-peak synchronization and paired IBI agreement.
 - Evidence package: `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`. Issue #16 remains `PAUSED`; portable V2 was read-only and unchanged.
+
+## 2026-08-30 targeted mmWave validation rerun — PARTIAL / block-reset + ECG alignment contract
+
+- 按 `docs/research/MMWAVE_BLOCK_RESET_AND_ECG_ALIGNMENT_CONTRACT_2026-08-30.md`，并核对 `kyandi233-dev/FocusWave@ecg` commit `8e6fe5c5d08f386661bc05aaf9d5c5715a43b317` 后重做 `97793`、`9779`、`97795`；8 个完整 block、335 个窗口、327 个同 block 相邻 transition。每个 block 起始均重置 target/bin/channel state；跨 rest、坐姿调整和 block 边界的 transition 未计入。
+- 旧版 12 个 transition 已逐项重分类：12/12 属于每场起始前 6000 frames 的 baseline/pre-block，0 个属于完整 formal block，0 个跨 rest/block；旧 12/12 不再作为 continuity failure 证据。
+- `BLOCK_LOCAL_CONTINUITY` 诊断 candidate 将 HR bin hop 243/327 降至 164/327、HR channel switch 246/327 降至 158/327；但 HR MAE 仅由 25.958 降至 24.885 bpm，BR MAE 由 3.723 升至 4.237 breaths/min。仅凭轨迹变平滑不能升级生理有效性，HR/BR/RR 继续 `HOLD`，HRV 继续 `BLOCKED`。
+- ECG/BIOPAC 使用每个 block 的 start/end marker 与 101–110 tick；ECG affine fit residual p95 中位数为 2.296 ms。8 个完整 block 中 7 个 marker sequence exact；`97793/block1` 在序列 index 73 出现 event `103` vs physical `102` 的单点 mismatch。
+- mmWave tick 审计发现 730 个 `|nearest delta| > 100 ms` 的 timestamp gap；排除这些 gap 后 affine-fit residual p95 中位数为 6.133 ms，但本轮不将其表述为双机同步已通过。该 gap/marker 限制是本轮 PARTIAL 的主要 blocker。
+- 本轮 HR/BR 仅使用现有 producer 的 bandpass + periodogram/peak 定义作 bounded diagnostic estimator；未运行 VMD、HRV 新算法、Issue #16、C2B/C2C 或全量 formal batch，未修改 producer、portable V2、实验程序或原始数据。
+- 新版证据包：`docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`，包括 block-local continuity table、mmWave↔ECG same-window comparison、alignment audit、legacy 12-transition audit、manifest 和报告。旧版同目录结果保留为历史文件，不再作为当前结论。
 

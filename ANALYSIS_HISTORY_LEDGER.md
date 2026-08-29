@@ -439,6 +439,20 @@ Behavior+mmWave 增量已经做过，不重跑：
 
 ---
 
+### 2026-08-30：mmWave block-reset + ECG marker-aligned targeted validation rerun — PARTIAL
+
+**为什么旧证据不足**：旧版 12 个 transition 只来自每场起始后的前 6000 frames，没有按正式程序 block marker 切段，也没有按 block 重建 mmWave↔ECG 同窗映射；因此不能回答“block 内 target continuity 是否稳定”或“marker-aligned HR/BR 是否改善”。
+
+**输入与来源**：`greenboo26/focuswave-multimodal-attention-analysis@main` at `6ca449020039b6eabe0f0665024bead6c706a1a0`；`kyandi233-dev/FocusWave@ecg` at `8e6fe5c5d08f386661bc05aaf9d5c5715a43b317`；sessions `97793`、`9779`、`97795`；contract `docs/research/MMWAVE_BLOCK_RESET_AND_ECG_ALIGNMENT_CONTRACT_2026-08-30.md`。
+
+**执行与结果**：每个完整 block 重新初始化 target/bin/channel，20 s window / 10 s step / 5 s boundary guard；8 个完整 block、335 个窗口、327 个同 block transitions。Local candidate 将 HR bin hops `243/327 → 164/327`、HR channel switches `246/327 → 158/327`，但 HR MAE `25.958 → 24.885 bpm`，BR MAE `3.723 → 4.237 breaths/min`，不支持 producer promotion。ECG 使用 `events.csv` start/end marker 与 Biopac digital pulse 的 block-local affine fit；ECG residual p95 median `2.296 ms`。7/8 marker sequences exact；`97793/block1` index 73 为 event `103` vs physical `102`。mmWave tick 有 730 个超过 100 ms 的 timestamp gap；gap 排除后 affine residual p95 median `6.133 ms`，仍标为 alignment limitation。
+
+**决策**：旧 12/12 不再作为 continuity failure 证据；当前 block-local continuity 只能作诊断性证据。HR、BR/RR 保持 `HOLD`，HRV 保持 `BLOCKED`；Issue #16、C2B/C2C、VMD/新 HRV 和全量 formal batch 不运行。以后若重做，必须先解决 tick gap 的来源/语义和单点 marker mismatch，并继续使用 block-local reset + marker-aligned contract。
+
+**证据包**：`docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/` 的 `MMWAVE_TARGETED_VALIDATION_REPORT_2026-08-30.md`、`target_continuity_block_local.csv`、`mmwave_ecg_block_window_comparison.csv`、`ecg_alignment_audit.csv`、`legacy_12_transition_audit.csv`、`target_continuity_summary.json`、`ecg_alignment_summary.json`、`run_manifest.json`；脚本 `scripts/maintenance/run_mmwave_targeted_validation_20260830.py`。
+
+---
+
 ## 12. 新智能体最小阅读顺序
 
 1. `ANALYSIS_HISTORY_LEDGER.md`（本文件）
