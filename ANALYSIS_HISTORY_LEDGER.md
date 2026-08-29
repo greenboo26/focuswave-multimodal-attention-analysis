@@ -20,6 +20,18 @@
 
 **证据路径**：`docs/research/MMWAVE_FRAME_TIME_CONTRACT_2026-08-30.md`；`docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_DLL_TIME_WINDOWS_2026-08-30.csv`、`MMWAVE_DLL_TIME_WINDOW_RECONSTRUCTION_REPORT_2026-08-30.md`、`MMWAVE_DLL_TIME_WINDOW_RECONSTRUCTION_MANIFEST.json`、`MMWAVE_TIME_SEMANTICS_HR_COMPARISON.csv`、`MMWAVE_TIME_SEMANTICS_HR_METRICS.csv`、`MMWAVE_TIME_SEMANTICS_HR_COMPARISON_REPORT_2026-08-30.md`、对应 manifest；row-level mapping 保留在本地 derived 目录，不上传 Git。
 
+### 2026-08-30：mmWave DLL-time coverage contract 与 fixed-denominator sensitivity — PARTIAL
+
+**为什么需要这次审计**：DLL-time 修复已确认 335 个窗口的 frame membership 发生实质变化，但 `97795/block4` 末尾仍有 24,809 ms program-end-to-last-DLL tail。需要先用 acquisition completeness 定义窗口是否完整，再判断少数缺尾窗是否解释 HR 高误差；coverage threshold 不得由 HR 结果反推。
+
+**冻结输入与阈值**：canonical `main` `426576e0809252656b79729ac077e91a6bfca80d`；输入为 `MMWAVE_DLL_TIME_WINDOWS_2026-08-30.csv` 与已完成的 DLL-time HR comparison；窗口仍为 20 s/10 s step/5 s guard/block-local。每个 subject/block 从 DLL timestamp 估计 median/p5/p95 interval 和 effective Hz；expected count=`20,000/median_interval+1`。`COMPLETE`：coverage≥0.95、边界 gap≤max(3×median,50 ms)、internal gap≤1,000 ms；`SEVERELY_INCOMPLETE`：coverage<0.50 或 boundary gap>max(1,000,5×median) 或 internal gap>1,000 ms；否则 `PARTIAL`。这些规则只使用 DLL timestamps 和窗口边界。
+
+**Coverage 结果**：335 窗中 `COMPLETE=333`、`PARTIAL=0`、`SEVERELY_INCOMPLETE=2`。严重窗均在 `97795/block4`：`w027` 为 1,035 frames、coverage `0.517241`、end gap `9,536 ms`；`w028` 为 46 frames、coverage `0.022989`、end gap `19,536 ms`。primary 335-window outputs 不删除、不覆盖。
+
+**预注册 sensitivity**：S0 all=`335`、S1 exclude severe=`333`、S2 complete-only=`333`。S0/S1/S2 的 ARM0 MAE=`25.791632/25.812760/25.812760`，ARM1=`22.189492/22.128143/22.128143`，ARM2=`19.189060/19.225180/19.225180` bpm；S0→S2 ΔMAE=`+0.021128/-0.061349/+0.036120` bpm。完整窗口中的 HR 仍明显偏高误差，因此 coverage 结论为 `SEVERE_COVERAGE_FAILURE_LOCALIZED_ONLY` 与 `COVERAGE_NOT_PRIMARY_HR_EXPLANATION`，不是算法提升、不是删除依据。
+
+**决策与可重复性**：HR/BR=`HOLD`，HRV=`BLOCKED`，Issue #16=`PAUSED`。允许以后重复的入口为 `scripts/maintenance/run_mmwave_dll_window_coverage_audit_20260830.py` 与 `run_mmwave_dll_window_coverage_sensitivity_20260830.py`；未修改 estimator/target/gate/filter/ECG/producer/raw/firmware/portable V2，未运行 C2B/C2C 或 full batch。证据包位于 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`，包含 coverage table、by-block n、reports 和 manifests。
+
 ## 1. 本账本的证据规则
 
 ### 2026-08-30：正式多模态母表 attach 与 V2 merge-ready 结构审计

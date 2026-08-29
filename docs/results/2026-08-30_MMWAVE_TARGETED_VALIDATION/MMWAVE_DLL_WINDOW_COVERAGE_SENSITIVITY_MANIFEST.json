@@ -1,0 +1,200 @@
+{
+  "status": "PARTIAL / COVERAGE_SENSITIVITY_COMPLETE",
+  "canonical_algorithm_head_at_run": "426576e0809252656b79729ac077e91a6bfca80d",
+  "canonical_algorithm_remote_main_at_run": "426576e0809252656b79729ac077e91a6bfca80d\trefs/heads/main",
+  "comparison_input": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_targeted_validation_20260830_rerun\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_TIME_SEMANTICS_HR_COMPARISON.csv",
+  "comparison_input_sha256": "80a27454a5d06d2c5f9bd11d860690d352436e165a979970323a199deed4ee39",
+  "coverage_input": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_targeted_validation_20260830_rerun\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_DLL_WINDOW_COVERAGE_AUDIT.csv",
+  "coverage_input_sha256": "e3b31619e2e2319a9636f1502ad935948188670b15b8e7fb41857b8acaf7e265",
+  "coverage_manifest": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_targeted_validation_20260830_rerun\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_DLL_WINDOW_COVERAGE_AUDIT_MANIFEST.json",
+  "coverage_manifest_sha256": "c8787462dddf3aa75f29598a23bbe863b0f5cff5ed11a2245c94784efe2107a8",
+  "selection_contract": {
+    "S0_all_windows": "all windows",
+    "S1_exclude_severely_incomplete": "coverage_class != SEVERELY_INCOMPLETE",
+    "S2_complete_only": "coverage_class == COMPLETE",
+    "frozen_before_metrics": true,
+    "uses_hr_or_ecg": false
+  },
+  "selection_counts": {
+    "S0_all_windows": 335,
+    "S1_exclude_severely_incomplete": 333,
+    "S2_complete_only": 333
+  },
+  "severe_windows": [
+    {
+      "subject": "97795",
+      "block_id": "block4",
+      "window_id": "block4_w027",
+      "frame_count": "1035",
+      "coverage_fraction": "0.517241",
+      "end_coverage_gap_ms": "9536.0",
+      "coverage_class": "SEVERELY_INCOMPLETE"
+    },
+    {
+      "subject": "97795",
+      "block_id": "block4",
+      "window_id": "block4_w028",
+      "frame_count": "46",
+      "coverage_fraction": "0.022989",
+      "end_coverage_gap_ms": "19536.0",
+      "coverage_class": "SEVERELY_INCOMPLETE"
+    }
+  ],
+  "metrics": [
+    {
+      "selection": "S0_all_windows",
+      "arm": "arm0",
+      "selected_window_n": 335,
+      "valid_n": 334,
+      "coverage_pct": 99.701,
+      "mae_bpm": 25.791632,
+      "median_ae_bpm": 28.701,
+      "rmse_bpm": 28.37093,
+      "bias_bpm": -25.47462,
+      "pearson_r": 0.0119,
+      "spearman_r": -0.071222
+    },
+    {
+      "selection": "S0_all_windows",
+      "arm": "arm1",
+      "selected_window_n": 335,
+      "valid_n": 323,
+      "coverage_pct": 96.418,
+      "mae_bpm": 22.189492,
+      "median_ae_bpm": 25.667,
+      "rmse_bpm": 25.660192,
+      "bias_bpm": -21.688718,
+      "pearson_r": 0.134016,
+      "spearman_r": 0.113713
+    },
+    {
+      "selection": "S0_all_windows",
+      "arm": "arm2",
+      "selected_window_n": 335,
+      "valid_n": 334,
+      "coverage_pct": 99.701,
+      "mae_bpm": 19.18906,
+      "median_ae_bpm": 21.039,
+      "rmse_bpm": 22.708948,
+      "bias_bpm": -17.800629,
+      "pearson_r": 0.138025,
+      "spearman_r": 0.126511
+    },
+    {
+      "selection": "S1_exclude_severely_incomplete",
+      "arm": "arm0",
+      "selected_window_n": 333,
+      "valid_n": 333,
+      "coverage_pct": 100.0,
+      "mae_bpm": 25.81276,
+      "median_ae_bpm": 28.727,
+      "rmse_bpm": 28.394901,
+      "bias_bpm": -25.494796,
+      "pearson_r": 0.004933,
+      "spearman_r": -0.078109
+    },
+    {
+      "selection": "S1_exclude_severely_incomplete",
+      "arm": "arm1",
+      "selected_window_n": 333,
+      "valid_n": 322,
+      "coverage_pct": 96.697,
+      "mae_bpm": 22.128143,
+      "median_ae_bpm": 25.611,
+      "rmse_bpm": 25.593489,
+      "bias_bpm": -21.625814,
+      "pearson_r": 0.140343,
+      "spearman_r": 0.119902
+    },
+    {
+      "selection": "S1_exclude_severely_incomplete",
+      "arm": "arm2",
+      "selected_window_n": 333,
+      "valid_n": 333,
+      "coverage_pct": 100.0,
+      "mae_bpm": 19.22518,
+      "median_ae_bpm": 21.157,
+      "rmse_bpm": 22.739634,
+      "bias_bpm": -17.83258,
+      "pearson_r": 0.131601,
+      "spearman_r": 0.120003
+    },
+    {
+      "selection": "S2_complete_only",
+      "arm": "arm0",
+      "selected_window_n": 333,
+      "valid_n": 333,
+      "coverage_pct": 100.0,
+      "mae_bpm": 25.81276,
+      "median_ae_bpm": 28.727,
+      "rmse_bpm": 28.394901,
+      "bias_bpm": -25.494796,
+      "pearson_r": 0.004933,
+      "spearman_r": -0.078109
+    },
+    {
+      "selection": "S2_complete_only",
+      "arm": "arm1",
+      "selected_window_n": 333,
+      "valid_n": 322,
+      "coverage_pct": 96.697,
+      "mae_bpm": 22.128143,
+      "median_ae_bpm": 25.611,
+      "rmse_bpm": 25.593489,
+      "bias_bpm": -21.625814,
+      "pearson_r": 0.140343,
+      "spearman_r": 0.119902
+    },
+    {
+      "selection": "S2_complete_only",
+      "arm": "arm2",
+      "selected_window_n": 333,
+      "valid_n": 333,
+      "coverage_pct": 100.0,
+      "mae_bpm": 19.22518,
+      "median_ae_bpm": 21.157,
+      "rmse_bpm": 22.739634,
+      "bias_bpm": -17.83258,
+      "pearson_r": 0.131601,
+      "spearman_r": 0.120003
+    }
+  ],
+  "s0_to_s2_delta": {
+    "arm0": {
+      "mae_delta_s2_minus_s0_bpm": 0.021128,
+      "valid_n_s0": 334,
+      "valid_n_s2": 333
+    },
+    "arm1": {
+      "mae_delta_s2_minus_s0_bpm": -0.061349,
+      "valid_n_s0": 323,
+      "valid_n_s2": 322
+    },
+    "arm2": {
+      "mae_delta_s2_minus_s0_bpm": 0.03612,
+      "valid_n_s0": 334,
+      "valid_n_s2": 333
+    }
+  },
+  "interpretation": [
+    "SEVERE_COVERAGE_FAILURE_LOCALIZED_ONLY",
+    "COVERAGE_NOT_PRIMARY_HR_EXPLANATION"
+  ],
+  "outputs": {
+    "MMWAVE_DLL_WINDOW_COVERAGE_SENSITIVITY.csv": {
+      "path": "MMWAVE_DLL_WINDOW_COVERAGE_SENSITIVITY.csv",
+      "sha256": "aceba245301db671f7f119e15b08c00be0f0b51711d858368606726ccb975374",
+      "row_count": 9
+    },
+    "MMWAVE_DLL_WINDOW_COVERAGE_SENSITIVITY_BY_BLOCK.csv": {
+      "path": "MMWAVE_DLL_WINDOW_COVERAGE_SENSITIVITY_BY_BLOCK.csv",
+      "sha256": "e857cdbdf46f4db44f38189860e6c7786c13b504b0cb215158e75a901f02b0fb",
+      "row_count": 72
+    },
+    "MMWAVE_DLL_WINDOW_COVERAGE_SENSITIVITY_REPORT_2026-08-30.md": {
+      "path": "MMWAVE_DLL_WINDOW_COVERAGE_SENSITIVITY_REPORT_2026-08-30.md",
+      "sha256": "7998f266f77217fe69df3f6fb00bdee86d81c304cf05762f43f3543cb893bbf9",
+      "row_count": null
+    }
+  }
+}

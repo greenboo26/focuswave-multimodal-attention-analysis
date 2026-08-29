@@ -14,6 +14,19 @@
 - Window equivalence: 25 exact / 156 partial / 154 obvious; 310/335 memberships changed. `97795/block4` has a 24,809 ms program-end-to-last-DLL coverage tail and one 46-frame guarded window; no backfill or padding was applied.
 - Unchanged ARM0/ARM1/ARM2 HR sensitivity completed. HR/BR remain `HOLD`, HRV remains `BLOCKED`, Issue #16 remains `PAUSED`; no producer, target, gate, ECG, portable V2, raw, firmware, C2B/C2C, HRV-new-algorithm, or full-batch change occurred.
 
+## 2026-08-30 — audit(mmwave): freeze DLL-time coverage contract and denominator sensitivity
+
+### 改动
+
+- Added `MMWAVE_DLL_WINDOW_COVERAGE_AUDIT.csv` and its report/manifest with subject-block local DLL rate, expected frame count, boundary/internal gaps, and frozen `COMPLETE`/`PARTIAL`/`SEVERELY_INCOMPLETE` classes.
+- Added pre-registered S0 all-window, S1 exclude-severe, and S2 complete-only sensitivity outputs, per-block remaining-n table, report, manifest, and reproducible maintenance scripts.
+
+### 验证与边界
+
+- Coverage classes are timestamp-only and were frozen before reading HR sensitivity: 333 complete, 0 partial, 2 severe out of 335 windows. Severe windows are localized to `97795/block4/w027` and `w028`.
+- S0→S2 MAE changes were ARM0 `+0.021128`, ARM1 `-0.061349`, and ARM2 `+0.036120` bpm; complete-window HR remains high-error. This is a validity sensitivity, not an algorithm improvement.
+- The all-window DLL-time primary result remains intact. HR/BR stay `HOLD`, HRV `BLOCKED`, Issue #16 `PAUSED`; no estimator, target, gate, filter, ECG, producer, raw, firmware, portable V2, C2B/C2C, or full-batch change occurred.
+
 ## 2026-08-30 — audit(multimodal): freeze formal model-ready cohort and LOSO contract
 
 ### 改动

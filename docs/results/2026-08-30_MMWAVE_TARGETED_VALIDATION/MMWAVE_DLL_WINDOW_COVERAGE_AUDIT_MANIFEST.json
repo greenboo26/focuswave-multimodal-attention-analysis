@@ -1,0 +1,148 @@
+{
+  "status": "COVERAGE_CONTRACT_FROZEN / HR-INDEPENDENT",
+  "canonical_algorithm_head_at_run": "426576e0809252656b79729ac077e91a6bfca80d",
+  "canonical_algorithm_remote_main_at_run": "426576e0809252656b79729ac077e91a6bfca80d\trefs/heads/main",
+  "window_input": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_targeted_validation_20260830_rerun\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_DLL_TIME_WINDOWS_2026-08-30.csv",
+  "window_input_sha256": "0186ec62f50f697096b86919bf21a46c681267cf0c4faba6b947773d955e1707",
+  "reconstruction_manifest": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_targeted_validation_20260830_rerun\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_DLL_TIME_WINDOW_RECONSTRUCTION_MANIFEST.json",
+  "reconstruction_manifest_sha256": "da117c803c67a23bc493a87294e244b9ef33822e34330fd24c20dec4e6a15813",
+  "contract": {
+    "window_duration_ms": 20000,
+    "complete_coverage_min": 0.95,
+    "partial_coverage_min": 0.5,
+    "normal_boundary_multiplier": 3.0,
+    "severe_gap_ms": 1000.0,
+    "normal_internal_max_ms": 1000.0,
+    "uses_hr_or_ecg": false
+  },
+  "class_counts": {
+    "COMPLETE": 333,
+    "PARTIAL": 0,
+    "SEVERELY_INCOMPLETE": 2
+  },
+  "block_counts": {
+    "97793/block1": {
+      "COMPLETE": 57,
+      "PARTIAL": 0,
+      "SEVERELY_INCOMPLETE": 0
+    },
+    "97793/block2": {
+      "COMPLETE": 54,
+      "PARTIAL": 0,
+      "SEVERELY_INCOMPLETE": 0
+    },
+    "9779/block1": {
+      "COMPLETE": 56,
+      "PARTIAL": 0,
+      "SEVERELY_INCOMPLETE": 0
+    },
+    "9779/block2": {
+      "COMPLETE": 56,
+      "PARTIAL": 0,
+      "SEVERELY_INCOMPLETE": 0
+    },
+    "97795/block1": {
+      "COMPLETE": 28,
+      "PARTIAL": 0,
+      "SEVERELY_INCOMPLETE": 0
+    },
+    "97795/block2": {
+      "COMPLETE": 28,
+      "PARTIAL": 0,
+      "SEVERELY_INCOMPLETE": 0
+    },
+    "97795/block3": {
+      "COMPLETE": 28,
+      "PARTIAL": 0,
+      "SEVERELY_INCOMPLETE": 0
+    },
+    "97795/block4": {
+      "COMPLETE": 26,
+      "PARTIAL": 0,
+      "SEVERELY_INCOMPLETE": 2
+    }
+  },
+  "local_rate_summary": {
+    "97793/block1": {
+      "median": 10.0,
+      "p5": 9.0,
+      "p95": 12.0,
+      "effective_hz": 100.0
+    },
+    "97793/block2": {
+      "median": 10.0,
+      "p5": 9.0,
+      "p95": 12.0,
+      "effective_hz": 100.0
+    },
+    "9779/block1": {
+      "median": 10.0,
+      "p5": 9.0,
+      "p95": 12.0,
+      "effective_hz": 100.0
+    },
+    "9779/block2": {
+      "median": 10.0,
+      "p5": 9.0,
+      "p95": 12.0,
+      "effective_hz": 100.0
+    },
+    "97795/block1": {
+      "median": 10.0,
+      "p5": 9.0,
+      "p95": 12.0,
+      "effective_hz": 100.0
+    },
+    "97795/block2": {
+      "median": 10.0,
+      "p5": 9.0,
+      "p95": 12.0,
+      "effective_hz": 100.0
+    },
+    "97795/block3": {
+      "median": 10.0,
+      "p5": 9.0,
+      "p95": 12.0,
+      "effective_hz": 100.0
+    },
+    "97795/block4": {
+      "median": 10.0,
+      "p5": 9.0,
+      "p95": 12.0,
+      "effective_hz": 100.0
+    }
+  },
+  "short_window_count": 2,
+  "short_windows": [
+    {
+      "subject": "97795",
+      "block_id": "block4",
+      "window_id": "block4_w027",
+      "frame_count": 1035,
+      "coverage_fraction": 0.517241,
+      "end_coverage_gap_ms": 9536.0,
+      "coverage_class": "SEVERELY_INCOMPLETE"
+    },
+    {
+      "subject": "97795",
+      "block_id": "block4",
+      "window_id": "block4_w028",
+      "frame_count": 46,
+      "coverage_fraction": 0.022989,
+      "end_coverage_gap_ms": 19536.0,
+      "coverage_class": "SEVERELY_INCOMPLETE"
+    }
+  ],
+  "outputs": {
+    "MMWAVE_DLL_WINDOW_COVERAGE_AUDIT.csv": {
+      "path": "MMWAVE_DLL_WINDOW_COVERAGE_AUDIT.csv",
+      "sha256": "e3b31619e2e2319a9636f1502ad935948188670b15b8e7fb41857b8acaf7e265",
+      "row_count": 335
+    },
+    "MMWAVE_DLL_WINDOW_COVERAGE_AUDIT_REPORT_2026-08-30.md": {
+      "path": "MMWAVE_DLL_WINDOW_COVERAGE_AUDIT_REPORT_2026-08-30.md",
+      "sha256": "601c522315d5a1301c024ff13b08a3ad98d2989e5b49cdff02d7b3ea895c1ce3",
+      "row_count": null
+    }
+  }
+}

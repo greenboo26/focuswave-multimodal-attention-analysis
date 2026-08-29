@@ -11,6 +11,16 @@
 - 旧 20 s 结果保留为 Python-time historical provenance，但 supersede 为当前 DLL authoritative contract 的结果；HR/BR 继续 `HOLD`，HRV `BLOCKED`，Issue #16 `PAUSED`。未修改 `Attention-Analysis@codex/formal-analysis-v2-portable`，未运行 C2B/C2C、HRV 新算法或全量 formal batch。
 - 证据包：`docs/research/MMWAVE_FRAME_TIME_CONTRACT_2026-08-30.md`、`docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_DLL_TIME_WINDOWS_2026-08-30.csv`、`MMWAVE_TIME_SEMANTICS_HR_COMPARISON.csv`、`MMWAVE_TIME_SEMANTICS_HR_METRICS.csv`、对应 reports/manifests；row-level mapping 仅保存在 `D:\Project\厚粲杯\11_数据\derived\mmwave_timestamp_semantics_repair_20260830\`。
 
+## 2026-08-30 mmWave DLL-time coverage audit and fixed-denominator sensitivity — PARTIAL / COVERAGE_NOT_PRIMARY_HR_EXPLANATION
+
+- 在已冻结的 DLL-time 335-window primary result 上，先于 sensitivity 固定了完全独立于 ECG/HR/abs error/arm performance 的 coverage contract：`COMPLETE`=`coverage_fraction≥0.95` 且边界 gap≤max(3×local median interval, 50 ms)、internal gap≤1,000 ms；`SEVERELY_INCOMPLETE`=`coverage_fraction<0.50` 或边界 gap>max(1,000 ms, 5×median) 或 internal gap>1,000 ms；其余为 `PARTIAL`。
+- 从每个 subject/block 的 DLL timestamp 估计 local rate：median interval=10 ms、p5=9 ms、p95=12 ms、effective local rate=100 Hz；expected count 使用 `20,000/median_interval+1`，不是固定 2,000 帧真值。
+- 335 个窗口 coverage class：`COMPLETE=333`、`PARTIAL=0`、`SEVERELY_INCOMPLETE=2`。两窗均为 `97795/block4` 尾部：`w027` 1,035 frames、coverage `0.517241`、end gap `9,536 ms`；`w028` 46 frames、coverage `0.022989`、end gap `19,536 ms`。
+- 预注册 sensitivity：S0 all=`335`，S1 exclude severe=`333`，S2 complete-only=`333`。S0/S1/S2 ARM0 MAE=`25.791632/25.812760/25.812760`；ARM1=`22.189492/22.128143/22.128143`；ARM2=`19.189060/19.225180/19.225180` bpm；S0→S2 ΔMAE=`+0.021128/-0.061349/+0.036120` bpm。
+- Coverage 结论为 `SEVERE_COVERAGE_FAILURE_LOCALIZED_ONLY` + `COVERAGE_NOT_PRIMARY_HR_EXPLANATION`：去除两条严重缺尾窗没有实质改变整体高误差模式；这只是完整采集窗口上的 validity sensitivity，不是 HR 算法提升。335-window primary 结果完整保留，未删除或覆盖 ARM0/ARM1/ARM2。
+- 新增证据：`MMWAVE_DLL_WINDOW_COVERAGE_AUDIT.csv`、`MMWAVE_DLL_WINDOW_COVERAGE_AUDIT_REPORT_2026-08-30.md`、`MMWAVE_DLL_WINDOW_COVERAGE_AUDIT_MANIFEST.json`、`MMWAVE_DLL_WINDOW_COVERAGE_SENSITIVITY.csv`、`MMWAVE_DLL_WINDOW_COVERAGE_SENSITIVITY_BY_BLOCK.csv`、`MMWAVE_DLL_WINDOW_COVERAGE_SENSITIVITY_REPORT_2026-08-30.md`、`MMWAVE_DLL_WINDOW_COVERAGE_SENSITIVITY_MANIFEST.json` 及对应 maintenance scripts。
+- HR/BR 继续 `HOLD`，HRV `BLOCKED`，Issue #16 `PAUSED`；未修改 estimator、target、gate、filter、ECG、producer/raw/firmware、portable V2，未运行 C2B/C2C 或 full batch。
+
 ## 2026-08-30 formal multimodal model-ready v1 — PASS_MODEL_READY
 
 - Frozen the observation-defined primary matched cohort at 1,295 probes / 65 sessions / 46 repeat participants from the 1,440-probe canonical timeline; all 46 matched repeat participants have one participant-disjoint LOSO fold.
