@@ -8,6 +8,12 @@
 
 ---
 
+### 2026-08-30：Issue #29 execution-evidence supervisor — REUSE_GATE=PASS / SCIENTIFIC_GATE=PARTIAL
+
+**审查范围**：Supervisor 读取并核验 #24–#28 的实际脚本、aggregate 结果、manifest、复用说明、分母边界和本地提交；不把会话文字当作科学证据。统一确认：#24 仅闭合 ECG reference eligibility；#25 为 283-pair bounded diagnostic；#26 的 distance/error 描述性证据通过但 physical gate unresolved；#27 仅 supporting retrospective truth；#28 为历史 acquisition tail 不可恢复。
+
+**统一门控**：`REUSE_GATE=PASS`、`SCIENTIFIC_GATE=PARTIAL`；HR/BR 继续 `HOLD`，HRV 继续 `BLOCKED`。没有 producer/raw/firmware/portable V2/NIR/RGB 修改、C2B/C2C 重跑、新 HR 算法族或 MAE 调参。证据包为 `docs/results/2026-08-30_MMWAVE_ISSUE29_SUPERVISOR/`，含执行矩阵与 manifest；本轮审查提交为 `7629952520b0f237b67b6db5d54c8d30ced8a6f8`。
+
 ### 2026-08-30：Issue #28 97795/block4 acquisition tail audit — PARTIAL / HISTORICAL_TAIL_IRRECOVERABLE
 
 **复用与执行**：复用既有 `c0f1717` coverage audit、`426576e` DLL contract、原始 coverage manifest 与 FocusWave `ecg` 生命周期源码；RUN_ID=`issue28-tail-20260830-r1`。11 个 session/block 目录中 6 个可审计、5 个缺少必需日志，未重建缺失记录。

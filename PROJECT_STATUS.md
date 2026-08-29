@@ -1,5 +1,11 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-30 Issue #29 execution-evidence supervisor — REUSE_GATE=PASS / SCIENTIFIC_GATE=PARTIAL
+
+- Supervisor 已核验 #24–#28 的实际脚本、结果、manifest、复用理由、分母边界和本地提交；不以会话文字替代证据。统一结果为 #24 ECG eligibility 层完成，#25 bounded diagnostic，#26 physical gate unresolved，#27 supporting-only，#28 历史 tail 不可恢复。
+- HR/BR 继续 `HOLD`，HRV 继续 `BLOCKED`；未修改 producer/raw/firmware/portable V2/NIR/RGB，未运行 C2B/C2C，无新 HR 算法族或 MAE 调参。
+- 证据包为 `docs/results/2026-08-30_MMWAVE_ISSUE29_SUPERVISOR/`，本轮远端写入前的审查基线为 `805db1d3f2d701d46f678b7cd911990f779a4966`；集成后的 canonical commit 另以 Git 提交记录为准。
+
 ## 2026-08-30 Issue #28 97795/block4 acquisition tail — PARTIAL / HISTORICAL_TAIL_IRRECOVERABLE
 
 - 复用既有 DLL coverage audit、DLL contract、原始 coverage manifest 与 FocusWave `ecg` source；RUN_ID=`issue28-tail-20260830-r1`。11 个 session/block 目录中 6 个可审计、5 个为 `MISSING_REQUIRED_LOG`。

@@ -574,3 +574,9 @@ HRV（仅供参考）：SDNN 49~173ms，RMSSD 40~223ms。
 - 完成三场、首 6000 帧、五重叠窗口的 target/bin/channel continuity diagnostic；记录 HR/BR bin hopping、channel switching、phase comparability 和 provenance/QC 边界，不改 producer 数值路径。
 - 完成 current A、radar-only BR guard B、external-RSP diagnostic C；B 相对 A 无触发、无改善，不进入 producer；external RSP 仅作验证参考。
 - 冻结 portable V2 的 ALLOW/HOLD/EXCLUDE：结构性 missing/loadability `ALLOW`，HR/BR/RR 与 continuity/phase/motion QC `HOLD`，HRV/IBI 与外部 ECG/RSP 值 `EXCLUDE`；HRV 仍 `BLOCKED`，Issue #16 仍 `PAUSED`。
+
+## 2026-08-30 — audit(mmwave): Issue #29 Supervisor execution-evidence review
+
+- 审查 #24–#28 的实际脚本、结果、manifest、治理同步和本地提交；#24/#26/#27/#28 的边界证据可供父调度按提交整合，均不提升 HR/BR formal validity。
+- #25 已由本地提交 `c4b5397d65e26ab3d8951005be83ed1d8c5f25d4` 闭合同源 ECG eligibility 下 283 个共同有效配对的 diagnostic 比较；formal window validity 仍 unresolved，不把旧 0 分母结果解释为无差异。
+- 新增 Supervisor 矩阵与 manifest：`docs/results/2026-08-30_MMWAVE_ISSUE29_SUPERVISOR/`；整体 `REUSE_GATE=PASS`、`SCIENTIFIC_GATE=PARTIAL`；HR `HOLD`、HRV `BLOCKED`。

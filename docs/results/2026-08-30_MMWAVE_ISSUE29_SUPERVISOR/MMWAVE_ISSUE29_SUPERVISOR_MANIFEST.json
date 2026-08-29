@@ -1,0 +1,27 @@
+{
+  "issue": "#29",
+  "role": "Supervisor execution-evidence audit for Issues #24-#28",
+  "audit_round": "round1",
+  "canonical_main_head_at_audit": "805db1d3f2d701d46f678b7cd911990f779a4966",
+  "canonical_origin_main_at_audit": "805db1d3f2d701d46f678b7cd911990f779a4966",
+  "remote_write": false,
+  "producer_or_raw_change": false,
+  "overall_reuse_gate": "PASS",
+  "overall_scientific_gate": "PARTIAL",
+  "scientific_state": "#24 ECG eligibility is complete for 335 targeted windows; #25 is a bounded 283-pair diagnostic comparison with formal window validity unresolved; #26 descriptive distance-error evidence passes while the physical gate is unresolved; #27 is supporting retrospective spectral truth only; #28 records historical tail irrecoverability and missing-log limits. HR remains HOLD and HRV remains BLOCKED.",
+  "required_fix_before_issue25_acceptance": null,
+  "child_commits": {
+    "24": "d2d09f8ac502600d3a1241e33c429bd53756fa45",
+    "25": "c4b5397971c98270520b1eec9ec81cda8592e9dd",
+    "26": "6990364151d544d54b297ce394b4ff9e5f20c1d7",
+    "27": "72140e8ea7ed99ecb0e668c632a4247305231d3d",
+    "28": "92f47305570622cd64ddd4b375b797b4614a5ce3"
+  },
+  "matrix": "MMWAVE_ISSUE29_EXECUTION_EVIDENCE_MATRIX.csv",
+  "verification_basis": [
+    "Each accepted child commit was inspected by git show --stat and worktree status.",
+    "Each accepted report/manifest was parsed and denominator boundaries were checked against aggregate CSVs.",
+    "Issue #28 pre-existing coverage manifest was verified restored to its prior hash/provenance.",
+    "No remote branch was created, renamed, switched, or pushed by this audit."
+  ]
+}
