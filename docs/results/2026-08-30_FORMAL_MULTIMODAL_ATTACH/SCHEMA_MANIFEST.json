@@ -1,0 +1,26 @@
+{
+  "schema_version": "focuswave-formal-multimodal-v2-attach-audit-2026-08-30",
+  "canonical_probe_key": ["repeat_participant_id", "session_id", "block_id", "probe_id", "window_name"],
+  "window": {
+    "name": "pre_30s",
+    "interval": "[probe_onset_unix_ms-30000, probe_onset_unix_ms)",
+    "boundary_rule": "clip at formal block_start_unix_ms and retain window_truncated_by_block_start",
+    "time_source": "formal behavior master_timeline real unix_ms"
+  },
+  "tables": {
+    "behavior_probe_merge_ready.csv": {"rows": 1440, "columns": 33, "unit": "probe"},
+    "nir_probe_merge_ready.csv": {"rows": 1440, "columns": 53, "unit": "probe"},
+    "rgb_probe_merge_ready.csv": {"rows": 1440, "columns": 64, "unit": "probe"},
+    "canonical_probe_timeline.csv": {"rows": 1440, "columns": 33, "unit": "probe"},
+    "modality_coverage_missingness_audit.csv": {"rows": 1440, "columns": 76, "unit": "probe"},
+    "fully_matched_candidate.csv": {"rows": 1295, "columns": 76, "unit": "probe"}
+  },
+  "identity": {
+    "statistical_unit": "repeat_participant_id",
+    "acquisition_unit": "session_id",
+    "fold_policy": "participant-disjoint; folds not generated in this postprocessing step",
+    "legacy_fields_retained": ["single_experiment_id", "legacy_block_num", "legacy_probe_index", "probe_index_in_block", "probe_index_global"]
+  },
+  "missingness_policy": "retain mother/timeline rows, use explicit availability/status/reason fields, never zero-fill modality features",
+  "upload_boundary": "aggregate schema and audit only; row-level tables and raw/large producer artifacts remain local-only"
+}

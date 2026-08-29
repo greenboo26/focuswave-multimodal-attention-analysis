@@ -1,5 +1,14 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-30 formal multimodal mother-table attach — PARTIAL / structural V2 merge-ready PASS
+
+- Reused the current local mother table (179 sessions / 112 repeat participants) and explicit `j_source_folder` evidence to map 72 current sessions / 46 repeat participants. `single_experiment_id` and `session_id` remain separate fields.
+- Recovered 1,440 current formal behavior probes from J events and froze `pre_30s` on real `unix_ms` with the five-column probe key `repeat_participant_id, session_id, block_id, probe_id, window_name`.
+- Built local-only behavior/NIR/RGB probe tables and coverage audit. Observed rows: Behavior 1,440; NIR 1,295; RGB 1,420; fully matched candidate 1,295. Missing rows remain explicit and are not filled.
+- Ran the portable V2 validator at pinned commit `21c7da4fe2e03d853f0b6391d580334526f86ce3`: all three modality keys passed non-null/unique validation; outer and inner merge each returned 1,440 rows. This is structural readiness only, not feature completeness or model readiness.
+- Evidence package: `docs/results/2026-08-30_FORMAL_MULTIMODAL_ATTACH/`. Row-level tables, raw videos/Parquet, and producer outputs remain local-only. No producer rerun or model training occurred.
+- Remaining boundary: NIR has 145 probe rows without current window observations; RGB has 20 rows missing from `sub-099`; RGB blink candidate is provisional and PERCLOS is absent; mmWave remains reserve-only with HR/BR/RR HOLD and HRV/IBI EXCLUDE.
+
 ## 2026-08-30 formal firmware deployment correction — CONFIRMED_WITH_PROVENANCE_LIMITATION
 
 - Formal acquisition operator confirmation: the identified `mrs6240_p2512.img` firmware (SHA-256 `7a8ca41d0b2438384c8a02c5abba95b265cd8984ed911414157b74f80c1fd5c8`) was the firmware used throughout the formal acquisition. This is no longer an uncertainty about which firmware was deployed.

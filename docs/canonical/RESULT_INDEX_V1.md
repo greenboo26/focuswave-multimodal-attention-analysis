@@ -4,6 +4,7 @@ This index points to local full results without uploading them. See `ANALYSIS_RE
 
 | analysis_id | status | Git description | local full result path | report use |
 |---|---|---|---|---|
+| FORMAL_MULTIMODAL_ATTACH_20260830 | PARTIAL / structural V2 merge-ready PASS | [current mother-table attach evidence](../results/2026-08-30_FORMAL_MULTIMODAL_ATTACH/) | `C:\Users\550ACW\Documents\Codex\2026-08-30\files-pasted-by-the-user-focuswave\outputs\FocusWave_formal_multimodal_v2_2026-08-30` | 72-session / 46-group / 1,440-probe current attach; NIR 1,295 observed, RGB 1,420 observed; no model or physiology promotion |
 | MMWAVE_NEXT_EXECUTION_20260830 | PARTIAL / #16 PAUSED | ordered device-firmware, continuity, harmonic-activation, and HRV-blocker audit; [evidence matrix](../research/MMWAVE_DEVICE_FIRMWARE_ENGINEERING_EVIDENCE_2026-08-30.csv) | `D:\Project\厚粲杯\11_数据\derived\j_mmwave_target_lock_audit_v1` plus existing formal JSON/NPZ outputs | engineering/evidence boundary only; no new formal batch and no validated HRV claim |
 | P0_PROTOCOL | MATCHED_SUPPORTING | [protocol method card](analysis_cards/p0_protocol.md); historical producer script unavailable | `D:\Project\厚粲杯\11_数据\derived\probe_program_version_audit_v1` | protocol/version evidence only; no new number inferred |
 | BEIJING_BEHAVIOR | VALID_SUPPORTING | manifest/report schema only | `D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\formal_behavior_longitudinal_v1` | behavior results with diagnostics/FDR caveat |

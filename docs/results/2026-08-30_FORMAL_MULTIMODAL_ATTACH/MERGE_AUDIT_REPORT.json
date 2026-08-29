@@ -1,0 +1,31 @@
+{
+  "status": "PARTIAL",
+  "validator": {
+    "repository": "kyandi233-dev/Attention-Analysis",
+    "branch": "codex/formal-analysis-v2-portable",
+    "pinned_commit": "21c7da4fe2e03d853f0b6391d580334526f86ce3",
+    "unit": "probe",
+    "modalities": {
+      "behavior": {"rows": 1440, "sessions": 72, "groups": 46, "unique_nonnull_key": true},
+      "nir": {"rows": 1440, "sessions": 72, "groups": 46, "unique_nonnull_key": true},
+      "rgb": {"rows": 1440, "sessions": 72, "groups": 46, "unique_nonnull_key": true}
+    },
+    "outer_merge_rows": 1440,
+    "inner_merge_rows": 1440,
+    "result": "PASS_structural_merge_ready"
+  },
+  "scientific_boundary": {
+    "models_trained": false,
+    "nir": "existing fullclass output aggregated on real unix_ms; no PIR primary",
+    "rgb": "existing raw Parquet postprocessed; PERCLOS absent; blink candidate provisional",
+    "behavior": "current formal J behavior events, not historical NIR-Behavior direct reuse",
+    "mmwave": "reserve interface; HR/BR/RR HOLD; HRV/IBI EXCLUDE"
+  },
+  "local_row_level_package": "C:\\Users\\550ACW\\Documents\\Codex\\2026-08-30\\files-pasted-by-the-user-focuswave\\outputs\\FocusWave_formal_multimodal_v2_2026-08-30",
+  "remaining_blockers": [
+    "NIR: 145/1440 probe rows have no current window observation.",
+    "RGB: 20/1440 probe rows have no current raw observation from sub-099.",
+    "No validated PERCLOS or frozen blink-event threshold is claimed.",
+    "No mmWave physiology predictor is attached."
+  ]
+}
