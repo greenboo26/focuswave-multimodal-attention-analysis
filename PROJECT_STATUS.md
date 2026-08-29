@@ -8,6 +8,14 @@
 - C2C 历史结果不作为当前结论，待 canonical rerun；NIR/RGB increment 尚不是 global final。
 - 该 PASS 仅表示本地与 canonical 的已完成证据对账通过，不代表未来计划分析已完成。
 
+## 2026-08-29 Issue #15 mmWave physiology/QC closure — CLOSED_WITH_EXPLICIT_BOUNDARIES
+
+- HR：`PASS_QUALITY_GATED`；corrected BIOPAC calibration MAE=3.777 bpm，仅支持质量门控候选和 #16 sensitivity。
+- BR：`PASS_SUPPORTING`；corrected spectral calibration MAE=3.328 breaths/min，仅支持辅助/敏感性分析。
+- HRV：`BLOCKED`；现有 beat/IBI 与 ECG 闭环不足，C1D 保持 `NO_MATERIAL_IMPROVEMENT_STOP_HRV`。
+- corrected QC：Tier1=33、Tier2=37、Tier3=2（067/099）；Tier1 不等于 ground-truth validated。
+- #16 仅允许一次预定义 quality-stratified sensitivity；不重跑 C2B/C2C，不启动新算法路线。
+
 ## 2026-08-29 local analysis assimilation status — PARTIAL
 
 - 已把旧 dirty 工作树中可确认的中央本地独有分析入口、QC/merge-readiness/RGB

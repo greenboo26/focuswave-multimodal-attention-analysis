@@ -1,5 +1,23 @@
 # 修改说明
 
+## 2026-08-29 — analysis(mmwave): close Issue #15 physiology and QC qualification
+
+### 改动
+
+- 复用既有 formal QC、corrected 37 mm、BIOPAC ECG/RSP、B1/B2 和 067/099 provenance，
+  关闭 #15 qualification；未重跑科学分析。
+- HR 定为 `PASS_QUALITY_GATED`（corrected MAE=3.777 bpm），BR 定为
+  `PASS_SUPPORTING`（corrected spectral MAE=3.328 breaths/min），HRV 保持 `BLOCKED`。
+- 冻结 corrected QC tiers：Tier1=33、Tier2=37、Tier3=2；Tier1 仅为 QC-eligible candidate。
+- 建立 #16 单次 quality-stratified sensitivity 输入契约，明确 70-session/1,400-probe
+  分母、Tier1/Tier2 strata 和 067/099 exclusion。
+
+### 边界
+
+- 不启动新算法海选、C2B/C2C、AoA/beamforming、VMD grid、HRV 或 NIR/RGB 任务；不修改原始数据。
+- 脚本、输入、输出、manifest、GitHub report 和结论变化记录见
+  `docs/results/mmwave_formal_vital_qc_v1/MMWAVE_FORMAL_VITAL_QC_V1_CLOSURE_2026-08-29.md`。
+
 ## 2026-08-29 — audit(analysis): close local↔canonical reconciliation gate
 
 ### 改动

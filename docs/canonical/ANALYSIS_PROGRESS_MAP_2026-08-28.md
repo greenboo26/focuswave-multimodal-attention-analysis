@@ -54,7 +54,7 @@
 | Behavior / Probe 主分析 | `PASS / CORE READY` | 北京 70 sessions / 1,400 probes 主队列；probe 四类语义；30 s C+B 锚点；participant-disjoint CV | 主要是最终报告整合，不是重新跑主分析 | 所有传感器增量的基线；也是状态效度主骨架 |
 | Behavior + mmWave AI 增量 C2B/C2C | `PASS AS ABLATION` | C2B-v2、C2C 已完成；没有稳定超越 C+B | 不重跑 | 回答“mmWave 是否增加 probe prediction”，不回答 HR 是否准确 |
 | mmWave 外部 HR benchmark | `PASS DEVELOPMENT-ONLY` | AgeBalanced 官方 ECG reference 已纠正；30 s project pooled MAE 10.361 BPM；旧 27–38 BPM 已标 superseded | held-out 80 未开；不继续算法海选 | 只用于算法/reference 边界，不直接替代 J_Data 正式生理分析 |
-| mmWave HR/BR/HRV 正式资格 #15 | `PARTIAL` | HR/BR 现有输出、ECG/RSP/历史 quality 证据已盘清；HR 可 quality-gated，BR supporting；067/099 状态明确 | 最终确定 HR/BR window-level quality gate；HRV ECG/IBI 闭环不足则保持 blocked | 完成后直接喂给 #16 做一次预定义 quality sensitivity |
+| mmWave HR/BR/HRV 正式资格 #15 | `CLOSED_WITH_EXPLICIT_BOUNDARIES` | HR=`PASS_QUALITY_GATED`、BR=`PASS_SUPPORTING`、HRV=`BLOCKED`；corrected QC=33/37/2；067/099 状态明确 | 不再扩大算法或重算；#16 仅按 closure contract 做一次预定义 quality sensitivity | closure report 与 #16 input contract |
 | mmWave task dynamics / alertness #16 | `PARTIAL` | 主 LMM/GEE 已存在；70-session 主分母固定；fixed-bin sensitivity 已有 | 接 #15 quality strata + 统一 matrix 后补分层 sensitivity；统一 questionnaire 68/67 分母 | 是 mmWave 生理变量与任务过程/警觉事件的正式统计解释 |
 | mmWave report-ready matrix #17 | `PARTIAL / NEAR READY` | 唯一 72-row session matrix；067 无 raw；099 supplemental | 099 timeline/meta/provenance；68/67 questionnaire denominator mapping | 给 #15/#16 提供统一样本口径，防止各模型自己换分母 |
 | Psychometric / validity #13 | `PARTIAL` | probe 状态效度、行为 criterion 路线可用；问卷可作外部效标 | 重复被试跨-session 稳定性、person-level reliability、与长期自评专注/持续时长关系需要正式闭合 | 把“瞬时状态预测”升级为“个体测评”的关键层 |

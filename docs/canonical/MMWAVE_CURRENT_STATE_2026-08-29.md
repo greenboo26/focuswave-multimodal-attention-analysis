@@ -12,6 +12,19 @@ Before proposing a rerun, new front-end algorithm, AoA/beamforming, multi-bin se
 
 ## What changed on 2026-08-29
 
+### Issue #15 closure
+
+- HR：`PASS_QUALITY_GATED`；corrected BIOPAC calibration MAE=`3.777 bpm`，仅可作为
+  quality-gated candidate 和 #16 sensitivity。
+- BR：`PASS_SUPPORTING`；corrected spectral calibration MAE=`3.328 breaths/min`，仅作
+  supporting/sensitivity，不宣称全队列准确。
+- HRV：`BLOCKED`；现有 beat/IBI + ECG 闭环不足，C1D 保持
+  `C1D_NO_MATERIAL_IMPROVEMENT_STOP_HRV`。
+- corrected QC：Tier1=`33`、Tier2=`37`、Tier3=`2`（067/099）；Tier1 不是
+  ground-truth validated。
+- #16 只允许一次预定义 quality-stratified sensitivity；契约见
+  `docs/canonical/ISSUE16_QUALITY_STRATIFIED_SENSITIVITY_CONTRACT_2026-08-29.md`。
+
 ### Formal distance semantics
 
 - Formal RS6240 DataCube distance spacing is corrected to **0.037 m/bin**.

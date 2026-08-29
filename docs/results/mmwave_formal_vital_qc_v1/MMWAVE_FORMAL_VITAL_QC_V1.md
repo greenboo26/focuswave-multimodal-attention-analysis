@@ -1,6 +1,11 @@
 # MMWAVE FORMAL VITAL QC V1
 
-日期：2026-08-28 ；状态：**PARTIAL**
+日期：2026-08-28；closure：2026-08-29；状态：**CLOSED_WITH_EXPLICIT_BOUNDARIES**
+
+Issue #15 closure 见 `MMWAVE_FORMAL_VITAL_QC_V1_CLOSURE_2026-08-29.md`。最终资格为：
+HR=`PASS_QUALITY_GATED`、BR=`PASS_SUPPORTING`、HRV=`BLOCKED`；corrected QC 为
+Tier1=33、Tier2=37、Tier3=2。该状态不把 Tier1 写成 ground-truth validated，且不授权
+新的 C2B/C2C、AoA/beamforming、VMD grid 或 HRV 运行。
 
 ## 范围与边界
 
@@ -171,5 +176,4 @@
 ## 验证与限制
 
 本批读取并核对了既有 matrix、formal output audit、subject summary、segment quality、ECG/RSP 参考比较与规则脚本；输出 CSV/JSON/Markdown 均可读。未提交、未推送；工作区原有大量用户修改保持不变。治理主 checkout 未能在本机解析，故治理基线的独立复核仍是限制。
-
 
