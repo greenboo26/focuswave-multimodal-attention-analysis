@@ -16,6 +16,7 @@ Purpose: add literature evidence specifically for mmWave participation in multim
 - Reported benchmark: remote PPG + remote respiratory signals + blink markers reached 86.49% cognitive-load classification accuracy versus 87.5% for contact-based sensing.
 - Relevance: very close precedent for FocusWave's `mmWave + NIR + RGB -> cognitive state` framing and for treating radar as one complementary physiological source rather than the sole estimator.
 - Sources: https://papers.nips.cc/paper_files/paper/2025/hash/014e80b61aca7a85630e6da5d63427c6-Abstract-Datasets_and_Benchmarks_Track.html ; https://papers.neurips.cc/paper_files/paper/2025/file/014e80b61aca7a85630e6da5d63427c6-Paper-Datasets_and_Benchmarks_Track.pdf
+- Sensor-layout evidence: Section 3.2 states that RGB/NIR are mounted in front of the participant, while the radar is placed behind the seat within a plastic enclosure. Direct source: https://openreview.net/pdf/fdf18cf3037df03a17e49c167acbff550548d7c3.pdf . This is a successful alternative geometry, not evidence that front-facing and rear-seat geometries are equivalent.
 
 ### M2 — Wang et al., 2026, WORK
 
@@ -71,6 +72,8 @@ Therefore FocusWave's planned analysis is not an exotic sensor combination. The 
 4. quantify each modality's incremental contribution;
 5. only then test a quality-aware gated model;
 6. do not infer causal physiology from learned gate weights.
+
+Sensor-layout boundary: literature establishes that successful mmWave vital-sign sensing can be implemented with different geometries, including front-facing and behind-seat placement. This does **not** justify treating geometries as interchangeable. FocusWave must interpret its own formal acquisition according to its actual front-side geometry; no acquisition-layout change or retrospective geometry correction is implied.
 
 ## DECISION
 
