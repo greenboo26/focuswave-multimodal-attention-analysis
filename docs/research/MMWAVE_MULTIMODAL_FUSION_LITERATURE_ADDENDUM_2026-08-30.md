@@ -45,6 +45,7 @@ Purpose: add literature evidence specifically for mmWave participation in multim
 - Journal: IEEE Communications Surveys & Tutorials 27(1):322–352.
 - Scope: comprehensive review of mmWave multimodal sensing, data representations, fusion algorithms and applications.
 - Relevance: authoritative survey support for treating mmWave as a complementary modality in heterogeneous sensing rather than requiring radar alone to explain the target state.
+- Source: https://doi.org/10.1109/COMST.2024.3398004
 
 ### M5 — Wei et al., 2022, Sensors review
 
@@ -52,6 +53,7 @@ Purpose: add literature evidence specifically for mmWave participation in multim
 - DOI: `10.3390/s22072542`
 - Although the application is object detection, it gives a clear fusion taxonomy: data-level, feature-level and decision-level fusion, with trade-offs.
 - Relevance to FocusWave: because current producers already output modality-specific engineered features, feature-level/late fusion is much more natural than raw-data fusion. The application domain is different, so this is methodological—not cognitive-state—evidence.
+- Source: https://www.mdpi.com/1424-8220/22/7/2542
 
 ### M6 — Tac-Mamba, 2026
 
@@ -59,6 +61,47 @@ Purpose: add literature evidence specifically for mmWave participation in multim
 - Journal: Electronics 15(7):1535
 - DOI: `10.3390/electronics15071535`
 - Relevance: modern example of trust-aware/gated multimodal fusion designed to reduce negative transfer when one modality degrades. This supports the engineering plausibility of FocusWave's proposed quality-aware gating, but it is HAR rather than cognitive-state evidence.
+- Source: https://www.mdpi.com/2079-9292/15/7/1535
+
+## METHOD COMPARISON — what each paper actually does and what it means for FocusWave
+
+| Source | Target task | Sensor roles | Fusion point / model | Reported evaluation/result | What FocusWave may borrow | What must NOT be inferred |
+|---|---|---|---|---|---|---|
+| CogPhys 2025 | cognitive load | RGB/NIR/thermal/mmWave provide remote physiology/ocular information; contact sensors serve as reference/comparison channels | remote signals are converted to physiological markers such as PPG/respiration/blink and derived HR/HRV/RR before higher-level cognitive-load prediction | remote PPG + remote respiration + blink markers: 86.49%; contact-based sensing: 87.5% | `sensor -> interpretable physiological/ocular features -> cognitive-state model`; mmWave as a complementary source rather than sole predictor | does not prove FocusWave HR/BR are valid; their radar placement/processing and dataset are not interchangeable with ours |
+| Wang et al. 2026 WORK | four-level mental workload | mmWave contributes cardiopulmonary information; camera contributes ocular information | engineered multimodal biosignals -> Random Forest | 30 participants; 83.33% four-level accuracy | direct precedent for `radar cardiopulmonary + camera ocular -> cognitive state`; Random Forest is a reasonable nonlinear robustness baseline | does not justify copying their accuracy or assuming our physiology features have equal quality |
+| Hao et al. 2023 Sensors | emotion recognition | mmWave heartbeat/respiration + camera facial expression | modality-specific CNNs -> feature fusion -> GRU temporal classifier | 84.5% person-dependent; 74.25% person-independent | precedent for modality-specific encoders followed by feature/temporal fusion; reinforces participant-independent evaluation | emotion is not attention; the neural architecture is not automatically superior for our sample size |
+| Wang et al. COMST review | broad mmWave multimodal sensing | mmWave combined with heterogeneous sensing modalities | reviews data-level, feature-level and decision-level families and multimodal algorithms | review, not one benchmark | supports selecting fusion level explicitly and treating mmWave as complementary heterogeneous sensing | does not prescribe one universal fusion architecture |
+| Wei et al. 2022 review | radar-camera object detection | radar + vision | taxonomy of data-level / feature-level / decision-level fusion | review | clear methodological taxonomy and diagrams for explaining where fusion occurs | application is object detection, so it is method evidence only, not cognitive-state evidence |
+| Tac-Mamba 2026 | human activity recognition | mmWave + pose/visual-like complementary information | cross-modal model with trust-aware gating | task-specific HAR evaluation | supports the engineering idea that modality trust can be dynamically down-weighted when one stream degrades | gate weights are model behavior, not causal physiological importance; HAR is not attention |
+
+### Plain-language translation of the fusion levels
+
+- `data-level / early fusion`: combine raw or very low-level streams before each modality has been independently summarized. This is the heaviest synchronization/modeling option and is **not** the current FocusWave default.
+- `feature-level fusion`: each modality first produces its own interpretable or learned features, then the feature blocks are concatenated or jointly modeled. This matches the current formal producer architecture most naturally.
+- `decision-level / late fusion`: each modality makes a separate prediction first, then those predictions are combined. Quality-aware gated fusion is a learned form of late/intermediate fusion when the model changes how much it trusts each modality per sample/window.
+- `gating`: a learned reliability weighting mechanism. In plain language: if NIR is occluded in one window, the fusion model can reduce NIR's contribution and rely more on other available modalities. A gate weight is **not** a causal statement such as “mmWave explains 40% of attention.”
+- `person-independent`: the tested participant is absent from training. FocusWave's LOSO rule is a participant-independent evaluation design.
+
+### Direct method decision for FocusWave
+
+The literature comparison does **not** justify replacing the frozen analysis plan. It strengthens the current order:
+
+1. formal modality-specific features/QC first;
+2. same matched cohort and participant-disjoint folds;
+3. interpretable feature-level fusion first (`C/M/N/R` subset ladder);
+4. quantify incremental/conditional contribution on identical held-out participants;
+5. Random Forest may be used as a prespecified nonlinear robustness model;
+6. small MLP may test learned feature interactions;
+7. quality-aware gated fusion is a secondary AI model only after simple fusion is stable;
+8. raw-data end-to-end fusion / large Transformer is not justified under the current evidence/sample constraints.
+
+## SENSOR PLACEMENT BOUNDARY — CogPhys rear-seat radar is a precedent, not an equivalence claim
+
+CogPhys reports the radar positioned behind the seat inside a plastic enclosure while the visual sensors are placed in front. This is evidence that mmWave cardiopulmonary sensing is not physically restricted to a front-of-chest layout. It does **not** establish that rear-seat, front-chest and side-on geometries are equivalent: radar phase is sensitive to the radial component of body-surface displacement, and orientation/material path can change the observed signal.
+
+Project decision: retain the actual FocusWave acquisition geometry as the only geometry for interpreting FocusWave data. Do not retroactively infer that a successful rear-seat setup validates our front placement or vice versa. The CogPhys layout is retained as a methodological precedent only.
+
+CogPhys sources: https://papers.nips.cc/paper_files/paper/2025/file/014e80b61aca7a85630e6da5d63427c6-Paper-Datasets_and_Benchmarks_Track.pdf ; https://openreview.net/pdf/fdf18cf3037df03a17e49c167acbff550548d7c3.pdf
 
 ## PROJECT INTERPRETATION
 
