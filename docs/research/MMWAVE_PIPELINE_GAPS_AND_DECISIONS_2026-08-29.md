@@ -74,6 +74,43 @@ Current gate result: **PARTIAL / #16 PAUSED**. No model, target-lock, C2B/C2C, r
 
 The corrected split is the result of applying existing formal QC/provenance rules with the corrected formal range semantics and retaining existing 067/099 boundaries. It measures the current pipeline's eligibility strata. The split cannot be decomposed from current evidence into “acquisition quality,” “participant cooperated,” “human chest was selected,” and “physiology was valid.” Those are separate claims requiring separate evidence.
 
+## 2026-08-30 literature-backed decision on the two remaining near-term engineering questions
+
+### D-AUDIT-20260830-05 — instrument and audit target continuity; do not redesign target tracking first
+
+Literature consistently treats range-bin choice and continuity as a first-order vital-sign problem. Choi et al. (IEEE Access 2021, DOI `10.1109/ACCESS.2020.3043013`) show that precise target range-bin selection materially changes respiration/heartbeat accuracy. Choi et al. (Applied Sciences 2021, DOI `10.3390/app11104514`) further use spatial phase coherency across neighboring bins and explicitly identify range-bin tracking as a future stability improvement. Xue et al. (Measurement 2023, DOI `10.1016/j.measurement.2023.113715`) use local search plus moving-average tracking to obtain the target chest range bin and discuss phase-discontinuity handling. A later multiple-range-bin study (PMCID `PMC12031119`) also reports that exploiting concurrent bins can improve robustness over a single-bin choice.
+
+Decision for this project: the next step is **diagnostic instrumentation first**, not a new tracking algorithm. Persist, per analysis window, the selected HR and BR bin/channel, previous selected bin/channel, bin/channel switch indicators, distance jump in bins/meters, selected-bin score/quality, and a phase-discontinuity diagnostic on the selected signal. Run this on a small prespecified representative set. If continuity is already stable, close the gap without algorithm change. Only if discontinuity/switching is frequent and materially associated with HR/BR error should a local-search, neighboring-bin coherence, or multi-bin strategy be considered.
+
+This decision is deliberately conservative because the current task is to establish whether the existing selector is stable enough for the psychology/multimodal use case, not to optimize the radar field generally.
+
+### D-AUDIT-20260830-06 — respiratory-harmonic suppression is scientifically justified, but external RSP must be validation-only, not a production crutch
+
+Respiratory harmonics overlapping the heartbeat band are a well-established radar HR failure mode. Published approaches include adaptive notch filtering (PMCID `PMC8070581`), adaptive harmonic cancellation (PMCID `PMC9693980`), explicit elimination of spectral peaks corresponding to respiratory harmonics (Frontiers in Physiology 2023, DOI `10.3389/fphys.2023.1206471`), improved VME/respiratory-harmonic suppression (IEEE Access 2024, DOI `10.1109/ACCESS.2024.3434952`), SSA-based harmonic removal (Digital Signal Processing 2025, DOI `10.1016/j.dsp.2024.104911`), and spatial/source-separation methods (Sensors 2025, DOI `10.3390/s25041198`). The literature therefore supports treating 2×/3× respiratory contamination as a real HR ambiguity that warrants an explicit mitigation/sensitivity analysis.
+
+Decision for this project: **do not make external BIOPAC/RSP a required production input to the radar HR estimator.** That would make the supposedly standalone radar feature depend on a reference sensor unavailable in deployment and would contaminate the interpretation of mmWave incremental value in multimodal modeling. Instead:
+
+1. keep the formal standalone radar HR path reference-independent;
+2. implement/verify an internal radar-derived BR harmonic guard using the same-window radar BR estimate, with explicit uncertainty/tolerance and a fail-safe that does not automatically delete a candidate solely because HR happens to be near an integer multiple of BR;
+3. use synchronized external RSP only as a **validation/sensitivity oracle** on the calibration subset: compare current standalone HR, internal radar-BR harmonic guard, and external-RSP-assisted rejection against ECG HR under identical windows;
+4. promote the internal guard only if it improves held-out/reference agreement without systematically rejecting true HR values that legitimately lie near 2× or 3× respiration.
+
+This is especially important because a 2024 two-wave-model study (Electronics 2024, DOI `10.3390/electronics13214308`) documents the opposite failure case: a true heartbeat can itself lie at approximately 3× the respiration rate. Therefore a hard rule of “near 2×/3× BR = reject” is not scientifically safe.
+
+### Near-term execution order after this review
+
+`CONTINUITY_INSTRUMENTATION = AUTHORIZED_FOR_DIAGNOSTIC_IMPLEMENTATION`
+
+`HARMONIC_VALIDATION_DESIGN = READY`
+
+`EXTERNAL_RSP_AS_PRODUCTION_DEPENDENCY = REJECTED`
+
+`INTERNAL_RADAR_BR_HARMONIC_GUARD = CONDITIONAL / VALIDATE_BEFORE_PROMOTION`
+
+`HRV = BLOCKED / NOT_NEAR_TERM`
+
+No formal batch, #16, C2B/C2C, NIR/RGB producer change, raw-data modification, or new multimodal model run is authorized by this literature decision alone.
+
 ## Next authorized gate
 
 The next action may only be chosen after preserving this audit record. If a future task seeks a scientific rerun, it must first name the exact changed input/semantic question, use the corrected formal distance contract, record the caller and producer commit, and preserve the same session denominator. No rerun follows from this document alone.
