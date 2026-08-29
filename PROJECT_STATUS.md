@@ -1,5 +1,13 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-30 formal multimodal model-ready v1 — PASS_MODEL_READY
+
+- Frozen the observation-defined primary matched cohort at 1,295 probes / 65 sessions / 46 repeat participants from the 1,440-probe canonical timeline; all 46 matched repeat participants have one participant-disjoint LOSO fold.
+- Audited modality states explicitly: NIR `OBSERVED=1,294`, `STRUCTURAL_MISSING=140`, `OBSERVATION_MISSING=5`, `QC_FAIL=1`; RGB `OBSERVED=1,420`, `STRUCTURAL_MISSING=20`. The NIR QC-fail row remains in the observation-defined denominator with NaN geometry.
+- Froze Behavior 5, NIR 4, and RGB 6 primary predictors. Blink remains provisional and excluded; PERCLOS is absent/not validated; mmWave HOLD/EXCLUDE fields remain outside the primary predictor contract.
+- Participant-disjoint LOSO leakage audit, pre-onset Behavior temporal audit, source-hash traceability, and readiness gate all pass. No model was trained and no NIR/RGB producer was rerun.
+- Git-safe evidence package: `docs/results/2026-08-30_FORMAL_MODEL_READY_V1/`. Full probe-level missingness audits, expanded folds, and model-ready candidate remain local-only.
+
 ## 2026-08-30 formal multimodal mother-table attach — PARTIAL / structural V2 merge-ready PASS
 
 - Reused the current local mother table (179 sessions / 112 repeat participants) and explicit `j_source_folder` evidence to map 72 current sessions / 46 repeat participants. `single_experiment_id` and `session_id` remain separate fields.

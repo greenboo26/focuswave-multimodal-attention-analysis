@@ -568,6 +568,18 @@ Behavior+mmWave 增量已经做过，不重跑：
 
 ---
 
+### 2026-08-30：formal multimodal model-ready v1 — PASS_MODEL_READY
+
+**输入与分母**：沿用 current mother-table attach 的 1,440-probe canonical timeline、72 current sessions、46 repeat participants和 `pre_30s` 五列 probe key。以 Behavior observed AND NIR observed AND RGB observed 冻结 primary matched cohort：1,295 probes、65 sessions、46 repeat participants；未使用 label-dependent filtering。
+
+**缺失与 QC**：NIR 明确分为 `OBSERVED=1,294`、`STRUCTURAL_MISSING=140`、`OBSERVATION_MISSING=5`、`QC_FAIL=1`；RGB 为 `OBSERVED=1,420`、`STRUCTURAL_MISSING=20`。sub-099 的 20 行归因为 processed session/raw parquet/subject manifest absent，现有证据另显示 `master_timeline.csv` 缺失；不把它升级为 postprocessing、probe-overlap 或 QC failure。NIR QC_FAIL row 保留在 observation-defined denominator，geometry 保持 NaN。
+
+**合同与决策**：冻结 Behavior=5、NIR=4、RGB=6 primary predictors；NIR 只用 fullclass pupil geometry，不启用 PIR；blink 仍为 provisional，PERCLOS absent/not validated，mmWave HOLD/EXCLUDE 字段不进入 primary predictor。46 个 participant-disjoint LOSO folds、participant/session/probe leakage audit、Behavior pre-onset temporal audit、source-hash/readiness gate 均 PASS。最终允许进入下一阶段 formal baseline modeling，但本轮不训练模型；下游必须先声明 NaN handling，不得静默改变 1,295 分母。
+
+**证据与边界**：Git-safe package 为 `docs/results/2026-08-30_FORMAL_MODEL_READY_V1/`；完整 probe-level missingness audits、expanded folds 和 model-ready candidate 保留本地，不上传 canonical。生成器为 `scripts/maintenance/build_formal_model_ready_v1.py`，通过显式参数读取既有本地 package 和 producer roots，不启动 producer。
+
+---
+
 ## 14. 维护规则
 
 以后任何实际运行的新分析，只要产生“采用 / 放弃 / 结果无效 / 参考被替代 / 数据语义修复”之一，就必须在同一次交付中更新本账本，至少写：
