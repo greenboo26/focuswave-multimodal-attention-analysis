@@ -172,6 +172,19 @@ def test_legacy_bbb_contract_is_rejected(tmp_path: Path):
         produce(manifest, identity, config, tmp_path / "out")
 
 
+@pytest.mark.parametrize("legacy_component", ["BBB", "050-sart-formal"])
+def test_legacy_behavior_paths_are_rejected(
+    tmp_path: Path,
+    legacy_component: str,
+):
+    manifest, identity, config = build(tmp_path / "fixture")
+    frame = pd.read_csv(manifest, dtype=str).fillna("")
+    frame.loc[0, "behavior_path"] = f"{legacy_component}/legacy.csv"
+    frame.to_csv(manifest, index=False, encoding="utf-8-sig")
+    with pytest.raises(ValueError, match="legacy BBB/050-sart-formal"):
+        produce(manifest, identity, config, tmp_path / "out")
+
+
 def test_groupkfold_never_splits_repeat_sessions():
     frame = pd.DataFrame({
         "session_id": ["s1", "s1", "s2", "s2", "s3", "s4"],
