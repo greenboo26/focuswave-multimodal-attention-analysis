@@ -438,3 +438,8 @@ HRV（仅供参考）：SDNN 49~173ms，RMSSD 40~223ms。
 
 - `scripts/analyze_mmwave_hrv.py`
 - `scripts/process_vital_signs_v9.py`（谐波陷波模块）
+## 2026-08-29 — audit(mmwave): primary-relink RS6240 firmware mode and pipeline stages
+
+- 恢复并重新绑定此前 RS6240 firmware/manual/SDK 审计：正式镜像 `mrs6240_p2512.img` 的 `fft_mode=2`、37 mm、256 点和 2T×4R 1D DataCube 路径已形成 primary-linked evidence。
+- 新增逐逻辑块审计、文献—项目 stage matrix、gap/decision ledger 和 source-controlled Mermaid flowchart；明确 lower-layer window/calibration、Tx/Rx timing、target continuity、active harmonic gate 和 HRV beat evidence 的缺口。
+- 不运行新科学分析、不运行 #16、不修改原始数据或 NIR/RGB producer。

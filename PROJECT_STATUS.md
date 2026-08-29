@@ -9,7 +9,8 @@
 - 当前决策：在 formal producer/downstream 逐行/逻辑块科学审计完成前，不运行 Issue #16 quality-stratified sensitivity。
 - `33/37/2` 当前只能作为 current-pipeline QC/eligibility strata；不得直接解释为 33 场采集好、37 场被试运动/采集差，也不得等同 physiology validity。
 - 下一硬 Gate 已正式分配为 `docs/research/MMWAVE_PIPELINE_SCIENTIFIC_AUDIT_TASK_2026-08-29.md`：先恢复并绑定既有 RS6240 firmware/manual/SDK 证据，再逐行审 producer/downstream；禁止从零重复 discovery。
-- 当前 `PIPELINE_SCIENTIFIC_AUDIT=PARTIAL`；未授权新算法、C2B/C2C 重跑、NIR/RGB producer 修改或原始数据修改。
+- 当前 `PIPELINE_SCIENTIFIC_AUDIT=PARTIAL`；正式镜像模式、37 mm range 轴、0xC2 DataCube 传输和下游 HR/BR/HRV/QC 边界已完成静态闭合；部署回执、lower-layer 校准/窗口、Tx/Rx 时序/补偿和 target continuity 仍未闭合。未授权新算法、C2B/C2C 重跑、NIR/RGB producer 修改或原始数据修改。
+- 本轮审计文件：`docs/research/MMWAVE_FORMAL_PIPELINE_LINE_BY_LINE_AUDIT_2026-08-29.md`、`docs/research/MMWAVE_LITERATURE_VS_PROJECT_STAGE_MATRIX_2026-08-29.csv`、`docs/research/MMWAVE_PIPELINE_GAPS_AND_DECISIONS_2026-08-29.md`、`docs/research/MMWAVE_PIPELINE_FLOWCHART_2026-08-29.md`。
 
 ## 2026-08-29 local↔canonical reconciliation gate — PASS
 

@@ -1,8 +1,8 @@
 # mmWave upstream firmware and DataCube evidence — 2026-08-29
 
-Status: `ACTIVE / PRIOR-AUDIT FACT RECOVERY`
+Status: `ACTIVE / FORMAL-MODE-CLOSED / DETAIL-BOUNDARIES-OPEN`
 
-Purpose: prevent already-completed RS6240 firmware/manual/DataCube investigations from being forgotten and reclassified as wholly unknown. This file records facts already established in prior project audits, separates them from still-unbound SDK/manual details, and defines the exact evidence-relink task required before the line-by-line scientific pipeline audit can close.
+Purpose: prevent already-completed RS6240 firmware/manual/DataCube investigations from being forgotten and reclassified as wholly unknown. This file records facts already established in prior project audits, separates them from still-unbound SDK/manual details, and records the evidence-relink and line-by-line audit result.
 
 ## 1. Already established project facts
 
@@ -50,6 +50,14 @@ Boundary: the prior audit did **not** establish a complete one-to-one mapping fr
 
 This fact must be re-linked to the original local audit artifact/manual/firmware evidence in the current line-by-line audit; it must not be discarded and rediscovered from zero.
 
+### U5 — Formal image mode and DataCube path are now primary-relinked
+
+Status: `CONFIRMED_IN_FORMAL_FIRMWARE`
+
+The recovered prior audit `2026-08-29_FORMAL_FIRMWARE_RUNTIME_MODE_AUDIT.md` is bound to the local SDK assets. The formal image `mrs6240_p2512.img` has SHA-256 `7a8ca41d0b2438384c8a02c5abba95b265cd8984ed911414157b74f80c1fd5c8`; the adjacent ADC experiment image has SHA-256 `bc3395113a8647f1ec16c779b6b3f153e43a979727d3f1853506ef5548d447d7`. The saved binary comparison identifies `range_resolution_mm=37`, `range_fft_len_log2=8`, and formal `fft_mode=2`, while the ADC experiment has `fft_mode=0`. `radar_framework.h:68-70` defines the enum and `ReportDataCube1D/src/main.c:65-83` binds it into the application configuration. This establishes the formal image as 1D Range-FFT output with no Doppler FFT in the 1D frame; `0xC2` is the complex16 report transport.
+
+The exact formal session burn/boot receipt is still absent. Lower-layer windowing, IQ/channel calibration, physical Tx/Rx timing and compensation, and amplitude scaling therefore remain bounded rather than inferred from generic SDK behavior.
+
 ## 2. What is NOT wholly unknown anymore
 
 The following classifications are now prohibited:
@@ -66,7 +74,7 @@ Correct current interpretation:
 | Range-domain transform before DataCube | `CONFIRMED` | exact FFT/window/length/zero-padding/cropping implementation |
 | ReportDataCube1D complex 8-channel range-domain semantics | `CONFIRMED` | exact channel physical mapping / Tx-Rx ordering |
 | Formal range spacing | `CONFIRMED_0.037_M_PER_BIN` | bind to exact firmware/manual parameter derivation |
-| Firmware binary identity | `PRIOR_AUDIT_CONFIRMED_NEEDS_PRIMARY_RELINK` | bind image to build/source/manual evidence |
+ | Firmware binary identity | `CONFIRMED_IN_FORMAL_FIRMWARE` | device burn/boot receipt and full build manifest remain absent |
 
 ## 3. Still unresolved upstream details
 
