@@ -1,85 +1,142 @@
 {
   "contract_id": "focuswave.behavior.science.v3",
-  "status": "web-repair-base",
+  "status": "formal-repair-implementation",
   "language": "zh-CN",
   "publication_policy": {
     "v2_status": "rejected",
     "v2_results_publishable": false,
-    "formal_report_is_separate_from_process_report": true
+    "formal_report_is_separate_from_process_report": true,
+    "engineering_validation_is_behavioral_validity": false,
+    "mechanism_claims_authorized_by_code_tests": false
   },
   "privacy": {
-    "real_data_allowed": false,
+    "real_data_allowed_in_repository_tests": false,
     "real_identity_mapping_allowed": false,
     "concrete_anonymous_group_values_allowed": false,
     "fixture_must_be_explicitly_synthetic": true
   },
   "units": {
-    "primary_event_row": "每个 probe 事件一行，不把窗口复制行当作独立主观测",
+    "primary_event_row": "每个 probe 事件一行；主窗口默认30秒；窗口复制行不得增加主样本量",
     "probe": "事件级观测单位",
+    "block": "区块级观测单位，嵌套于session",
     "session": "一次完整场次级观测单位",
-    "participant_group": "重复场次的聚类单位，不在契约或结果中写入具体键值",
-    "window_sensitivity": "10、20、30 秒分别运行和标记，不合并为一个独立样本量"
+    "participant_group": "重复场次的聚类单位，不在契约或结果中写入具体真实键值",
+    "window_sensitivity": "10、20、30 秒分别运行和标记，不能合并为独立主样本"
+  },
+  "required_metrics": [
+    "go_correct_rt_mean_ms",
+    "go_correct_rt_median_ms",
+    "go_correct_rt_sd_ms",
+    "go_correct_rt_mad_ms",
+    "go_correct_rt_iqr_ms",
+    "go_correct_rt_cv",
+    "go_correct_rt_theilsen_slope_ms_per_s",
+    "omission_rate",
+    "commission_rate",
+    "dprime_loglinear",
+    "criterion_c",
+    "beta"
+  ],
+  "outcome_separation": {
+    "go_omission": "Go机会中的遗漏；保留独立分子、分母和比例",
+    "nogo_commission": "No-Go机会中的误按；保留独立分子、分母和比例",
+    "combined_correct_dependent_variable": "forbidden_for_formal_error_inference"
   },
   "required_fields": {
     "primary_probe": [
       "synthetic_or_authorized_event_id",
       "session_id",
       "participant_cluster_ref",
-      "cycle_id",
       "block_id",
       "q1_nominal_4class",
       "q2_ordinal_4level"
     ],
     "window_sensitivity": [
       "synthetic_or_authorized_event_id",
-      "window_seconds_nominal",
-      "metric_value"
+      "window_seconds_nominal"
     ],
     "error_event": [
       "session_id",
       "participant_cluster_ref",
-      "error_event_id",
+      "error_event_key",
       "trial_offset",
-      "error_metric",
-      "within_participant_centered_error_metric"
+      "target_trial_key",
+      "go_correct_rt_ms"
     ]
   },
   "sensitivity_windows_seconds": [10, 20, 30],
   "questions": {
     "q1": {
       "outcome_type": "nominal_four_class",
-      "model_requirement": "名义类别模型，不得用有序或连续折线替代",
-      "dependence_requirement": "按 session 和 participant 聚类或使用等价重复测量结构"
+      "reference_category_default": 1,
+      "visualization": "unordered_category_points_no_connecting_line",
+      "model_requirement": "名义类别固定效应；participant随机截距并显式加入session嵌套方差结构",
+      "failure_policy": "参考类别缺失、类别缺失、样本门失败、收敛失败或异常均写入model_failures_v3.csv"
     },
     "q2": {
       "outcome_type": "ordinal_four_level",
-      "model_requirement": "重复测量有序模型，或明确说明并验证的 cluster 方法",
-      "ordered_model_without_cluster": "forbidden"
+      "model_requirement": "必须存在经过审计的participant/session聚类或层级有序模型后端",
+      "ordered_model_without_cluster": "forbidden",
+      "current_formal_status": "fail_closed_descriptive_only"
     },
     "b1_b2": {
-      "contrast": "session 内配对差值",
-      "uncertainty": "participant cluster",
-      "session_and_participant_levels_must_be_distinguished": true
+      "contrast": "先在session内唯一配对B1/B2，再进入participant聚类/汇总",
+      "session_order": "重复参与者必须显式提供，不允许从session_id或时间排序推断",
+      "failure_policy": "缺失、重复、participant不一致、session_order不一致均写失败记录"
     }
   },
   "hierarchy": {
-    "required_nesting": ["cycle within block", "block within session", "session within participant_cluster"],
-    "required_interaction": "block_by_cycle",
+    "required_nesting": ["block within session", "session within participant_cluster"],
+    "probe_dependence": "probe重复观测依附于session和participant_cluster",
     "error_events": "nested within session and participant_cluster",
-    "error_centering": "within_participant_centering_required",
-    "leakage_control": "participant_cluster_split_before_model_fit"
+    "error_overlap_policy": "nearest_event_by_absolute_trial_offset_then_stable_event_key",
+    "error_centering": "within_participant_centering_and_pre_error_baseline_change",
+    "leakage_control": "participant_cluster_disjoint_split_before_prediction_fit"
+  },
+  "correlation": {
+    "observation_unit": "session",
+    "repeat_sensitivity": "participant-level mean collapse",
+    "relationship_types": [
+      "mathematical_identity_or_complement",
+      "derived_redundancy",
+      "same_measure_family",
+      "behavioral_association"
+    ],
+    "mechanism_claim_from_derived_relation": "forbidden"
   },
   "reporting": {
     "n_labels": ["probe_n", "session_n", "participant_group_n"],
-    "forest_plot": "按观测单位分面，重复对比标签必须与模型单位一致",
-    "qc_counts": "每个计数必须带单位和对应分母",
-    "effect_plots": "按单位分面，不混合 probe/session/participant",
+    "forest_plot": "按结果族/量纲分面，禁止跨量纲视觉排序",
+    "qc_counts": "session、participant group、block、probe、trial分别给分母并分图/分面",
+    "chinese_figures_required": true,
     "process_report": "记录输入、契约、QC、模型、失败和限制",
-    "formal_report": "只引用已通过监督门和正式证据门的结果"
+    "formal_report": "只引用formal_inference=true且通过监督门的结果",
+    "model_failure_table": "model_failures_v3.csv",
+    "figure_manifest": "figure_manifest_v3.csv",
+    "report_manifest": "report_manifest_v3.json"
+  },
+  "candidate_decision": {
+    "required_fields": [
+      "candidate",
+      "decision_class",
+      "decision",
+      "evidence_source",
+      "rule_version",
+      "review_status",
+      "scientific_boundary"
+    ],
+    "decision_classes": ["hard_gate", "soft_recommendation", "pending", "scientific_prohibited"],
+    "unsupported_binary_0_1_gate": "forbidden"
+  },
+  "cohort_runtime_contract": {
+    "current_audit_fact": "44 sessions / 38 current anonymous participant groups / 6 two-session repeat groups",
+    "hardcode_into_producer_or_inference": false,
+    "future_full_identity_remap_required": true
   },
   "fixture_policy": {
-    "source": "tests/fixtures/behavior_science_v3_synthetic.json",
+    "contract_fixture": "tests/fixtures/behavior_science_v3_synthetic.json",
+    "implementation_tests": "tests/test_behavior_science_v3_analysis.py",
     "real_data": false,
-    "identity_values": "仅使用明确标记的 synthetic 值"
+    "identity_values": "仅使用明确标记的synthetic值"
   }
 }
