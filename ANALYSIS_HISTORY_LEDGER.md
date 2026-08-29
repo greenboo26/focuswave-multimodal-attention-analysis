@@ -367,6 +367,16 @@ Git 时间：2026-08-13 18:41 UTC = 2026-08-14 02:41 北京时间
 
 因此“稳定特质全部 BLOCKED”过于粗暴；正确说法是：**状态证据更成熟，person-level 稳定性有现成数据路线但尚需按重复被试/问卷正式闭合。**
 
+
+### 2026-08-29：formal BB V1 探针前窗口锚定试次语义修复
+
+**基线**：PR #19 / `codex/formal-bb-behavior-v1@0423beba1813bf81b16d4d7d7e9c7ac4763920e6`。
+
+- 本地真实数据隔离复跑发现 120 个探针前窗口包含了各自的锚定探针试次。根因是实现只使用 `[probe_onset-window, probe_onset)` 时间条件；当锚定试次的 `absolute_onset_time` 早于 `probe_onset_time` 时，该行会落入窗口。
+- 修复合同增加同 session、同 Block、`is_probe=0` 与 `trial_key != anchor_trial_key` 四个成员条件；10/20/30 秒窗口及其他科学参数不变。
+- 旧基线生成的窗口输出需要按原冻结 manifest、identity map 和 config 全量重建，不能只局部减去一行或据结果调整窗口。
+- 本次 GitHub 交付只运行合成/去身份化回归测试，不运行 44 场，也不产生正式统计结论。
+
 ---
 
 ## 9. 当前 J_Data / mmWave 主线状态（2026-08-27~28）

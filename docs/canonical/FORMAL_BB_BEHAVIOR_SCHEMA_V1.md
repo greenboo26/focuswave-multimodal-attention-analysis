@@ -8,6 +8,8 @@ The frozen session manifest has one row per session/Block/source file and requir
 
 The anonymous identity map requires one row per `session_id` with `anonymous_participant_group_id` and `identity_status`. The producer does not create identities. The example configuration explicitly excludes `sub-9504`; a frozen manifest can also mark it `include=false`. No session count or participant-group count is hardcoded.
 
+The current frozen queue is expected to resolve to 44 sessions, 38 current-queue anonymous groups, and six two-session repeat groups. These are external manifest/mapping audit facts, not producer constants or permanent identities. When the approximately 72-session cohort is connected, rebuild the complete anonymous identity mapping before deriving groups or folds; do not extend the current 38 keys incrementally.
+
 ## Standard output tables
 
 | Table | Unique key | Analysis unit | Main contents |
@@ -27,7 +29,7 @@ Every aggregate row keeps `total_trial_opportunities`, `go_opportunities`, `nogo
 - RT mean, median, sample SD, median absolute deviation (MAD), interquartile range (IQR), coefficient of variation (CV), and Theil–Sen robust slope are recomputed independently at each supported scale. The slope unit is ms/s.
 - Commission is No-Go response error over No-Go opportunities. Omission is missed Go over Go opportunities. Overall error is commission plus omission over all trial opportunities.
 - `dprime_loglinear`, `criterion_c`, and `beta` are calculated only after configured Go and No-Go opportunity gates pass. Raw rates are retained; corrected rates use `(count + 0.5)/(opportunities + 1)`. A rejected unit remains missing with `sdt_status=rejected_low_opportunity`.
-- Probe windows are `[probe_onset-window, probe_onset)`: the left boundary is included and the probe anchor is excluded. Fixed windows use the same half-open convention.
+- Probe windows are `[probe_onset-window, probe_onset)`: the left boundary is included and the probe onset is excluded. Membership additionally requires the same `session_id` and `block_id`, `is_probe=0`, and `trial_key != anchor_trial_key`. The explicit key/probe exclusions remain authoritative when the anchored trial onset precedes the questionnaire/probe onset. Fixed windows remain session/Block-scoped and use the same half-open time convention; their membership semantics are unchanged.
 - `q1_nominal_4class` retains the four nominal Q1 codes. `q2_ordinal_4level` retains the ordered 1–4 Q2 code. They are not averaged together or converted into an unvalidated focus score.
 
 ## Compatibility with the existing 12 probe features

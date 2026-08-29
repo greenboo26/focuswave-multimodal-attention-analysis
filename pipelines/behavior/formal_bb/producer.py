@@ -304,6 +304,30 @@ def _aggregate(trials: pd.DataFrame, group_columns: list[str], cfg: dict[str, An
     return pd.DataFrame(rows)
 
 
+def _select_probe_preceding_trials(
+    trials: pd.DataFrame,
+    probe: Any,
+    *,
+    start: float,
+    end: float,
+) -> pd.DataFrame:
+    """Select only non-probe behavior trials preceding one probe anchor.
+
+    Session and Block identity are part of the membership predicate so this
+    helper remains safe even if a caller passes a wider frame than one Block.
+    The anchor key is excluded independently of timestamps because a probe's
+    questionnaire onset can occur after its anchored trial onset.
+    """
+    return trials[
+        trials.session_id.eq(probe.session_id)
+        & trials.block_id.eq(probe.block_id)
+        & trials.is_probe.eq(0)
+        & trials.trial_key.ne(probe.trial_key)
+        & trials.trial_time_s.ge(start)
+        & trials.trial_time_s.lt(end)
+    ]
+
+
 def _probe_windows(trials: pd.DataFrame, cfg: dict[str, Any]) -> pd.DataFrame:
     rows: list[dict[str, Any]] = []
     group_columns = ["session_id", "block_id"]
@@ -314,7 +338,9 @@ def _probe_windows(trials: pd.DataFrame, cfg: dict[str, Any]) -> pd.DataFrame:
             anchor_source = "probe_onset_time" if np.isfinite(probe.probe_time_s) else "absolute_onset_time_fallback"
             for width in cfg["probe_window_seconds"]:
                 start, end = float(anchor) - float(width), float(anchor)
-                selected = block[block.trial_time_s.ge(start) & block.trial_time_s.lt(end)]
+                selected = _select_probe_preceding_trials(
+                    block, probe, start=start, end=end
+                )
                 row = {
                     "session_id": session_id,
                     "anonymous_participant_group_id": probe.anonymous_participant_group_id,
