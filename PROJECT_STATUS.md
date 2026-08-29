@@ -1,5 +1,14 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-29 mmWave literature/pipeline audit decision — PARTIAL / #16 PAUSED
+
+- 已建立 canonical 文献证据与决策账本：`docs/research/MMWAVE_LITERATURE_EVIDENCE_AND_DECISION_LEDGER_2026-08-29.md`。
+- 已建立机器可读文献登记：`docs/research/MMWAVE_LITERATURE_EVIDENCE_REGISTER_2026-08-29.csv`。
+- 当前决策：在 formal producer/downstream 逐行/逻辑块科学审计完成前，不运行 Issue #16 quality-stratified sensitivity。
+- `33/37/2` 当前只能作为 current-pipeline QC/eligibility strata；不得直接解释为 33 场采集好、37 场被试运动/采集差，也不得等同 physiology validity。
+- 下一硬 Gate：完成文献规范链、ReportDataCube1D upstream provenance、正式代码逐行映射、缺失/启发式/潜在有害处理清单和 source-controlled flowchart。
+- 当前 `PIPELINE_SCIENTIFIC_AUDIT=PARTIAL`；未授权新算法、C2B/C2C 重跑、NIR/RGB producer 修改或原始数据修改。
+
 ## 2026-08-29 local↔canonical reconciliation gate — PASS
 
 - 已完成本地与 canonical 的 43 条分析视图对账：30 条 MATCHED、2 条 SUPERSEDED、
@@ -72,9 +81,9 @@ producer worktree 仍然保留。
 
 ## 当前下一步
 
-1. 复核两个首分片的 RGB 边界、遮挡和曝光变化。
-2. 对四个中/末分片执行最小 HR/BR 验证链。
-3. 暂不直接进入 HRV；逐搏定位和 ECG 验证仍是前置条件。
+1. 完成文献规范链与 formal mmWave producer/downstream 逐行科学审计。
+2. 复原/确认 `ReportDataCube1D` 前可验证的 producer 处理；看不到的步骤标 `UNVERIFIABLE_UPSTREAM`，不得猜。
+3. 在上述 Gate 通过前暂停 #16；不得用 33/37 直接推断 participant compliance 或 acquisition quality。
 
 ## 证据边界
 
