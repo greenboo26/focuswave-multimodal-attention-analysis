@@ -20,6 +20,12 @@
 
 **证据**：`docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/ECG_REFERENCE_ELIGIBILITY_REPORT_2026-08-30.md`、`ECG_ELIGIBILITY_REASON_DISTRIBUTION.csv`、`ECG_ELIGIBILITY_BLOCK_SUMMARY.csv`、`ECG_ARM_METRICS_VALID_DENOMINATOR.csv`、`ECG_ELIGIBILITY_MANIFEST.json`；逐窗含 reject reason 的 CSV 仅在 `work/ecg_eligibility_dll_windows_20260830/` local-only，不入 Git。全套 pytest 在仓库根目录收集到既有 legacy `_cal_segment_test.py` 的模块路径错误；相关 ECG 测试文件在当前 HEAD 不存在，已改以 Python compile、脚本实际运行、CSV/JSON/hash/diff 校验完成验证。
 
+### 2026-08-30：Issue #26 distance-error 与 physical gate audit — PASS / PHYSICAL_GATE_UNRESOLVED
+
+**复用与执行**：复用 `selected_bin × 0.037 m`、B2 极端距离前端审计、早期 5 participant/99-window ECG-valid HR 与 99-row RSP-valid BR paired evidence；RUN_ID=`MMWAVE_DISTANCE_ERROR_PHYSICAL_GATE_20260829T220501Z`。只新增下游聚合入口 `scripts/maintenance/run_mmwave_distance_error_physical_gate_audit_20260830.py`，未重选 target、重跑 estimator、修改 QC 或运行 C2B/C2C；`REUSE_REJECTION_REASON` 为既有结构审计与 paired 表没有同时覆盖连续 distance-error、预定义分层、coverage 和 target-stability 的聚合入口。
+
+**结果与边界**：formal 71-session distance 分布为 `4/12/32/5/18`；早期 HR N=99、MAE=`3.777215` bpm，BR N=99、MAE=`3.327631` breaths/min，仅作参考描述。B2 near-side bright structure=`OBSERVED`，labels=`LIKELY_HUMAN=4`、`AMBIGUOUS=82`、direct leakage=`0`、fixed reflection=`0`；0 不是机制不存在证明。历史 `0.30–1.50 m` 仅 `HISTORICAL_GATE_SENSITIVITY`，near-field cause/current physical gate 保持 `UNRESOLVED`，未授权 exclusion gate；结果包为 `docs/results/2026-08-30_MMWAVE_DISTANCE_ERROR_PHYSICAL_GATE/`。
+
 ---
 
 ### 2026-08-30：mmWave timestamp semantics repair、DLL-time window reconstruction 与 unchanged HR sensitivity — PARTIAL

@@ -1,0 +1,4 @@
+group,n_sessions,range_peak_mode_fraction_median,range_peak_bin_std_median_bins,channel_amplitude_cv_median,usable_ratio_median,below_threshold_ratio_median,existing_hr_quality,existing_br_quality,analysis_role
+NEAR_LT_0.30,16,0.699,0.719,0.248,1.0,0.0,usable_for_hr=16,review_required=9; usable_for_br=7,existing B2 diagnostic proxy; not target-lock confirmation or a new QC gate
+FAR_GT_1.50,18,0.63,1.316,0.263,1.0,0.0,usable_for_hr=18,review_required=11; usable_for_br=7,existing B2 diagnostic proxy; not target-lock confirmation or a new QC gate
+REFERENCE_0.30_0.60,9,0.748,1.342,0.242,1.0,0.0,usable_for_hr=9,research_harmonic_corrected=1; review_required=5; usable_for_br=3,existing B2 diagnostic proxy; not target-lock confirmation or a new QC gate

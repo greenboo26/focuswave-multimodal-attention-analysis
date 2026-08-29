@@ -1,0 +1,12 @@
+distance_band,n_sessions,n_participants,identity_note
+<0.20,4,4,formal session id used as participant key; no second participant mapping inferred
+0.20-0.30,12,12,formal session id used as participant key; no second participant mapping inferred
+0.30-0.60,32,32,formal session id used as participant key; no second participant mapping inferred
+0.60-1.00,5,5,formal session id used as participant key; no second participant mapping inferred
+>1.00,18,18,formal session id used as participant key; no second participant mapping inferred
+corrected_qc=FAIL,22,22,existing QC label; not ECG/RSP validity
+corrected_qc=PASS,49,49,existing QC label; not ECG/RSP validity
+transition=FAIL→FAIL,20,20,existing old-vs-corrected distance QC transition
+transition=FAIL→PASS,16,16,existing old-vs-corrected distance QC transition
+transition=PASS→FAIL,2,2,existing old-vs-corrected distance QC transition
+transition=PASS→PASS,33,33,existing old-vs-corrected distance QC transition

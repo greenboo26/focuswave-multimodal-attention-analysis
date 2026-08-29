@@ -26,6 +26,12 @@
 - RUN_ID=`issue25_window_length_20260830`; 303 endpoints / 8 blocks; 20 s MAE=`14.703129` bpm and 60 s MAE=`5.608574` bpm; nominal resolution=`3 bpm` versus `1 bpm`.
 - Status is `PARTIAL / DIAGNOSTIC_ONLY`; formal window validity remains `UNRESOLVED`. `REUSE_REJECTION_REASON` is recorded in the report and manifest because the prior same-window audit could not construct a paired 60 s DLL-time/ECG_VALID comparison.
 
+## 2026-08-30 — audit(mmwave): complete Issue #26 distance-error evidence package
+
+- Reused `selected_bin × 0.037 m`, B2 extreme-range evidence, and early 5-participant/99-window ECG/RSP paired outputs; added only a downstream aggregate audit and did not change target, estimator, QC, producer, raw or firmware.
+- RUN_ID=`MMWAVE_DISTANCE_ERROR_PHYSICAL_GATE_20260829T220501Z`; formal distance bands=`4/12/32/5/18`; early HR N=99 MAE=`3.777215` bpm and BR N=99 MAE=`3.327631` breaths/min remain descriptive reference evidence. Historical `0.30–1.50 m` remains `HISTORICAL_GATE_SENSITIVITY`.
+- B2 near-side bright structure is `OBSERVED`; direct-leakage and fixed-reflection labels remain zero without being interpreted as proof of absence. Current physical gate and near-field cause remain `UNRESOLVED`; no exclusion gate is authorized. Evidence is under `docs/results/2026-08-30_MMWAVE_DISTANCE_ERROR_PHYSICAL_GATE/`.
+
 ## 2026-08-30 — audit(mmwave): repair authoritative DLL frame-time semantics and rerun bounded HR sensitivity
 
 ### 改动

@@ -1,0 +1,5 @@
+metric,cohort,n_windows,n_sessions,n_participants,distance_mean_m,distance_median_m,abs_error_mean,abs_error_median,bias_mean_estimate_minus_reference,rmse,within_5_fraction,within_10_fraction,pearson_distance_abs_error,spearman_distance_abs_error,ols_abs_error_per_m,analysis_role,gate_label
+HR,ECG_VALID,99,5,5,0.605828,0.703,3.777215,2.718214,-0.283855,5.121422,0.737374,0.939394,0.180362,0.251401,2.773851,descriptive; repeated windows within participant; not a threshold-selection test,
+BR,RSP_VALID,99,5,5,0.596485,0.481,3.327631,2.33881,-2.701301,4.414133,0.727273,0.979798,0.165609,0.133291,2.003887,descriptive; repeated windows within participant; not a threshold-selection test,
+HR,HISTORICAL_GATE_SENSITIVITY,99,5,5,0.605828,0.703,3.777215,2.718214,-0.283855,5.121422,0.737374,0.939394,0.180362,0.251401,2.773851,descriptive; repeated windows within participant; not a threshold-selection test,HISTORICAL_GATE_SENSITIVITY
+BR,HISTORICAL_GATE_SENSITIVITY,99,5,5,0.596485,0.481,3.327631,2.33881,-2.701301,4.414133,0.727273,0.979798,0.165609,0.133291,2.003887,descriptive; repeated windows within participant; not a threshold-selection test,HISTORICAL_GATE_SENSITIVITY

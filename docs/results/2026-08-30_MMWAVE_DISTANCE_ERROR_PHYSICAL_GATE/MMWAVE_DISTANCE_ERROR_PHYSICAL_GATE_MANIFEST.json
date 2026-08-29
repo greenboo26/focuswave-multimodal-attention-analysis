@@ -1,0 +1,79 @@
+{
+  "run_id": "MMWAVE_DISTANCE_ERROR_PHYSICAL_GATE_20260829T220501Z",
+  "status": "PASS / DESCRIPTIVE_DISTANCE_ERROR_COMPLETE__PHYSICAL_GATE_UNRESOLVED",
+  "created_utc": "2026-08-29T22:05:01.786357+00:00",
+  "script": "run_mmwave_distance_error_physical_gate_audit_20260830.py",
+  "script_sha256": "356916bae62ee03c23c86c419fd6dbf147edfe042b01a633ec2afc93e7e6cf94",
+  "analysis_set": {
+    "formal_distance": {
+      "sessions": 71,
+      "participants": 71,
+      "estimator_rerun": false
+    },
+    "ecg_valid_hr": {
+      "windows": 99,
+      "sessions": 5,
+      "participants": 5,
+      "rejected_by_source_validity": 0
+    },
+    "rsp_valid_br": {
+      "windows": 99,
+      "sessions": 5,
+      "participants": 5,
+      "rejected_by_source_validity": 1
+    }
+  },
+  "distance_semantics": "corrected_distance_m = selected_bin * 0.037; selected bin reused from existing outputs; not human ground-truth distance",
+  "predefined_bands_m": [
+    "<0.20",
+    "0.20-0.30",
+    "0.30-0.60",
+    "0.60-1.00",
+    ">1.00"
+  ],
+  "historical_gate_role": "HISTORICAL_GATE_SENSITIVITY_ONLY",
+  "physical_gate_decision": "UNRESOLVED",
+  "near_field_decision": "OBSERVED_NEAR_SIDE_STRUCTURE__CAUSE_UNRESOLVED__EXCLUSION_NOT_AUTHORIZED",
+  "reuse_rejection_reason": "Existing B2 structural audit and separate HR/BR corrected paired tables did not provide one aggregate with continuous distance-vs-absolute-error, predeclared bands, source-valid coverage, and target-stability distributions; add only this downstream aggregation layer.",
+  "estimator": "existing corrected-gate paired outputs; no producer, target rule, estimator, or QC threshold change",
+  "source_files": {
+    "formal_distance_qc": {
+      "basename": "2026-08-29_FORMAL_37MM_DISTANCE_QC.csv",
+      "sha256": "1332dd3a3ce7912dc427f0abe30c7ecc57b6ec60a4b32d80e07c0bf003aff541"
+    },
+    "hr_paired_existing_estimator": {
+      "basename": "HR_COURSE_99WINDOW_PAIRED.csv",
+      "sha256": "72b4d0f9d8e382cbae7a8a7595dd7c34036d4c0ed550e5ff28b3b10ccf3c2cac"
+    },
+    "br_paired_existing_estimator": {
+      "basename": "BR_FULL_DENOMINATOR_PAIRED.csv",
+      "sha256": "97e30e5806ee0eef8b33304e0f7986ad4d3bf449305df813995409fd46f27331"
+    },
+    "formal_B2_report": {
+      "basename": "2026-08-29_FORMAL_EXTREME_RANGE_TARGET_AUDIT.md",
+      "sha256": "904789472977277c0407646be51603d69c4d5005478443b125b452bc99d3287c"
+    },
+    "early_profile_figure": {
+      "basename": "2026-08-29_representative_range_profile_gate_overlay.png",
+      "sha256": "9690a37aed834f998ead4c9bd500c0753052b3985fccdc67c474906fd2ce2b48"
+    }
+  },
+  "outputs": [
+    "MMWAVE_DISTANCE_ERROR_SUMMARY.csv",
+    "MMWAVE_DISTANCE_ERROR_BY_BAND.csv",
+    "MMWAVE_TARGET_STABILITY_COVERAGE_SUMMARY.csv",
+    "MMWAVE_FORMAL_DISTANCE_DISTRIBUTION.csv",
+    "MMWAVE_FORMAL_TARGET_STABILITY_EVIDENCE.csv",
+    "MMWAVE_PHYSICAL_EVIDENCE.csv",
+    "MMWAVE_DISTANCE_ERROR_PHYSICAL_GATE_REPORT_2026-08-30.md",
+    "MMWAVE_DISTANCE_ERROR_PHYSICAL_GATE_MANIFEST.json"
+  ],
+  "row_level_outputs": "none; only aggregate CSVs are written",
+  "prohibitions_checked": [
+    "no raw data change",
+    "no C2B/C2C",
+    "no new HR algorithm family",
+    "no MAE-based threshold tuning",
+    "no NIR/RGB producer change"
+  ]
+}

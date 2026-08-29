@@ -1,0 +1,11 @@
+metric,cohort,distance_band,n_windows,n_sessions,n_participants,distance_mean_m,distance_median_m,abs_error_mean,abs_error_median,bias_mean_estimate_minus_reference,rmse,within_5_fraction,within_10_fraction,pearson_distance_abs_error,spearman_distance_abs_error,ols_abs_error_per_m,analysis_role
+HR,ECG_VALID,<0.20,0,,,,,,,,,,,,,,
+HR,ECG_VALID,0.20-0.30,0,,,,,,,,,,,,,,
+HR,ECG_VALID,0.30-0.60,40,2,2,0.3515,0.3515,2.926119,2.008179,-1.548573,4.366882,0.85,0.95,-0.0172,0.129944,-3.013829,descriptive; repeated windows within participant; not a threshold-selection test
+HR,ECG_VALID,0.60-1.00,59,3,3,0.778254,0.703,4.354229,3.849441,0.57358,5.575188,0.661017,0.932203,-0.027763,0.044154,-0.919868,descriptive; repeated windows within participant; not a threshold-selection test
+HR,ECG_VALID,>1.00,0,,,,,,,,,,,,,,
+BR,RSP_VALID,<0.20,0,,,,,,,,,,,,,,
+BR,RSP_VALID,0.20-0.30,0,,,,,,,,,,,,,,
+BR,RSP_VALID,0.30-0.60,60,3,3,0.407,0.407,2.898644,2.027416,-2.123916,3.931455,0.783333,0.983333,-0.102123,-0.031824,-4.48912,descriptive; repeated windows within participant; not a threshold-selection test
+BR,RSP_VALID,0.60-1.00,39,2,2,0.888,0.888,3.98761,3.091361,-3.589585,5.067727,0.641026,0.974359,,,,descriptive; repeated windows within participant; not a threshold-selection test
+BR,RSP_VALID,>1.00,0,,,,,,,,,,,,,,

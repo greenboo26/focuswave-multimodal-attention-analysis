@@ -1,0 +1,11 @@
+scope,evidence,classification,evidence_level,n_sessions,detail
+formal_B2,persistent_near_side_bright_structure,OBSERVED,SUPPORTING,43,Existing locked 16 near + 18 far + 9 reference front-end audit reports persistent near-side bright structure across groups; cause remains unresolved.
+formal_B2,near_field_direct_leakage_or_fixed_reflection_cause,UNRESOLVED,SUPPORTING,43,Existing conservative B2 conclusion is RISK_NOT_SUPPORTED; no new exclusion gate is authorized.
+formal_B2,target_classification_NEAR_LT_0.30,REUSED_EXISTING_LABELS,SUPPORTING,16,heart=AMBIGUOUS=14; LIKELY_HUMAN=2; breath=AMBIGUOUS=15; LIKELY_HUMAN=1; labels are not physical truth.
+formal_B2,target_classification_FAR_GT_1.50,REUSED_EXISTING_LABELS,SUPPORTING,18,heart=AMBIGUOUS=18; breath=AMBIGUOUS=17; LIKELY_HUMAN=1; labels are not physical truth.
+formal_B2,target_classification_REFERENCE_0.30_0.60,REUSED_EXISTING_LABELS,SUPPORTING,9,heart=AMBIGUOUS=9; breath=AMBIGUOUS=9; labels are not physical truth.
+formal_B2,target_classification_LIKELY_HUMAN,LIKELY_HUMAN,SUPPORTING__CANDIDATE_ONLY,4 target labels,Existing B2 visible-shape label only; it does not replace placement ground truth or prove chest lock.
+formal_B2,target_classification_AMBIGUOUS,AMBIGUOUS,SUPPORTING__CONSERVATIVE_DEFAULT,82 target labels,Existing B2 retained ambiguous when the conservative profile/heatmap criteria were not met.
+formal_B2,target_classification_LIKELY_NEAR_FIELD_OR_DIRECT_LEAKAGE,LIKELY_NEAR_FIELD_OR_DIRECT_LEAKAGE,NOT_OBSERVED__UNRESOLVED_CAUSE,0 target labels,No batch-level target evidence met the existing conservative condition; this is not evidence that the mechanism is absent.
+formal_B2,target_classification_LIKELY_FIXED_ENVIRONMENT_REFLECTION,LIKELY_FIXED_ENVIRONMENT_REFLECTION,NOT_OBSERVED__UNRESOLVED_CAUSE,0 target labels,No batch-level target evidence met the existing conservative condition; this is not evidence that the mechanism is absent.
+early_BIOPAC_representative,existing_range_profile_figure,OBSERVED_STRUCTURE_ONLY,ENGINEERING_REFERENCE,1 representative,"Existing representative range-profile figure is retained as visual context; it does not establish human placement, cause, or a gate."

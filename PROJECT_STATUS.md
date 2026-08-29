@@ -8,6 +8,13 @@
 - RUN_ID=`ecg_eligibility_dll_20260829T220533Z`。逐窗 eligibility 与每个 reject reason 保存在 local-only `work/ecg_eligibility_dll_windows_20260830/ECG_DLL_WINDOW_ELIGIBILITY_LOCAL_ONLY.csv`；Git-safe aggregate、manifest 和报告位于 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`。
 - 本轮只闭合 ECG reference eligibility 层；不把 20 s 窗口升级为 canonical HR window，不改 estimator/target/gate/producer/raw/firmware/portable V2，不运行 #16、C2B/C2C 或 HRV。HR 仍 `HOLD`，HRV 仍 `BLOCKED`。
 
+## 2026-08-30 Issue #26 distance-error / physical gate — PASS / PHYSICAL_GATE_UNRESOLVED
+
+- 复用 `selected_bin × 0.037 m` 校正语义、既有 B2 极端距离前端审计、早期 5 participant/99-window ECG-valid HR 与 99-row RSP-valid BR paired evidence；未重选 target、重跑 estimator、改变 QC 或运行 C2B/C2C。
+- RUN_ID=`MMWAVE_DISTANCE_ERROR_PHYSICAL_GATE_20260829T220501Z`；连续 distance–absolute-error 与预定义 `<0.20`、`0.20–0.30`、`0.30–0.60`、`0.60–1.00`、`>1.00 m` 分层已完成，HR MAE=`3.777215` bpm、BR MAE=`3.327631` breaths/min，仅作早期参考描述；历史 `0.30–1.50 m` 仅为 `HISTORICAL_GATE_SENSITIVITY`。
+- formal 71-session distance 分布复现为 `4/12/32/5/18`；near-side bright structure=`OBSERVED`，B2 labels 为 `LIKELY_HUMAN=4`、`AMBIGUOUS=82`、direct leakage=`0`、fixed reflection=`0`。这些 0 不证明机制不存在；near-field cause 与 current physical gate 仍 `UNRESOLVED`，未授权 exclusion gate。
+- 结果包位于 `docs/results/2026-08-30_MMWAVE_DISTANCE_ERROR_PHYSICAL_GATE/`；formal 71 场只作 distance/structure/QC 描述，早期 99 窗不外推为正式 71 场真值。未改 raw、firmware、producer、portable V2 或 HRV。
+
 ## 2026-08-30 mmWave timestamp-semantics repair — PARTIAL / DLL_CONTRACT_FROZEN__WINDOWS_MATERIALLY_CHANGED
 
 - 以 canonical `main` baseline `ab39ad272462c54208b56e0b302b5d9ff1e95b4c`、FocusWave `ecg` commit `8e6fe5c5d08f386661bc05aaf9d5c5715a43b317` 完成 `97793`、`9779`、`97795` 的 Python timestamp row ↔ NPZ frame ↔ DLL timestamp mapping；三场均 row/frame 数一致、frame index 连续、8 通道长度一致、DLL timestamp 单调，mapping status=`OK`。
