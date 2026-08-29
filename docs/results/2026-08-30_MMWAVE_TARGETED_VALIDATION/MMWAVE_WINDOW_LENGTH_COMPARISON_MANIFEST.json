@@ -1,9 +1,10 @@
 {
   "run_id": "issue25_window_length_20260830",
   "canonical_head": "805db1d3f2d701d46f678b7cd911990f779a4966",
+  "canonical_main_head": "805db1d3f2d701d46f678b7cd911990f779a4966",
   "origin_main": "805db1d3f2d701d46f678b7cd911990f779a4966\trefs/heads/main",
   "script": "C:\\Users\\550ACW\\.codex\\worktrees\\b132\\08_算法\\scripts\\maintenance\\run_mmwave_window_length_comparison_20260830.py",
-  "script_sha256": "4a173402ea4ac84a81b450c891a73b6a52d9ef02936e58244caf1e80f39ecbaf",
+  "script_sha256": "7a3aa50b63a237857af6577cb287549acbc790a6aa038bfd922ffe7aa4c9be85",
   "producer_script": "C:\\Users\\550ACW\\.codex\\worktrees\\b132\\08_算法\\scripts\\process_vital_signs_v3_1_1.py",
   "producer_script_sha256": "e25e3f137360a78df1841c65ac442fba9fbb85508079e019d474a5d168014cfd",
   "fixed_20s_input": "C:\\Users\\550ACW\\.codex\\worktrees\\b132\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\mmwave_ecg_block_window_comparison.csv",
@@ -63,6 +64,9 @@
       "issue24_commit": "d2d09f8ac502600d3a1241e33c429bd53756fa45",
       "manifest_repo_path": "docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/ECG_ELIGIBILITY_MANIFEST.json",
       "manifest_commit_sha256": "0806cb4f0e477788ee7cd604e3d04c811654fb692f2840767249982ebc5ba258",
+      "issue24_commit": "d2d09f8ac502600d3a1241e33c429bd53756fa45",
+      "manifest_repo_path": "docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/ECG_ELIGIBILITY_MANIFEST.json",
+      "manifest_commit_sha256": "0806cb4f0e477788ee7cd604e3d04c811654fb692f2840767249982ebc5ba258",
       "issue24_run_id": "ecg_eligibility_dll_20260829T220533Z",
       "issue24_git_head": "805db1d3f2d701d46f678b7cd911990f779a4966",
       "issue24_origin_main": "805db1d3f2d701d46f678b7cd911990f779a4966",
@@ -81,6 +85,15 @@
         "marker_mismatch": "warning only when affine fit remains available; not silently treated as validity"
       }
     }
+  },
+  "ecg_eligibility": {
+    "source": "issue24_isolated_worktree_aggregate plus same gold_standard_qa.ecg_qa adapter reapplied per current duration",
+    "full_input_n": 335,
+    "full_ECG_VALID_n": 325,
+    "full_ECG_INVALID_n": 10,
+    "full_UNRESOLVED_n": 0,
+    "paired_ECG_VALID_n": 283,
+    "pair_rule": "#24 gold_standard_qa.ecg_qa: SOS 0.5-40 Hz; R-peak distance 0.30 s prominence 0.25; IBI 300-2000 ms; adjacent IBI change >20% rejected; valid IBI coverage >=0.80; minimum 3 valid IBI; marker mismatch warning only"
   },
   "counts": {
     "paired_rows": 303,
@@ -132,6 +145,16 @@
   ],
   "status": "PARTIAL / DIAGNOSTIC_ONLY",
   "conclusion": "diagnostic_window_length_comparison_formal_validity_unresolved",
+  "verification": {
+    "python_compile": "PASS",
+    "run_exit_code": 0,
+    "fixed_grid_pair_rows": 303,
+    "both_window_ECG_VALID_pairs": 283,
+    "empty_metric_guard": true,
+    "metrics_nonempty": true,
+    "git_diff_check": "PASS before staging"
+  },
+  "reuse_rejection_reason": "Existing same-window audit is 20 s-only and marks strict historical 60 s NOT_APPLICABLE_TO_20S; it lacks paired 60 s DLL-time windows and paired ECG_VALID references.",
   "excluded": [
     "C2B",
     "C2C",

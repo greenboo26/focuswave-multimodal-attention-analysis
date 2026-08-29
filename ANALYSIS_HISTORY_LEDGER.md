@@ -632,6 +632,16 @@ Behavior+mmWave 增量已经做过，不重跑：
 
 ---
 
+### 2026-08-30：Issue #25 20 s 来源与历史 60 s 受控比较 — PARTIAL / DIAGNOSTIC_ONLY
+
+**输入与来源**：canonical `main` 与 `origin/main` 均为 `805db1d3f2d701d46f678b7cd911990f779a4966`；20 s 来源绑定 `472735b6b6af5f98e92ab7815718e81863cb6098` 的 `scripts/maintenance/run_mmwave_targeted_validation_20260830.py`，历史 60 s 语义绑定 `64634159d226ee1ed892d53e56fcf3697fbff9b8` 的 `run_hr_course_99_corrected.py` / `build_hr_course_99_audit.py`（25 s internal course、5 s step、60 s trailing probe median）。
+
+**#24 依赖与口径**：复用 #24 commit `d2d09f8ac502600d3a1241e33c429bd53756fa45`，manifest repo-relative path 为 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/ECG_ELIGIBILITY_MANIFEST.json`，commit 内容 SHA-256=`0806cb4f0e477788ee7cd604e3d04c811654fb692f2840767249982ebc5ba258`；其 ECG_VALID/ECG_INVALID/UNRESOLVED=`325/10/0`。当前两种时长均调用同源 `gold_standard_qa.py::ecg_qa` eligibility adapter：0.5–40 Hz、固定 R-peak、300–2000 ms IBI、相邻 IBI >20% artifact、valid coverage ≥80%、至少 3 个 valid IBI；marker mismatch 仅 warning。
+
+**实际运行与结果**：RUN_ID=`issue25_window_length_20260830`，固定 10 s endpoint grid、8 complete blocks、303 paired endpoints、283 ECG_VALID pair。20 s nominal resolution=`0.05 Hz/3 bpm`，coverage mean/median=`0.655511/0.691708`，n=`283`，MAE/median AE/bias/Pearson/Spearman=`14.703129/14.514286/-12.598120/0.278024/0.268721`；60 s nominal resolution=`0.016666667 Hz/1 bpm`，coverage=`0.656046/0.691986`，n=`283`，对应=`5.608574/4.083467/-3.630629/0.379439/0.399861`。同窗 AE 差（20 s−60 s）mean/median=`9.094555/7.4`，20 s better/tie/60 s better=`74/1/208`，仅作 diagnostic。
+
+**复用门与决策**：`REUSE_REJECTION_REASON` 为既有 same-window audit 仅有 20 s denominator、strict 60 s=`NOT_APPLICABLE_TO_20S`，缺少 paired 60 s DLL-time window 与 paired ECG_VALID reference，故增加最小 wrapper；未按结果选长度，未新造 estimator。结论为 `PARTIAL / DIAGNOSTIC_ONLY`，formal window validity=`UNRESOLVED`，HR=`HOLD`；允许以后复用入口为 `scripts/maintenance/run_mmwave_window_length_comparison_20260830.py`，证据位于 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_WINDOW_LENGTH_*`，raw/row-level/large outputs 不入 Git。
+
 ## 14. 维护规则
 
 以后任何实际运行的新分析，只要产生“采用 / 放弃 / 结果无效 / 参考被替代 / 数据语义修复”之一，就必须在同一次交付中更新本账本，至少写：

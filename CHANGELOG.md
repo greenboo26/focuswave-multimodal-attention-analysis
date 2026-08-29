@@ -13,6 +13,19 @@
 - ECG_VALID ARM0/ARM1/ARM2 MAE: `25.005/21.906332/18.904008` bpm with valid n `325/304/325`; all-window values remain diagnostic only.
 - HR remains `HOLD`, HRV remains `BLOCKED`; no estimator, target, gate, producer, raw, firmware, portable V2, #16, C2B/C2C, or HRV change occurred.
 
+## 2026-08-30 — audit(mmwave): controlled 20 s versus historical 60 s window comparison
+
+### 改动
+
+- Added `scripts/maintenance/run_mmwave_window_length_comparison_20260830.py` with the fixed historical target, DLL-time endpoint grid, 20 s/trailing 60 s windows, and unchanged v3.1.1 estimator chain.
+- Reused #24 ECG eligibility from commit `d2d09f8ac502600d3a1241e33c429bd53756fa45` and `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/ECG_ELIGIBILITY_MANIFEST.json`; both durations apply the same independent ECG adapter and only the 283 paired-valid endpoints enter MAE/correlation metrics.
+- Added five Git-safe aggregate/report artifacts under `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`; no raw, row-level, producer, firmware, portable-V2, C2B/C2C, HRV or full-batch changes.
+
+### 结果与边界
+
+- RUN_ID=`issue25_window_length_20260830`; 303 endpoints / 8 blocks; 20 s MAE=`14.703129` bpm and 60 s MAE=`5.608574` bpm; nominal resolution=`3 bpm` versus `1 bpm`.
+- Status is `PARTIAL / DIAGNOSTIC_ONLY`; formal window validity remains `UNRESOLVED`. `REUSE_REJECTION_REASON` is recorded in the report and manifest because the prior same-window audit could not construct a paired 60 s DLL-time/ECG_VALID comparison.
+
 ## 2026-08-30 — audit(mmwave): repair authoritative DLL frame-time semantics and rerun bounded HR sensitivity
 
 ### 改动
