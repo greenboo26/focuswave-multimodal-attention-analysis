@@ -217,6 +217,17 @@ Important: this chain is a literature-derived audit scaffold. Some methods repla
 - Current status: the URL was cited as a recent respiratory-harmonic-removal source, but bibliographic metadata could not be reliably retrieved in the current session because the publisher page blocked automated retrieval.
 - Rule: do not use this item as primary evidence until title/authors/DOI/method are independently verified. It is retained here so the citation is not lost.
 
+## 9. 2026-08-29 audit completion checkpoint
+
+The formal mmWave pipeline audit is complete as a bounded evidence audit. The prior RS6240 firmware/manual/SDK evidence was recovered first and linked to the exact formal image and hash; no generic SDK default was promoted to exact formal behavior. The audit and stage matrix are recorded in:
+
+- `docs/research/MMWAVE_FORMAL_PIPELINE_LINE_BY_LINE_AUDIT_2026-08-29.md`
+- `docs/research/MMWAVE_LITERATURE_VS_PROJECT_STAGE_MATRIX_2026-08-29.csv`
+- `docs/research/MMWAVE_PIPELINE_GAPS_AND_DECISIONS_2026-08-29.md`
+- `docs/research/MMWAVE_PIPELINE_FLOWCHART_2026-08-29.md`
+
+New durable decisions are `D-AUDIT-20260829-01` through `D-AUDIT-20260829-06` in the gaps/decisions report. They preserve the following boundary: the formal path is range-domain complex 8-channel data at 0.037 m/bin with no added 1D Doppler FFT; several upstream implementation details remain unresolved; target selection and downstream vital-sign outputs remain bounded; `33/37/2` is current-pipeline eligibility/QC stratification, not acquisition compliance; and Issue #16 remains paused. No model run or rerun occurred.
+
 ## 5. Project evidence already relevant to the audit
 
 These are project facts and must not be conflated with the literature above:
@@ -267,4 +278,4 @@ This audit is **not complete** merely because it was explained in chat. Completi
 - explicit decision/status update;
 - descriptive commit.
 
-Until then: `PIPELINE_SCIENTIFIC_AUDIT = PARTIAL`, and #16 remains paused.
+This gate is now complete in GitHub as `PIPELINE_SCIENTIFIC_AUDIT = PASS` for evidence recovery and source-level audit. The separate scientific sensitivity analysis in Issue #16 remains paused.

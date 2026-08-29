@@ -1,26 +1,41 @@
 # Formal mmWave pipeline flowchart
 
+Status: source-controlled audit visual; no new analysis is implied.
+
 ```mermaid
-flowchart TD
-  A[RS6240 formal image\nmrs6240_p2512.img\nSHA + fft_mode=2] --> B[RS6240 1D frame\nRange FFT upstream\n256 bins × 37 mm]
-  B --> C[HIF 0xC2\ncomplex16 DataCube report]
-  C --> D[SDK DatacubeConversion\n2 TX × 4 RX arrays]
-  D --> E[NPZ producer\nframe × range-bin × 8 complex]
-  E --> F[Power/channel accumulation]
-  F --> G[Heuristic target/bin/channel selection]
-  G --> H[angle → unwrap → displacement]
-  H --> I[Detrend + band filtering]
-  I --> J{BR / HR candidate paths}
-  J --> K[BR peak + periodogram consensus]
-  J --> L[HR peak/time-course + periodogram\noptional VMD/fusion]
-  K --> M[BR supporting evidence]
-  L --> N[HR quality-gated evidence]
-  H --> O[Peak/interval-like output]
-  O --> P[ECG beat/IBI evidence absent or insufficient]
-  P --> Q[HRV BLOCKED]
-  E --> R[Timeline/QC scanner]
-  R --> S[Corrected QC tiers\nTier1 33 / Tier2 37 / Tier3 2]
-  S --> T[Eligibility and attribution only\nnot physiology validation]
+flowchart LR
+    A[RS6240 formal firmware image<br/>fft_mode=2; 256; 37 mm/bin] --> B[1D range-domain DataCube<br/>2 TX x 4 RX x 256 complex16]
+    B --> C[HIF 0xC2 ReportDataCube1D]
+    C --> D[SDK DatacubeConversion]
+    D --> E[NPZ chunks<br/>frame x range-bin x 8 complex]
+    E --> F[Behavior/timestamp segment mapping]
+    F --> G[Mean |z|^2 range profile<br/>no proven downstream DC/clutter correction]
+    G --> H{Distance gate}
+    H -->|formal semantics should be 0.037 m/bin| I[Candidate bins]
+    H -->|legacy default 0.08 m/bin remains in producer| J[Potentially harmful gate mismatch]
+    I --> K[Per-channel phase variance<br/>HR/BR spectral scores]
+    K --> L[Independent BR and HR bin/channel choice]
+    L --> M[Phase angle -> unwrap -> displacement]
+    M --> N[BR branch: detrend / diff+smooth / 0.10-0.50 Hz]
+    N --> O[BR time + periodogram consensus]
+    M --> P[HR 0.80-2.00 Hz]
+    P --> Q[VMD K=3, 40 s/20 s overlap]
+    Q --> R[Peak candidates + periodogram]
+    R --> S{External RSP passed?}
+    S -->|standard formal runner: no| T[Reference/time harmonic folding only]
+    S -->|optional calibration path| U[Scalar RSP 2x/3x candidate rejection]
+    T --> V[HR time/frequency fusion + smoothing]
+    U --> V
+    V --> W[10 s HR signal-existence gate]
+    M --> X[HRV-shaped path: peaks -> IBI -> SDNN/RMSSD]
+    X --> Y[No ECG beat-level alignment]
+    O --> Z[BR output + consistency label]
+    W --> AA[HR candidate output]
+    Y --> AB[HRV validation blocked]
+    Z --> AC[Existing formal QC/coverage/tier crosswalk]
+    AA --> AC
+    AC --> AD[33/37/2 = current-pipeline eligibility strata]
+    AD --> AE[Not participant compliance, acquisition quality, or physiology validity]
 ```
 
-实线表示已有证据闭环；`target/bin/channel`、校准、TDM timing 和 HRV beat validation 仍是边界或缺口。
+Legend: solid links are observed code/data flow; the RSP branch is optional and is not active in the standard formal batch; the red-flag conceptual branch records the known 0.08 m/bin dependency rather than changing it.

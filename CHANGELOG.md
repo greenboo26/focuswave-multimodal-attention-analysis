@@ -1,5 +1,18 @@
 # 修改说明
 
+## 2026-08-29 — audit(mmwave): complete formal pipeline scientific audit
+
+### 改动
+
+- 恢复此前 RS6240 formal firmware/manual/SDK 审计，并绑定精确 firmware image、SHA-256、运行模式与 `ReportDataCube1D` 输出语义；确认正式距离语义为 0.037 m/bin、八通道复数 range-domain、1D 路径无新增 Doppler FFT。
+- 完成 `ReportDataCube1D → target/bin/channel → phase → filter → harmonic → HR/BR/HRV/QC` 的逐文件逐逻辑块审计、文献对照矩阵、缺口/决策报告和 Mermaid 流程图。
+- 明确 target selection、harmonic suppression、HRV ECG 对齐和 `33/37/2` 的科学边界；未将 generic SDK 默认值升级为 formal 行为。
+
+### 边界
+
+- 未运行新模型、#16、C2B/C2C、target-lock rerun，未修改原始数据、NIR/RGB 或科学代码；#16 保持 `PAUSED`。
+- 本次 `PASS` 仅表示证据恢复与管线审计完成，不表示 HR/BR/HRV、participant compliance 或 acquisition quality 已验证。
+
 ## 2026-08-29 — analysis(mmwave): close Issue #15 physiology and QC qualification
 
 ### 改动

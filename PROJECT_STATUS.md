@@ -1,15 +1,15 @@
 # FocusWave Multimodal Attention Analysis 状态
 
-## 2026-08-29 mmWave literature/pipeline audit decision — PARTIAL / #16 PAUSED
+## 2026-08-29 mmWave literature/pipeline audit decision — PASS / #16 PAUSED
 
 - 已建立 canonical 文献证据与决策账本：`docs/research/MMWAVE_LITERATURE_EVIDENCE_AND_DECISION_LEDGER_2026-08-29.md`。
 - 已建立机器可读文献登记：`docs/research/MMWAVE_LITERATURE_EVIDENCE_REGISTER_2026-08-29.csv`。
 - 已补回此前 RS6240 固件/手册/DataCube 审计中已经确认的 upstream 事实，见 `docs/research/MMWAVE_UPSTREAM_FIRMWARE_AND_DATACUBE_EVIDENCE_2026-08-29.md`：`ReportDataCube1D` 不是 raw ADC，而是 8 通道 complex range-domain DataCube；Range FFT 已发生在 upstream；formal distance spacing 固定为 `0.037 m/bin`。这些事实不得再次整体降级为 `UNVERIFIABLE_UPSTREAM`。
 - 已登记此前 formal firmware 镜像审计身份：`mrs6240_p2512.img`，SHA-256=`7a8ca41d0b2438384c8a02c5abba95b265cd8984ed911414157b74f80c1fd5c8`，记录 build time=`2026-07-24 21:33:39`；但仍需在本轮把该镜像重新绑定到原始本地审计记录/官方 SDK/手册/构建证据，不能把 generic SDK default 直接当成 exact formal firmware behavior。
-- 当前决策：在 formal producer/downstream 逐行/逻辑块科学审计完成前，不运行 Issue #16 quality-stratified sensitivity。
+- 当前决策：formal producer/downstream 逐行/逻辑块科学审计已完成；Issue #16 quality-stratified sensitivity 仍暂停，等待单独授权与科学输入确认。
 - `33/37/2` 当前只能作为 current-pipeline QC/eligibility strata；不得直接解释为 33 场采集好、37 场被试运动/采集差，也不得等同 physiology validity。
 - 下一硬 Gate 已正式分配为 `docs/research/MMWAVE_PIPELINE_SCIENTIFIC_AUDIT_TASK_2026-08-29.md`：先恢复并绑定既有 RS6240 firmware/manual/SDK 证据，再逐行审 producer/downstream；禁止从零重复 discovery。
-- 当前 `PIPELINE_SCIENTIFIC_AUDIT=PARTIAL`；正式镜像模式、37 mm range 轴、0xC2 DataCube 传输和下游 HR/BR/HRV/QC 边界已完成静态闭合；部署回执、lower-layer 校准/窗口、Tx/Rx 时序/补偿和 target continuity 仍未闭合。未授权新算法、C2B/C2C 重跑、NIR/RGB producer 修改或原始数据修改。
+- 当前 `PIPELINE_SCIENTIFIC_AUDIT=PASS` 仅表示证据恢复与源级审计完成；正式镜像模式、37 mm range 轴、0xC2 DataCube 传输和下游 HR/BR/HRV/QC 边界已完成静态闭合；部署回执、lower-layer 校准/窗口、Tx/Rx 时序/补偿和 target continuity 仍未闭合。未授权新算法、C2B/C2C 重跑、NIR/RGB producer 修改或原始数据修改。
 - 本轮审计文件：`docs/research/MMWAVE_FORMAL_PIPELINE_LINE_BY_LINE_AUDIT_2026-08-29.md`、`docs/research/MMWAVE_LITERATURE_VS_PROJECT_STAGE_MATRIX_2026-08-29.csv`、`docs/research/MMWAVE_PIPELINE_GAPS_AND_DECISIONS_2026-08-29.md`、`docs/research/MMWAVE_PIPELINE_FLOWCHART_2026-08-29.md`。
 
 ## 2026-08-29 local↔canonical reconciliation gate — PASS
@@ -84,10 +84,10 @@ producer worktree 仍然保留。
 
 ## 当前下一步
 
-1. 按 `docs/research/MMWAVE_PIPELINE_SCIENTIFIC_AUDIT_TASK_2026-08-29.md` 执行：先恢复/绑定此前 firmware/manual/SDK 审计证据，不从零重复查找。
+1. 保持本轮 `docs/research/` 审计证据、矩阵、缺口/决策与流程图为 canonical 入口。
 2. 对真正仍未闭合的 upstream 项逐项确认：DC/clutter、window、FFT length/zero padding、chirp aggregation/Doppler、normalization、channel calibration、8 通道物理映射、upstream phase correction。
-3. 再逐文件逐逻辑块审查 `ReportDataCube1D → target/bin/channel → phase → filter → harmonic → HR/BR/HRV/QC`。
-4. 在上述 Gate 通过前暂停 #16；不得用 33/37 直接推断 participant compliance 或 acquisition quality。
+3. 若另行授权 #16，只能使用已冻结输入契约、corrected 0.037 m/bin 口径和本轮记录的 HR/BR/HRV/QC 边界。
+4. 不得用 33/37 直接推断 participant compliance 或 acquisition quality；不得将本轮 PASS 解读为 physiology validity。
 
 ## 证据边界
 
@@ -100,4 +100,13 @@ producer worktree 仍然保留。
 完整被试数据和派生结果不进入本仓库，保留在本地：
 
 `D:\Project\厚粲杯\11_数据\derived\j_mmwave_target_lock_audit_v1\`
+
+## 2026-08-29 formal mmWave pipeline scientific audit — PASS / #16 PAUSED
+
+- Recovered and relinked the prior RS6240 firmware/manual/SDK audit to the exact formal image: SHA-256 `7a8ca41d0b2438384c8a02c5abba95b265cd8984ed911414157b74f80c1fd5c8`, 233,280 bytes, build string `2026-07-24 21:33:39`.
+- Confirmed formal stored output as eight-channel complex range-domain data with 256 bins and 0.037 m/bin; runtime-mode evidence supports range FFT without an added Doppler FFT for the 1D formal path.
+- Kept DC/static clutter, window, FFT padding/cropping, chirp aggregation, normalization, physical channel mapping/calibration, and upstream phase correction explicitly unresolved where exact formal binding is absent. Generic SDK defaults are not promoted to formal behavior.
+- Completed the line-by-line producer/downstream audit, literature-vs-project stage matrix, gaps/decisions report, and source-controlled Mermaid flowchart under `docs/research/`.
+- Interpretation remains bounded: target lock is a mixed heuristic, standard formal execution does not activate the optional scalar RSP harmonic check, HRV is not ECG R-peak aligned, and corrected `33/37/2` tiers are current-pipeline QC eligibility strata rather than acquisition-quality, participant-compliance, or physiology-validity labels.
+- This was a read-only scientific audit. No model run, C2B/C2C rerun, target-lock rerun, raw-data change, NIR/RGB change, or Issue #16 execution occurred. Issue #16 remains paused.
 

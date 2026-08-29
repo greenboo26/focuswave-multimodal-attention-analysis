@@ -138,3 +138,21 @@ The project must **reuse and bind prior RS6240 firmware/manual/SDK findings befo
 `DECISION U-20260829-02`:
 
 Issue #16 remains paused. The immediate task is evidence recovery + source binding + line-by-line producer/downstream audit, not new model fitting or new mmWave algorithm development.
+
+## 7. 2026-08-29 primary relink and formal pipeline audit result
+
+Status: **ACTIVE / PRIOR-AUDIT RECOVERED / PIPELINE AUDIT PASS**. The status applies to evidence recovery and source-level audit completion; it does not upgrade HR, BR, HRV, participant compliance, or acquisition quality claims.
+
+The prior RS6240 audit was recovered and relinked to the exact local formal image rather than repeated as generic discovery:
+
+- Image: `D:\Project\厚粲杯\04_硬件\05_硬件使用\RS6x_7x_mmWave_sdk_V2.1.0\Software_Kit\04_Image\mrs6240_p2512.img`
+- Verification: 233,280 bytes; SHA-256 `7a8ca41d0b2438384c8a02c5abba95b265cd8984ed911414157b74f80c1fd5c8`; recorded build string `2026-07-24 21:33:39`.
+- Runtime-mode evidence: binary offset `0x37918` is `2` in the formal image and `0` in the adjacent ADC experiment image. `radar_framework.h:68-71` defines these as 2DFFT and ADC modes; for the 1D frame type, the 2DFFT path retains the range FFT and does not add a Doppler FFT. This is the formal range-domain binding, not a claim that every generic SDK default matches the image.
+- Formal output evidence: `ReportDataCube1D` records eight complex channels (`tx0_rx0` through `tx1_rx3`) with 256 range samples; formal spacing is 37 mm/bin. Existing output semantics and PSIC/DataCube headers support the same interpretation.
+- Official source/manual evidence already inspected: CDK `V2.24.11-20250612-1933`, project `ReportDataCube1D_MRS6240_P2512`, `main.c`, `radar_framework.h`, `radar_framework.c`, `radar_framework_report.c`, `radar_signal_process_1d.c`, `prj_config.h`, `RS6x_7x_SDK_参考手册_V1.2.pdf`, `RS6x_7x_HIF_参考手册_V1.0.pdf`, and `HifMsgDataCollectionLib_使用说明_V1.1.txt` under the SDK root above.
+
+The exact formal image closes the following facts: stored formal data are not raw ADC; a range-domain transform has occurred; the formal DataCube is eight-channel complex range data; and formal distance spacing is 0.037 m/bin. It does **not** close the exact window, DC/static-clutter operation, zero-padding/cropping, chirp aggregation, normalization, physical channel order/calibration, or upstream phase correction. Those remain itemized as `UNRESOLVED` or `PRIOR_AUDIT_CONFIRMED_NEEDS_PRIMARY_RELINK` in the corrected matrix.
+
+The complete downstream source trace is now in `docs/research/MMWAVE_FORMAL_PIPELINE_LINE_BY_LINE_AUDIT_2026-08-29.md`; the machine-readable comparison is `docs/research/MMWAVE_LITERATURE_VS_PROJECT_STAGE_MATRIX_2026-08-29.csv`; gaps and decisions are in `docs/research/MMWAVE_PIPELINE_GAPS_AND_DECISIONS_2026-08-29.md`; and the controlled Mermaid source is `docs/research/MMWAVE_PIPELINE_FLOWCHART_2026-08-29.md`.
+
+No model run, C2B/C2C rerun, target-lock rerun, raw-data change, NIR/RGB change, or Issue #16 execution occurred in this audit cycle. Issue #16 remains **PAUSED** until the evidence gate and its explicitly required scientific validation are separately authorized.
