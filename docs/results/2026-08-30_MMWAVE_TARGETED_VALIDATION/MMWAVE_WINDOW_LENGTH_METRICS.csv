@@ -1,0 +1,3 @@
+﻿bias_estimator_minus_ecg_bpm,coverage_mean,coverage_median,ecg_valid_pair_n,estimator_valid_n,frequency_resolution_bpm,frequency_resolution_hz,mae_bpm,median_ae_bpm,metric_n,pair_grid_n,pearson_r,signal_usable_ratio_mean,spearman_r,window_s
+-12.59812,0.655511,0.691708,283,303,3.0,0.05,14.703129,14.514286,283,303,0.278024,1.0,0.268721,20.0
+-3.630629,0.656046,0.691986,283,303,1.0,0.016666667,5.608574,4.083467,283,303,0.379439,1.0,0.399861,60.0

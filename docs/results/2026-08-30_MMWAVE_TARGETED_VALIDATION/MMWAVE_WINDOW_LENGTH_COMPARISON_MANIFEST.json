@@ -1,0 +1,166 @@
+{
+  "run_id": "issue25_window_length_20260830",
+  "canonical_head": "805db1d3f2d701d46f678b7cd911990f779a4966",
+  "origin_main": "805db1d3f2d701d46f678b7cd911990f779a4966\trefs/heads/main",
+  "script": "C:\\Users\\550ACW\\.codex\\worktrees\\b132\\08_算法\\scripts\\maintenance\\run_mmwave_window_length_comparison_20260830.py",
+  "script_sha256": "4a173402ea4ac84a81b450c891a73b6a52d9ef02936e58244caf1e80f39ecbaf",
+  "producer_script": "C:\\Users\\550ACW\\.codex\\worktrees\\b132\\08_算法\\scripts\\process_vital_signs_v3_1_1.py",
+  "producer_script_sha256": "e25e3f137360a78df1841c65ac442fba9fbb85508079e019d474a5d168014cfd",
+  "fixed_20s_input": "C:\\Users\\550ACW\\.codex\\worktrees\\b132\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\mmwave_ecg_block_window_comparison.csv",
+  "fixed_20s_input_sha256": "06370f49681854a9dee6cb7ed3b524f4ab3aef7c59dc64a57e9c22c8988b4033",
+  "historical_selection_root": "D:\\Project\\厚粲杯\\08_算法\\output\\20_生理金标准验证\\06_HR_COURSE_99_CORRECTED_GATE",
+  "subjects": [
+    "97793",
+    "9779",
+    "97795"
+  ],
+  "parameters": {
+    "short_window_s": 20.0,
+    "historical_window_s": 60.0,
+    "step_s": 10.0,
+    "boundary_guard_s": 5.0,
+    "fs_hz": 100.0,
+    "target_source": "historical corrected-gate _selection_60s artifact; fixed per subject",
+    "mmwave_time_column": "DLL Unix ms in timestamp CSV column 3 / zero-based index 2",
+    "ecg_valid_rule": "#24 gold_standard_qa.ecg_qa: SOS 0.5-40 Hz; R-peak distance 0.30 s prominence 0.25; IBI 300-2000 ms; adjacent IBI change >20% rejected; valid IBI coverage >=0.80; minimum 3 valid IBI; marker mismatch warning only",
+    "periodogram_resolution_formula": "FS/N; N is observed DLL-time frame count"
+  },
+  "reuse": {
+    "reused_files": [
+      "scripts/maintenance/run_mmwave_estimator_same_window_audit_20260830.py",
+      "scripts/maintenance/run_mmwave_targeted_validation_20260830.py",
+      "scripts/process_vital_signs_v3_1_1.py",
+      "scripts/gold_standard_qa.py::ecg_qa (same implementation used by #24)",
+      "scripts/maintenance/audit_historical_ecg_reference_chain_20260830.py",
+      "output/20_生理金标准验证/06_HR_COURSE_99_CORRECTED_GATE/*/_selection_60s/*.json"
+    ],
+    "reuse_rejection_reason": "Existing same-window audit is 20 s-only and marks strict historical 60 s NOT_APPLICABLE_TO_20S; it lacks paired 60 s DLL-time windows and paired ECG_VALID references."
+  },
+  "ecg24_dependency": {
+    "source": "issue24_isolated_worktree_aggregate",
+    "root": "C:\\Users\\550ACW\\.codex\\worktrees\\0ce8\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION",
+    "counts": {
+      "input_window_n": 335,
+      "ECG_INVALID": 10,
+      "ECG_VALID": 325,
+      "UNRESOLVED": 0
+    },
+    "files": {
+      "ECG_ELIGIBILITY_MANIFEST.json": {
+        "path": "C:\\Users\\550ACW\\.codex\\worktrees\\0ce8\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\ECG_ELIGIBILITY_MANIFEST.json",
+        "sha256": "7a32f16b41ab78507fc16bd2ec5fa2307643b689f782d771433a151ddd2f7023"
+      },
+      "ECG_ELIGIBILITY_BLOCK_SUMMARY.csv": {
+        "path": "C:\\Users\\550ACW\\.codex\\worktrees\\0ce8\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\ECG_ELIGIBILITY_BLOCK_SUMMARY.csv",
+        "sha256": "b4d467e888dc26597954a95ae9e1523a23199c546590e55b5853a62d1417a94b"
+      },
+      "ECG_ARM_METRICS_VALID_DENOMINATOR.csv": {
+        "path": "C:\\Users\\550ACW\\.codex\\worktrees\\0ce8\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\ECG_ARM_METRICS_VALID_DENOMINATOR.csv",
+        "sha256": "041d68402a854fd94a48343dd6f2ac63855664d9421c0bda2ca47815dc42c85c"
+      }
+    },
+    "lineage": {
+      "issue24_commit": "d2d09f8ac502600d3a1241e33c429bd53756fa45",
+      "manifest_repo_path": "docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/ECG_ELIGIBILITY_MANIFEST.json",
+      "manifest_commit_sha256": "0806cb4f0e477788ee7cd604e3d04c811654fb692f2840767249982ebc5ba258",
+      "issue24_run_id": "ecg_eligibility_dll_20260829T220533Z",
+      "issue24_git_head": "805db1d3f2d701d46f678b7cd911990f779a4966",
+      "issue24_origin_main": "805db1d3f2d701d46f678b7cd911990f779a4966",
+      "rules": {
+        "filter": "gold_standard_qa.ecg_qa: third-order SOS 0.5-40 Hz",
+        "r_peak": "find_peaks distance 0.30 s, prominence 0.25",
+        "ibi_plausibility_ms": [
+          300.0,
+          2000.0
+        ],
+        "artifact_rejection": "adjacent IBI relative change >20%; both adjacent intervals marked",
+        "effective_beat_coverage": "kept valid IBI / raw detected R-peak count >=0.80",
+        "minimum_valid_ibi": 3,
+        "window_eligibility": "invalid if any IBI plausibility/artifact rejection reason, insufficient valid IBI, or coverage <0.80",
+        "block_rule": "complete formal block + block-local ECG affine marker mapping; rest/posture/boundary excluded",
+        "marker_mismatch": "warning only when affine fit remains available; not silently treated as validity"
+      }
+    }
+  },
+  "counts": {
+    "paired_rows": 303,
+    "blocks": 8,
+    "pairwise": {
+      "common_n": 283,
+      "mean_ae_delta_20s_minus_60s_bpm": 9.094555,
+      "median_ae_delta_20s_minus_60s_bpm": 7.4,
+      "20s_better_n": 74,
+      "tie_n": 1,
+      "60s_better_n": 208
+    }
+  },
+  "metrics": [
+    {
+      "window_s": 20.0,
+      "pair_grid_n": 303,
+      "ecg_valid_pair_n": 283,
+      "estimator_valid_n": 303,
+      "metric_n": 283,
+      "coverage_mean": 0.655511,
+      "coverage_median": 0.691708,
+      "signal_usable_ratio_mean": 1.0,
+      "frequency_resolution_hz": 0.05,
+      "frequency_resolution_bpm": 3.0,
+      "mae_bpm": 14.703129,
+      "median_ae_bpm": 14.514286,
+      "bias_estimator_minus_ecg_bpm": -12.59812,
+      "pearson_r": 0.278024,
+      "spearman_r": 0.268721
+    },
+    {
+      "window_s": 60.0,
+      "pair_grid_n": 303,
+      "ecg_valid_pair_n": 283,
+      "estimator_valid_n": 303,
+      "metric_n": 283,
+      "coverage_mean": 0.656046,
+      "coverage_median": 0.691986,
+      "signal_usable_ratio_mean": 1.0,
+      "frequency_resolution_hz": 0.016666667,
+      "frequency_resolution_bpm": 1.0,
+      "mae_bpm": 5.608574,
+      "median_ae_bpm": 4.083467,
+      "bias_estimator_minus_ecg_bpm": -3.630629,
+      "pearson_r": 0.379439,
+      "spearman_r": 0.399861
+    }
+  ],
+  "status": "PARTIAL / DIAGNOSTIC_ONLY",
+  "conclusion": "diagnostic_window_length_comparison_formal_validity_unresolved",
+  "excluded": [
+    "C2B",
+    "C2C",
+    "Issue #16",
+    "HRV",
+    "NIR",
+    "RGB",
+    "firmware",
+    "portable V2",
+    "producer modification",
+    "raw mutation",
+    "full formal batch"
+  ],
+  "outputs": [
+    {
+      "path": "MMWAVE_WINDOW_LENGTH_COMPARISON.csv",
+      "sha256": "45a12d6f10feef42ccd9b4f759444a805d27e45e44f884c5b28bc60953e8bf0b"
+    },
+    {
+      "path": "MMWAVE_WINDOW_LENGTH_METRICS.csv",
+      "sha256": "d17c534380c360cb770cbb561c9c519ec62e061517649bf5cce4dec43dda66f4"
+    },
+    {
+      "path": "MMWAVE_WINDOW_LENGTH_BLOCK_AUDIT.csv",
+      "sha256": "f655d86525b6c6a952ab68b0886f02415a30e15185891464a5dfe6ce573d558c"
+    },
+    {
+      "path": "MMWAVE_WINDOW_LENGTH_COMPARISON_REPORT_2026-08-30.md",
+      "sha256": "ac251352590eb72b711c55df889739385e9a711d4b4a3171d13fc50db4e10def"
+    }
+  ]
+}
