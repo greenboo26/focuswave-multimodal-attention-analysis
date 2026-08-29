@@ -76,13 +76,19 @@ The corrected split is the result of applying existing formal QC/provenance rule
 
 ## 2026-08-30 literature-backed decision on the two remaining near-term engineering questions
 
-### D-AUDIT-20260830-05 — instrument and audit target continuity; do not redesign target tracking first
+### D-AUDIT-20260830-05 — instrument and audit target continuity; do not freeze one bin forever
 
-Literature consistently treats range-bin choice and continuity as a first-order vital-sign problem. Choi et al. (IEEE Access 2021, DOI `10.1109/ACCESS.2020.3043013`) show that precise target range-bin selection materially changes respiration/heartbeat accuracy. Choi et al. (Applied Sciences 2021, DOI `10.3390/app11104514`) further use spatial phase coherency across neighboring bins and explicitly identify range-bin tracking as a future stability improvement. Xue et al. (Measurement 2023, DOI `10.1016/j.measurement.2023.113715`) use local search plus moving-average tracking to obtain the target chest range bin and discuss phase-discontinuity handling. A later multiple-range-bin study (PMCID `PMC12031119`) also reports that exploiting concurrent bins can improve robustness over a single-bin choice.
+Literature consistently treats range-bin choice as a first-order vital-sign problem. Choi et al. (IEEE Access 2021, DOI `10.1109/ACCESS.2020.3043013`; open metadata: https://doaj.org/article/94f8211fcdaa4edf8fe10924a8dbb1df) show that precise target range-bin selection materially changes respiration/heartbeat accuracy. Choi et al. (Applied Sciences 2021, DOI `10.3390/app11104514`; full text: https://www.mdpi.com/2076-3417/11/10/4514) use spatial phase coherency across neighboring bins and explicitly note range-bin tracking as a stability improvement. Xue et al. (Measurement 2023, DOI `10.1016/j.measurement.2023.113715`; abstract: https://www.sciencedirect.com/science/article/abs/pii/S0263224123012794) use local search plus moving-average filtering to obtain each target chest range bin. A 2025 multi-bin study (PMCID `PMC12031119`; full text: https://pmc.ncbi.nlm.nih.gov/articles/PMC12031119/) reports better HR and BR accuracy when multiple concurrent bins are used rather than a single-bin choice.
 
-Decision for this project: the next step is **diagnostic instrumentation first**, not a new tracking algorithm. Persist, per analysis window, the selected HR and BR bin/channel, previous selected bin/channel, bin/channel switch indicators, distance jump in bins/meters, selected-bin score/quality, and a phase-discontinuity diagnostic on the selected signal. Run this on a small prespecified representative set. If continuity is already stable, close the gap without algorithm change. Only if discontinuity/switching is frequent and materially associated with HR/BR error should a local-search, neighboring-bin coherence, or multi-bin strategy be considered.
+Plain-language interpretation fixed for this project: **the proposal is not “pick one bin at the beginning and never move again.”** A `bin` is one distance slot. If the chest-related reflection is around bin 20, a continuity-aware method can use the previous window as a prior and preferentially search around bin 19–21/22 in the next window, while still allowing a larger move when evidence strongly supports it. The scientific goal is to avoid implausible window-to-window jumping, not to prohibit real target drift.
 
-This decision is deliberately conservative because the current task is to establish whether the existing selector is stable enough for the psychology/multimodal use case, not to optimize the radar field generally.
+Conceptual example only:
+
+`window 1: bin 20 -> window 2: first examine nearby bins 19–21 -> choose 20 or 21 if supported; do not automatically jump to bin 37 merely because its instantaneous score is slightly larger.`
+
+This is a tracking prior, not a hard lock. A hard fixed-bin policy could itself become wrong if posture, breathing geometry, or the dominant body reflection shifts.
+
+Decision for this project: the next scientific test, if separately authorized, is a **small controlled continuity strategy comparison**, not a full radar redesign. Compare the current independent-window selector against one or more conservative alternatives such as local-neighborhood continuity, neighboring-bin phase coherency, or multi-bin aggregation on exactly the same ECG-referenced windows. Do not promote any method unless it improves reference agreement. This is distinct from the completed diagnostic instrumentation; the targeted validation has already shown that current independent-window selection switches frequently.
 
 ### D-AUDIT-20260830-06 — respiratory-harmonic suppression is scientifically justified, but external RSP must be validation-only, not a production crutch
 
@@ -91,25 +97,37 @@ Respiratory harmonics overlapping the heartbeat band are a well-established rada
 Decision for this project: **do not make external BIOPAC/RSP a required production input to the radar HR estimator.** That would make the supposedly standalone radar feature depend on a reference sensor unavailable in deployment and would contaminate the interpretation of mmWave incremental value in multimodal modeling. Instead:
 
 1. keep the formal standalone radar HR path reference-independent;
-2. implement/verify an internal radar-derived BR harmonic guard using the same-window radar BR estimate, with explicit uncertainty/tolerance and a fail-safe that does not automatically delete a candidate solely because HR happens to be near an integer multiple of BR;
-3. use synchronized external RSP only as a **validation/sensitivity oracle** on the calibration subset: compare current standalone HR, internal radar-BR harmonic guard, and external-RSP-assisted rejection against ECG HR under identical windows;
-4. promote the internal guard only if it improves held-out/reference agreement without systematically rejecting true HR values that legitimately lie near 2× or 3× respiration.
+2. only revisit harmonic suppression after target continuity is stabilized enough to make the input signal interpretable;
+3. then compare candidate harmonic-handling approaches against ECG on identical windows;
+4. use synchronized external RSP only as a validation label/oracle, never as a required deployed input;
+5. promote a harmonic method only if it improves ECG agreement without systematically rejecting true HR values that legitimately lie near 2× or 3× respiration.
 
-This is especially important because a 2024 two-wave-model study (Electronics 2024, DOI `10.3390/electronics13214308`) documents the opposite failure case: a true heartbeat can itself lie at approximately 3× the respiration rate. Therefore a hard rule of “near 2×/3× BR = reject” is not scientifically safe.
+A 2024 two-wave-model study (Electronics 2024, DOI `10.3390/electronics13214308`) documents the opposite failure case: a true heartbeat can itself lie at approximately 3× the respiration rate. Therefore a hard rule of “near 2×/3× BR = reject” is not scientifically safe.
 
-### Near-term execution order after this review
+### Why continuity comes before harmonic tuning — plain-language fixed explanation
 
-`CONTINUITY_INSTRUMENTATION = AUTHORIZED_FOR_DIAGNOSTIC_IMPLEMENTATION`
+The processing order is important:
 
-`HARMONIC_VALIDATION_DESIGN = READY`
+1. **Choose what body reflection to follow.** This is target/bin/channel selection. If this changes arbitrarily between windows, the algorithm may be listening to a different reflection each time.
+2. **Check whether the signal from that followed target is temporally coherent.** `Phase` is the wave-cycle position; tiny chest motion changes phase. Here “phase continuity” means asking whether the signal evolves smoothly enough across adjacent windows after following approximately the same target.
+3. **Only then tune heartbeat-versus-respiration separation.** `Respiratory harmonic` means a multiple of the breathing rhythm, e.g. breathing 18/min can create strong components around 36/min or 54/min. Some of these can overlap the heart-rate search band and be mistaken for heartbeat.
+4. **Finally compare radar HR with ECG.** ECG is the external reference used to decide whether the changed radar method actually became more accurate.
+
+If step 1 is unstable, changing step 3 can be misleading because the algorithm is trying to remove harmonics from a signal source that may itself change from window to window. Therefore the decision is not “all upstream preprocessing is wrong”; it is “the already-corrected data semantics remain valid, but target continuity now becomes the next testable algorithmic bottleneck.”
+
+### Near-term status after targeted validation
+
+`CURRENT_INDEPENDENT_WINDOW_SELECTOR = FAILED_CONTINUITY_ON_TARGETED_SAMPLE / HOLD`
+
+`HARD_FIXED_BIN_FOR_WHOLE_SESSION = NOT_RECOMMENDED`
+
+`CONTINUITY_AWARE_LOCAL_OR_MULTI_BIN_COMPARISON = CANDIDATE_NEXT_TEST / NOT_YET_AUTHORIZED`
 
 `EXTERNAL_RSP_AS_PRODUCTION_DEPENDENCY = REJECTED`
 
-`INTERNAL_RADAR_BR_HARMONIC_GUARD = CONDITIONAL / VALIDATE_BEFORE_PROMOTION`
+`CURRENT_INTERNAL_RADAR_BR_GUARD = NOT_PROPOSED_FOR_PRODUCER`
 
 `HRV = BLOCKED / NOT_NEAR_TERM`
-
-No formal batch, #16, C2B/C2C, NIR/RGB producer change, raw-data modification, or new multimodal model run is authorized by this literature decision alone.
 
 ## Next authorized gate
 
