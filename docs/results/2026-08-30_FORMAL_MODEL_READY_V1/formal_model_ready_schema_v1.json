@@ -1,0 +1,128 @@
+{
+  "schema_name": "FocusWave formal model-ready candidate v1",
+  "schema_version": "formal-model-ready-v1",
+  "status": "CANDIDATE_ONLY_NO_MODEL_RESULT",
+  "identity_columns": [
+    "repeat_participant_id",
+    "session_id",
+    "single_experiment_id",
+    "site"
+  ],
+  "probe_key": [
+    "repeat_participant_id",
+    "session_id",
+    "block_id",
+    "probe_id",
+    "window_name"
+  ],
+  "target_column": "target_probe_vigilance",
+  "predictors": {
+    "Behavior": [
+      "behavior_rt_median_ms_pre30s",
+      "behavior_rt_mean_ms_pre30s",
+      "behavior_error_rate_pre30s",
+      "behavior_commission_rate_pre30s",
+      "behavior_omission_rate_pre30s"
+    ],
+    "NIR": [
+      "nir_pupil_equiv_diameter_median",
+      "nir_pupil_geom_mean_diameter_median",
+      "nir_pupil_contour_area_median",
+      "nir_pupil_ellipse_area_median"
+    ],
+    "RGB": [
+      "rgb_primary_face_fraction",
+      "rgb_ear_mean_median",
+      "rgb_aperture_iris_mean_median",
+      "rgb_head_motion_norm_per_sec_mean",
+      "rgb_global_motion_energy_mean",
+      "rgb_global_motion_energy_per_sec_mean"
+    ]
+  },
+  "qc_columns": [
+    "behavior_qc_status",
+    "nir_state",
+    "nir_observed",
+    "nir_missing_reason",
+    "nir_pupil_fit_valid_fraction",
+    "nir_observed_eye_fraction",
+    "nir_temporal_anomaly_fraction",
+    "nir_analysis_valid_pixel_fraction_median",
+    "rgb_state",
+    "rgb_observed",
+    "rgb_missing_reason",
+    "rgb_eye_geometry_valid_fraction",
+    "rgb_motion_valid_fraction",
+    "rgb_gap_fraction",
+    "rgb_pose_valid_fraction",
+    "rgb_source_row_count",
+    "nir_source_path",
+    "rgb_source_path",
+    "behavior_source_path"
+  ],
+  "missingness_columns": [
+    "nir_state",
+    "nir_missing_reason",
+    "rgb_state",
+    "rgb_missing_reason",
+    "nir_observed",
+    "rgb_observed"
+  ],
+  "excluded_columns": [
+    "label_probe_response",
+    "label_probe_rt_ms",
+    "probe_response",
+    "probe_response_time",
+    "rgb_native_eye_blink_mean_median",
+    "rgb_blink_event_count_candidate",
+    "PERCLOS",
+    "mmWave_HR",
+    "mmWave_BR",
+    "mmWave_RR",
+    "HRV",
+    "IBI"
+  ],
+  "fold_registry": {
+    "registry_file": "formal_loso_participant_registry_v1.csv",
+    "fold_file": "formal_loso_folds_v1.csv",
+    "role_semantics": "one repeat_participant_id per outer fold is TEST; all other matched participants are TRAIN"
+  },
+  "window_semantics": {
+    "window_name": "pre_30s",
+    "interval": "[probe_onset_unix_ms-30000, probe_onset_unix_ms)",
+    "timestamp": "real unix_ms",
+    "block_boundary": "use window_effective_start_unix_ms when the current source table records truncation"
+  },
+  "cohort": {
+    "full_timeline_rows": 1440,
+    "matched_rows": 1295,
+    "matched_sessions": 65,
+    "matched_repeat_participants": 46,
+    "loso_folds": 46
+  },
+  "source_hashes": {
+    "canonical_probe_timeline.csv": "cf395e565a31b4099338be45431075263b55fce21d6eac151be85fc8d5927687",
+    "behavior_probe_merge_ready.csv": "cf395e565a31b4099338be45431075263b55fce21d6eac151be85fc8d5927687",
+    "nir_probe_merge_ready.csv": "f8ba24ec64344dfac4c4802a9b9d54bc8802c22f9444a5278175e58a1693754d",
+    "rgb_probe_merge_ready.csv": "fccf031d68a763f439843bdea01467330aa74b39c547e589b4ec53a6d73bad05",
+    "modality_coverage_missingness_audit.csv": "bd45e391cad4b2770fc8f5aa5e32595be2e382e56ca91b61fc9ac7c04dd4d3c6",
+    "merge_audit_report.json": "b3263397f47abf826883026f80db84481be81020631e1411727d9177e409c90e",
+    "NIR_MISSINGNESS_AUDIT.csv": "76f654790b4fb76bd8f86b5126ba3aa568b58a31243be80252c81a108a637723",
+    "RGB_MISSINGNESS_AUDIT.csv": "868315ab045669f7ae1b31b3d43dbaa47cfe3b1e0e7c5dfcb4f160cccf744448",
+    "formal_matched_cohort_v1.csv": "280d5eb12f573ac34d09d95082cf604ab72083d67089f51c4188c7c855ba17b6",
+    "formal_loso_participant_registry_v1.csv": "12846629381dfd863f64e3ae14d556a5cad25def445b4457e944984797a5b15a",
+    "BEHAVIOR_FEATURE_CONTRACT.csv": "6d8a9351179a47902ac80a1d3e600632e534e9b898a1724633608069fdece946",
+    "NIR_FEATURE_CONTRACT.csv": "628fde812ade257df36b84d70c432619394823abe68e4238a9d6572173536ca6",
+    "RGB_FEATURE_CONTRACT.csv": "de8ceb21e6fcc982574ba15952fe95c04dc6ec8b82c2e6ac48db2006516d4b4e"
+  },
+  "local_absolute_output_path": "C:\\Users\\550ACW\\Documents\\Codex\\2026-08-30\\files-pasted-by-the-user-focuswave\\outputs\\FocusWave_formal_multimodal_v2_2026-08-30",
+  "generation_script": "C:\\Users\\550ACW\\Documents\\Codex\\2026-08-30\\files-pasted-by-the-user-focuswave\\work\\build_formal_model_ready_v1.py",
+  "constraints": {
+    "nir_producer_rerun": false,
+    "rgb_producer_rerun": false,
+    "model_training": false,
+    "mmwave_primary_predictor": false,
+    "provisional_blink_primary_predictor": false,
+    "perclos_primary_predictor": false
+  }
+}

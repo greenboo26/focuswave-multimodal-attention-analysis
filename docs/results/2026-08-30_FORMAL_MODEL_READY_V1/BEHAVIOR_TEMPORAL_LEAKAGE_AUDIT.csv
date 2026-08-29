@@ -1,0 +1,11 @@
+﻿feature_name,source_column,role,max_data_time_relative_to_probe_onset,future_data_used,future_trial_used,future_block_used,label_derived,status,reason
+behavior_rt_median_ms_pre30s,behavior_rt_median_ms_pre30s,PREDICTOR,<0 ms,False,False,False,False,PASS,bounded to pre-onset context
+behavior_rt_mean_ms_pre30s,behavior_rt_mean_ms_pre30s,PREDICTOR,<0 ms,False,False,False,False,PASS,bounded to pre-onset context
+behavior_error_rate_pre30s,behavior_error_rate_pre30s,PREDICTOR,<0 ms,False,False,False,False,PASS,bounded to pre-onset context
+behavior_commission_rate_pre30s,behavior_commission_rate_pre30s,PREDICTOR,<0 ms,False,False,False,False,PASS,bounded to pre-onset context
+behavior_omission_rate_pre30s,behavior_omission_rate_pre30s,PREDICTOR,<0 ms,False,False,False,False,PASS,bounded to pre-onset context
+behavior_trial_count_pre30s,behavior_trial_count_pre30s,TARGET_OR_EXCLUDED,<0 ms,False,False,False,False,PASS,bounded to pre-onset context
+behavior_valid_rt_count_pre30s,behavior_valid_rt_count_pre30s,TARGET_OR_EXCLUDED,<0 ms,False,False,False,False,PASS,bounded to pre-onset context
+behavior_available,behavior_available,TARGET_OR_EXCLUDED,<0 ms,False,False,False,False,PASS,bounded to pre-onset context
+behavior_qc_status,behavior_qc_status,TARGET_OR_EXCLUDED,<0 ms,False,False,False,False,PASS,bounded to pre-onset context
+behavior_source_path,behavior_source_path,TARGET_OR_EXCLUDED,<0 ms,False,False,False,False,PASS,bounded to pre-onset context

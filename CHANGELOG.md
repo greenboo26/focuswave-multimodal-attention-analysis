@@ -1,5 +1,19 @@
 # 修改说明
 
+## 2026-08-30 — audit(multimodal): freeze formal model-ready cohort and LOSO contract
+
+### 改动
+
+- Added the Git-safe formal model-ready v1 package under `docs/results/2026-08-30_FORMAL_MODEL_READY_V1/`.
+- Froze the observation-defined 1,295-probe / 65-session / 46-repeat-participant cohort and 46-fold participant-disjoint LOSO registry from the 1,440-probe canonical timeline.
+- Added explicit NIR/RGB missingness and QC semantics, Behavior temporal leakage audit, modality feature contracts, model-ready schema, readiness gate, and a parameterized generation script.
+
+### 验证与边界
+
+- Readiness gate: `PASS_MODEL_READY`; all participant/session/probe leakage checks passed and source hashes are recorded.
+- Primary predictor counts are Behavior=5, NIR=4, RGB=6. Blink remains provisional and excluded; PERCLOS and mmWave HOLD/EXCLUDE fields are excluded.
+- No NIR/RGB producer rerun and no model training occurred. Probe-level audits, expanded folds, and candidate table remain local-only.
+
 ## 2026-08-30 — audit(multimodal): attach current mother table and freeze probe merge contract
 
 ### 改动

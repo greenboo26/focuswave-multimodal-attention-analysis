@@ -1,0 +1,48 @@
+{
+  "status": "PASS_MODEL_READY",
+  "baseline_modeling_authorized": true,
+  "modeling_executed": false,
+  "checks": {
+    "matched_cohort_frozen": true,
+    "loso_participant_disjoint": true,
+    "feature_definitions_frozen": true,
+    "temporal_leakage_absent": true,
+    "qc_missingness_semantics_frozen": true,
+    "no_mmwave_hold_predictor": true,
+    "no_provisional_blink_or_perclos_predictor": true,
+    "same_denominator_traceable": true,
+    "source_hashes_complete": true
+  },
+  "predictor_counts": {
+    "Behavior": 5,
+    "NIR": 4,
+    "RGB": 6,
+    "total": 15
+  },
+  "candidate_predictor_nan_cells": {
+    "Behavior": 0,
+    "NIR": 4,
+    "RGB": 0
+  },
+  "candidate_nan_note": "One retained NIR QC_FAIL probe has NaN pupil geometry by design; downstream modeling must declare an explicit NaN policy and must not silently label-dependent-filter the cohort.",
+  "cohort_summary_file": "FORMAL_MATCHED_COHORT_SUMMARY.json",
+  "loso_audit_file": "LOSO_LEAKAGE_AUDIT.json",
+  "schema_file": "formal_model_ready_schema_v1.json",
+  "local_absolute_output_path": "C:\\Users\\550ACW\\Documents\\Codex\\2026-08-30\\files-pasted-by-the-user-focuswave\\outputs\\FocusWave_formal_multimodal_v2_2026-08-30",
+  "generation_script": "C:\\Users\\550ACW\\Documents\\Codex\\2026-08-30\\files-pasted-by-the-user-focuswave\\work\\build_formal_model_ready_v1.py",
+  "source_hashes": {
+    "canonical_probe_timeline.csv": "cf395e565a31b4099338be45431075263b55fce21d6eac151be85fc8d5927687",
+    "behavior_probe_merge_ready.csv": "cf395e565a31b4099338be45431075263b55fce21d6eac151be85fc8d5927687",
+    "nir_probe_merge_ready.csv": "f8ba24ec64344dfac4c4802a9b9d54bc8802c22f9444a5278175e58a1693754d",
+    "rgb_probe_merge_ready.csv": "fccf031d68a763f439843bdea01467330aa74b39c547e589b4ec53a6d73bad05",
+    "modality_coverage_missingness_audit.csv": "bd45e391cad4b2770fc8f5aa5e32595be2e382e56ca91b61fc9ac7c04dd4d3c6",
+    "merge_audit_report.json": "b3263397f47abf826883026f80db84481be81020631e1411727d9177e409c90e",
+    "NIR_MISSINGNESS_AUDIT.csv": "76f654790b4fb76bd8f86b5126ba3aa568b58a31243be80252c81a108a637723",
+    "RGB_MISSINGNESS_AUDIT.csv": "868315ab045669f7ae1b31b3d43dbaa47cfe3b1e0e7c5dfcb4f160cccf744448",
+    "formal_matched_cohort_v1.csv": "280d5eb12f573ac34d09d95082cf604ab72083d67089f51c4188c7c855ba17b6",
+    "formal_loso_participant_registry_v1.csv": "12846629381dfd863f64e3ae14d556a5cad25def445b4457e944984797a5b15a",
+    "BEHAVIOR_FEATURE_CONTRACT.csv": "6d8a9351179a47902ac80a1d3e600632e534e9b898a1724633608069fdece946",
+    "NIR_FEATURE_CONTRACT.csv": "628fde812ade257df36b84d70c432619394823abe68e4238a9d6572173536ca6",
+    "RGB_FEATURE_CONTRACT.csv": "de8ceb21e6fcc982574ba15952fe95c04dc6ec8b82c2e6ac48db2006516d4b4e"
+  }
+}
