@@ -1,5 +1,16 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-30 mmWave timestamp-semantics repair — PARTIAL / DLL_CONTRACT_FROZEN__WINDOWS_MATERIALLY_CHANGED
+
+- 以 canonical `main` baseline `ab39ad272462c54208b56e0b302b5d9ff1e95b4c`、FocusWave `ecg` commit `8e6fe5c5d08f386661bc05aaf9d5c5715a43b317` 完成 `97793`、`9779`、`97795` 的 Python timestamp row ↔ NPZ frame ↔ DLL timestamp mapping；三场均 row/frame 数一致、frame index 连续、8 通道长度一致、DLL timestamp 单调，mapping status=`OK`。
+- 冻结 `MMWAVE_FRAME_TIME_CONTRACT_2026-08-30.md`：以 `receive_data.timeStamp` 经 `_dotnet_ts_to_unix_ms()` 转换的绝对 Unix ms 作为 authoritative frame clock；Python `time.time()` 仅 provenance。底层 DateTime 由 device、firmware、SDK 还是 host-side DLL 生成，源代码未说明，保留为 unresolved provenance limitation。
+- 按 block start/end markers（block1 `12/22`、block2 `13/23`、block3 `14/24`、block4 `16/26`）及既有 BIOPAC/101–110 tick audit 重建 335 个 complete-block、20 s/10 s/5 s-guard windows；block 内 continuity 规则和 block-start reset 不变，跨 rest/坐姿调整/block 边界 transition 未纳入。
+- Window equivalence 为 exact `25`、partial `156`、obvious `154`，changed `310/335`，mean/median/min Jaccard=`0.736410/0.923114/0.000000`。因此不是 cosmetic change，旧 Python-time windows 与 DLL-time windows 不可互换。
+- 在不改 estimator、target、gate、ECG reference 的前提下重放 ARM0/ARM1/ARM2：new DLL-time MAE 分别 `25.791632/22.189492/19.189060` bpm（334/334、323/335、334/335）；old Python-time provenance 分别 `24.884913/21.804185/19.068931` bpm。mean absolute HR value delta 为 `6.126641/6.845548/6.444105` bpm。
+- 关键 blocker：`97795/block4` 程序结束 marker 比最后 DLL frame 晚 `24,809 ms`，最后一个 guarded window 只有 `46` 个 DLL frames；不做 Python-time backfill、padding 或 synthetic timestamp。分类为 A=`不支持`、B=`支持（materially changed windows）`、C=`保留 unresolved`。
+- 旧 20 s 结果保留为 Python-time historical provenance，但 supersede 为当前 DLL authoritative contract 的结果；HR/BR 继续 `HOLD`，HRV `BLOCKED`，Issue #16 `PAUSED`。未修改 `Attention-Analysis@codex/formal-analysis-v2-portable`，未运行 C2B/C2C、HRV 新算法或全量 formal batch。
+- 证据包：`docs/research/MMWAVE_FRAME_TIME_CONTRACT_2026-08-30.md`、`docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_DLL_TIME_WINDOWS_2026-08-30.csv`、`MMWAVE_TIME_SEMANTICS_HR_COMPARISON.csv`、`MMWAVE_TIME_SEMANTICS_HR_METRICS.csv`、对应 reports/manifests；row-level mapping 仅保存在 `D:\Project\厚粲杯\11_数据\derived\mmwave_timestamp_semantics_repair_20260830\`。
+
 ## 2026-08-30 formal multimodal model-ready v1 — PASS_MODEL_READY
 
 - Frozen the observation-defined primary matched cohort at 1,295 probes / 65 sessions / 46 repeat participants from the 1,440-probe canonical timeline; all 46 matched repeat participants have one participant-disjoint LOSO fold.

@@ -1,0 +1,80 @@
+{
+  "status": "PARTIAL / PYTHON_TIMESTAMP_ARTIFACT_MATERIALLY_CHANGED_WINDOWS",
+  "canonical_algorithm_head_at_run": "ab39ad272462c54208b56e0b302b5d9ff1e95b4c",
+  "canonical_algorithm_remote_main_at_run": "ab39ad272462c54208b56e0b302b5d9ff1e95b4c\trefs/heads/main",
+  "fixed_contract_manifest": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_targeted_validation_20260830_rerun\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_DLL_TIME_WINDOW_RECONSTRUCTION_MANIFEST.json",
+  "fixed_contract_manifest_sha256": "da117c803c67a23bc493a87294e244b9ef33822e34330fd24c20dec4e6a15813",
+  "old_input": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_targeted_validation_20260830_rerun\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_HR_GATE_TARGET_ABLATION_2026-08-30.csv",
+  "old_input_sha256": "74213ca10ae39541ae83e7e83ea2f671f1f52ed9201ae71d93455569d000a474",
+  "new_window_input": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_targeted_validation_20260830_rerun\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_DLL_TIME_WINDOWS_2026-08-30.csv",
+  "new_window_input_sha256": "0186ec62f50f697096b86919bf21a46c681267cf0c4faba6b947773d955e1707",
+  "arms": {
+    "arm0": "current block-local",
+    "arm1": "historical bins 9-40 gate + current block-local",
+    "arm2": "historical fixed target + current 20s estimator"
+  },
+  "only_changed": "window frame membership from Python-time to DLL-time",
+  "old_window_results_decision": "RETAIN_AS_HISTORICAL_PROVENANCE__SUPERSEDE_FOR_CURRENT_DLL_CONTRACT",
+  "window_equivalence": {
+    "n": 335,
+    "changed": 310,
+    "obvious": 154
+  },
+  "mean_abs_hr_value_delta_bpm": {
+    "arm0": 6.126641,
+    "arm1": 6.845548,
+    "arm2": 6.444105
+  },
+  "coverage_blocker": {
+    "short_window_rows": [
+      [
+        "97795",
+        "block4",
+        "block4_w028",
+        46
+      ]
+    ],
+    "absolute_coverage_summary": {
+      "97793": {
+        "last_dll_unix_ms": 1786871352163,
+        "complete_block_end_unix_ms": 1786871223401,
+        "complete_block_end_after_last_dll_ms": -128762
+      },
+      "9779": {
+        "last_dll_unix_ms": 1786866226251,
+        "complete_block_end_unix_ms": 1786866219087,
+        "complete_block_end_after_last_dll_ms": -7164
+      },
+      "97795": {
+        "last_dll_unix_ms": 1786887631266,
+        "complete_block_end_unix_ms": 1786887656075,
+        "complete_block_end_after_last_dll_ms": 24809
+      }
+    }
+  },
+  "decision_categories": {
+    "A_cosmetic_only": false,
+    "B_materially_changed_windows": true,
+    "C_unresolved": [
+      "exact DLL timestamp generator origin",
+      "97795/block4 acquisition coverage tail"
+    ]
+  },
+  "outputs": {
+    "MMWAVE_TIME_SEMANTICS_HR_COMPARISON.csv": {
+      "path": "MMWAVE_TIME_SEMANTICS_HR_COMPARISON.csv",
+      "sha256": "80a27454a5d06d2c5f9bd11d860690d352436e165a979970323a199deed4ee39",
+      "row_count": 335
+    },
+    "MMWAVE_TIME_SEMANTICS_HR_METRICS.csv": {
+      "path": "MMWAVE_TIME_SEMANTICS_HR_METRICS.csv",
+      "sha256": "fa7313593c32ddfc000aa2b0ef4dffdf7fc9e68a11ebff21d3fc294f9f9b63ef",
+      "row_count": 6
+    },
+    "MMWAVE_TIME_SEMANTICS_HR_COMPARISON_REPORT_2026-08-30.md": {
+      "path": "MMWAVE_TIME_SEMANTICS_HR_COMPARISON_REPORT_2026-08-30.md",
+      "sha256": "67bae6e671dbc7b2068fc36fb88a69a92e17e8ff440da79e754ad09f9cfb89fe",
+      "row_count": null
+    }
+  }
+}

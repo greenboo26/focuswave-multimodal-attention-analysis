@@ -8,6 +8,18 @@
 
 ---
 
+### 2026-08-30：mmWave timestamp semantics repair、DLL-time window reconstruction 与 unchanged HR sensitivity — PARTIAL
+
+**为什么需要 repair**：此前 335 个窗口按同一 CSV 的 Python `time.time()` 列定义，旧结果无法证明它们对应 acquisition frame 的真实时间语义。FocusWave source `ecg` `8e6fe5c5d08f386661bc05aaf9d5c5715a43b317` 已确认 DLL `receive_data.timeStamp` 在 consumer 侧写入 timestamps CSV，且与 `frameIndex` 同行；本轮只修复 frame-time/window membership 口径，不重写 producer。
+
+**输入与合同**：canonical `main` baseline `ab39ad272462c54208b56e0b302b5d9ff1e95b4c`；subjects `97793/9779/97795`；既有 `ecg_alignment_audit.csv`、`beh/events.csv` block markers（12/22、13/23、14/24、16/26）和 101–110 tick；20 s window、10 s step、5 s guard、complete-block-only。每个 block 独立 reset target/bin/channel tracking，跨 rest、姿势调整和 block boundary transition 排除。新 contract 以 DLL DateTime 转换出的绝对 Unix ms 为 authoritative clock，Python 列只作 provenance；DateTime 的 device/firmware/SDK/host origin 未被源代码独立说明。
+
+**Mapping 与窗口结果**：三场 timestamp rows 与 NPZ frames 均为 `162924/155557/140648`，frame index 均连续、通道长度一致、DLL timestamp 单调，mapping=`OK`。335 个窗口的 exact/partial/obvious=`25/156/154`，changed=`310`，mean/median/min Jaccard=`0.736410/0.923114/0.000000`。旧 Python-time 窗口与新 DLL-time 窗口因此不可互换。
+
+**HR sensitivity 与决策**：只重放既有 ARM0 current block-local、ARM1 historical gate + current block-local、ARM2 historical fixed target + current 20 s estimator，未改变 target/gate/filter/ECG/FS。new DLL-time MAE=`25.791632/22.189492/19.189060` bpm，old Python-time historical provenance=`24.884913/21.804185/19.068931` bpm；mean absolute HR value delta=`6.126641/6.845548/6.444105` bpm。`97795/block4` 的程序 end marker 比最后 DLL frame 晚 `24,809 ms`，最终 guarded window 仅 46 帧，未填补。分类 A cosmetic=`不支持`，B material window change=`支持`，C unresolved=`DLL timestamp generator origin + acquisition tail coverage`；旧 20 s 结果 retain as historical provenance、supersede for current DLL contract。HR/BR=`HOLD`，HRV=`BLOCKED`，Issue #16=`PAUSED`。允许以后重复的唯一入口是两个 maintenance scripts 与本次冻结 contract；不修改 portable V2、producer、raw、firmware，不运行 C2B/C2C、HRV 新算法或全量 batch。
+
+**证据路径**：`docs/research/MMWAVE_FRAME_TIME_CONTRACT_2026-08-30.md`；`docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_DLL_TIME_WINDOWS_2026-08-30.csv`、`MMWAVE_DLL_TIME_WINDOW_RECONSTRUCTION_REPORT_2026-08-30.md`、`MMWAVE_DLL_TIME_WINDOW_RECONSTRUCTION_MANIFEST.json`、`MMWAVE_TIME_SEMANTICS_HR_COMPARISON.csv`、`MMWAVE_TIME_SEMANTICS_HR_METRICS.csv`、`MMWAVE_TIME_SEMANTICS_HR_COMPARISON_REPORT_2026-08-30.md`、对应 manifest；row-level mapping 保留在本地 derived 目录，不上传 Git。
+
 ## 1. 本账本的证据规则
 
 ### 2026-08-30：正式多模态母表 attach 与 V2 merge-ready 结构审计

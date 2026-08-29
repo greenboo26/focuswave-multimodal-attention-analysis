@@ -1,5 +1,19 @@
 # 修改说明
 
+## 2026-08-30 — audit(mmwave): repair authoritative DLL frame-time semantics and rerun bounded HR sensitivity
+
+### 改动
+
+- Added the frozen `MMWAVE_FRAME_TIME_CONTRACT_2026-08-30.md`, mapping audit generator, DLL-time window reconstruction, and unchanged-estimator HR sensitivity generator.
+- Added Git-safe DLL-time windows, reconstruction report/manifest, HR old-vs-new comparison/metrics, and reports under `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`. The row-level frame mapping remains local-only.
+- Recorded the acquisition-source limitation: FocusWave writes `receive_data.timeStamp` as the DLL DateTime converted to Unix ms; its underlying device/firmware/SDK/host origin is not documented by the source.
+
+### 验证与边界
+
+- Mapping passed for `97793`, `9779`, and `97795`: timestamp rows equal NPZ frames, frame indices are contiguous, channel lengths are consistent, and DLL timestamps are monotonic.
+- Window equivalence: 25 exact / 156 partial / 154 obvious; 310/335 memberships changed. `97795/block4` has a 24,809 ms program-end-to-last-DLL coverage tail and one 46-frame guarded window; no backfill or padding was applied.
+- Unchanged ARM0/ARM1/ARM2 HR sensitivity completed. HR/BR remain `HOLD`, HRV remains `BLOCKED`, Issue #16 remains `PAUSED`; no producer, target, gate, ECG, portable V2, raw, firmware, C2B/C2C, HRV-new-algorithm, or full-batch change occurred.
+
 ## 2026-08-30 — audit(multimodal): freeze formal model-ready cohort and LOSO contract
 
 ### 改动
