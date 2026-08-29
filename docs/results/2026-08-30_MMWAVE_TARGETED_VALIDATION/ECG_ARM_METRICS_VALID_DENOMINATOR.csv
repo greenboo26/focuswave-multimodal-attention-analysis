@@ -1,0 +1,7 @@
+﻿arm,bias_mmwave_minus_ecg_bpm,coverage_pct_of_denominator,denominator,estimator_valid_n,interpretation,mae_bpm,median_ae_bpm,pearson_r,rmse_bpm,selected_window_n,spearman_r
+arm0,-24.591623,100.0,ECG_VALID,325,ECG_VALID_primary,25.005,27.917331,0.02147,27.738634,325,-0.057884
+arm1,-21.17871,93.538,ECG_VALID,304,ECG_VALID_primary,21.906332,25.598185,0.152426,25.388652,325,0.114518
+arm2,-17.319487,100.0,ECG_VALID,325,ECG_VALID_primary,18.904008,20.607575,0.20073,22.406726,325,0.177097
+arm0,-24.411488,100.0,ALL_WINDOWS_DIAGNOSTIC,335,diagnostic_only_not_validity_denominator,24.847938,27.844895,0.00939,27.636099,335,-0.063334
+arm1,-21.037589,93.731,ALL_WINDOWS_DIAGNOSTIC,314,diagnostic_only_not_validity_denominator,21.77462,25.51482,0.149412,25.258213,335,0.112256
+arm2,-17.503046,100.0,ALL_WINDOWS_DIAGNOSTIC,335,diagnostic_only_not_validity_denominator,19.040268,20.807932,0.213387,22.461628,335,0.187325

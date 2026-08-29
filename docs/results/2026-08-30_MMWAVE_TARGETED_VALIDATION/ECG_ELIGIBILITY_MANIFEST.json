@@ -1,0 +1,96 @@
+{
+  "status": "PARTIAL / ECG_REFERENCE_ELIGIBILITY_COMPLETE",
+  "run_id": "ecg_eligibility_dll_20260829T220533Z",
+  "analysis_set": [
+    "97793",
+    "9779",
+    "97795"
+  ],
+  "input_window_n": 335,
+  "eligibility_counts": {
+    "ECG_INVALID": 10,
+    "ECG_VALID": 325,
+    "UNRESOLVED": 0
+  },
+  "reason_distribution": [
+    {
+      "eligibility": "ECG_INVALID",
+      "reason": "abnormal_adjacent_ibi_fluctuation_gt20pct",
+      "window_n": 10
+    },
+    {
+      "eligibility": "ECG_VALID",
+      "reason": "none",
+      "window_n": 325
+    }
+  ],
+  "block_summary_rows": 8,
+  "execution_failures": [],
+  "rules": {
+    "filter": "gold_standard_qa.ecg_qa: third-order SOS 0.5-40 Hz",
+    "r_peak": "find_peaks distance 0.30 s, prominence 0.25",
+    "ibi_plausibility_ms": [
+      300.0,
+      2000.0
+    ],
+    "artifact_rejection": "adjacent IBI relative change >20%; both adjacent intervals marked",
+    "effective_beat_coverage": "kept valid IBI / raw detected R-peak count >=0.80",
+    "minimum_valid_ibi": 3,
+    "window_eligibility": "invalid if any IBI plausibility/artifact rejection reason, insufficient valid IBI, or coverage <0.80",
+    "block_rule": "complete formal block + block-local ECG affine marker mapping; rest/posture/boundary excluded",
+    "marker_mismatch": "warning only when affine fit remains available; not silently treated as validity"
+  },
+  "input_sha256": {
+    "dll_time_windows": "0186ec62f50f697096b86919bf21a46c681267cf0c4faba6b947773d955e1707",
+    "fixed_arm_rows": "74213ca10ae39541ae83e7e83ea2f671f1f52ed9201ae71d93455569d000a474",
+    "targeted_script": "4a17732cc4e11e3a206fc78a54b0584fc8fb6f41c7dfdc6a9cd3fb8ef57aec7d",
+    "gold_standard_qa_script": "11f9233acd42d4c7f2e160ace5cbee9ac9425a35e278afc09d92590c81b244cb",
+    "eligibility_script": "66ebd8a2e230c5329a0d4c188756f558d6fa4581812ca432304232bd9edd9269"
+  },
+  "git": {
+    "head_at_run": "805db1d3f2d701d46f678b7cd911990f779a4966",
+    "origin_main_at_run": "805db1d3f2d701d46f678b7cd911990f779a4966"
+  },
+  "excluded": [
+    "mmWave estimator rerun",
+    "mmWave error-based ECG selection",
+    "new estimator or parameter search",
+    "Issue #16",
+    "C2B/C2C",
+    "HRV",
+    "raw/acquisition/producer/firmware/portable-V2 changes"
+  ],
+  "outputs": {
+    "ECG_ELIGIBILITY_REASON_DISTRIBUTION.csv": {
+      "role": "tracked_aggregate",
+      "path": "C:\\Users\\550ACW\\.codex\\worktrees\\0ce8\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\ECG_ELIGIBILITY_REASON_DISTRIBUTION.csv",
+      "sha256": "5b74fca95642d97acd7ef06dd8a252006fb82eefa48df559dd259b62f63d14b3",
+      "row_count": 2
+    },
+    "ECG_ELIGIBILITY_BLOCK_SUMMARY.csv": {
+      "role": "tracked_aggregate",
+      "path": "C:\\Users\\550ACW\\.codex\\worktrees\\0ce8\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\ECG_ELIGIBILITY_BLOCK_SUMMARY.csv",
+      "sha256": "b4d467e888dc26597954a95ae9e1523a23199c546590e55b5853a62d1417a94b",
+      "row_count": 8
+    },
+    "ECG_ARM_METRICS_VALID_DENOMINATOR.csv": {
+      "role": "tracked_aggregate",
+      "path": "C:\\Users\\550ACW\\.codex\\worktrees\\0ce8\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\ECG_ARM_METRICS_VALID_DENOMINATOR.csv",
+      "sha256": "041d68402a854fd94a48343dd6f2ac63855664d9421c0bda2ca47815dc42c85c",
+      "row_count": 6
+    },
+    "ECG_REFERENCE_ELIGIBILITY_REPORT_2026-08-30.md": {
+      "role": "tracked_report",
+      "path": "C:\\Users\\550ACW\\.codex\\worktrees\\0ce8\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\ECG_REFERENCE_ELIGIBILITY_REPORT_2026-08-30.md",
+      "sha256": "e0baec7003daf6d4a127e8dd1fe0891a8956e30fb3a52d3da902632140349530",
+      "row_count": null
+    },
+    "work\\ecg_eligibility_dll_windows_20260830\\ECG_DLL_WINDOW_ELIGIBILITY_LOCAL_ONLY.csv": {
+      "role": "local_only_row_level",
+      "path": "C:\\Users\\550ACW\\.codex\\worktrees\\0ce8\\08_算法\\work\\ecg_eligibility_dll_windows_20260830\\ECG_DLL_WINDOW_ELIGIBILITY_LOCAL_ONLY.csv",
+      "sha256": "4f721e184683341c624b47ac3475cb70f1488d5a08d81e823d74fef85ee99d46",
+      "row_count": 335
+    }
+  },
+  "manifest_path": "C:\\Users\\550ACW\\.codex\\worktrees\\0ce8\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\ECG_ELIGIBILITY_MANIFEST.json"
+}

@@ -1,19 +1,19 @@
 # mmWave validity blockers and resolution contract — 2026-08-30
 
-Status: `DECISION_FROZEN / VALIDITY_REANALYSIS_REQUIRED`
+Status: `DECISION_FROZEN / ECG_QC_COMPLETED_FOR_335_DLL_WINDOWS__NEXT_GATE_WINDOW_LENGTH`
 
 Purpose: record and correct the current mmWave HR validity workflow after review of the latest targeted-validation sequence. This document is canonical for the unresolved validity blockers below. It does not authorize changing raw data, producer outputs, firmware, protected portable V2, or promoting HR/BR/HRV.
 
 ## 1. Immediate correction to current interpretation
 
-The current DLL-time ARM0/ARM1/ARM2 results (`25.791632 / 22.189492 / 19.189060 bpm` on S0; essentially unchanged on the 333 COMPLETE windows) are **diagnostic results, not final criterion-validity estimates**.
+The pre-QC current DLL-time ARM0/ARM1/ARM2 results (`25.791632 / 22.189492 / 19.189060 bpm` on S0; essentially unchanged on the 333 COMPLETE windows) remain **diagnostic results, not final criterion-validity estimates**. Issue #24 has now completed the required ECG reference-quality layer for these 335 windows: `ECG_VALID=325`, `ECG_INVALID=10`, `UNRESOLVED=0`; ECG_VALID ARM0/ARM1/ARM2 MAE is `25.005 / 21.906332 / 18.904008 bpm`.
 
 Reason: the current rerun removed cross-rest / posture-adjustment / block-boundary periods and excluded incomplete blocks, but it has **not yet demonstrated a frozen, independently defined ECG signal-quality gate that rejects within-block ECG artifact / abnormal R-peak / implausible IBI windows before mmWave-vs-ECG error is computed**.
 
 Therefore:
 
 - `CURRENT_HR_VALIDITY_ESTIMATE = NOT_FINAL`
-- `ECG_REFERENCE_QC = REQUIRED_BEFORE_VALIDITY_CLAIM`
+- `ECG_REFERENCE_QC = COMPLETED_FOR_335_DLL_WINDOWS__325_VALID_10_INVALID_0_UNRESOLVED`
 - existing 19–26 bpm MAE values remain provenance for the current diagnostic pipeline and must not be presented as the final scientific accuracy of the mmWave system.
 
 ## 2. User/operator protocol facts that must be preserved
@@ -93,11 +93,12 @@ Therefore `COVERAGE_NOT_PRIMARY_HR_EXPLANATION` remains supported. The `97795/bl
 
 The next mmWave validity work must execute in this order:
 
-1. **ECG reference-quality audit and frozen QC contract**
+1. **ECG reference-quality audit and frozen QC contract — COMPLETED FOR CURRENT 335 DLL-TIME WINDOWS**
    - reuse historical validated ECG preprocessing/QC where available;
    - identify and exclude rest/posture/boundary periods (already structurally excluded) and within-block ECG artifact independently of radar error;
    - output explicit valid/rejected windows with reasons;
    - recompute ARM0/ARM1/ARM2 only on the ECG-valid denominator.
+   - evidence: `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/ECG_REFERENCE_ELIGIBILITY_REPORT_2026-08-30.md` and `ECG_ELIGIBILITY_MANIFEST.json`.
 
 2. **Window-length provenance and controlled comparison**
    - trace the historical 60 s implementation exactly;
@@ -126,7 +127,7 @@ No estimator, target rule, harmonic threshold, distance gate, or QC threshold ma
 
 ## 10. Current status
 
-- `ECG_REFERENCE_QC`: `UNRESOLVED / REQUIRED`
+- `ECG_REFERENCE_QC`: `COMPLETED_FOR_335_DLL_WINDOWS / 325_VALID / 10_INVALID / 0_UNRESOLVED`
 - `20S_HR_WINDOW`: `DIAGNOSTIC_LINEAGE_CONFIRMED / SCIENTIFIC_JUSTIFICATION_UNRESOLVED`
 - `DISTANCE_GATE`: `NOT_FROZEN`
 - `NEAR_FIELD_CAUSE`: `UNRESOLVED`

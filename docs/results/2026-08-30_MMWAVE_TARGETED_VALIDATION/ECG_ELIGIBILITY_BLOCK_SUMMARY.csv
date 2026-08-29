@@ -1,0 +1,9 @@
+﻿ECG_INVALID_n,ECG_VALID_n,UNRESOLVED_n,acq_filename_verdict,block_id,marker_sequence_exact,marker_warning_n,subject,window_n
+2,55,0,subject_basename_match,block1,False,57,97793,57
+3,51,0,subject_basename_match,block2,True,0,97793,54
+4,52,0,subject_basename_match,block1,True,0,9779,56
+1,55,0,subject_basename_match,block2,True,0,9779,56
+0,28,0,directory_subject_matches_basename_typo,block1,True,0,97795,28
+0,28,0,directory_subject_matches_basename_typo,block2,True,0,97795,28
+0,28,0,directory_subject_matches_basename_typo,block3,True,0,97795,28
+0,28,0,directory_subject_matches_basename_typo,block4,True,0,97795,28

@@ -1,5 +1,18 @@
 # 修改说明
 
+## 2026-08-30 — audit(mmwave): complete ECG reference eligibility for DLL-time windows
+
+### 改动
+
+- Added `scripts/maintenance/run_ecg_eligibility_dll_windows_20260830.py`, reusing the historical ECG gold-standard cleaner, block-marker affine mapping, and fixed ARM0/ARM1/ARM2 rows.
+- Added aggregate ECG eligibility reasons, per-block eligibility counts, ECG_VALID denominator ARM metrics, a manifest, and a report under `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`. Per-window reject reasons remain local-only under `work/`.
+
+### 验证与边界
+
+- 335 DLL-time windows: `ECG_VALID=325`, `ECG_INVALID=10`, `UNRESOLVED=0`; all 10 primary invalid reasons are abnormal adjacent IBI fluctuation >20%. Marker mismatch is a separate warning field.
+- ECG_VALID ARM0/ARM1/ARM2 MAE: `25.005/21.906332/18.904008` bpm with valid n `325/304/325`; all-window values remain diagnostic only.
+- HR remains `HOLD`, HRV remains `BLOCKED`; no estimator, target, gate, producer, raw, firmware, portable V2, #16, C2B/C2C, or HRV change occurred.
+
 ## 2026-08-30 — audit(mmwave): repair authoritative DLL frame-time semantics and rerun bounded HR sensitivity
 
 ### 改动

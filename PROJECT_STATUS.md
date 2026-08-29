@@ -1,5 +1,13 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-30 Issue #24 ECG reference eligibility — PARTIAL / ECG_REFERENCE_ELIGIBILITY_COMPLETE
+
+- 在 canonical `main` `805db1d3f2d701d46f678b7cd911990f779a4966` 上，复用 `scripts/gold_standard_qa.py` 的 ECG 清洗规则（0.5–40 Hz 三阶 SOS、R-peak 最小间距 0.30 s、固定 prominence 0.25、IBI 300–2000 ms、相邻 IBI >20% 异常波动剔除、有效 beat coverage ≥80%）和既有 `run_mmwave_targeted_validation_20260830.py` 的 block marker affine mapping。
+- 针对冻结的 335 个 DLL-time windows，实际结果为 `ECG_VALID=325`、`ECG_INVALID=10`、`UNRESOLVED=0`。10 个 invalid 的主 reason 全部是 `abnormal_adjacent_ibi_fluctuation_gt20pct`；marker mismatch 单独存于 `ecg_qc_warning`，不作为 invalid reason。`97793/block1` 的 57 个窗口保留 marker warning，但 affine mapping 可用。
+- 固定既有 ARM0/ARM1/ARM2 estimator rows，仅在 `ECG_VALID=325` 分母重算：ARM0 MAE=`25.005` bpm（325/325），ARM1=`21.906332` bpm（304/325），ARM2=`18.904008` bpm（325/325）。全 335 窗口的 `24.847938/21.774620/19.040268` 仅作 diagnostic，不作 validity denominator。
+- RUN_ID=`ecg_eligibility_dll_20260829T220533Z`。逐窗 eligibility 与每个 reject reason 保存在 local-only `work/ecg_eligibility_dll_windows_20260830/ECG_DLL_WINDOW_ELIGIBILITY_LOCAL_ONLY.csv`；Git-safe aggregate、manifest 和报告位于 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`。
+- 本轮只闭合 ECG reference eligibility 层；不把 20 s 窗口升级为 canonical HR window，不改 estimator/target/gate/producer/raw/firmware/portable V2，不运行 #16、C2B/C2C 或 HRV。HR 仍 `HOLD`，HRV 仍 `BLOCKED`。
+
 ## 2026-08-30 mmWave timestamp-semantics repair — PARTIAL / DLL_CONTRACT_FROZEN__WINDOWS_MATERIALLY_CHANGED
 
 - 以 canonical `main` baseline `ab39ad272462c54208b56e0b302b5d9ff1e95b4c`、FocusWave `ecg` commit `8e6fe5c5d08f386661bc05aaf9d5c5715a43b317` 完成 `97793`、`9779`、`97795` 的 Python timestamp row ↔ NPZ frame ↔ DLL timestamp mapping；三场均 row/frame 数一致、frame index 连续、8 通道长度一致、DLL timestamp 单调，mapping status=`OK`。

@@ -1,0 +1,3 @@
+﻿eligibility,reason,window_n
+ECG_INVALID,abnormal_adjacent_ibi_fluctuation_gt20pct,10
+ECG_VALID,none,325

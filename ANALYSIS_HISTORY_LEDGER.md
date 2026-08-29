@@ -8,6 +8,20 @@
 
 ---
 
+### 2026-08-30：Issue #24 ECG reference eligibility on 335 DLL-time windows — PARTIAL / ECG_REFERENCE_ELIGIBILITY_COMPLETE
+
+**Reuse Gate 与适配原因**：已有 `scripts/gold_standard_qa.py` 已包含历史 gold-standard ECG 的滤波、R-peak、IBI plausibility、相邻 IBI artifact rejection 和 ≥80% 有效 beat coverage；已有 `scripts/maintenance/run_mmwave_targeted_validation_20260830.py` 已包含 block start/end marker 与 Biopac digital marker 的 block-local affine mapping；已有 `MMWAVE_HR_GATE_TARGET_ABLATION_2026-08-30.csv` 已固定 ARM0/ARM1/ARM2 estimator rows。旧入口不能直接输出当前 DLL-time window 的 `ECG_VALID/ECG_INVALID/UNRESOLVED`、逐窗 reject reason 并按新分母重算，因此只新增窄 adapter `scripts/maintenance/run_ecg_eligibility_dll_windows_20260830.py`；没有否决已有算法。`REUSE_REJECTION_REASON=existing scripts expose cleaning/mapping components but no combined 335-window eligibility output or valid-denominator ARM metrics`。
+
+**运行与输入**：RUN_ID=`ecg_eligibility_dll_20260829T220533Z`；canonical HEAD 与 `origin/main` 均为 `805db1d3f2d701d46f678b7cd911990f779a4966`；输入为 `MMWAVE_DLL_TIME_WINDOWS_2026-08-30.csv`（335 rows）和既有 `MMWAVE_HR_GATE_TARGET_ABLATION_2026-08-30.csv`（335 rows），读取三场 `.acq`/`events.csv` 及 block marker 证据。ECG 参数沿用 gold-standard 入口：0.5–40 Hz、prominence 0.25、最小峰距 0.30 s、IBI 300–2000 ms、相邻 IBI 变化 >20% 记 artifact、coverage ≥80%。Rest、坐姿调整、block 边界和非 complete block 由冻结 DLL-time block window contract 结构性排除。
+
+**结果与 reason 边界**：335 个窗口为 `ECG_VALID=325`、`ECG_INVALID=10`、`UNRESOLVED=0`。10 个 invalid 的 primary reason 全部是 `abnormal_adjacent_ibi_fluctuation_gt20pct`；`marker_sequence_not_exact_but_block_affine_fit_available` 只写入 `ecg_qc_warning`，不混入 primary invalid reason。`97793/block1` 的 57 个窗口均有该 warning，但 marker affine mapping 可用，不能把 marker mismatch 误读成 57 个 invalid。
+
+**ARM 重算与决策**：固定既有毫米波 ARM rows，只在 ECG_VALID 分母得到 ARM0/ARM1/ARM2 MAE=`25.005/21.906332/18.904008 bpm`，valid n=`325/304/325`；all-window `24.847938/21.774620/19.040268 bpm` 仅作 diagnostic。该结果闭合 ECG reference eligibility 层，但不闭合 20 s window justification、distance gate、spectral truth 或 formal HR validity；HR 继续 `HOLD`，HRV 继续 `BLOCKED`，#16 继续 `PAUSED`。
+
+**证据**：`docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/ECG_REFERENCE_ELIGIBILITY_REPORT_2026-08-30.md`、`ECG_ELIGIBILITY_REASON_DISTRIBUTION.csv`、`ECG_ELIGIBILITY_BLOCK_SUMMARY.csv`、`ECG_ARM_METRICS_VALID_DENOMINATOR.csv`、`ECG_ELIGIBILITY_MANIFEST.json`；逐窗含 reject reason 的 CSV 仅在 `work/ecg_eligibility_dll_windows_20260830/` local-only，不入 Git。全套 pytest 在仓库根目录收集到既有 legacy `_cal_segment_test.py` 的模块路径错误；相关 ECG 测试文件在当前 HEAD 不存在，已改以 Python compile、脚本实际运行、CSV/JSON/hash/diff 校验完成验证。
+
+---
+
 ### 2026-08-30：mmWave timestamp semantics repair、DLL-time window reconstruction 与 unchanged HR sensitivity — PARTIAL
 
 **为什么需要 repair**：此前 335 个窗口按同一 CSV 的 Python `time.time()` 列定义，旧结果无法证明它们对应 acquisition frame 的真实时间语义。FocusWave source `ecg` `8e6fe5c5d08f386661bc05aaf9d5c5715a43b317` 已确认 DLL `receive_data.timeStamp` 在 consumer 侧写入 timestamps CSV，且与 `frameIndex` 同行；本轮只修复 frame-time/window membership 口径，不重写 producer。
