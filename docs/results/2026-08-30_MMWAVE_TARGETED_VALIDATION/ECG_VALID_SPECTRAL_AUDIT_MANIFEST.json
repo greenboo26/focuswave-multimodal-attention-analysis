@@ -1,0 +1,257 @@
+{
+  "run_id": "ECG_VALID_RETROSPECTIVE_SPECTRAL_TRUTH_AUDIT_20260830",
+  "run_started_utc": "2026-08-29T22:15:54.201745+00:00",
+  "status": "PARTIAL / ECG_VALID_SPECTRAL_TRUTH_AUDIT_COMPLETE",
+  "analysis_set": [
+    "97793",
+    "9779",
+    "97795"
+  ],
+  "rows": 335,
+  "blocks": [
+    "9779/block1",
+    "9779/block2",
+    "97793/block1",
+    "97793/block2",
+    "97795/block1",
+    "97795/block2",
+    "97795/block3",
+    "97795/block4"
+  ],
+  "denominators": {
+    "ALL_WINDOWS_DIAGNOSTIC": 335,
+    "ECG_VALID_PRIMARY": 325,
+    "ECG_INVALID_SUPPORTING": 10,
+    "UNRESOLVED": 0,
+    "ECG_VALID_WITH_COVERAGE_REFERENCE_LIMIT": 2
+  },
+  "canonical_main_head_at_run": "805db1d3f2d701d46f678b7cd911990f779a4966",
+  "canonical_origin_main_at_run": "805db1d3f2d701d46f678b7cd911990f779a4966",
+  "git_status_at_run": "detached_head; task-scoped outputs were staged after generation",
+  "fixed_inputs": {
+    "comparison": "C:\\Users\\550ACW\\.codex\\worktrees\\de3a\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\mmwave_ecg_block_window_comparison.csv",
+    "comparison_sha256": "06370f49681854a9dee6cb7ed3b524f4ab3aef7c59dc64a57e9c22c8988b4033",
+    "arms": "C:\\Users\\550ACW\\.codex\\worktrees\\de3a\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_HR_GATE_TARGET_ABLATION_2026-08-30.csv",
+    "arms_sha256": "74213ca10ae39541ae83e7e83ea2f671f1f52ed9201ae71d93455569d000a474",
+    "coverage": "C:\\Users\\550ACW\\.codex\\worktrees\\de3a\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_DLL_WINDOW_COVERAGE_AUDIT.csv",
+    "coverage_sha256": "e3b31619e2e2319a9636f1502ad935948188670b15b8e7fb41857b8acaf7e265",
+    "ecg_eligibility": "C:\\Users\\550ACW\\.codex\\worktrees\\0ce8\\08_算法\\work\\ecg_eligibility_dll_windows_20260830\\ECG_DLL_WINDOW_ELIGIBILITY_LOCAL_ONLY.csv",
+    "ecg_eligibility_sha256": "4f721e184683341c624b47ac3475cb70f1488d5a08d81e823d74fef85ee99d46"
+  },
+  "ecg_reference_provenance": {
+    "issue": "#24",
+    "eligibility_manifest": "C:\\Users\\550ACW\\.codex\\worktrees\\0ce8\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\ECG_ELIGIBILITY_MANIFEST.json",
+    "eligibility_manifest_sha256": "7a32f16b41ab78507fc16bd2ec5fa2307643b689f782d771433a151ddd2f7023",
+    "eligibility_counts": {
+      "ECG_VALID": 325,
+      "ECG_INVALID": 10
+    },
+    "marker_warning_is_nonfatal": true,
+    "invalid_reason_is_not_double_counted_with_marker_warning": true
+  },
+  "truth_class_distribution": {
+    "ALL_WINDOWS_DIAGNOSTIC": {
+      "nearby_target_bin_channel": 182,
+      "true_peak_available_selected_target_but_wrong_selection": 102,
+      "insufficient_coverage_or_reference": 12,
+      "true_peak_selected_ecg_bin": 22,
+      "absent_or_weak": 17
+    },
+    "ECG_VALID_PRIMARY": {
+      "nearby_target_bin_channel": 182,
+      "true_peak_available_selected_target_but_wrong_selection": 102,
+      "true_peak_selected_ecg_bin": 22,
+      "absent_or_weak": 17,
+      "insufficient_coverage_or_reference": 2
+    },
+    "by_subject": {
+      "97793": {
+        "all_windows": {
+          "nearby_target_bin_channel": 62,
+          "true_peak_available_selected_target_but_wrong_selection": 34,
+          "insufficient_coverage_or_reference": 5,
+          "true_peak_selected_ecg_bin": 5,
+          "absent_or_weak": 5
+        },
+        "ecg_valid_primary": {
+          "nearby_target_bin_channel": 62,
+          "true_peak_available_selected_target_but_wrong_selection": 34,
+          "true_peak_selected_ecg_bin": 5,
+          "absent_or_weak": 5
+        }
+      },
+      "9779": {
+        "all_windows": {
+          "nearby_target_bin_channel": 59,
+          "true_peak_selected_ecg_bin": 15,
+          "true_peak_available_selected_target_but_wrong_selection": 24,
+          "insufficient_coverage_or_reference": 5,
+          "absent_or_weak": 9
+        },
+        "ecg_valid_primary": {
+          "nearby_target_bin_channel": 59,
+          "true_peak_selected_ecg_bin": 15,
+          "true_peak_available_selected_target_but_wrong_selection": 24,
+          "absent_or_weak": 9
+        }
+      },
+      "97795": {
+        "all_windows": {
+          "true_peak_available_selected_target_but_wrong_selection": 44,
+          "nearby_target_bin_channel": 61,
+          "absent_or_weak": 3,
+          "true_peak_selected_ecg_bin": 2,
+          "insufficient_coverage_or_reference": 2
+        },
+        "ecg_valid_primary": {
+          "true_peak_available_selected_target_but_wrong_selection": 44,
+          "nearby_target_bin_channel": 61,
+          "absent_or_weak": 3,
+          "true_peak_selected_ecg_bin": 2,
+          "insufficient_coverage_or_reference": 2
+        }
+      }
+    },
+    "by_subject_block_primary": {
+      "97793/block1": {
+        "nearby_target_bin_channel": 27,
+        "true_peak_available_selected_target_but_wrong_selection": 24,
+        "true_peak_selected_ecg_bin": 3,
+        "absent_or_weak": 1
+      },
+      "97793/block2": {
+        "true_peak_selected_ecg_bin": 2,
+        "true_peak_available_selected_target_but_wrong_selection": 10,
+        "nearby_target_bin_channel": 35,
+        "absent_or_weak": 4
+      },
+      "9779/block1": {
+        "nearby_target_bin_channel": 34,
+        "true_peak_selected_ecg_bin": 3,
+        "true_peak_available_selected_target_but_wrong_selection": 10,
+        "absent_or_weak": 5
+      },
+      "9779/block2": {
+        "true_peak_selected_ecg_bin": 12,
+        "nearby_target_bin_channel": 25,
+        "absent_or_weak": 4,
+        "true_peak_available_selected_target_but_wrong_selection": 14
+      },
+      "97795/block1": {
+        "true_peak_available_selected_target_but_wrong_selection": 8,
+        "nearby_target_bin_channel": 18,
+        "absent_or_weak": 2
+      },
+      "97795/block2": {
+        "nearby_target_bin_channel": 14,
+        "true_peak_available_selected_target_but_wrong_selection": 13,
+        "absent_or_weak": 1
+      },
+      "97795/block3": {
+        "nearby_target_bin_channel": 16,
+        "true_peak_available_selected_target_but_wrong_selection": 12
+      },
+      "97795/block4": {
+        "nearby_target_bin_channel": 13,
+        "true_peak_selected_ecg_bin": 2,
+        "true_peak_available_selected_target_but_wrong_selection": 11,
+        "insufficient_coverage_or_reference": 2
+      }
+    }
+  },
+  "verification": {
+    "py_compile": "PASS",
+    "audit_script_run": "PASS",
+    "pytest": {
+      "status": "FAIL_COLLECTION_UNRELATED_LEGACY_IMPORT",
+      "error": "scripts/legacy/2026-08-30_*/_cal_segment_test.py: ModuleNotFoundError: process_vital_signs_v3_1_1",
+      "impact": "repository-wide collection did not complete; targeted audit run and output checks remain valid"
+    }
+  },
+  "reused_scripts": [
+    {
+      "path": "C:\\Users\\550ACW\\.codex\\worktrees\\de3a\\08_算法\\scripts\\maintenance\\run_mmwave_targeted_validation_20260830.py",
+      "sha256": "4a17732cc4e11e3a206fc78a54b0584fc8fb6f41c7dfdc6a9cd3fb8ef57aec7d",
+      "role": "PartReader and frozen window/target contract"
+    },
+    {
+      "path": "C:\\Users\\550ACW\\.codex\\worktrees\\de3a\\08_算法\\scripts\\process_vital_signs_v3_1_1.py",
+      "sha256": "e25e3f137360a78df1841c65ac442fba9fbb85508079e019d474a5d168014cfd",
+      "role": "existing bandpass/periodogram/peak/harmonic functions"
+    },
+    {
+      "path": "C:\\Users\\550ACW\\.codex\\worktrees\\de3a\\08_算法\\scripts\\maintenance\\run_mmwave_estimator_same_window_audit_20260830.py",
+      "sha256": "c17a737aa4d802c586beee1441ea1d70b7c7acf06d558571340d6191a72ae736",
+      "role": "same-window estimator lineage"
+    },
+    {
+      "path": "C:\\Users\\550ACW\\.codex\\worktrees\\de3a\\08_算法\\scripts\\maintenance\\run_mmwave_gate_target_ablation_20260830.py",
+      "sha256": "ce25d076d3078ce015d9c1d2e4adaa4c0efac9cbb9d0d59c5ddcb66f74924b55",
+      "role": "ARM0/1/2 frozen comparison"
+    }
+  ],
+  "reuse_rejection_reason": "Existing ECG reference audit and 15-row harmonic A/B diagnostic do not persist the required 335-window top candidates, prominence, ECG-nearest rank, and selection classification in one table; add only a downstream audit layer.",
+  "parameters": {
+    "mmwave_fs_hz": 100.0,
+    "heart_band_hz": [
+      0.8,
+      2.0
+    ],
+    "br_band_hz": [
+      0.1,
+      0.5
+    ],
+    "periodogram": "scipy.signal.periodogram(window=hann), same default estimator path; no ECG input",
+    "top_candidates": 8,
+    "harmonic_tolerance_bpm": 5.0,
+    "classification_exact_tolerance": "max(0.5 * periodogram bin in bpm, 1.5 bpm)",
+    "classification_nearby_tolerance": "max(2.0 * periodogram bin in bpm, 6.0 bpm)",
+    "weak_relative_prominence": 0.05
+  },
+  "arm_definitions": {
+    "arm0": "current block-local, unchanged",
+    "arm1": "current block-local plus historical bins 9-40 gate",
+    "arm2": "historical 6000-frame fixed target plus current 20 s HR estimator"
+  },
+  "ecg_role": "oracle_only_after_mmwave_target_and_peak_selection; no production target/peak selection",
+  "internal_harmonic_guard": "Producer _select_spectral_bpm folds against time/previous/reference anchors and does not read BR; fixed targeted path uses estimate_freq_periodogram + detect_peaks_heart_lo and does not invoke it.",
+  "external_rsp_guard": "A/B diagnostic only; raw selected and ARM results are retained unchanged; no hard rejection or producer change.",
+  "reproduction_check": {
+    "selected_hr_rows_compared": 335,
+    "selected_hr_within_0p001_bpm_n": 335,
+    "selected_hr_max_abs_delta_bpm": 0.000495925,
+    "radar_br_rows_compared": 335,
+    "radar_br_within_0p001_bpm_n": 335,
+    "radar_br_max_abs_delta_bpm": 0.000498519
+  },
+  "local_only_truth_table": "D:\\Project\\厚粲杯\\11_数据\\derived\\ecg_valid_retrospective_spectral_truth_audit_20260830\\ECG_VALID_RETROSPECTIVE_SPECTRAL_TRUTH_TABLE.csv",
+  "local_only_truth_table_sha256": "4a353d69cf345f797ed0231ef012c3bb26cc9830e9c9ec90a00ec7c6f2d75b0a",
+  "tracked_outputs": [
+    {
+      "path": "ECG_VALID_SPECTRAL_AUDIT_SUMMARY.csv",
+      "sha256": "8aa8a60098586e81c72eee1bdf8f2f7d43bb71d0bbd82b2a8fa330192bfe2c19"
+    },
+    {
+      "path": "ECG_VALID_SPECTRAL_ARM_SUMMARY.csv",
+      "sha256": "341446c5bd914654ecc1777ab94f81fea946fbca2df3946e15d12da2be2c3fa0"
+    },
+    {
+      "path": "ECG_VALID_SPECTRAL_AUDIT_MANIFEST.json",
+      "sha256": "self-referential_hash_not_recorded"
+    },
+    {
+      "path": "ECG_VALID_SPECTRAL_AUDIT_REPORT_2026-08-30.md",
+      "sha256": "090cd4b6e3ffc80738cef9b7fce3df441a1ebd045d010214e51d37d9c905657b"
+    }
+  ],
+  "decision": "SUPPORTING_RETROSPECTIVE_ORACLE_AUDIT_ONLY; HR HOLD; HRV BLOCKED; no producer promotion",
+  "excluded": [
+    "new HR algorithm",
+    "ECG-assisted selection",
+    "hard rejection",
+    "C2B",
+    "C2C",
+    "NIR/RGB",
+    "raw/firmware/portable V2 changes"
+  ]
+}

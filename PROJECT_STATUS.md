@@ -15,6 +15,13 @@
 - formal 71-session distance 分布复现为 `4/12/32/5/18`；near-side bright structure=`OBSERVED`，B2 labels 为 `LIKELY_HUMAN=4`、`AMBIGUOUS=82`、direct leakage=`0`、fixed reflection=`0`。这些 0 不证明机制不存在；near-field cause 与 current physical gate 仍 `UNRESOLVED`，未授权 exclusion gate。
 - 结果包位于 `docs/results/2026-08-30_MMWAVE_DISTANCE_ERROR_PHYSICAL_GATE/`；formal 71 场只作 distance/structure/QC 描述，早期 99 窗不外推为正式 71 场真值。未改 raw、firmware、producer、portable V2 或 HRV。
 
+## 2026-08-30 Issue #27 ECG_VALID retrospective spectral truth audit — PARTIAL / SUPPORTING_ONLY
+
+- 在既有 335-window fixed target/peak/ARM0/1/2 结果之后追加下游 spectral truth audit；ECG/RSP 仅作 oracle，未参与 target、channel、candidate、peak、ARM 选择，未改 producer 或参数。
+- 分母冻结为全窗口 diagnostic/supporting=`335`、#24 ECG_VALID primary=`325`、ECG_INVALID=`10`、UNRESOLVED=`0`；97795/block4 w027/w028 为 `SUPPORTING_COVERAGE_LIMIT`，不与 10 个 ECG_INVALID 重复计数。
+- ECG_VALID primary ARM0/ARM1/ARM2 MAE=`25.005/21.906332/18.904008` bpm，selected n=`325/325/325`，estimator-valid n=`325/304/325`；truth class 为 nearby=`182`、wrong-selection=`102`、selected-ECG-bin=`22`、absent/weak=`17`、coverage/reference=`2`。
+- Internal harmonic guard 在 fixed targeted path 未调用；external RSP guard 仅 diagnostic。结果包为 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/ECG_VALID_SPECTRAL_*`，逐窗表 local-only；HR=`HOLD`、HRV=`BLOCKED`。
+
 ## 2026-08-30 mmWave timestamp-semantics repair — PARTIAL / DLL_CONTRACT_FROZEN__WINDOWS_MATERIALLY_CHANGED
 
 - 以 canonical `main` baseline `ab39ad272462c54208b56e0b302b5d9ff1e95b4c`、FocusWave `ecg` commit `8e6fe5c5d08f386661bc05aaf9d5c5715a43b317` 完成 `97793`、`9779`、`97795` 的 Python timestamp row ↔ NPZ frame ↔ DLL timestamp mapping；三场均 row/frame 数一致、frame index 连续、8 通道长度一致、DLL timestamp 单调，mapping status=`OK`。

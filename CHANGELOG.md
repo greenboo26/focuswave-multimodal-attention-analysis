@@ -32,6 +32,12 @@
 - RUN_ID=`MMWAVE_DISTANCE_ERROR_PHYSICAL_GATE_20260829T220501Z`; formal distance bands=`4/12/32/5/18`; early HR N=99 MAE=`3.777215` bpm and BR N=99 MAE=`3.327631` breaths/min remain descriptive reference evidence. Historical `0.30–1.50 m` remains `HISTORICAL_GATE_SENSITIVITY`.
 - B2 near-side bright structure is `OBSERVED`; direct-leakage and fixed-reflection labels remain zero without being interpreted as proof of absence. Current physical gate and near-field cause remain `UNRESOLVED`; no exclusion gate is authorized. Evidence is under `docs/results/2026-08-30_MMWAVE_DISTANCE_ERROR_PHYSICAL_GATE/`.
 
+## 2026-08-30 — audit(mmwave): add ECG_VALID retrospective spectral truth audit
+
+- Added the downstream Issue #27 audit script and Git-safe aggregate evidence under `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`, reusing frozen 335-window target/peak/ARM outputs and #24 ECG eligibility as an oracle.
+- Separate layers remain explicit: all-window diagnostic/supporting=`335`; #24 ECG_VALID primary=`325`; ECG_INVALID=`10`; UNRESOLVED=`0`; primary truth classes are nearby=`182`, wrong-selection=`102`, selected-ECG-bin=`22`, absent/weak=`17`, coverage/reference=`2`.
+- Internal harmonic guard was not applied in the fixed targeted path; external RSP A/B remains diagnostic only. Status is `PARTIAL / SUPPORTING_ONLY`; HR remains `HOLD` and HRV `BLOCKED`; no producer/raw/firmware/portable-V2 or C2B/C2C change.
+
 ## 2026-08-30 — audit(mmwave): repair authoritative DLL frame-time semantics and rerun bounded HR sensitivity
 
 ### 改动

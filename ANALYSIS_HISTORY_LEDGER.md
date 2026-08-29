@@ -26,6 +26,12 @@
 
 **结果与边界**：formal 71-session distance 分布为 `4/12/32/5/18`；早期 HR N=99、MAE=`3.777215` bpm，BR N=99、MAE=`3.327631` breaths/min，仅作参考描述。B2 near-side bright structure=`OBSERVED`，labels=`LIKELY_HUMAN=4`、`AMBIGUOUS=82`、direct leakage=`0`、fixed reflection=`0`；0 不是机制不存在证明。历史 `0.30–1.50 m` 仅 `HISTORICAL_GATE_SENSITIVITY`，near-field cause/current physical gate 保持 `UNRESOLVED`，未授权 exclusion gate；结果包为 `docs/results/2026-08-30_MMWAVE_DISTANCE_ERROR_PHYSICAL_GATE/`。
 
+### 2026-08-30：Issue #27 ECG_VALID retrospective spectral truth audit — PARTIAL / SUPPORTING_ONLY
+
+**复用与结果**：复用既有 335-window fixed target/peak/ARM0/1/2 输出、targeted validation window contract、producer bandpass/periodogram/peak/harmonic 实现及 #24 ECG eligibility；ECG/RSP 仅作 oracle。新增下游 audit 的原因是既有表没有统一记录 top candidates、prominence、ECG-nearest rank 与 selection classification，`REUSE_REJECTION_REASON` 写入 manifest/report。
+
+**分母与决策**：全窗口 diagnostic/supporting=`335`；#24 ECG_VALID primary=`325`、ECG_INVALID=`10`、UNRESOLVED=`0`；truth class 为 nearby=`182`、wrong-selection=`102`、selected-ECG-bin=`22`、absent/weak=`17`、coverage/reference=`2`。ARM0/1/2 primary MAE=`25.005/21.906332/18.904008` bpm；internal harmonic guard 未在 fixed targeted path 调用，external RSP guard 仅 diagnostic。结果为 `SUPPORTING_ONLY`，HR=`HOLD`、HRV=`BLOCKED`，逐窗 truth table local-only。
+
 ---
 
 ### 2026-08-30：mmWave timestamp semantics repair、DLL-time window reconstruction 与 unchanged HR sensitivity — PARTIAL
