@@ -4,9 +4,11 @@
 
 - 已建立 canonical 文献证据与决策账本：`docs/research/MMWAVE_LITERATURE_EVIDENCE_AND_DECISION_LEDGER_2026-08-29.md`。
 - 已建立机器可读文献登记：`docs/research/MMWAVE_LITERATURE_EVIDENCE_REGISTER_2026-08-29.csv`。
+- 已补回此前 RS6240 固件/手册/DataCube 审计中已经确认的 upstream 事实，见 `docs/research/MMWAVE_UPSTREAM_FIRMWARE_AND_DATACUBE_EVIDENCE_2026-08-29.md`：`ReportDataCube1D` 不是 raw ADC，而是 8 通道 complex range-domain DataCube；Range FFT 已发生在 upstream；formal distance spacing 固定为 `0.037 m/bin`。这些事实不得再次整体降级为 `UNVERIFIABLE_UPSTREAM`。
+- 已登记此前 formal firmware 镜像审计身份：`mrs6240_p2512.img`，SHA-256=`7a8ca41d0b2438384c8a02c5abba95b265cd8984ed911414157b74f80c1fd5c8`，记录 build time=`2026-07-24 21:33:39`；但仍需在本轮把该镜像重新绑定到原始本地审计记录/官方 SDK/手册/构建证据，不能把 generic SDK default 直接当成 exact formal firmware behavior。
 - 当前决策：在 formal producer/downstream 逐行/逻辑块科学审计完成前，不运行 Issue #16 quality-stratified sensitivity。
 - `33/37/2` 当前只能作为 current-pipeline QC/eligibility strata；不得直接解释为 33 场采集好、37 场被试运动/采集差，也不得等同 physiology validity。
-- 下一硬 Gate：完成文献规范链、ReportDataCube1D upstream provenance、正式代码逐行映射、缺失/启发式/潜在有害处理清单和 source-controlled flowchart。
+- 下一硬 Gate 已正式分配为 `docs/research/MMWAVE_PIPELINE_SCIENTIFIC_AUDIT_TASK_2026-08-29.md`：先恢复并绑定既有 RS6240 firmware/manual/SDK 证据，再逐行审 producer/downstream；禁止从零重复 discovery。
 - 当前 `PIPELINE_SCIENTIFIC_AUDIT=PARTIAL`；未授权新算法、C2B/C2C 重跑、NIR/RGB producer 修改或原始数据修改。
 
 ## 2026-08-29 local↔canonical reconciliation gate — PASS
@@ -81,15 +83,16 @@ producer worktree 仍然保留。
 
 ## 当前下一步
 
-1. 完成文献规范链与 formal mmWave producer/downstream 逐行科学审计。
-2. 复原/确认 `ReportDataCube1D` 前可验证的 producer 处理；看不到的步骤标 `UNVERIFIABLE_UPSTREAM`，不得猜。
-3. 在上述 Gate 通过前暂停 #16；不得用 33/37 直接推断 participant compliance 或 acquisition quality。
+1. 按 `docs/research/MMWAVE_PIPELINE_SCIENTIFIC_AUDIT_TASK_2026-08-29.md` 执行：先恢复/绑定此前 firmware/manual/SDK 审计证据，不从零重复查找。
+2. 对真正仍未闭合的 upstream 项逐项确认：DC/clutter、window、FFT length/zero padding、chirp aggregation/Doppler、normalization、channel calibration、8 通道物理映射、upstream phase correction。
+3. 再逐文件逐逻辑块审查 `ReportDataCube1D → target/bin/channel → phase → filter → harmonic → HR/BR/HRV/QC`。
+4. 在上述 Gate 通过前暂停 #16；不得用 33/37 直接推断 participant compliance 或 acquisition quality。
 
 ## 证据边界
 
-允许使用：`human-target-lock candidate`、`strong spatial consistency evidence`。
+允许使用：`human-target-lock candidate`、`strong spatial consistency evidence`、`ReportDataCube1D is complex range-domain 8-channel data`、`Range FFT already occurred upstream`、`formal range spacing = 0.037 m/bin`。
 
-暂不使用：`chest lock confirmed`、`HR accurate`、`BR accurate`、`HRV accurate`。
+暂不使用：`chest lock confirmed`、`HR accurate`、`BR accurate`、`HRV accurate`、`generic SDK behavior == exact formal firmware behavior`。
 
 ## 本地结果位置
 
