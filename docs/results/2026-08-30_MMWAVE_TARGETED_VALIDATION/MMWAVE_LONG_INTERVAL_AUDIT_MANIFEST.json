@@ -1,0 +1,415 @@
+{
+  "status": "PARTIAL / TIMESTAMP_RECORDING_ARTIFACT / GAP_EFFECT_UNRESOLVED",
+  "canonical_main_at_audit": "42167d3a112215701fad09ec21999a78a977baad",
+  "canonical_main_remote_at_audit": "1c1d5516ecd43b3a90cb5222e9a64ee15d121eb0\trefs/heads/main",
+  "focuswave_ecg_commit": "8e6fe5c5d08f386661bc05aaf9d5c5715a43b317",
+  "focuswave_historical_source_commit": "817a7fccb969bcc6e1e0071b387f88e3b3494481",
+  "fixed_input": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_targeted_validation_20260830_rerun\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_HR_GATE_TARGET_ABLATION_2026-08-30.csv",
+  "fixed_input_sha256": "74213ca10ae39541ae83e7e83ea2f671f1f52ed9201ae71d93455569d000a474",
+  "ecg_biopac_alignment_audit": {
+    "path": "ecg_alignment_audit.csv",
+    "sha256": "c15277ab3b35524f7bff8ce2c08d1bb5d29de7bbe3c0ed9a1d9525a7eb9d6aa1",
+    "row_count": 12
+  },
+  "subjects": [
+    "97793",
+    "9779",
+    "97795"
+  ],
+  "window_rows": 335,
+  "long_event_rows": 457,
+  "source_summary": {
+    "subjects": {
+      "97793": {
+        "timestamp_rows": 162924,
+        "python_nominal_interval_ms": 7.0,
+        "dll_nominal_interval_ms": 10.0,
+        "python_long_n": 162,
+        "python_gt500_n": 162,
+        "python_long_distribution": {
+          "n": 162,
+          "min_ms": 1763,
+          "p10_ms": 1922.2,
+          "median_ms": 2278.5,
+          "p90_ms": 2761.9,
+          "p95_ms": 2832.7,
+          "max_ms": 4338
+        },
+        "python_nonpositive_adjacent_intervals": 3110,
+        "python_negative_adjacent_intervals": 0,
+        "dll_gt100_n": 0,
+        "dll_gt500_n": 0,
+        "dll_nonpositive_adjacent_intervals": 0,
+        "npz_file_count": 163,
+        "npz_chunk_size_observed": [
+          924,
+          1000
+        ],
+        "long_events_at_chunk_boundary_n": 162,
+        "periodicity": {
+          "python_inter_event_distribution_s": {
+            "n": 161,
+            "min_s": 10.087,
+            "p10_s": 10.104,
+            "median_s": 10.113,
+            "p90_s": 10.124,
+            "p95_s": 10.127,
+            "max_s": 10.142
+          },
+          "dll_inter_event_distribution_s": {
+            "n": 161,
+            "min_s": 10.109,
+            "p10_s": 10.112,
+            "median_s": 10.114,
+            "p90_s": 10.116,
+            "p95_s": 10.116,
+            "max_s": 10.117
+          },
+          "frame_inter_event_distribution_frames": {
+            "n": 161,
+            "min_s": 1000.0,
+            "p10_s": 1000.0,
+            "median_s": 1000.0,
+            "p90_s": 1000.0,
+            "p95_s": 1000.0,
+            "max_s": 1000.0
+          },
+          "python_fixed_period_counts_within_1s": {
+            "1": 0,
+            "2": 0,
+            "5": 0,
+            "10": 161,
+            "30": 0,
+            "60": 0
+          },
+          "dll_fixed_period_counts_within_1s": {
+            "1": 0,
+            "2": 0,
+            "5": 0,
+            "10": 161,
+            "30": 0,
+            "60": 0
+          },
+          "python_inter_event_histogram_s": {
+            "0-5": 0,
+            "5-8": 0,
+            "8-9.5": 0,
+            "9.5-10.5": 161,
+            "10.5-12": 0,
+            "12-15": 0,
+            "15+": 0
+          },
+          "dll_inter_event_histogram_s": {
+            "0-5": 0,
+            "5-8": 0,
+            "8-9.5": 0,
+            "9.5-10.5": 161,
+            "10.5-12": 0,
+            "12-15": 0,
+            "15+": 0
+          },
+          "frame_modulo_1000_counts": {
+            "501": 162
+          },
+          "frame_modulo_1000_all_same": true
+        },
+        "phase_counts": {
+          "baseline": 17,
+          "baseline->outside_formal_segments": 1,
+          "block1": 58,
+          "block1->rest": 1,
+          "block2": 55,
+          "block2->outside_formal_segments": 1,
+          "outside_formal_segments": 5,
+          "rest": 23,
+          "rest->outside_formal_segments": 1
+        }
+      },
+      "9779": {
+        "timestamp_rows": 155557,
+        "python_nominal_interval_ms": 7.0,
+        "dll_nominal_interval_ms": 10.0,
+        "python_long_n": 155,
+        "python_gt500_n": 155,
+        "python_long_distribution": {
+          "n": 155,
+          "min_ms": 1805,
+          "p10_ms": 2001.8,
+          "median_ms": 2360.0,
+          "p90_ms": 2882.4,
+          "p95_ms": 3724.4,
+          "max_ms": 6495
+        },
+        "python_nonpositive_adjacent_intervals": 2265,
+        "python_negative_adjacent_intervals": 0,
+        "dll_gt100_n": 0,
+        "dll_gt500_n": 0,
+        "dll_nonpositive_adjacent_intervals": 0,
+        "npz_file_count": 156,
+        "npz_chunk_size_observed": [
+          557,
+          1000
+        ],
+        "long_events_at_chunk_boundary_n": 155,
+        "periodicity": {
+          "python_inter_event_distribution_s": {
+            "n": 154,
+            "min_s": 9.052,
+            "p10_s": 10.104,
+            "median_s": 10.114,
+            "p90_s": 10.122,
+            "p95_s": 10.127,
+            "max_s": 11.383
+          },
+          "dll_inter_event_distribution_s": {
+            "n": 154,
+            "min_s": 10.11,
+            "p10_s": 10.112,
+            "median_s": 10.114,
+            "p90_s": 10.115,
+            "p95_s": 10.116,
+            "max_s": 10.117
+          },
+          "frame_inter_event_distribution_frames": {
+            "n": 154,
+            "min_s": 1000.0,
+            "p10_s": 1000.0,
+            "median_s": 1000.0,
+            "p90_s": 1000.0,
+            "p95_s": 1000.0,
+            "max_s": 1000.0
+          },
+          "python_fixed_period_counts_within_1s": {
+            "1": 0,
+            "2": 0,
+            "5": 0,
+            "10": 153,
+            "30": 0,
+            "60": 0
+          },
+          "dll_fixed_period_counts_within_1s": {
+            "1": 0,
+            "2": 0,
+            "5": 0,
+            "10": 154,
+            "30": 0,
+            "60": 0
+          },
+          "python_inter_event_histogram_s": {
+            "0-5": 0,
+            "5-8": 0,
+            "8-9.5": 1,
+            "9.5-10.5": 152,
+            "10.5-12": 1,
+            "12-15": 0,
+            "15+": 0
+          },
+          "dll_inter_event_histogram_s": {
+            "0-5": 0,
+            "5-8": 0,
+            "8-9.5": 0,
+            "9.5-10.5": 154,
+            "10.5-12": 0,
+            "12-15": 0,
+            "15+": 0
+          },
+          "frame_modulo_1000_counts": {
+            "69": 155
+          },
+          "frame_modulo_1000_all_same": true
+        },
+        "phase_counts": {
+          "baseline": 18,
+          "block1": 57,
+          "block2": 57,
+          "outside_formal_segments": 9,
+          "outside_formal_segments->block2": 1,
+          "rest": 13
+        }
+      },
+      "97795": {
+        "timestamp_rows": 140648,
+        "python_nominal_interval_ms": 4.0,
+        "dll_nominal_interval_ms": 10.0,
+        "python_long_n": 140,
+        "python_gt500_n": 140,
+        "python_long_distribution": {
+          "n": 140,
+          "min_ms": 1748,
+          "p10_ms": 1927.9,
+          "median_ms": 2312.0,
+          "p90_ms": 2925.0,
+          "p95_ms": 3040.25,
+          "max_ms": 3977
+        },
+        "python_nonpositive_adjacent_intervals": 828,
+        "python_negative_adjacent_intervals": 0,
+        "dll_gt100_n": 0,
+        "dll_gt500_n": 0,
+        "dll_nonpositive_adjacent_intervals": 0,
+        "npz_file_count": 141,
+        "npz_chunk_size_observed": [
+          648,
+          1000
+        ],
+        "long_events_at_chunk_boundary_n": 140,
+        "periodicity": {
+          "python_inter_event_distribution_s": {
+            "n": 139,
+            "min_s": 2.779,
+            "p10_s": 6.248,
+            "median_s": 10.982,
+            "p90_s": 12.653,
+            "p95_s": 12.945,
+            "max_s": 13.933
+          },
+          "dll_inter_event_distribution_s": {
+            "n": 139,
+            "min_s": 10.109,
+            "p10_s": 10.111,
+            "median_s": 10.113,
+            "p90_s": 10.115,
+            "p95_s": 10.115,
+            "max_s": 10.116
+          },
+          "frame_inter_event_distribution_frames": {
+            "n": 139,
+            "min_s": 1000.0,
+            "p10_s": 1000.0,
+            "median_s": 1000.0,
+            "p90_s": 1000.0,
+            "p95_s": 1000.0,
+            "max_s": 1000.0
+          },
+          "python_fixed_period_counts_within_1s": {
+            "1": 0,
+            "2": 7,
+            "5": 5,
+            "10": 45,
+            "30": 0,
+            "60": 0
+          },
+          "dll_fixed_period_counts_within_1s": {
+            "1": 0,
+            "2": 0,
+            "5": 0,
+            "10": 139,
+            "30": 0,
+            "60": 0
+          },
+          "python_inter_event_histogram_s": {
+            "0-5": 13,
+            "5-8": 9,
+            "8-9.5": 8,
+            "9.5-10.5": 25,
+            "10.5-12": 48,
+            "12-15": 36,
+            "15+": 0
+          },
+          "dll_inter_event_histogram_s": {
+            "0-5": 0,
+            "5-8": 0,
+            "8-9.5": 0,
+            "9.5-10.5": 139,
+            "10.5-12": 0,
+            "12-15": 0,
+            "15+": 0
+          },
+          "frame_modulo_1000_counts": {
+            "816": 140
+          },
+          "frame_modulo_1000_all_same": true
+        },
+        "phase_counts": {
+          "baseline": 16,
+          "block1": 27,
+          "block2": 28,
+          "block3": 28,
+          "block4": 27,
+          "outside_formal_segments": 12,
+          "outside_formal_segments->block1": 1,
+          "outside_formal_segments->block2": 1
+        }
+      }
+    },
+    "all_long_events": 457,
+    "all_long_gt500_events": 457,
+    "python_long_all_gt500": true,
+    "checks": {
+      "duplicate_long_event_frame_indices": 0,
+      "nonpositive_python_adjacent_intervals": 6203,
+      "negative_python_adjacent_intervals": 0,
+      "nonpositive_dll_adjacent_intervals": 0,
+      "python_events_in_100_to_500ms_inclusive": 0,
+      "all_long_events_chunk_boundary": true,
+      "all_long_events_frame_modulo_1000_same": true,
+      "timestamp_reset_found": false
+    },
+    "all_python_long_distribution": {
+      "n": 457,
+      "min_ms": 1748,
+      "p10_ms": 1953.2,
+      "median_ms": 2326.0,
+      "p90_ms": 2859.8,
+      "p95_ms": 3070.2,
+      "max_ms": 6495
+    },
+    "all_dll_long_distribution": {
+      "n": 457,
+      "min_ms": 8,
+      "p10_ms": 9.0,
+      "median_ms": 10.0,
+      "p90_ms": 11.0,
+      "p95_ms": 12.0,
+      "max_ms": 13
+    }
+  },
+  "periodicity_classification": "PERIODIC_ACQUISITION_OR_WRITE_PATTERN_CANDIDATE; exact 1000-frame NPZ rotation boundary",
+  "gap_source_classification": "TIMESTAMP_RECORDING_ARTIFACT",
+  "gap_effect_on_hr": "UNRESOLVED",
+  "fixed_fs_with_gaps": "QUESTIONABLE",
+  "timestamp_aware_resampled": "NOT_RUN__NOT_SAFE_TO_ISOLATE_FROM_WRITER_ARTIFACT_COLUMN",
+  "outputs": {
+    "MMWAVE_LONG_FRAME_INTERVAL_EVENTS.csv": {
+      "path": "MMWAVE_LONG_FRAME_INTERVAL_EVENTS.csv",
+      "sha256": "3934302429ac734e90bd69796deac6cd3b1195b4b9e64456cf012ded345776d5",
+      "row_count": 457
+    },
+    "MMWAVE_WINDOW_GAP_BURDEN.csv": {
+      "path": "MMWAVE_WINDOW_GAP_BURDEN.csv",
+      "sha256": "ba9bfbfabdf69b5973105635641a4be14b3e3f35153ada62ada7cc4d03b2dfb6",
+      "row_count": 335
+    },
+    "MMWAVE_GAP_BURDEN_CORRELATION.csv": {
+      "path": "MMWAVE_GAP_BURDEN_CORRELATION.csv",
+      "sha256": "02257a11e3694a4ac3743a5768deef9097c2d34aa0d0089a3547a57afb9bb2d6",
+      "row_count": 96
+    },
+    "MMWAVE_ACQUISITION_TIMESTAMP_SOURCE_AUDIT.md": {
+      "path": "MMWAVE_ACQUISITION_TIMESTAMP_SOURCE_AUDIT.md",
+      "sha256": "a05bd88bfed29ffbf530a1536a8fbb86099b42bcebe8baf4836ac167060b8add",
+      "row_count": null
+    },
+    "MMWAVE_LONG_INTERVAL_AUDIT_REPORT_2026-08-30.md": {
+      "path": "MMWAVE_LONG_INTERVAL_AUDIT_REPORT_2026-08-30.md",
+      "sha256": "a05bd88bfed29ffbf530a1536a8fbb86099b42bcebe8baf4836ac167060b8add",
+      "row_count": null
+    },
+    "ecg_alignment_audit.csv": {
+      "path": "ecg_alignment_audit.csv",
+      "sha256": "c15277ab3b35524f7bff8ce2c08d1bb5d29de7bbe3c0ed9a1d9525a7eb9d6aa1",
+      "row_count": 12
+    }
+  },
+  "excluded": [
+    "HR estimator tuning",
+    "ECG changes",
+    "HRV",
+    "Issue #16",
+    "C2B",
+    "C2C",
+    "full batch",
+    "producer/raw/firmware/acquisition/portable-V2 changes",
+    "window deletion"
+  ]
+}

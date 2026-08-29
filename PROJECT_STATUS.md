@@ -178,3 +178,13 @@ producer worktree 仍然保留。
 - 457 个真实 >100 ms adjacent frame intervals 的 overlap audit 中，335/335 个 HR 窗口均至少包含一个长间隔，无法形成无 gap 对照子集；`TIMESTAMP_LONG_INTERVAL_EFFECT=UNRESOLVED`。未删除任何窗口。
 - 未满足 producer change candidate 的证据门槛；current HR producer 继续 `HOLD`。新增 ablation 表、participant/block/stability、gate split、gap split、report、manifest 和脚本均位于 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/` 与 `scripts/maintenance/run_mmwave_gate_target_ablation_20260830.py`。
 
+## 2026-08-30 mmWave long-interval source/impact audit — PARTIAL / TIMESTAMP_RECORDING_ARTIFACT
+
+- 在 canonical `main` `42167d3a112215701fad09ec21999a78a977baad` 的固定输入上，审计 `97793`、`9779`、`97795` 的 457 个 Python timestamp column-3 相邻间隔 >100 ms 事件；335 个既有 complete formal-block、20 s 窗口、同一 block-affine ECG HR 和同一 HR estimator 均保留，未删除行。
+- 457/457 个事件同时 >500 ms，0 个落在 100–500 ms；每个事件均是 NPZ 文件切换，且 frame index modulo 1000 在每名被试内恒定。DLL timestamp column-2 的相邻间隔 >100 ms 为 0、>500 ms 为 0；DLL inter-event 和 frame spacing 均约 10 s / 1000 frames。Python 长间隔因此定位为 consumer/write timestamp artifact candidate，与 `mmwave_capture.py` 中 consumer 侧 `time.time()`、每 1000 帧 `np.savez_compressed` 同线程写入相吻合，而不是已证实的 sensor frame loss。
+- Python 列另有 6,203 个同毫秒重复、0 个负间隔；没有 timestamp reset。window burden 仍逐窗输出：每窗 n_gap_gt100 为 1–2，平均 1.755；Python gap sum 平均 4,143.660 ms；DLL 规则下 expected frame count 为约 2,000，实际窗口索引密度指标仍保留但不解释为真实丢帧率。
+- 同窗 burden 对 HR absolute error 的 Spearman 仅作描述性报告：overall 的 n_gap ρ 为 ARM0 `-0.058547`、ARM1 `0.004575`、ARM2 `-0.065296`；sum-gap ρ 为 `0.040775`、`0.027823`、`-0.046619`。由于所有窗口都有长间隔且 burden 与分块写入位置混杂，不作因果或质量改善结论。
+- 当前 estimator 继续使用固定 `FS=100.0` 的 bandpass/periodogram/peak 参数，不读取 timestamp 列；DLL 时间戳支持 dense frame sequence 的固定采样率假设，但 Python timestamp-axis window semantics 仍为 `QUESTIONABLE`。未运行 timestamp-aware resampling，因为对 writer artifact 列重采样会制造伪传感器缺口。
+- 最终分类：`GAP_SOURCE_CLASSIFICATION=TIMESTAMP_RECORDING_ARTIFACT`；`GAP_EFFECT_ON_HR=UNRESOLVED`（无 clean no-gap comparator）；`FIXED_FS_WITH_GAPS=QUESTIONABLE`。HR/BR 继续 `HOLD`，HRV `BLOCKED`，Issue #16 `PAUSED`；未修改 FocusWave producer/raw/firmware、portable V2、C2B/C2C 或全量 batch。
+- 证据包新增 `MMWAVE_LONG_FRAME_INTERVAL_EVENTS.csv`、`MMWAVE_WINDOW_GAP_BURDEN.csv`、`MMWAVE_GAP_BURDEN_CORRELATION.csv`、`MMWAVE_ACQUISITION_TIMESTAMP_SOURCE_AUDIT.md`、`MMWAVE_LONG_INTERVAL_AUDIT_REPORT_2026-08-30.md`、`MMWAVE_LONG_INTERVAL_AUDIT_MANIFEST.json` 和 `scripts/maintenance/run_mmwave_long_interval_source_audit_20260830.py`。
+

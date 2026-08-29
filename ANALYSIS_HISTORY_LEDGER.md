@@ -568,6 +568,22 @@ Behavior+mmWave 增量已经做过，不重跑：
 
 ---
 
+### 2026-08-30：mmWave long-frame interval source/impact audit — PARTIAL / TIMESTAMP_RECORDING_ARTIFACT
+
+**为什么需要这次审计**：上一版只能确认 457 个 Python timestamp column-3 相邻间隔超过 100 ms，且 335/335 个 HR 窗口都被覆盖，无法区分真实采集帧丢失、consumer/write 暂停、NPZ 分块边界或时间戳语义问题。因此本次不继续调 HR estimator，而是只追溯采集源、时间戳阶段、分块周期与窗口 burden。
+
+**输入与冻结口径**：canonical `main` `42167d3a112215701fad09ec21999a78a977baad`；`97793`、`9779`、`97795`；335 个既有 complete formal-block 20 s windows；同一 window start/end、同一 frozen block-affine ECG HR、同一现有 HR frequency estimator。FocusWave source 为 `ecg` commit `8e6fe5c5d08f386661bc05aaf9d5c5715a43b317`，历史 acquisition source 为 `817a7fccb969bcc6e1e0071b387f88e3b3494481`。ECG/BIOPAC mapping 继续使用 `beh/events.csv` 的 block markers（baseline 11/21、block1 12/22、block2 13/23、block3 14/24、rest 15/25、block4 16/26 if used）和 101–110 ticks；既有 alignment audit 为 8 complete blocks、7/8 exact marker sequences。
+
+**来源证据与结果**：`mmwave_capture.py` 的 SDK/DLL callback 先进入 bounded queue；consumer 线程在 `_process_datacube` 中生成 DLL timestamp 与 Python `time.time()` timestamp 并写 CSV；每 1000 个 processed frames 同一 consumer 线程执行 `np.savez_compressed` chunk rotation。457/457 个 Python 长间隔同时 >500 ms，0 个在 100–500 ms；457/457 个跨 NPZ 文件边界，frame index modulo 1000 对每名被试恒定。DLL timestamp 没有任何 >100 ms 或 >500 ms interval，DLL event periodicity 和 frame spacing 均约 10 s / 1000 frames。Python 列另有 6,203 个同毫秒重复、0 个负间隔，故无 timestamp reset。
+
+**Window burden 与关联**：335/335 个窗口保留 burden 行；每窗 n_gap_gt100 为 1–2，平均 `1.755`，sum gap 平均 `4143.660 ms`，max gap 平均 `2544.337 ms`。以 DLL 约 10 ms 估算 expected frame count，实际 frame count/estimated loss fraction 仅作为窗口索引密度诊断，不等同真实 sensor frame loss。Spearman 为描述性：overall n_gap 与 absolute error 的 ARM0/ARM1/ARM2 分别 `-0.058547/0.004575/-0.065296`；sum-gap 分别 `0.040775/0.027823/-0.046619`；完整 participant/block 分层结果在 correlation CSV 中。所有窗口均有 artifact burden、没有 clean no-gap comparator，因此不作因果结论。
+
+**决策**：`GAP_SOURCE_CLASSIFICATION=TIMESTAMP_RECORDING_ARTIFACT`；`GAP_EFFECT_ON_HR=UNRESOLVED`；`FIXED_FS_WITH_GAPS=QUESTIONABLE`。当前 estimator 的固定 `FS=100.0`、bandpass、periodogram、peak 均未修改，也未运行 timestamp-aware resampling（对 writer-artifact 列重采样不安全）。HR/BR 继续 `HOLD`，HRV `BLOCKED`，Issue #16 `PAUSED`；没有修改 producer、firmware、raw、FocusWave、portable V2、C2B/C2C 或全量 batch。
+
+**证据包**：`docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_LONG_FRAME_INTERVAL_EVENTS.csv`、`MMWAVE_WINDOW_GAP_BURDEN.csv`、`MMWAVE_GAP_BURDEN_CORRELATION.csv`、`MMWAVE_ACQUISITION_TIMESTAMP_SOURCE_AUDIT.md`、`MMWAVE_LONG_INTERVAL_AUDIT_REPORT_2026-08-30.md`、`MMWAVE_LONG_INTERVAL_AUDIT_MANIFEST.json`、`ecg_alignment_audit.csv`；脚本 `scripts/maintenance/run_mmwave_long_interval_source_audit_20260830.py`。允许的下一步仅是基于 DLL/帧序列重新定义 timestamp/window contract 后再做只读复核，不是继续调 HR estimator。
+
+---
+
 ## 14. 维护规则
 
 以后任何实际运行的新分析，只要产生“采用 / 放弃 / 结果无效 / 参考被替代 / 数据语义修复”之一，就必须在同一次交付中更新本账本，至少写：
