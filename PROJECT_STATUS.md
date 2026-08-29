@@ -1,5 +1,13 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-29 local↔canonical reconciliation gate — PASS
+
+- 已完成本地与 canonical 的 43 条分析视图对账：30 条 MATCHED、2 条 SUPERSEDED、
+  6 条 PRODUCER_OWNED、3 条 PLANNED_NOT_EXECUTED、2 条 PRODUCER_NOT_READY；
+  PATH_STALE、RESULT_MISMATCH、TRUE_MISSING、LOCAL_ONLY、REMOTE_ONLY 均为 0。
+- C2C 历史结果不作为当前结论，待 canonical rerun；NIR/RGB increment 尚不是 global final。
+- 该 PASS 仅表示本地与 canonical 的已完成证据对账通过，不代表未来计划分析已完成。
+
 ## 2026-08-29 local analysis assimilation status — PARTIAL
 
 - 已把旧 dirty 工作树中可确认的中央本地独有分析入口、QC/merge-readiness/RGB

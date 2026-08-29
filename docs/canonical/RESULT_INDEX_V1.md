@@ -4,16 +4,20 @@ This index points to local full results without uploading them. See `ANALYSIS_RE
 
 | analysis_id | status | Git description | local full result path | report use |
 |---|---|---|---|---|
+| P0_PROTOCOL | MATCHED_SUPPORTING | [protocol method card](analysis_cards/p0_protocol.md); historical producer script unavailable | `D:\Project\厚粲杯\11_数据\derived\probe_program_version_audit_v1` | protocol/version evidence only; no new number inferred |
 | BEIJING_BEHAVIOR | VALID_SUPPORTING | manifest/report schema only | `D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\formal_behavior_longitudinal_v1` | behavior results with diagnostics/FDR caveat |
 | BEHAVIOR_BASELINE | CANONICAL_BEIJING_REPORT_BASELINE | [aggregate baseline package](../results/final_report_cohort_baseline_v2) | `D:\Project\厚粲杯\11_数据\derived\final_report_cohort_baseline_v2` | current Beijing C+B anchor, 70/46/1400 |
+| CONTEXT | MATCHED_SUPPORTING | [behavior/context baseline report](../results/final_report_cohort_baseline_v2/FINAL_BEHAVIOR_CONTEXT_BASELINE_V2.md) | `D:\Project\厚粲杯\11_数据\derived\final_report_cohort_baseline_v2` | context-only ROC-AUC 0.593; Beijing baseline only |
 | PREPROBE_BEHAVIOR | VALID_SUPPORTING | [Probe-before aggregate package](../results/preprobe_behavior_validity) | `D:\Project\厚粲杯\11_数据\derived\beijing_c2_identity_reuse_event_analysis_v2\formal_behavior_longitudinal_v1` | objective behavior validity |
 | C2B_V2 | VALID_SUPPORTING | canonical candidate contract | `D:\Project\厚粲杯\11_数据\derived\c2b_v2_canonical_baselines_20260826` | mmWave baseline, not final multimodal |
 | Q1_QUESTIONNAIRE | VALID_SUPPORTING | criterion report pointer | `D:\Project\厚粲杯\11_数据\derived\questionnaire_criterion_validity_v1` | questionnaire evidence with criterion limit |
 | M1 | VALID_SUPPORTING | person-effect audit pointer | `D:\Project\厚粲杯\11_数据\derived\m1_mmwave_person_effect_variance_audit_v1` | limitation/diagnostic |
-| D1_HARMONIZATION | VALID_SUPPORTING | cross-site contract pointer | `D:\Project\厚粲杯\11_数据\derived\beijing_zhuhai_canonical_harmonization_v1` | harmonization only |
+| D1_HARMONIZATION | PLANNED_NOT_EXECUTED | cross-site contract pointer; external storage unavailable | `D:\Project\厚粲杯\11_数据\derived\beijing_zhuhai_canonical_harmonization_v1` | no executed cross-site result; future harmonization task |
 | C1_ALIGNMENT | BLOCKED_EXTERNAL_STORAGE | blocker and protocol record | `D:\Project\厚粲杯\11_数据\derived\c1_alignment_protocol_repair_v1` | not usable for HRV claim |
 | C3A_V1/C3A_V2/NIR_69 | ENGINEERING_ONLY | engineering manifests | `D:\Project\厚粲杯\11_数据\01_Attention-Analysis_nvidia-cuda_formal_NIR` | not final NIR increment |
-| NIR_INCREMENT/RGB_INCREMENT/MULTIMODAL_FUSION/CROSS_SITE | PLANNED_GLOBAL_ONLY | no final result | readiness manifests only | cannot enter final report |
+| NIR_INCREMENT | PRODUCER_NOT_READY | 14-participant formal producer report exists; no global final matched-cohort report | `D:\Project\厚粲杯\11_数据\derived\c3a_formal_nir_full_available_results_v2` | producer evidence is not the global final increment |
+| RGB_INCREMENT | PRODUCER_NOT_READY | raw/context engineering only; no formal RGB incremental model | RGB producer status and availability manifests | wait for producer derived-window features/model |
+| MULTIMODAL_FUSION/CROSS_SITE | PLANNED_GLOBAL_ONLY | no final result | readiness manifests only | future work; not a reconciliation failure |
 
 All local paths are external to Git and must be checked on the executing machine.
 
@@ -37,7 +41,7 @@ PNGs remain local-only.
 | RGB current status | ENGINEERING_ONLY | `../results/rgb_current_status_v1/RGB_CURRENT_STATUS_V1.md` | `D:\Project\厚粲杯\08_算法\01_Attention-Analysis_rgb-nvidia` | raw/context merge-ready; derived tracking/QC absent | producer worktree; not merged across repositories |
 | target-lock | CANDIDATE_ONLY | existing target-lock cards and local manifest | `D:\Project\厚粲杯\11_数据\derived\j_mmwave_target_lock_audit_v1` | candidate only; not chest-lock confirmation | existing canonical scripts |
 | behavior/probe | CANONICAL_BEIJING_REPORT_BASELINE | existing baseline package | `D:\Project\厚粲杯\11_数据\derived\final_report_cohort_baseline_v2` | 70 sessions / 46 participants / 1400 probes anchor | existing canonical pipeline |
-| C2C | PENDING_CANONICAL_RERUN | existing C2C card | local within-subject derived boundary | no promotion from old result | `pipelines/mmwave/run_c2c_personalized_mmwave_calibration.py` |
+| C2C | SUPERSEDED_PENDING_CANONICAL_RERUN | existing C2C card; historical local output retained | `D:\Project\厚粲杯\11_数据\derived\c2c_within_subject_normalization_v1` | old local result is provenance only; no promotion before rerun | `pipelines/mmwave/run_c2c_personalized_mmwave_calibration.py` |
 | NIR completed audit | ENGINEERING_ONLY / PRODUCER_REPO_OWNED | existing NIR cards and manifests | `D:\Project\厚粲杯\11_数据\01_Attention-Analysis_nvidia-cuda_formal_NIR` | not a final NIR increment; no cross-repo merge | producer worktree |
 | multimodal LOSO | PLANNED_GLOBAL_ONLY | `docs/canonical/analysis_cards/multimodal_fusion.md` | matched multimodal inputs | final result MISSING; not run in this assimilation | canonical fusion contract |
 

@@ -1,5 +1,18 @@
 # 修改说明
 
+## 2026-08-29 — audit(analysis): close local↔canonical reconciliation gate
+
+### 改动
+
+- 定向收口 P0 protocol、C2C、Context、D1、NIR/RGB increment、multimodal fusion 和 cross-site；
+- 将已有 Context baseline 恢复为 MATCHED，将 C2C 历史结果标记 SUPERSEDED；
+- 将未来任务分为 `PLANNED_NOT_EXECUTED` 与 `PRODUCER_NOT_READY`，不把未执行计划计为对账缺失；
+- 对账结果：43 条视图中 30 条 MATCHED、TRUE_MISSING=0、PATH_STALE=0、RESULT_MISMATCH=0。
+
+### 边界
+
+- 未运行新科学分析、未启动 #15/#16/#17 或 final multimodal LOSO；未修改 NIR/RGB producer 或旧 dirty 工作树。
+
 ## 2026-08-29 — chore(analysis): close unresolved ownership classifications
 
 ### 改动
