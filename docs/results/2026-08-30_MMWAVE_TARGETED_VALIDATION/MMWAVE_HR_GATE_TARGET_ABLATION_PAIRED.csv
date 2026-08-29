@@ -1,0 +1,4 @@
+better_n,common_n,comparison,mean_delta_ae_a_minus_reference_bpm,median_delta_ae_a_minus_reference_bpm,tie_n,worse_n
+98,314,arm1_vs_arm0,-2.638525,0.0,152,64
+188,335,arm2_vs_arm0,-5.815982,-3.511,48,99
+98,314,arm3_vs_arm0,-2.638525,0.0,152,64

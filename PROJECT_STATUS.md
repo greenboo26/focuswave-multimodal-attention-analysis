@@ -161,3 +161,11 @@ producer worktree 仍然保留。
 - 时间语义已闭合但仍有真实采集间隔限制：A 类 event tick Unix ms 到最近 mmWave timestamp 共 3491 条，`|delta|>100 ms` 为 730；它不是相邻帧 gap。B 类相邻 mmWave timestamp 共 459126 条，median 7 ms、p95 20 ms、p99 31 ms、max 6495 ms，>20/50/100/500 ms 分别为 20682/840/457/457；真实 >100 ms 帧间隔因此存在，需与 A 类 730 分开解释。
 - 证据包新增 `MMWAVE_HR_ESTIMATOR_LINEAGE.csv`、`MMWAVE_HR_ESTIMATOR_SAME_WINDOW_COMPARISON.csv`、`MMWAVE_HR_ESTIMATOR_SUMMARY.csv`、`MMWAVE_HR_ESTIMATOR_PAIRWISE_COMPARISON.csv`、`MMWAVE_HR_ESTIMATOR_COMPARISON_REPORT_2026-08-30.md`、`MMWAVE_TIMESTAMP_SEMANTICS_AUDIT_2026-08-30.md`、`MMWAVE_HR_ESTIMATOR_AUDIT_MANIFEST.json` 及脚本 `scripts/maintenance/run_mmwave_estimator_same_window_audit_20260830.py`。完整时间 CSV 保存在 `D:\Project\厚粲杯\11_数据\derived\mmwave_timestamp_semantics_audit_20260830\`，manifest 记录行数和 SHA-256；未修改 producer、firmware、raw、FocusWave acquisition、portable V2、#16、C2B/C2C、HRV 或全量 formal batch。
 
+## 2026-08-30 mmWave gate/target ablation — PARTIAL / GATE_AND_TARGET_BOTH_MATTER
+
+- 在同一 335 个窗口、同一 block-affine ECG 和同一当前 HR estimator 上完成四 arm：ARM0 current block-local；ARM1 current block-local + historical bins 9–40 gate；ARM2 historical 6000-frame fixed target + 当前 20 s estimator；ARM3 gate + current block-local。按用户给出的定义，ARM1 与 ARM3 实际逐窗完全相同，未虚构额外 block-local effect。
+- ARM0 MAE `24.884913`（335/335）；ARM1/ARM3 MAE `21.804185`（314/335，21 个窗口 gate 内无候选）；ARM2 MAE `19.068931`（335/335）。ARM1 vs ARM0 common n=314，mean ΔAE `-2.638525`；ARM2 vs ARM0 common n=335，mean ΔAE `-5.815982`。三个被试和四个 block 的 participant/block MAE 均同方向改善，但 gate arm 有 coverage 损失。
+- ARM0 gate 内 181 窗口 MAE `21.902392`，gate 外 154 窗口 MAE `28.390344`；支持 `PHYSICAL_GATE_MISMATCH` 是贡献因素，但 ARM2 的固定 target 改善更大。因此本轮最终标签为 `GATE_AND_TARGET_BOTH_MATTER`，不是单一距离 gate 结论；trajectory stability 与 HR accuracy 分开记录。
+- 457 个真实 >100 ms adjacent frame intervals 的 overlap audit 中，335/335 个 HR 窗口均至少包含一个长间隔，无法形成无 gap 对照子集；`TIMESTAMP_LONG_INTERVAL_EFFECT=UNRESOLVED`。未删除任何窗口。
+- 未满足 producer change candidate 的证据门槛；current HR producer 继续 `HOLD`。新增 ablation 表、participant/block/stability、gate split、gap split、report、manifest 和脚本均位于 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/` 与 `scripts/maintenance/run_mmwave_gate_target_ablation_20260830.py`。
+

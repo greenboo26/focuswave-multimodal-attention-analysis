@@ -1,0 +1,3 @@
+arm,bias_bpm,coverage_pct,mae_bpm,median_ae_bpm,n,n_gap_windows,pearson_r,rmse_bpm,spearman_r,split
+arm0,-21.265309,100.0,21.902392,24.789,181,181,0.019098,25.359325,-0.018425,inside_historical_gate
+arm0,-28.202773,100.0,28.390344,30.743,154,154,0.046916,30.171203,-0.034118,outside_historical_gate

@@ -550,6 +550,16 @@ Behavior+mmWave 增量已经做过，不重跑：
 
 ---
 
+### 2026-08-30：mmWave gate/target ablation — PARTIAL / GATE_AND_TARGET_BOTH_MATTER
+
+**输入与 arm**：沿用 canonical `main` `21be8b22e4c6460b819f82cc97fe9fb0a4e25bed` 的 335 个 complete formal-block 20 s windows、同一 block-affine ECG 和同一当前 HR estimator。ARM0 为 current block-local；ARM1 为其加历史 bins 9–40 gate；ARM2 为历史 6000-frame fixed target；ARM3 为 gate + current block-local。按文字定义 ARM1/ARM3 逐窗完全相同，未把它们当作独立 block-local 对照。
+
+**结果与决策**：ARM0 MAE `24.884913`（335/335）；ARM1/ARM3 `21.804185`（314/335）；ARM2 `19.068931`（335/335）。ARM1 vs ARM0 mean ΔAE `-2.638525`（common n=314），ARM2 vs ARM0 mean ΔAE `-5.815982`（common n=335）；三名被试及四个 block 的 participant/block MAE 均同方向改善。ARM0 gate 内 MAE `21.902392`，gate 外 `28.390344`。因此选择 `GATE_AND_TARGET_BOTH_MATTER`，但不升级为 producer change candidate，HR 继续 `HOLD`。
+
+**长间隔限制**：457 个真实 >100 ms adjacent frame intervals 全部 overlap 到 335/335 HR windows，无法形成无 gap comparator；`TIMESTAMP_LONG_INTERVAL_EFFECT=UNRESOLVED`，不删除窗口。证据为 `MMWAVE_HR_GATE_TARGET_ABLATION_2026-08-30.csv`、summary/paired/participant/block/stability/gate-split/gap-split、report、manifest 与 `scripts/maintenance/run_mmwave_gate_target_ablation_20260830.py`。
+
+---
+
 ## 14. 维护规则
 
 以后任何实际运行的新分析，只要产生“采用 / 放弃 / 结果无效 / 参考被替代 / 数据语义修复”之一，就必须在同一次交付中更新本账本，至少写：
