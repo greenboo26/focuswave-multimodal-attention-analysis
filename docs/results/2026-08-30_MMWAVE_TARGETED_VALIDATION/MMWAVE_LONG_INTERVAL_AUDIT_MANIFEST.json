@@ -1,7 +1,7 @@
 {
   "status": "PARTIAL / TIMESTAMP_RECORDING_ARTIFACT / GAP_EFFECT_UNRESOLVED",
-  "canonical_main_at_audit": "073c9008b8b8fde3fdb75015f3db7743353a6da4",
-  "canonical_main_remote_at_audit": "1c1d5516ecd43b3a90cb5222e9a64ee15d121eb0\trefs/heads/main",
+  "canonical_main_at_audit": "88c9560243b6d494675b317132ac98d96fec4306",
+  "canonical_main_remote_at_audit": "88c9560243b6d494675b317132ac98d96fec4306\trefs/heads/main",
   "focuswave_ecg_commit": "8e6fe5c5d08f386661bc05aaf9d5c5715a43b317",
   "focuswave_historical_source_commit": "817a7fccb969bcc6e1e0071b387f88e3b3494481",
   "fixed_input": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_targeted_validation_20260830_rerun\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_HR_GATE_TARGET_ABLATION_2026-08-30.csv",
