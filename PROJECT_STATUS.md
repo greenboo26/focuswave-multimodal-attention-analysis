@@ -1,5 +1,13 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+> 当前唯一状态地图：[`docs/00_治理/项目级进度与时空状态地图_20260829.md`](docs/00_治理/项目级进度与时空状态地图_20260829.md)。本文件保留项目历史状态与阶段性记录；新任务先读状态地图，再读本文件和分析历史账本。
+
+## 2026-08-29 B2 毫米波前端证据边界
+
+- B2 已完成 16 个近端、18 个远端和 9 个 reference 的 43-session 只读审查，结论为 `RISK_NOT_SUPPORTED`。
+- 异常距离不得自动解释为近场泄漏、直接泄漏或固定环境反射；本结论不改变 gate、不重跑 HR/BR、不进入 HRV，也不读取 NIR/RGB。
+- 详细范围、分类、限制和证据路径见状态地图及 B2 报告，不在此复制数据或图形。
+
 ## 2026-08-26 Stage 2C governance status
 
 - `main` 是正式默认分支，repository 已更名为 `greenboo26/focuswave-multimodal-attention-analysis`。
