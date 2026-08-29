@@ -16,11 +16,6 @@ from typing import Iterable
 
 INVALID_RECORDS = {
     ("E_Data", "067"),
-    ("Formal_mmwave", "036"),
-    ("Formal_mmwave", "038"),
-    ("Formal_mmwave", "040"),
-    ("Formal_mmwave", "041"),
-    ("Formal_mmwave", "047"),
 }
 REVIEW_RECORDS = {("E_Data", "099")}
 
@@ -77,6 +72,24 @@ def find_mmwave_dir(subject_dir: Path) -> Path:
     if not candidates:
         raise FileNotFoundError(f"未找到毫米波分片目录：{subject_dir}")
     return candidates[0]
+
+
+def validate_mmwave_input(mmwave_dir: Path, timestamp_path: Path) -> None:
+    """Reject placeholders and empty inputs from file facts, not subject IDs."""
+    files = [path for path in mmwave_dir.iterdir() if path.is_file()]
+    if not files:
+        raise ValueError("EMPTY_MMWAVE_DIRECTORY")
+    if timestamp_path.stat().st_size == 0:
+        bin_files = [path for path in files if path.suffix.lower() == ".bin"]
+        if bin_files and all(path.stat().st_size == 32 for path in bin_files):
+            raise ValueError("PLACEHOLDER_BIN_32_BYTES_AND_EMPTY_TIMESTAMPS")
+        raise ValueError("EMPTY_TIMESTAMP_FILE")
+    npz_files = [path for path in files if path.suffix.lower() == ".npz" and "mmwave_datacube" in path.name.lower()]
+    if not npz_files:
+        bin_files = [path for path in files if path.suffix.lower() == ".bin"]
+        if bin_files and all(path.stat().st_size == 32 for path in bin_files):
+            raise ValueError("PLACEHOLDER_BIN_32_BYTES")
+        raise ValueError("NO_ANALYZABLE_MMWAVE_NPZ")
 
 
 def find_timeline_path(subject_dir: Path) -> Path:
@@ -179,15 +192,18 @@ def build_record(root: Path, subject_dir: Path) -> dict:
         "exclusion_reasons": EXCLUSION_REASONS,
     }
     if (tag, subject_id) in INVALID_RECORDS:
-        record.update(status="excluded_invalid", exclusion_note="既有审计确认毫米波文件缺失或空文件")
+        record.update(status="excluded_invalid", exclusion_note="LEGACY_INVALID_RECORD_REGISTRY")
         return record
     if (tag, subject_id) in REVIEW_RECORDS:
         record.update(status="excluded_review", exclusion_note="sub-099 缺少 meta，保持待复核，不进入主队列")
         return record
     try:
-        timeline_path = find_timeline_path(subject_dir)
-        timestamp_path = find_timestamp_path(subject_dir, subject_id)
         mmwave_dir = find_mmwave_dir(subject_dir)
+        if not any(path.is_file() for path in mmwave_dir.iterdir()):
+            raise ValueError("EMPTY_MMWAVE_DIRECTORY")
+        timestamp_path = find_timestamp_path(subject_dir, subject_id)
+        validate_mmwave_input(mmwave_dir, timestamp_path)
+        timeline_path = find_timeline_path(subject_dir)
         baseline, blocks, timestamps = build_segments(timeline_path, timestamp_path)
     except (FileNotFoundError, ValueError) as exc:
         record.update(status="excluded_invalid", exclusion_note=str(exc))

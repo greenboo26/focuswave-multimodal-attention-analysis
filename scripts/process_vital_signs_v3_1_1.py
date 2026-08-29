@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 from pathlib import Path
 from typing import Iterable
 
@@ -27,6 +28,35 @@ HR_TIME_FREQ_WARNING_BPM = 10.0
 HEART_SIGNAL_QC_WINDOW_S = 10.0
 MIN_HEART_WINDOW_STD_MM = 0.0005
 MIN_HEART_CANDIDATE_COVERAGE = 0.50
+
+
+class CandidateSelectionError(RuntimeError):
+    """No finite, quality-eligible channel/range-bin candidate was returned."""
+
+    def __init__(self, reason: str, summaries: list[dict] | None = None):
+        super().__init__(reason)
+        self.reason = reason
+        self.summaries = summaries or []
+
+
+def _strict_json_value(value):
+    """Convert NumPy values and non-finite floats to standard-JSON values."""
+    if isinstance(value, dict):
+        return {str(key): _strict_json_value(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_strict_json_value(item) for item in value]
+    if isinstance(value, np.ndarray):
+        return [_strict_json_value(item) for item in value.tolist()]
+    if isinstance(value, np.generic):
+        return _strict_json_value(value.item())
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    return value
+
+
+def strict_json_dumps(payload: object, **kwargs) -> str:
+    """Serialize only RFC-compliant JSON; NaN and Infinity can never be emitted."""
+    return json.dumps(_strict_json_value(payload), allow_nan=False, **kwargs)
 
 
 def load_radar_timestamps(path: Path) -> tuple[np.ndarray, np.ndarray]:
@@ -276,14 +306,12 @@ def _sos_bandpass(x: np.ndarray, lo_hz: float, hi_hz: float) -> np.ndarray:
 
 
 def _load_vmd():
-    try:
-        from sktime.libs.vmdpy import VMD
+    # The production environment pins the small direct dependency.  Do not
+    # silently switch to sktime's vendored copy because that changes the
+    # dependency surface without changing the requested method.
+    from vmdpy import VMD
 
-        return VMD, "sktime.libs.vmdpy"
-    except Exception:
-        from vmdpy import VMD
-
-        return VMD, "vmdpy"
+    return VMD, "vmdpy"
 
 
 def _heart_mode_score(mode_signal: np.ndarray, freqs: np.ndarray, hr_mask: np.ndarray, hr_freq_hint: float | None):
@@ -1197,28 +1225,52 @@ def select_bins_from_profile(
     iq_fd_sample: np.ndarray,
     n_frames_sample: int,
 ) -> tuple[int, int, list[tuple[int, float, float, float, float, float]]]:
-    bin_power = bin_power_acc[:, best_ch]
+    bin_power = np.asarray(bin_power_acc[:, best_ch], dtype=np.float64)
     freqs = np.fft.rfftfreq(n_frames_sample, d=1 / FS)
 
+    if n_frames_sample < 8 or iq_fd_sample.shape[0] < 8:
+        raise CandidateSelectionError("INSUFFICIENT_SELECTION_FRAMES")
+    if not np.all(np.isfinite(bin_power)):
+        raise CandidateSelectionError("NONFINITE_RANGE_POWER")
+    positive_power = bin_power[bin_power > 0.0]
+    if positive_power.size == 0:
+        raise CandidateSelectionError("EMPTY_OR_ZERO_RANGE_POWER")
+    hr_mask = (freqs >= HR_LO_HZ) & (freqs <= HR_HI_HZ)
+    br_mask = (freqs >= BR_LO_HZ) & (freqs <= BR_HI_HZ)
+    noise_mask = (freqs >= 2.5) & (freqs <= 5.0)
+    if not np.any(hr_mask) or not np.any(br_mask) or not np.any(noise_mask):
+        raise CandidateSelectionError("EMPTY_SPECTRAL_BASELINE")
+
     def build_candidates(require_phi_var: bool) -> list[tuple[int, float, float, float, float, float]]:
-        power_thresh = float(np.max(bin_power)) * 0.01
+        power_thresh = float(np.max(positive_power)) * 0.01
         local_candidates: list[tuple[int, float, float, float, float, float]] = []
         for bin_idx in range(bin_power.shape[0]):
             if bin_power[bin_idx] < power_thresh:
                 continue
             phi = np.unwrap(np.angle(iq_fd_sample[:, bin_idx, best_ch]))
+            if not np.all(np.isfinite(phi)):
+                continue
             phi_var = float(np.var(phi))
+            if not np.isfinite(phi_var):
+                continue
             if require_phi_var and not (0.1 < phi_var < 50):
                 continue
             phi_detrended = signal.detrend(phi, type="linear")
             pxx = np.abs(np.fft.rfft(phi_detrended)) ** 2
-            noise = max(float(np.mean(pxx[(freqs >= 2.5) & (freqs <= 5.0)])), 1e-10)
-            hr_snr = float(np.mean(pxx[(freqs >= HR_LO_HZ) & (freqs <= HR_HI_HZ)]) / noise)
-            br_snr = float(np.mean(pxx[(freqs >= BR_LO_HZ) & (freqs <= BR_HI_HZ)]) / noise)
+            if not np.all(np.isfinite(pxx)):
+                continue
+            noise_raw = float(np.mean(pxx[noise_mask]))
+            if not np.isfinite(noise_raw) or noise_raw < 0.0:
+                continue
+            noise = max(noise_raw, 1e-10)
+            hr_snr = float(np.mean(pxx[hr_mask]) / noise)
+            br_snr = float(np.mean(pxx[br_mask]) / noise)
             phase_stability, _ = _phase_stability_score(phi)
             br_score = float(br_snr * phase_stability)
             # Compress SNR so one large spectral spike cannot overwhelm phase roughness.
             heart_score = float(np.log1p(max(hr_snr, 0.0)) * phase_stability**2)
+            if not all(np.isfinite(value) for value in (hr_snr, br_snr, phase_stability, br_score, heart_score)):
+                continue
             local_candidates.append((int(bin_idx), hr_snr, br_snr, br_score, phase_stability, heart_score))
         return local_candidates
 
@@ -1226,8 +1278,7 @@ def select_bins_from_profile(
     if not candidates:
         candidates = build_candidates(require_phi_var=False)
     if not candidates:
-        top_idx = int(np.argmax(bin_power))
-        candidates = [(top_idx, 0.0, 0.0, 0.0, 0.0, 0.0)]
+        raise CandidateSelectionError("NO_FINITE_CHANNEL_BIN_CANDIDATES")
     br_bin = max(candidates, key=lambda item: item[3])[0]
     hr_bin = max(candidates, key=lambda item: item[5])[0]
     return br_bin, hr_bin, candidates
@@ -1378,15 +1429,26 @@ def select_separate_channels_bins(
     channel_override: int | None = None,
 ) -> tuple[int, int, int, int, list[dict]]:
     summaries: list[dict] = []
+    valid_summaries: list[dict] = []
     channels = [int(channel_override)] if channel_override is not None else list(range(bin_power_acc.shape[1]))
     for ch in channels:
-        br_bin, hr_bin, candidates = select_bins_from_profile(bin_power_acc, ch, iq_fd_sample, n_frames_sample)
+        try:
+            br_bin, hr_bin, candidates = select_bins_from_profile(bin_power_acc, ch, iq_fd_sample, n_frames_sample)
+        except CandidateSelectionError as exc:
+            summaries.append({
+                "channel": ch,
+                "algorithm_returned": False,
+                "quality_valid": False,
+                "selection_status": "rejected",
+                "failure_reason": exc.reason,
+                "n_candidates": 0,
+            })
+            continue
         if not candidates:
             continue
         best_hr = max(candidates, key=lambda item: item[5])
         best_br = max(candidates, key=lambda item: item[3])
-        summaries.append(
-            {
+        summary = {
                 "channel": ch,
                 "breath_bin": int(br_bin),
                 "heart_bin": int(hr_bin),
@@ -1397,12 +1459,26 @@ def select_separate_channels_bins(
                 "best_br_score": float(best_br[3]),
                 "best_br_phase_stability": float(best_br[4]),
                 "n_candidates": int(len(candidates)),
+                "algorithm_returned": True,
+                "quality_valid": True,
+                "selection_status": "eligible_not_selected",
+                "failure_reason": None,
             }
-        )
-    if not summaries:
-        raise RuntimeError("No valid channel/bin candidates were found.")
-    breath_choice = max(summaries, key=lambda item: item["best_br_score"])
-    heart_choice = max(summaries, key=lambda item: item["best_hr_selection_score"])
+        summaries.append(summary)
+        valid_summaries.append(summary)
+    if not valid_summaries:
+        raise CandidateSelectionError("NO_VALID_CHANNEL_BIN_SELECTION", summaries=summaries)
+    breath_choice = max(valid_summaries, key=lambda item: item["best_br_score"])
+    heart_choice = max(valid_summaries, key=lambda item: item["best_hr_selection_score"])
+    for item in valid_summaries:
+        breath_selected = item is breath_choice
+        heart_selected = item is heart_choice
+        if breath_selected and heart_selected:
+            item["selection_status"] = "selected_breath_and_heart"
+        elif breath_selected:
+            item["selection_status"] = "selected_breath"
+        elif heart_selected:
+            item["selection_status"] = "selected_heart"
     return (
         int(breath_choice["channel"]),
         int(breath_choice["breath_bin"]),
@@ -1446,7 +1522,7 @@ def save_result(
 ) -> tuple[Path, Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     json_path = output_dir / f"{result['session']}_mmwave_vital_signs.json"
-    json_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    json_path.write_text(strict_json_dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
 
     t, breath, heartbeat, hp, bp = waveforms
     npz_path = output_dir / f"{result['session']}_mmwave_vital_signs.npz"
@@ -2328,8 +2404,14 @@ def _select_refined_heart_candidate(
 ) -> tuple[int, int, list[dict]]:
     channels = [int(channel_override)] if channel_override is not None else list(range(bin_power_acc.shape[1]))
     candidates_to_eval: list[tuple[int, int, float, float, float]] = []
+    selection_failures: list[dict] = []
     for ch in channels:
-        _br_bin, _hr_bin, candidates = select_bins_from_profile(bin_power_acc, ch, iq_fd_sample, n_frames_sample)
+        try:
+            _br_bin, _hr_bin, candidates = select_bins_from_profile(bin_power_acc, ch, iq_fd_sample, n_frames_sample)
+        except CandidateSelectionError as exc:
+            selection_failures.append({"channel": ch, "algorithm_returned": False, "quality_valid": False,
+                                       "selection_status": "rejected", "failure_reason": exc.reason})
+            continue
         if not candidates:
             continue
         top = sorted(candidates, key=lambda item: item[5], reverse=True)[: max(1, int(top_k_per_channel))]
@@ -2363,17 +2445,22 @@ def _select_refined_heart_candidate(
         evaluations.append(item)
 
     if not evaluations:
-        raise RuntimeError("No refined heart candidates were evaluated.")
+        raise CandidateSelectionError("NO_REFINED_HEART_CANDIDATES_EVALUATED", summaries=selection_failures)
 
     evaluations.sort(key=lambda x: x["score"], reverse=True)
+    for item in evaluations:
+        item.update(algorithm_returned=True, quality_valid=bool(item.get("signal_hard_gate_passed", False)),
+                    selection_status="eligible_not_selected", failure_reason=None)
     passing = [item for item in evaluations if item.get("signal_hard_gate_passed", False)]
     if not passing:
-        raise RuntimeError(
-            "All heart candidates failed the 10-second signal-strength hard gate "
-            f"(minimum std {MIN_HEART_WINDOW_STD_MM} mm, minimum coverage {MIN_HEART_CANDIDATE_COVERAGE:.0%})."
-        )
+        for item in evaluations:
+            item.update(quality_valid=False, selection_status="rejected",
+                        failure_reason="HEART_SIGNAL_STRENGTH_HARD_GATE_FAILED")
+        raise CandidateSelectionError("ALL_HEART_CANDIDATES_FAILED_SIGNAL_GATE",
+                                      summaries=evaluations + selection_failures)
     best = passing[0]
-    return int(best["channel"]), int(best["heart_bin"]), evaluations
+    best["selection_status"] = "selected"
+    return int(best["channel"]), int(best["heart_bin"]), evaluations + selection_failures
 
 
 def _analyze_displacement_v23(
@@ -3020,6 +3107,11 @@ def analyze_long_record(
         kwargs["heart_reference_candidates"] = heart_reference_candidates
 
     result, waveforms = runner(**kwargs)
+    forced_selection = forced_heart_ch is not None and forced_heart_bin is not None
+    result["algorithm_returned"] = True
+    result["quality_valid"] = not forced_selection
+    result["selection_status"] = "forced_candidate_unvalidated" if forced_selection else "selected"
+    result["failure_reason"] = None if not forced_selection else "FORCED_HEART_CANDIDATE_REQUIRES_EXTERNAL_JUSTIFICATION"
     result["version"] = "v3.1.1"
     result["pipeline"] = "v3.1.1_phase_stable_bins_k3_breath_guided_vmd_guarded_hr_fusion"
     result["parent_version"] = "v3.1"
@@ -3034,7 +3126,7 @@ def analyze_long_record(
             "window_s": HEART_SIGNAL_QC_WINDOW_S,
             "min_std_mm": MIN_HEART_WINDOW_STD_MM,
             "candidate_min_usable_ratio": MIN_HEART_CANDIDATE_COVERAGE,
-            "rejected_output": "NaN",
+            "rejected_output": "null_with_explicit_status",
         },
     }
     result["usable_dataset_scope"] = ["sub-deep-breath", "sub-rest_3min", "sxq"]
