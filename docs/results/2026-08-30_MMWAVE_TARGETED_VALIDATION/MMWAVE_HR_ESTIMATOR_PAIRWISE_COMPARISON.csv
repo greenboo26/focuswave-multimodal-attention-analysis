@@ -1,0 +1,7 @@
+﻿common_ecg_window_n,mae_method_a_bpm,mae_method_b_bpm,mean_abs_error_delta_a_minus_b_bpm,median_abs_error_delta_a_minus_b_bpm,method_a,method_a_better_n,method_b,method_b_better_n,tie_n
+0,,,,,historical_original_hr_bpm,0,historical_20s_adapt_hr_bpm,0,0
+0,,,,,historical_original_hr_bpm,0,current_independent_hr_bpm,0,0
+0,,,,,historical_original_hr_bpm,0,current_block_local_hr_bpm,0,0
+335,14.748328,25.958119,-11.209791,-11.898,historical_20s_adapt_hr_bpm,242,current_independent_hr_bpm,93,0
+335,14.748328,24.884913,-10.136585,-9.865,historical_20s_adapt_hr_bpm,231,current_block_local_hr_bpm,104,0
+335,25.958119,24.884913,1.073206,0.0,current_independent_hr_bpm,73,current_block_local_hr_bpm,99,163

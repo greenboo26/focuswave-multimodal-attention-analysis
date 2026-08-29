@@ -538,6 +538,18 @@ Behavior+mmWave 增量已经做过，不重跑：
 
 ---
 
+### 2026-08-30：mmWave estimator lineage、same-window replay 与 timestamp semantics audit — PARTIAL
+
+**输入与历史链**：canonical `main` `64634159d226ee1ed892d53e56fcf3697fbff9b8`；固定输入为 335 个 complete formal-block、20 s 窗口及既有 block-affine ECG HR。历史 `3.7772146 bpm` 已绑定到 `run_hr_course_99_corrected.py → process_vital_signs_v3_1_1.py`：6000-frame fixed target selection、`0.037 m/bin`、`0.30–1.50 m` bins 9–40、`bp_heart`、0.8–2.0 Hz、60 s historical probe、5 sessions/99 valid windows。master legacy、calibration 和 reanalysis utilities 已加入 lineage inventory，并标注不是该数值的 producer。
+
+**同窗结果**：strict 60 s historical arm 对当前 20 s rows 为 `NOT_APPLICABLE_TO_20S`；20 s minimal adaptation MAE `14.748328`，current independent `25.958119`，current block-local `24.884913`，均 335/335；current 两个重算 arm 与冻结旧行 335/335 exact、最大差 0。Pairwise 同分母中 adaptation 相对 independent 在 242/335 窗口更好、相对 block-local 在 231/335 更好；independent 与 block-local 的绝对误差平均差为 `1.073206 bpm`，163/335 tie。历史 adaptation 不能回溯等价成历史原始 60 s 结果，故不判定 current regression 或 historical pipeline 已在当前窗口成立。
+
+**target 与时间结论**：历史 9–40 gate 与当前 selector 不等价；bin+channel exact 仅 4/335（independent）和 4/335（block-local），落在历史 gate 外分别 186/335、154/335。A 类 event tick→nearest mmWave residual 为 3491 条、>100 ms 为 730；B 类相邻 frame interval 共 459126 条，median/p95/p99/max 为 7/20/31/6495 ms，>20/>50/>100/>500 ms 为 20682/840/457/457。730 不得再称为 frame gap；B 的 457 条才是实际 >100 ms 相邻间隔证据。
+
+**决策与证据**：整体状态 `PARTIAL / TIMESTAMP_SEMANTICS_CLASSIFIED`；HR 保持 `HOLD`，不运行 HRV 新算法、#16、C2B/C2C 或全量 formal batch，不修改 producer、firmware、raw、FocusWave acquisition 或 portable V2。证据文件为 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_HR_ESTIMATOR_LINEAGE.csv`、`MMWAVE_HR_ESTIMATOR_SAME_WINDOW_COMPARISON.csv`、`MMWAVE_HR_ESTIMATOR_SUMMARY.csv`、`MMWAVE_HR_ESTIMATOR_PAIRWISE_COMPARISON.csv`、两个 markdown report、manifest 和 `scripts/maintenance/run_mmwave_estimator_same_window_audit_20260830.py`；完整 timestamp CSV 位于 `D:\Project\厚粲杯\11_数据\derived\mmwave_timestamp_semantics_audit_20260830\`，manifest 记录 hash。
+
+---
+
 ## 14. 维护规则
 
 以后任何实际运行的新分析，只要产生“采用 / 放弃 / 结果无效 / 参考被替代 / 数据语义修复”之一，就必须在同一次交付中更新本账本，至少写：

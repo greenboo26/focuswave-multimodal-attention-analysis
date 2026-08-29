@@ -1,0 +1,5 @@
+﻿all_available_n,all_available_pct_of_335,bias_estimator_minus_ecg_bpm_all_available,mae_bpm_all_available,median_ae_bpm_all_available,method,pairwise_common_window_n_all_methods,pearson_r_all_available,rmse_bpm_all_available,spearman_r_all_available
+0,0.0,,,,historical_original_hr_bpm,0,,,
+335,100.0,-12.794734,14.748328,14.348,historical_20s_adapt_hr_bpm,0,0.255126,18.551216,0.243843
+335,100.0,-25.664322,25.958119,28.84,current_independent_hr_bpm,0,0.016323,28.390694,-0.013683
+335,100.0,-24.454472,24.884913,27.87,current_block_local_hr_bpm,0,0.008856,27.675448,-0.063346
