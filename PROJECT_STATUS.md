@@ -133,7 +133,7 @@ producer worktree 仍然保留。
 - Frozen portable-V2 contract: HR and BR/RR `HOLD`; HRV/IBI `EXCLUDE`; continuity/phase/motion fields `HOLD` as diagnostic QC only; missing/loadability `ALLOW` as structural metadata. HRV remains blocked at radar beat–ECG R-peak synchronization and paired IBI agreement.
 - Evidence package: `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`. Issue #16 remains `PAUSED`; portable V2 was read-only and unchanged.
 
-## 2026-08-30 targeted mmWave validation rerun — PARTIAL / block-reset + ECG alignment contract
+## 2026-08-30 targeted mmWave validation rerun — PROVISIONAL / REFERENCE_PIPELINE_AUDIT_PENDING
 
 - 按 `docs/research/MMWAVE_BLOCK_RESET_AND_ECG_ALIGNMENT_CONTRACT_2026-08-30.md`，并核对 `kyandi233-dev/FocusWave@ecg` commit `8e6fe5c5d08f386661bc05aaf9d5c5715a43b317` 后重做 `97793`、`9779`、`97795`；8 个完整 block、335 个窗口、327 个同 block 相邻 transition。每个 block 起始均重置 target/bin/channel state；跨 rest、坐姿调整和 block 边界的 transition 未计入。
 - 旧版 12 个 transition 已逐项重分类：12/12 属于每场起始前 6000 frames 的 baseline/pre-block，0 个属于完整 formal block，0 个跨 rest/block；旧 12/12 不再作为 continuity failure 证据。
@@ -142,4 +142,13 @@ producer worktree 仍然保留。
 - mmWave tick 审计发现 730 个 `|nearest delta| > 100 ms` 的 timestamp gap；排除这些 gap 后 affine-fit residual p95 中位数为 6.133 ms，但本轮不将其表述为双机同步已通过。该 gap/marker 限制是本轮 PARTIAL 的主要 blocker。
 - 本轮 HR/BR 仅使用现有 producer 的 bandpass + periodogram/peak 定义作 bounded diagnostic estimator；未运行 VMD、HRV 新算法、Issue #16、C2B/C2C 或全量 formal batch，未修改 producer、portable V2、实验程序或原始数据。
 - 新版证据包：`docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`，包括 block-local continuity table、mmWave↔ECG same-window comparison、alignment audit、legacy 12-transition audit、manifest 和报告。旧版同目录结果保留为历史文件，不再作为当前结论。
+
+## 2026-08-30 historical ECG reference-chain audit — PARTIAL / CURRENT_MMWAVE_COMPARISON_QUALIFIED
+
+- 已完成历史 ECG/BIOPAC 链审计：盘点 canonical `master`、当前 `main`、mmWave reanalysis、`kyandi233-dev/FocusWave@ecg`，并确认 `Attention-Analysis@nvidia-cuda` 未发现相关 ECG/BIOPAC/mmWave reference script；`Attention-Analysis@codex/formal-analysis-v2-portable` 未修改。
+- 历史最佳 HR 数值 `3.7772146 bpm` 已绑定到 5-session、100-row/99-valid、60 s probe 的 corrected-distance calibration；其 ECG 参考链是 `scripts/analyze_acq_reference.py` 的 metadata-zero 规则，毫米波端同时改变了 `0.08 m/bin` 到 `0.037 m/bin` 的 gate。因此该数字保留为历史 corrected calibration，不迁移为当前 3-session/20 s block 结果。
+- 固定当前毫米波 `local_hr_freq_bpm` 后重放 335 个同窗：historical ECG `24.912767 bpm`、current block-marker-affine ECG `24.880549 bpm`、minimal-difference `24.912767 bpm`。255/335 个 ECG HR 数值发生变化，但中位绝对变化 `0.15 bpm`、最大 `3.30 bpm`；alignment 不能解释约 24.9 bpm 的当前毫米波误差。
+- 因而当前 targeted HR MAE 仅取得 `CURRENT_MMWAVE_COMPARISON_QUALIFIED`：它是同一固定毫米波输出下的 20 s block-local diagnostic comparison，不是 formal HR validity；HR/BR 继续 `HOLD`，HRV 继续 `BLOCKED`。
+- `97795` 的目录与通道/采样长度/marker 结构一致，但实际 `.acq` 文件名为 `97995.acq`；未重命名、复制或替换原始文件，故保留为 provenance limitation。mmWave timestamp gaps 与历史/当前毫米波估计器差异仍阻止统一 cross-era MAE 或 `PASS`。
+- 新增证据：`docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/ECG_SCRIPT_LINEAGE.csv`、`ECG_HISTORICAL_RESULT_PROVENANCE.csv`、`ECG_REFERENCE_PIPELINE_COMPARISON.csv`、`ECG_REFERENCE_PIPELINE_SUMMARY.csv`、`ECG_REFERENCE_AUDIT_REPORT_2026-08-30.md`、`ECG_REFERENCE_AUDIT_MANIFEST.json` 及审计脚本 `scripts/maintenance/audit_historical_ecg_reference_chain_20260830.py`。
 

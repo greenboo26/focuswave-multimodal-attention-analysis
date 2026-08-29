@@ -4,7 +4,7 @@
 >
 > 目的不是替代当前科学结论，而是回答四个问题：**以前做过什么、什么时候做的、结果怎样、为什么采用/放弃。** 只有能够说明“新证据、新输入语义、新参考标准或新研究问题与旧实验有什么实质差别”时，才允许重复已有路线。
 
-更新时间：2026-08-28（Asia/Shanghai）
+更新时间：2026-08-30（Asia/Shanghai）
 
 ---
 
@@ -450,6 +450,22 @@ Behavior+mmWave 增量已经做过，不重跑：
 **决策**：旧 12/12 不再作为 continuity failure 证据；当前 block-local continuity 只能作诊断性证据。HR、BR/RR 保持 `HOLD`，HRV 保持 `BLOCKED`；Issue #16、C2B/C2C、VMD/新 HRV 和全量 formal batch 不运行。以后若重做，必须先解决 tick gap 的来源/语义和单点 marker mismatch，并继续使用 block-local reset + marker-aligned contract。
 
 **证据包**：`docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/` 的 `MMWAVE_TARGETED_VALIDATION_REPORT_2026-08-30.md`、`target_continuity_block_local.csv`、`mmwave_ecg_block_window_comparison.csv`、`ecg_alignment_audit.csv`、`legacy_12_transition_audit.csv`、`target_continuity_summary.json`、`ecg_alignment_summary.json`、`run_manifest.json`；脚本 `scripts/maintenance/run_mmwave_targeted_validation_20260830.py`。
+
+---
+
+### 2026-08-30：历史 ECG 参考链审计与固定毫米波重放 — PARTIAL
+
+**为什么需要补审计**：targeted rerun 得到的 `24.885 bpm` 与历史 `3.777/4.590 bpm` 使用了不同 cohort、window 和毫米波端口径；在没有把旧 ECG 脚本、marker/offset、R-peak 规则和结果 provenance 分开之前，不能判断差异来自 ECG 参考还是毫米波/窗口变化。因此在审计完成前，当前 targeted 数值暂标为 `PROVISIONAL / REFERENCE_PIPELINE_AUDIT_PENDING`。
+
+**输入与来源**：canonical `main` 已核验为 `472735b6b6af5f98e92ab7815718e81863cb6098`；历史 `master` 为 `96525b19422b34291e4d87747fef214d1fec60d7`；FocusWave `ecg` 为 `8e6fe5c5d08f386661bc05aaf9d5c5715a43b317`；mmWave reanalysis reference 为 `d87229afe071f23450728a6d617ec82317e6c9df`。已盘点 `analyze_acq_reference.py`、`gold_standard_qa.py`、`validate_gold_anchor.py`、旧 calibration 脚本、`ecg_reference_v1.py` 和 FocusWave marker 源；`Attention-Analysis@nvidia-cuda` 未找到相关 ECG/BIOPAC/mmWave reference script。
+
+**历史结果**：`4.5901918 bpm` 是 5 sessions / 100 rows / 99 valid HR-course windows 的旧 `0.08 m/bin` gate reproduction；`3.7772146 bpm` 是相同 99 valid windows、同一历史 ECG 参考链下，仅将毫米波距离口径改为 `0.037 m/bin` 的 corrected-gate estimate。另有 goldclean re-pair `5.023715 bpm`。这些结果均为 60 s calibration/probe 口径，不能直接替代当前 3-session、20 s block-local targeted comparison。
+
+**固定重放**：对 `97793`、`9779`、`97795` 的 335 个当前 block windows 固定既有 `local_hr_freq_bpm` 毫米波值，分别使用 historical metadata-zero ECG、current per-block marker-affine ECG 和 minimal-difference arm。结果为 `24.912767`、`24.880549`、`24.912767 bpm`；255/335 个窗口 ECG HR 有数值变化，但中位绝对变化 `0.15 bpm`、最大 `3.30 bpm`。因此当前约 24.9 bpm 误差不能归因于 ECG alignment；主要差异仍在当前毫米波估计器、cohort/window 和历史距离门不等价。
+
+**决策**：历史 ECG 链已达到脚本/commit/参数/结果层面的可追溯；当前 targeted comparison 从 provisional 提升为 `QUALIFIED_FOR_THIS_FIXED_COMPARISON`，但整体状态仍 `PARTIAL`。HR/BR/RR 继续 `HOLD`，HRV 继续 `BLOCKED`。`97795` 的 `97995.acq` 文件名差异保留为 provenance limitation；mmWave timestamp gaps 与历史/当前毫米波估计器差异仍阻止统一 cross-era MAE 和 PASS。
+
+**证据包**：同一结果目录新增 `ECG_SCRIPT_LINEAGE.csv`、`ECG_HISTORICAL_RESULT_PROVENANCE.csv`、`ECG_REFERENCE_PIPELINE_COMPARISON.csv`、`ECG_REFERENCE_PIPELINE_SUMMARY.csv`、`ECG_REFERENCE_AUDIT_REPORT_2026-08-30.md`、`ECG_REFERENCE_AUDIT_MANIFEST.json`；执行入口为 `scripts/maintenance/audit_historical_ecg_reference_chain_20260830.py`。原始 `.acq`/NPZ、实验程序、producer、portable V2 和 Attention-Analysis portable V2 均未改动。
 
 ---
 

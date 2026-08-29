@@ -1,0 +1,4 @@
+﻿bias_mmwave_minus_ecg_bpm,mae_bpm,median_abs_error_bpm,n,pipeline
+-24.449681,24.912767,27.8,335,historical
+-24.447158,24.880549,27.917,335,current
+-24.449681,24.912767,27.8,335,minimal_difference

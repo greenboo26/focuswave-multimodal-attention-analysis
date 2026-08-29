@@ -1,0 +1,4 @@
+﻿acq_file,acq_filename_verdict,acq_fs_hz,acq_samples,acq_start_ms_metadata,block_count_complete,ecg_channel,ecg_fit_p95_ms_max,marker_channel,mmwave_tick_gap_n_abs_over_100ms,subject
+D:\acq_mmwave_data\sub-97793_\97793.acq,subject_basename_match,2000.0,3350154,1786869685764,2,"ECG, X, RSPEC-R",2.666327,Digital (STP Input 0..7),233,97793
+D:\acq_mmwave_data\sub-9779_\9779.acq,subject_basename_match,2000.0,3233138,1786864618241,2,"ECG, X, RSPEC-R",2.243542,Digital (STP Input 0..7),249,9779
+D:\acq_mmwave_data\sub-97795_\97995.acq,directory_subject_matches_basename_typo,2000.0,3051259,1786886138056,4,"ECG, X, RSPEC-R",2.952014,Digital (STP Input 0..7),248,97795

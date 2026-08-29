@@ -1,0 +1,159 @@
+{
+  "status": "PARTIAL / HISTORICAL_ECG_CHAIN_AUDITED_CURRENT_MMWAVE_COMPARISON_QUALIFIED",
+  "canonical_main_commit_verified": "472735b6b6af5f98e92ab7815718e81863cb6098",
+  "acquisition_repo": "kyandi233-dev/FocusWave",
+  "acquisition_branch": "ecg",
+  "acquisition_commit": "8e6fe5c5d08f386661bc05aaf9d5c5715a43b317",
+  "analysis_set": [
+    "97793",
+    "9779",
+    "97795"
+  ],
+  "fixed_mmwave_input": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_targeted_validation_20260830_rerun\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\mmwave_ecg_block_window_comparison.csv",
+  "fixed_mmwave_input_sha256": "06370f49681854a9dee6cb7ed3b524f4ab3aef7c59dc64a57e9c22c8988b4033",
+  "fixed_mmwave_field": "local_hr_freq_bpm",
+  "replay_rows": 335,
+  "replay_summary": [
+    {
+      "pipeline": "historical",
+      "n": 335,
+      "mae_bpm": 24.912767,
+      "median_abs_error_bpm": 27.8,
+      "bias_mmwave_minus_ecg_bpm": -24.449681
+    },
+    {
+      "pipeline": "current",
+      "n": 335,
+      "mae_bpm": 24.880549,
+      "median_abs_error_bpm": 27.917,
+      "bias_mmwave_minus_ecg_bpm": -24.447158
+    },
+    {
+      "pipeline": "minimal_difference",
+      "n": 335,
+      "mae_bpm": 24.912767,
+      "median_abs_error_bpm": 27.8,
+      "bias_mmwave_minus_ecg_bpm": -24.449681
+    }
+  ],
+  "comparison_diagnostics": {
+    "n": 335,
+    "changed_n": 255,
+    "unchanged_n": 80,
+    "mean_delta_current_minus_old_bpm": -0.002522,
+    "median_abs_delta_bpm": 0.15,
+    "max_abs_delta_bpm": 3.3,
+    "by_subject": {
+      "9779": {
+        "n": 112,
+        "changed_n": 94,
+        "mean_delta_current_minus_old_bpm": -0.037911,
+        "median_abs_delta_bpm": 0.2,
+        "max_abs_delta_bpm": 2.392
+      },
+      "97793": {
+        "n": 111,
+        "changed_n": 96,
+        "mean_delta_current_minus_old_bpm": 0.049297,
+        "median_abs_delta_bpm": 0.223,
+        "max_abs_delta_bpm": 3.3
+      },
+      "97795": {
+        "n": 112,
+        "changed_n": 65,
+        "mean_delta_current_minus_old_bpm": -0.018491,
+        "median_abs_delta_bpm": 0.0355,
+        "max_abs_delta_bpm": 1.793
+      }
+    }
+  },
+  "old_alignment": "acq earliest_marker_created_at metadata zero",
+  "current_alignment": "per-block events.csv marker to physical BIOPAC digital pulse affine fit",
+  "excluded": [
+    "Issue #16",
+    "C2B",
+    "C2C",
+    "new HRV algorithm",
+    "full formal batch",
+    "producer modification",
+    "portable V2 modification",
+    "Attention-Analysis codex/formal-analysis-v2-portable modification",
+    "raw data modification"
+  ],
+  "historical_result_provenance": [
+    {
+      "result_id": "historical_old_gate",
+      "artifact": "D:\\Project\\厚粲杯\\08_算法\\output\\20_生理金标准验证\\01_历史严格参照_v20260821",
+      "cohort": "5 sessions: 97793,97794,97795,97796,9779",
+      "windows": "100 rows / 99 valid HR-course",
+      "window_rule": "60 s behavior-gated probe window",
+      "ecg_reference": "analyze_acq_reference.py; metadata acq zero; 4th-order 5-35 Hz adaptive peaks",
+      "mmwave_side": "05_毫米波参照_FAST; bp_heart; 0.08 m/bin",
+      "hr_mae_bpm": 4.5901917738,
+      "status": "historical reproduced",
+      "comparability_to_current": "not comparable: cohort/window/mmWave gate differ"
+    },
+    {
+      "result_id": "historical_corrected_gate",
+      "artifact": "D:\\Project\\厚粲杯\\08_算法\\output\\20_生理金标准验证\\07_HR_COURSE_99_CORRECTED_GATE_AUDIT",
+      "cohort": "same 5 sessions",
+      "windows": "same 100 rows / 99 valid HR-course",
+      "window_rule": "same 60 s probe keys",
+      "ecg_reference": "same historical ECG reference chain",
+      "mmwave_side": "06_HR_COURSE_99_CORRECTED_GATE; bp_heart; 0.037 m/bin physical gate 0.30-1.50 m",
+      "hr_mae_bpm": 3.7772146,
+      "status": "corrected-gate historical estimate",
+      "comparability_to_current": "not comparable: mmWave target/gate and cohort/window differ"
+    },
+    {
+      "result_id": "goldclean_reaudit",
+      "artifact": "D:\\Project\\厚粲杯\\11_数据\\derived\\ecg_rsp_goldclean_pairing_v1",
+      "cohort": "source 5-session pairing",
+      "windows": "100 exact source windows",
+      "window_rule": "re-paired existing source windows",
+      "ecg_reference": "re-cleaned ECG/RSP; no mmWave rerun",
+      "mmwave_side": "existing strict output",
+      "hr_mae_bpm": 5.023715,
+      "status": "historical re-pairing",
+      "comparability_to_current": "not comparable: 60 s source windows"
+    },
+    {
+      "result_id": "current_targeted_block_local",
+      "artifact": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_targeted_validation_20260830_rerun\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION",
+      "cohort": "97793,9779,97795",
+      "windows": "335 windows / 327 within-block transitions",
+      "window_rule": "20 s, 10 s step, 5 s guard, complete formal blocks only",
+      "ecg_reference": "current rerun detector with per-block marker-affine mapping",
+      "mmwave_side": "existing producer estimator; block-local target selection",
+      "hr_mae_bpm": 24.885,
+      "status": "provisional pending historical ECG audit; remains qualified after audit",
+      "comparability_to_current": "same targeted run; not comparable to 99-window calibration"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "ECG_SCRIPT_LINEAGE.csv",
+      "sha256": "d001614f6d70f0b95e6a00c2cc3afae1558155ed3afb0b8b46cf0cbd6b1aa09e"
+    },
+    {
+      "path": "ECG_HISTORICAL_RESULT_PROVENANCE.csv",
+      "sha256": "8c1d9ee681df8032b0fdb549e4b186ee9c3509f0095595a96fc54976eb3ea5ad"
+    },
+    {
+      "path": "ECG_REFERENCE_PIPELINE_COMPARISON.csv",
+      "sha256": "e31aabaa0699a2357a2991c11f76548b2eb843ab0d34408e212c3a9ef551bd0a"
+    },
+    {
+      "path": "ECG_REFERENCE_PIPELINE_SUMMARY.csv",
+      "sha256": "c7ea8b3f99b0372c4b2d6c3f7728c8d47fdc322b75669c150e4a5726fcf04924"
+    },
+    {
+      "path": "ECG_REFERENCE_ALIGNMENT_AUDIT.csv",
+      "sha256": "fd664eb6e075cf71a9452d8222d588f1ea7eaff70ff597688890a626ad21b020"
+    },
+    {
+      "path": "ECG_REFERENCE_AUDIT_REPORT_2026-08-30.md",
+      "sha256": "a7e72f2f81c96bae2102f1a0adc228beb6cd833eb9d1048b409cf6253903e7a8"
+    }
+  ]
+}
