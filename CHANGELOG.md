@@ -1,5 +1,18 @@
 # 修改说明
 
+## 2026-08-30 — audit(multimodal): attach current mother table and freeze probe merge contract
+
+### 改动
+
+- Reused the current 179-session / 112-repeat mother table and explicit 72-session J mapping evidence; generated a current 1,440-probe formal timeline with frozen `pre_30s` semantics.
+- Recorded local-only behavior/NIR/RGB merge-ready tables, coverage/missingness, source-output schema/QC index, and a 1,295-row fully matched candidate. Existing NIR/RGB producers were not rerun and no model was trained.
+- Added the Git-safe aggregate evidence package under `docs/results/2026-08-30_FORMAL_MULTIMODAL_ATTACH/`.
+
+### 验证与边界
+
+- Portable V2 validator at pinned commit `21c7da4fe2e03d853f0b6391d580334526f86ce3` passed the five-column probe key for Behavior/NIR/RGB; both outer and inner merges returned 1,440 rows.
+- Overall status remains `PARTIAL`: NIR observed 1,295/1,440 probe rows, RGB observed 1,420/1,440; missing rows remain explicit. No raw/large producer artifact or row-level table was uploaded.
+
 ## 2026-08-30 — audit(mmwave): execute ordered next gate; keep #16 paused
 
 ### 改动

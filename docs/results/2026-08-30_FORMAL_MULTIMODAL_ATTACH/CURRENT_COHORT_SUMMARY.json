@@ -1,0 +1,56 @@
+{
+  "status": "PARTIAL",
+  "analysis_date": "2026-08-30",
+  "mother_table": {
+    "path": "D:\\Project\\厚粲杯\\11_数据\\derived\\analysis_tables_v1\\subject_session_master.csv",
+    "sessions": 179,
+    "repeat_participants": 112
+  },
+  "current_explicit_mapping": {
+    "evidence_path": "D:\\Project\\厚粲杯\\11_数据\\derived\\analysis_tables_v2\\subject_session_master_v2.csv",
+    "sessions": 72,
+    "repeat_participants": 46,
+    "mapping": "single_experiment_id -> separately retained session_id from explicit j_source_folder evidence"
+  },
+  "canonical_probe_timeline": {
+    "rows": 1440,
+    "window_name": "pre_30s",
+    "window_interval": "[probe_onset_unix_ms-30000, probe_onset_unix_ms)",
+    "key": ["repeat_participant_id", "session_id", "block_id", "probe_id", "window_name"],
+    "time_source": "formal behavior master_timeline real unix_ms"
+  },
+  "coverage": {
+    "behavior_observed_rows": 1440,
+    "nir_observed_rows": 1295,
+    "rgb_observed_rows": 1420,
+    "fully_matched_candidate_rows": 1295
+  },
+  "producer_evidence": {
+    "nir": {
+      "root": "D:\\Project\\厚粲杯\\11_数据\\01_Attention-Analysis_nvidia-cuda_formal_NIR\\ritnet-fullclass-final",
+      "complete_sessions": "65/65",
+      "eye_metrics_schema_version": 6,
+      "aggregate_eye_metric_rows": 5068255,
+      "aggregate_frame_coverage_rows": 2620967,
+      "time_semantics": "real unix_ms",
+      "primary_metric_boundary": "fullclass pupil geometry; no PIR"
+    },
+    "rgb": {
+      "root": "D:\\Project\\厚粲杯\\11_数据\\04_Attention-Analysis_nvidia-cuda_RGB",
+      "existing_selected_subjects": 71,
+      "existing_complete_or_skipped": 71,
+      "current_window_observed_rows": 1420,
+      "current_missing_session": "sub-099",
+      "perclos": "not emitted; blink field remains provisional candidate"
+    }
+  },
+  "mmwave": {
+    "role": "reserve_interface_only",
+    "hr_br_rr": "HOLD",
+    "hrv_ibi": "EXCLUDE",
+    "continuity_phase_motion": "diagnostic HOLD",
+    "missing_loadability": "structural ALLOW"
+  },
+  "models_trained": false,
+  "raw_or_large_files_uploaded": false
+}

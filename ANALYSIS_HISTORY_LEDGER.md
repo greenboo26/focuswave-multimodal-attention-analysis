@@ -10,6 +10,14 @@
 
 ## 1. 本账本的证据规则
 
+### 2026-08-30：正式多模态母表 attach 与 V2 merge-ready 结构审计
+
+**来源**：`docs/results/2026-08-30_FORMAL_MULTIMODAL_ATTACH/`
+
+- 复用当前身份母表，不重跑 NIR/RGB producer，不建模；以显式 `j_source_folder` 证据将 72 个当前 J 会话映射到母表，保留 `single_experiment_id` 与 `session_id` 两个字段。
+- 从当前正式行为事件恢复 1,440 个 probe，冻结 `pre_30s` 真实 `unix_ms` 窗口和五列 probe key；行为/NIR/RGB 三表均通过 portable V2 非空/唯一键审计，结构性 outer/inner merge 均为 1,440 行。
+- 这不是科学特征完整性或模型就绪 PASS：NIR 有 145 行缺失窗口观测，RGB 有 20 行缺失 raw 观测；RGB PERCLOS 未生成，mmWave 仍为 reserve interface。
+
 本文件重建自 GitHub 上四个与采集、producer、行为/生理分析、正式结果直接相关的仓库：
 
 1. **中央科学与最终解释**：`greenboo26/focuswave-multimodal-attention-analysis@main`
