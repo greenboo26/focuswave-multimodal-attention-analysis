@@ -44,3 +44,13 @@ PNGs remain local-only.
 Explicitly MISSING at this checkpoint: full-cohort ECG/RSP vital validation,
 C1 full-cohort HRV validation, RGB derived-window features, and final
 multimodal LOSO results.
+
+## unresolved closure
+
+The prior unresolved set is fully classified in
+`../repository/LOCAL_ANALYSIS_ASSIMILATION_2026-08-29.md`: 5
+`KEEP_IN_MAIN`, 5 `PRODUCER_REPO_OWNED`, 1 `SUPERSEDED`, 4 `HISTORICAL`,
+7 `GENERATED_ONLY`, 0 `SAFE_TO_REMOVE`, and 0
+`BLOCKED_BY_RUNNING_TASK`. No unresolved current result remains in this
+index. Dirty old branches and producer worktrees remain protected from
+deletion; their status is not a claim of canonical scientific validity.

@@ -15,6 +15,14 @@
 收编逐项链路见 `docs/repository/LOCAL_ANALYSIS_ASSIMILATION_2026-08-29.md`，结果索引见
 `docs/canonical/RESULT_INDEX_V1.md`。
 
+## 2026-08-29 unresolved closure
+
+已关闭上一阶段 22 个 unresolved 处理单元：5 个 `KEEP_IN_MAIN`、5 个
+`PRODUCER_REPO_OWNED`、1 个 `SUPERSEDED`、4 个 `HISTORICAL`、7 个
+`GENERATED_ONLY`；`SAFE_TO_REMOVE` 和 `BLOCKED_BY_RUNNING_TASK` 均为 0，
+剩余 `UNRESOLVED` 为 0。这里是归类关闭，不是删除授权；旧 dirty 分支和
+producer worktree 仍然保留。
+
 ## 2026-08-26 Stage 2C governance status
 
 - `main` 是正式默认分支，repository 已更名为 `greenboo26/focuswave-multimodal-attention-analysis`。

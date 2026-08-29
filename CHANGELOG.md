@@ -1,5 +1,20 @@
 # 修改说明
 
+## 2026-08-29 — chore(analysis): close unresolved ownership classifications
+
+### 改动
+
+- 关闭 22 个 unresolved 处理单元：central 入口、历史归档、生成结果、
+  NIR/RGB producer 资产和 superseded 结果均已明确归类；
+- 确认 Issue12/NIR ladder 为 producer-side provenance，旧 Issue13/Q1
+  label 冲突矩阵不进入 canonical scientific results；
+- 结果索引和项目状态补充 closure 计数；没有新的科学运行或 central 结论。
+
+### 边界
+
+- 旧 dirty 分支、dirty clone/worktree 和 producer 代码均未删除、移动或覆盖；
+- 大型矩阵、PNG、逐帧结果保持本地；后续工作回到正式科学分析主线。
+
 ## 2026-08-29 — merge(analysis): assimilate local unique evidence into canonical main
 
 ### 背景

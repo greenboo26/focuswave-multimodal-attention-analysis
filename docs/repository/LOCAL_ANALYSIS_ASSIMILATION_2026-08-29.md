@@ -113,4 +113,54 @@
 
 ## 结论
 
-已将可确认的中央 LOCAL_UNIQUE_CURRENT 收编到 clean canonical main；57/57 deletion 完整迁移；NIR/RGB producer 内容未跨仓库混入。仍不能证明旧 dirty 工作树没有唯一科学成果：78 个 modified、40 个 untracked 仍有 18 个既有审计 unresolved，work 副本也未全部满足 clean/no-unique-result/sync。因此旧分支退休：NO。
+已将可确认的中央 LOCAL_UNIQUE_CURRENT 收编到 clean canonical main；57/57 deletion 完整迁移；NIR/RGB producer 内容未跨仓库混入。旧 dirty 工作树仍不退休。
+
+## unresolved closure（2026-08-29）
+
+旧报告的 unresolved 计数是 Git status 折叠后的 22 个处理单元，不是 22
+个文件。本表将每个处理单元归入最终允许状态；同一 worktree 内的混合
+资产在“说明”列拆开记录。小文件已读取，大型矩阵/PNG/逐帧输出只核对
+元数据、hash/manifest 和 ownership，没有运行分析。
+
+| ID | 原路径/资产 | 类型；repo；branch/HEAD；dirty | 独有代码/结果；科学结论 | canonical/producer 检查 | 最终归类 | 后续动作 |
+|---|---|---|---|---|---|---|
+| U01 | `D:\Project\厚粲杯\08_算法\AI_PROJECT.md` | 导航；旧算法仓库；old branch/`30c56ef`；dirty | 无独有科学结论 | canonical main 有更新版 `AI_PROJECT.md` | SUPERSEDED | 保留旧副本，不覆盖/删除 |
+| U02 | `NIR_FORMAL_DETACHED_RUN.ps1` | NIR launcher；Attention-Analysis producer；old branch/`30c56ef`；dirty | 只启动正式 NIR，不产 central 结论 | producer-owned | PRODUCER_REPO_OWNED | producer 侧维护；不迁入 central |
+| U03 | `NIR_QUEUE_MONITOR.ps1` | NIR read-only monitor；Attention-Analysis producer；old branch/`30c56ef`；dirty | 只监视 batch/extension，不产科学结果 | producer-owned；最终快照未发现匹配运行 PID，仍按用户要求不触碰 | PRODUCER_REPO_OWNED | 保留原地 |
+| U04 | `configs/vision_provenance.example.json` | 示例配置；旧算法仓库；old branch/`30c56ef`；dirty | placeholder，无实际输入/输出/结论 | central 有 `configs/paths.example.json`；无当前 producer 绑定 | HISTORICAL | 保留作旧示例 |
+| U05 | `docs/WORKSPACE_LEDGER.md` | 工作区账本；旧算法仓库；old branch/`30c56ef`；dirty | 旧分支/C1 记录，结论已被 canonical status 覆盖 | canonical status/registry 已等价记录 | HISTORICAL | 仅作历史参考 |
+| U06 | `docs/handoff/C1_C2A_HANDOFF_2026-08-26.md` | handoff；旧算法仓库；old branch/`30c56ef`；dirty | 阶段交接，无未收编 central 结论 | canonical decisions/status 已覆盖 | HISTORICAL | 不重复迁移 |
+| U07 | `docs/results/2026-08-24_J_Data警觉度事件审计_v1` | 生成报告；旧算法仓库；old branch/`30c56ef`；dirty | #16 辅助结果，不是代码 | canonical result family/manifest 已登记 | GENERATED_ONLY | 保留 provenance；大结果不入 Git |
+| U08 | `docs/results/2026-08-29_BR管线与极端距离审计_v1` | 生成报告；旧算法仓库；old branch/`30c56ef`；dirty | B2/range-gate supporting evidence | canonical QC/result index 已登记 | GENERATED_ONLY | 只保留小型报告 |
+| U09 | `docs/results/2026-08-29_Codex结果迁移_v1` | 迁移报告；旧算法仓库；old branch/`30c56ef`；dirty | provenance，无新科学结论 | canonical assimilation report 已覆盖 | GENERATED_ONLY | 不重复处理 |
+| U10 | `docs/results/2026-08-29_FORMAL_37mm*` | QC 生成结果；旧算法仓库；old branch/`30c56ef`；dirty | corrected-distance QC，不是 vital validation | canonical `mmwave_formal_vital_qc_v1` 已覆盖 | GENERATED_ONLY | 保留 report/manifest |
+| U11 | `docs/results/2026-08-29_FORMAL毫米波任务动态警觉度_v1` | 生成结果；旧算法仓库；old branch/`30c56ef`；dirty | #16 辅助证据，不升级生理结论 | canonical result index 已登记 | GENERATED_ONLY | 不作为 active result |
+| U12 | `docs/results/2026-08-29_HR峰值*` | 生成结果；旧算法仓库；old branch/`30c56ef`；dirty | HR supporting/QC，不是全队列验证 | canonical QC boundary 已登记 | GENERATED_ONLY | 不作为 validated HR |
+| U13 | `docs/results/2026-08-29_RS6240*` | 生成结果；旧算法仓库；old branch/`30c56ef`；dirty | RS6240 exploratory/QC evidence | canonical result index 已登记 | GENERATED_ONLY | 完整输出留本地 |
+| U14 | `scripts/audit_c1_alignment_robustness.py`、`repair_c1_alignment_protocol.py`、`replay_c1c_assets.py`、`run_c1c_mmhrv_pilot.py`、`run_c1d_radarbeat_backend_pilot.py` | 分析/审计脚本；central；old branch/`30c56ef`；dirty | C1 protocol/pilot；结论为 validation stopped | 等价入口已进入 `pipelines/mmwave/` | KEEP_IN_MAIN | 仅使用 canonical 路径 |
+| U15 | `scripts/audit_c2a_dataset.py` | C2a audit；central；old branch/`30c56ef`；dirty | supporting audit，无 final claim | 已进入 `pipelines/mmwave/audit_c2a_dataset.py` | KEEP_IN_MAIN | 使用 canonical 入口 |
+| U16 | `scripts/run_c2b_task_focus_baselines.py` | C2b supporting；central；old branch/`30c56ef`；dirty | exploratory task-focus baseline | 已进入 canonical pipeline | KEEP_IN_MAIN | 使用 canonical 入口 |
+| U17 | `scripts/run_c2b_v2_canonical_reconstruction.py` | C2b reconstruction；central；old branch/`30c56ef`；dirty | canonical implementation，旧副本非唯一 | main 已有更严格实现 | KEEP_IN_MAIN | 不保留旧平行路径 |
+| U18 | `scripts/legacy` | 历史代码；central；old branch/`30c56ef`；dirty | 历史实验/算法脚本，可能含旧结论；不计 active | 已完整迁入 `scripts/legacy/` | HISTORICAL | 只作 provenance，不运行 |
+| U19 | `scripts/maintenance` | 维护脚本；central；old branch/`30c56ef`；dirty | QC/readiness/report helpers，无 final claim | 已进入 `scripts/maintenance/` | KEEP_IN_MAIN | 使用 canonical maintenance |
+| U20 | `work/canonical_local_analysis_pipeline_v1` | 临时 worktree；central pipeline；detached/`53e3af5`；dirty 1 | Issue12 asset-audit JSON；无 central 新结论 | producer-side/local asset audit，不应复制到 central results | PRODUCER_REPO_OWNED | 保留原地，人工决定生命周期 |
+| U21 | `work/focuswave_repository_final_clean_clone_21b8bfc` | clone；Attention-Analysis producer；main/`21b8bfca`；dirty 2 | NIR ladder、joined matrix、OOF；producer-side | producer-owned；大结果未进入 Git | PRODUCER_REPO_OWNED | producer 侧继续维护，不跨仓库合并 |
+| U22 | `work/focuswave_repository_final_clean_clone_3cd3433` + `01_Attention-Analysis_rgb-nvidia` | clone/worktree；producer + frontend audit；main/`3cd3433`、`rgb-nvidia`/`0307b1b`；分别 dirty 5/5 untracked | frontend transparency 文本已收编；clone3 NIR mainline C 为 producer；旧 Issue13 matrix label 冲突；RGB 为 producer code | central 已收 frontend report；NIR/RGB producer-owned；旧 matrix superseded | PRODUCER_REPO_OWNED | 保留 dirty 副本；不得删除或跨仓库合并 |
+
+### Closure counts
+
+| final classification | count |
+|---|---:|
+| KEEP_IN_MAIN | 5 |
+| PRODUCER_REPO_OWNED | 5 |
+| SUPERSEDED | 1 |
+| HISTORICAL | 4 |
+| GENERATED_ONLY | 7 |
+| SAFE_TO_REMOVE | 0 |
+| BLOCKED_BY_RUNNING_TASK | 0 |
+| remaining UNRESOLVED | 0 |
+
+The old dirty branch remains protected because it still has `M 78 / D 57 /
+?? 40`; closure means every known unresolved unit has a disposition, not that
+the branch is safe to delete. No new central scientific conclusion was found,
+and no result needs another upload or a new analysis run.
