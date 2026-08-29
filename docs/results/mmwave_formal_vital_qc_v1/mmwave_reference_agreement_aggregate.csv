@@ -1,0 +1,7 @@
+metric,reference,n_windows,unit,mae,bias,within_abs_5,interpretation
+HR_course,ECG,99,bpm,3.7770,-1.078,66,HR course
+HR_peak,ECG,99,bpm,7.8216,-6.9569,38,HR peak
+BR_peak,RSP,99,次/分,11.7689,-11.7689,1,BR peak
+RMSSD,ECG,99,ms,262.6418,262.6418,0,RMSSD
+
+

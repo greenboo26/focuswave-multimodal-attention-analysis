@@ -1,0 +1,70 @@
+{
+  "artifact": "MMWAVE_FORMAL_VITAL_QC_V1",
+  "generated_at_utc": "2026-08-28T13:38:15.119906+00:00",
+  "status": "PARTIAL",
+  "redaction": "absolute paths, raw filenames, personal identifiers and raw waveforms omitted; anonymous session namespace retained",
+  "scope": "formal mmWave batch QC and ECG/RSP criterion-attribution only; no focus modeling; no algorithm change",
+  "repo_head_reviewed": "ba7a2c652bea82c3fa58ad5858a7460ed933fb47",
+  "session_counts": {
+    "total": 72,
+    "primary": {
+      "C_vital_algorithm_failure": 9,
+      "B_radar_geometry_or_motion": 44,
+      "A_acquisition_or_sync": 2,
+      "U_unresolved": 17
+    },
+    "analysis_buckets": {
+      "Tier_2_motion_only": 53,
+      "Tier_3_unusable_for_formal_v1": 2,
+      "Tier_1_QC_eligible_candidate": 17
+    }
+  },
+  "rules": {
+    "ecg": "0.5-40 Hz bandpass; R-peak distance >=0.3 s; IBI 300-2000 ms; adjacent IBI relative change >20% rejected; usable if normal RR ratio >=80%",
+    "rsp": "0.1-0.7 Hz bandpass; peak distance >=0.5 s; 6-42 breaths/min; low-amplitude loose-belt flag; usable if normal cycle ratio >=80%; median rate",
+    "mmwave": "existing v3.1.1/time-gated outputs; 10 s heart-band signal-presence windows; independent block analysis; no cross-block IBI/HRV concatenation",
+    "formal_v1_session_gate": "window_quality_pct >=80 and probe_quality_pct >=80, plus no existing target-lock geometry/phase instability flag; this is a QC eligibility rule, not a claim of physiological accuracy",
+    "ecg_label_tuning": "no ECG/RSP labels used to tune formal-batch v1 parameters; ECG/RSP used only as independent reference/attribution evidence"
+  },
+  "reference_cohort": {
+    "sessions": 5,
+    "paired_windows": 100,
+    "metric_rows": 99,
+    "source": "existing strict BIOPAC ECG/RSP comparison artifact"
+  },
+  "sources": {
+    "issue17_report_ready_session_matrix_v1.csv": {
+      "sha256": "3e00c2246f16b3a52a0fb29dd6270fbaf390524db3968bc3195e69345b593102"
+    },
+    "formal_output_subject_audit.csv": {
+      "sha256": "684badeaec2b8907194e88715e5db4570ebbc18d31722449a12f900c27e2818a"
+    },
+    "subject_summary.csv": {
+      "sha256": "bae5e20c8c5f4eb902ca2a8274a077212d785e3f85bf56f04d8d4adbd4262c3e"
+    },
+    "mmwave_vs_reference_probes.csv": {
+      "sha256": "8810a0d0ffdc8bc99ccc20a19bdd4628fd1a1c3f9fbde9b7e1e60ee4b3809aff"
+    },
+    "reference_metrics.json": {
+      "sha256": "33a62f1c5cd5ce0f27d28184f968c1c477bec154840dd7241bd040f38124c19f"
+    },
+    "segment_quality.csv": {
+      "sha256": "af038e4ffc0f1d48d33c098decd61c8d376513c04450efaf665e4927593a1e48"
+    },
+    "gold_standard_qa.py": {
+      "sha256": "10d35bed3931519d62594e1fc4aca489c0b26b2bec11f43ce2a871fedab01415"
+    },
+    "process_vital_signs_v3_1_1.py": {
+      "sha256": "b05a07fbb8b40a5991620d9bf23139ecdb94538e0a3045747440d12373cdaa61"
+    }
+  },
+  "outputs": [
+    "MMWAVE_FORMAL_VITAL_QC_V1.md",
+    "MMWAVE_FORMAL_VITAL_QC_V1_REDACTED_MANIFEST.json",
+    "mmwave_session_qc_summary_redacted.csv",
+    "mmwave_session_use_tier_crosswalk.csv",
+    "mmwave_reference_agreement_aggregate.csv",
+    "mmwave_failure_mode_counts.csv"
+  ]
+}
+

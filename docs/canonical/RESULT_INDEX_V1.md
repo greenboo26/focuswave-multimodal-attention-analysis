@@ -16,3 +16,31 @@ This index points to local full results without uploading them. See `ANALYSIS_RE
 | NIR_INCREMENT/RGB_INCREMENT/MULTIMODAL_FUSION/CROSS_SITE | PLANNED_GLOBAL_ONLY | no final result | readiness manifests only | cannot enter final report |
 
 All local paths are external to Git and must be checked on the executing machine.
+
+## 2026-08-29 local-analysis assimilation evidence
+
+The following small reports, summaries, and manifests were assimilated from the
+old dirty worktree. Large matrices, waveform files, frame-level outputs, and
+PNGs remain local-only.
+
+| analysis | status | canonical report/index | local output or input boundary | conclusion / decision | provenance |
+|---|---|---|---|---|---|
+| C1c mmHRV pilot | VALIDATION_STOPPED | `../results/c1_pilot/C1C_PILOT_REPORT.md` | `D:\Project\厚粲杯\11_数据\derived\c1c_mmhrv_pilot_v1` | no clear improvement; do not claim HRV validation | `pipelines/mmwave/run_c1c_mmhrv_pilot.py` |
+| C1d RadarBeat backend pilot | VALIDATION_STOPPED | `../results/c1_pilot/C1D_PILOT_REPORT.md` | same C1c fixed-waveform local boundary | F1 decreased on the pilot; stop this development cycle | `pipelines/mmwave/run_c1d_radarbeat_backend_pilot.py` |
+| C2a dataset audit | SUPPORTING_AUDIT | `pipelines/mmwave/audit_c2a_dataset.py` | local C2a/mmWave derived tables | audit entrypoint only; no new scientific claim | `pipelines/mmwave/audit_c2a_dataset.py` |
+| C2b task-focus baselines | SUPPORTING_AUDIT | `pipelines/mmwave/run_c2b_task_focus_baselines.py` | local C2b derived tables | exploratory baseline; not final multimodal inference | `pipelines/mmwave/run_c2b_task_focus_baselines.py` |
+| Issue #13 psychometric evidence | REVISE_METHOD | `scripts/build_psychometric_evidence_matrix_v1.py` | local questionnaire/behavior aggregates | corrected label semantics; old label-3/4 matrix is superseded | generator plus `pipelines/questionnaire/run_q1_questionnaire_criterion_validity.py` |
+| formal physiology / QC | PARTIAL | `../results/mmwave_formal_vital_qc_v1/` | local formal mmWave + BIOPAC reference outputs | QC strata only; not a validated vital-sign tier | `scripts/maintenance/build_formal_vital_qc_v1.py` |
+| B1 corrected-distance audit | QC_RERUN | `../results/mmwave_formal_vital_qc_v1/MMWAVE_FORMAL_VITAL_QC_V1_CORRECTED37MM.md` | local corrected 37 mm tables | tier distribution changed; scientific use remains QC-bound | `scripts/maintenance/rebuild_readiness_matrices_20260829.py` |
+| B2 extreme-range audit | PRELIMINARY | existing BR/range-gate report family | local extreme-range QC tables | no upgrade of physiology conclusions | `scripts/maintenance/B2_extreme_range_target_audit_20260829.py` |
+| merge readiness / denominator | PARTIAL | `../results/final_merge_readiness_20260829/FINAL_MERGE_READINESS_20260829.md` | local availability/missingness matrices | 70/46/1400 anchor; 067/099 boundaries remain | `scripts/maintenance/build_merge_readiness_20260829.ps1` |
+| RGB current status | ENGINEERING_ONLY | `../results/rgb_current_status_v1/RGB_CURRENT_STATUS_V1.md` | `D:\Project\厚粲杯\08_算法\01_Attention-Analysis_rgb-nvidia` | raw/context merge-ready; derived tracking/QC absent | producer worktree; not merged across repositories |
+| target-lock | CANDIDATE_ONLY | existing target-lock cards and local manifest | `D:\Project\厚粲杯\11_数据\derived\j_mmwave_target_lock_audit_v1` | candidate only; not chest-lock confirmation | existing canonical scripts |
+| behavior/probe | CANONICAL_BEIJING_REPORT_BASELINE | existing baseline package | `D:\Project\厚粲杯\11_数据\derived\final_report_cohort_baseline_v2` | 70 sessions / 46 participants / 1400 probes anchor | existing canonical pipeline |
+| C2C | PENDING_CANONICAL_RERUN | existing C2C card | local within-subject derived boundary | no promotion from old result | `pipelines/mmwave/run_c2c_personalized_mmwave_calibration.py` |
+| NIR completed audit | ENGINEERING_ONLY / PRODUCER_REPO_OWNED | existing NIR cards and manifests | `D:\Project\厚粲杯\11_数据\01_Attention-Analysis_nvidia-cuda_formal_NIR` | not a final NIR increment; no cross-repo merge | producer worktree |
+| multimodal LOSO | PLANNED_GLOBAL_ONLY | `docs/canonical/analysis_cards/multimodal_fusion.md` | matched multimodal inputs | final result MISSING; not run in this assimilation | canonical fusion contract |
+
+Explicitly MISSING at this checkpoint: full-cohort ECG/RSP vital validation,
+C1 full-cohort HRV validation, RGB derived-window features, and final
+multimodal LOSO results.

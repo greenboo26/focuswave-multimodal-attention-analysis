@@ -1,0 +1,8 @@
+"modality","denominator","session_available","session_total","session_missing","probe_available","probe_total","probe_missing","status"
+"behavior","canonical cohort","70","70","0","1400","1400","0","canonical"
+"probe","canonical cohort","70","70","0","1400","1400","0","canonical"
+"mmWave","canonical cohort","70","70","0","1297","1400","103","preliminary QC screening flag subset; not validated vital-sign availability"
+"RGB","canonical cohort","70","70","0","1400","1400","0","engineering complete; formal authorization pending"
+"NIR","canonical cohort","68","70","2","1360","1400","40","completion subjects only"
+
+

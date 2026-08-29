@@ -32,3 +32,24 @@
 - Beijing B1+B2 是 shared primary；Zhuhai B3 仅 extension，直到全局 cohort gate 通过。
 - labels 2/3/4 保留四分类层，不统称为 mind-wandering。
 - C1/HRV、最终 NIR/RGB 增量、多模态融合与跨站点验证不得从工程状态推断科学完成。
+
+## 2026-08-29 assimilation note
+
+The local-unique evidence identified from the old dirty worktree now has a
+canonical traceability record in `docs/repository/LOCAL_ANALYSIS_ASSIMILATION_2026-08-29.md`
+and the result-level pointers in `RESULT_INDEX_V1.md`. Current executable
+locations are:
+
+- C1c/C1d pilot: `pipelines/mmwave/run_c1c_mmhrv_pilot.py` and
+  `pipelines/mmwave/run_c1d_radarbeat_backend_pilot.py`;
+- C2a/C2b supporting audits: `pipelines/mmwave/audit_c2a_dataset.py` and
+  `pipelines/mmwave/run_c2b_task_focus_baselines.py`;
+- QC/readiness: `scripts/maintenance/` entries listed in the canonical script
+  README;
+- questionnaire evidence: `scripts/build_psychometric_evidence_matrix_v1.py`
+  together with the canonical questionnaire pipeline.
+
+The old Q1 and Issue #13 matrices with the reversed label-3/label-4 wording
+are superseded and are not canonical results. NIR and RGB producer worktrees
+remain separately owned; their local outputs are registered but not merged
+into this repository.

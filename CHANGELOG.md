@@ -1,5 +1,30 @@
 # 修改说明
 
+## 2026-08-29 — merge(analysis): assimilate local unique evidence into canonical main
+
+### 背景
+
+旧 questionnaire 分支包含现行 mmWave pilot/QC/readiness 证据、研究文档、维护入口和历史
+脚本，但不能把 62 个 ahead commit 直接 cherry-pick，也不能把 NIR/RGB producer worktree
+跨仓库合并。需要把真实有价值的中央资产逐项收编并保留 provenance。
+
+### 改动
+
+- 收编 C1c/C1d、C2a/C2b supporting entrypoints，formal QC、HR course、B1/B2、range-gate
+  和 merge-readiness 维护入口；
+- 收编 questionnaire evidence generator，并修正旧结果中 label 3/label 4 的语义冲突；
+- 收编 66 个历史脚本到既有 `scripts/legacy/`，57/57 个 tracked deletion 有内容级迁移证明；
+- 收编 C1 pilot、formal QC、merge readiness、RGB raw/context 和 frontend transparency 的
+  小型报告/CSV/manifest；大型矩阵、波形、逐帧输出和 PNG 保留本地；
+- 更新 result index、registry 说明、canonical script README、PROJECT_STATUS 和本文件。
+
+### 验证与边界
+
+- 新增 Python 入口已通过轻量编译检查；PowerShell 入口已通过解析检查；未重新运行科学分析；
+- NIR/RGB producer worktree、Issue12 NIR ladder 和旧 Q1/Issue13 错误标签结果未跨仓库合入；
+- 旧 dirty 工作树仍保留，旧分支暂不能退休；完整逐项映射见
+  `docs/repository/LOCAL_ANALYSIS_ASSIMILATION_2026-08-29.md`。
+
 ## 2026-08-29 — chore: enforce existing workspace traceability entry
 
 ### 背景

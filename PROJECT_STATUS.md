@@ -1,5 +1,20 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-29 local analysis assimilation status — PARTIAL
+
+- 已把旧 dirty 工作树中可确认的中央本地独有分析入口、QC/merge-readiness/RGB
+  状态报告和小型 provenance 文件收编到现有 canonical 路径；没有重新运行科学分析。
+- 57 个旧路径删除均已与 `scripts/legacy/`、`scripts/maintenance/` 或既有维护路径完成
+  内容级迁移证明；历史脚本不计 active analysis。
+- C1c/C1d 仍为 `VALIDATION_STOPPED`；HR、BR、HRV 仍受 QC/reference/逐搏验证边界约束。
+- RGB/NIR worktree 仍由 producer repo 所有；RGB 仅 raw/context merge-ready，NIR 仅工程审计边界。
+- 大型矩阵、波形、逐帧输出和 PNG 保留在本地 `11_数据\derived` 或 producer worktree，Git
+  仅收报告、摘要、manifest、schema 和生成脚本。
+- 旧分支仍含 78 个 tracked modified、40 个 untracked 及 unresolved 项，尚未具备退休条件。
+
+收编逐项链路见 `docs/repository/LOCAL_ANALYSIS_ASSIMILATION_2026-08-29.md`，结果索引见
+`docs/canonical/RESULT_INDEX_V1.md`。
+
 ## 2026-08-26 Stage 2C governance status
 
 - `main` 是正式默认分支，repository 已更名为 `greenboo26/focuswave-multimodal-attention-analysis`。

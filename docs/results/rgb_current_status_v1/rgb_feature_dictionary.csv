@@ -1,0 +1,19 @@
+field,source,category,availability,notes
+"subject;video_frame_position;capture_frame_idx;unix_ms;target_unix_ms;sample_error_ms;dt_ms;phase;block;trial_num;condition;cycle_num;position_in_cycle;stimulus_name;stimulus_size;is_no_go;response;correct;commission;omission;is_probe;probe_response;probe_vigilance;trial_onset_unix_ms;time_from_trial_onset_ms;next_trial_onset_unix_ms;time_to_next_trial_onset_ms;trial_active;probe_onset_unix_ms;probe_response_unix_ms;probe_active;behavior_state","face_frames + face_raw + motion_raw + pose_landmarks","identity/context","present","shared timestamp and behavior/probe context"
+"FaceRectX;FaceRectY;FaceRectWidth;FaceRectHeight;FaceScore","face_raw.parquet","face raw feature","present","bbox and face confidence"
+"x_0..x_67; y_0..y_67","face_raw.parquet","face raw feature","present","68 facial landmark coordinates"
+"Pitch;Roll;Yaw;X;Y;Z","face_raw.parquet","face raw feature","present","head pose and translation"
+"AU01..AU43 (20 AU fields)","face_raw.parquet","face raw feature","present","action units"
+"Neutral;Happy;Sad;Surprise;Fear;Disgust;Anger;valence;arousal","face_raw.parquet","face raw feature","present","expression and affect scores"
+"gaze_pitch;gaze_yaw;gaze_angle","face_raw.parquet","face raw feature","present","gaze fields"
+"mesh_x_0..mesh_x_477;mesh_y_0..mesh_y_477;mesh_z_0..mesh_z_477","face_raw.parquet","face raw feature","present","478-point face mesh"
+"_neutral + brow* + cheek* + eye* + jaw* + mouth* + nose*","face_raw.parquet","face raw feature","present","MediaPipe blendshapes"
+"FrameHeight;FrameWidth;input;frame;local_sample_index;detected;rf_bbox_x1..rf_bbox_y2;face_rank","face_raw.parquet","provenance/QC","present","face detector and frame provenance"
+"pose_valid;pose_count;pose_index;landmark_index;landmark_name;x/y/z;visibility/presence;world_x/world_y/world_z;world_visibility/world_presence;pose_bbox_xmin/ymin/xmax/ymax;pose_timestamp_ms","pose_landmarks.parquet","pose raw feature","present","landmark/world landmark raw output"
+"gray_mean;gray_std;gray_min;gray_max;gray_mean_delta;mean_abs_difference;std_abs_difference;sum_abs_difference;max_abs_difference;changed_pixel_ratio;pixel_diff_threshold;global_motion_energy;global_motion_energy_per_sec","motion_raw.parquet","motion feature","present","raw/low-cost motion measurement"
+"capture_missing_frame_indices_before;dt_multiple_of_median;irregular_dt;gap_before;gap_duration_ms;gap_reason;motion_valid;capture_gap_before;temporal_gap","motion_raw + face_frames","quality metric","present","QC flags and diagnostics; not a passed QC decision"
+"face detection missingness via FaceScore/detected; pose validity via pose_valid/visibility/presence; timestamp/sample_error/dt/gap flags; probe/context completeness","all raw/context files","quality metric","present","available fields; downstream QC not run"
+"rgb_features.parquet;face_tracks.parquet;eye_features.parquet;pose_features.parquet;blink/PERCLOS;iris/虹膜校正","not present","derived/optional","absent","do not use as completed result; no iris correction claim"
+
+
+

@@ -1,0 +1,8 @@
+"model_set","level","n_session","n_participant","n_probe","status","qc_boundary"
+"A_behavior_probe_baseline","primary","70","46","1400","available_canonical","behavior/probe canonical anchor"
+"B_behavior_plus_RGB","incremental","70","46","1400","available_input_engineering_only","RGB formal gate pending"
+"C_behavior_plus_mmWave_preliminary_screening","exploratory_increment","70","46","1297","available_preliminary_screening_flag_subset","mmWave preliminary screening only; not validated HR/RR/HRV"
+"D_behavior_plus_RGB_plus_mmWave_preliminary_screening","exploratory_auxiliary","70","46","1297","available_matched_preliminary_screening_subset","RGB engineering plus mmWave preliminary flags; no validated physiological interpretation"
+"E_behavior_plus_RGB_plus_mmWave_plus_NIR","NIR_subsample_validation","68","44","1259","completion_subjects_only","NIR completion/alignment gate; mmWave remains preliminary screening only"
+
+

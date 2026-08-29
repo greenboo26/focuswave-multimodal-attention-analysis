@@ -1,0 +1,9 @@
+failure_mode,session_count,count_basis
+A_acquisition_or_sync,2,primary_or_applicable_flag
+B_radar_geometry_or_motion,44,primary_or_applicable_flag
+C_vital_algorithm_failure,9,primary_or_applicable_flag
+D_hrv_too_strict_not_supported,71,primary_or_applicable_flag
+E_construct_validity_not_sensor_quality,71,primary_or_applicable_flag
+U_unresolved,19,primary_or_applicable_flag
+
+
