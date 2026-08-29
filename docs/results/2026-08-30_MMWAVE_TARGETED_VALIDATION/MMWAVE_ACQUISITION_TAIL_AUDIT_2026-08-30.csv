@@ -1,0 +1,12 @@
+subject,audit_status,has_block4,timestamp_rows,first_frame_index,last_frame_index,frame_index_consecutive,frame_index_gap_count,first_frame_index_gap,last_dll_unix_ms,last_python_unix_ms,block4_end_unix_ms,experiment_end_unix_ms,reference_end_after_last_dll_ms,experiment_end_after_last_dll_ms,experiment_end_after_last_python_ms,final_python_minus_dll_ms,dll_span_ms,python_span_ms,tail_dll_interval_median_ms,tail_python_interval_median_ms,long_tail_candidate_ge_5s,python_processing_near_event,queue_lag_signature,interpretation
+2,MISSING_REQUIRED_LOG,,,,,,,,,,,,,,,,,,,,,,,
+3,MISSING_REQUIRED_LOG,,,,,,,,,,,,,,,,,,,,,,,
+4,MISSING_REQUIRED_LOG,,,,,,,,,,,,,,,,,,,,,,,
+5,MISSING_REQUIRED_LOG,,,,,,,,,,,,,,,,,,,,,,,
+6,MISSING_REQUIRED_LOG,,,,,,,,,,,,,,,,,,,,,,,
+97792,OK,False,30771,463739,494509,True,0,,1786869411134,1786869411136,,1786869412606,1472,1472,1470,2,311216,311194,10,10,False,True,False,No long-tail queue-lag signature under this audit rule.
+97793,OK,False,162924,523502,686425,True,0,,1786871352163,1786871352164,,1786871353872,1709,1709,1708,1,1647758,1647733,10,9,False,True,False,No long-tail queue-lag signature under this audit rule.
+97795,OK,True,140648,902817,1043464,True,0,,1786887631266,1786887656153,1786887656075,1786887656082,24809,24816,-71,24887,1422363,1447236,10,1,True,True,True,"DLL tail lags program end while final Python processing time is near event end; consistent with consumer backlog/shutdown truncation, not proof of physical RF dropout."
+97796,OK,True,141395,1243811,1386085,False,82,"[1262810, 1262982, 171]",1786891096282,1786891122483,1786891122401,1786891122409,26119,26127,-74,26201,1438847,1465033,10,1,True,True,True,"DLL tail lags program end while final Python processing time is near event end; consistent with consumer backlog/shutdown truncation, not proof of physical RF dropout."
+9779,OK,False,155557,24070,179626,True,0,,1786866226251,1786866226252,,1786866227422,1171,1171,1170,1,1573234,1573219,10,10,False,True,False,No long-tail queue-lag signature under this audit rule.
+97994,OK,True,133139,26052,161718,False,314,"[103051, 103066, 14]",1786878709400,1786878762016,1786878761960,1786878761967,52560,52567,-49,52616,1372058,1424659,10,1,True,True,True,"DLL tail lags program end while final Python processing time is near event end; consistent with consumer backlog/shutdown truncation, not proof of physical RF dropout."

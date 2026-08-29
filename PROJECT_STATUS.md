@@ -1,5 +1,12 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-30 Issue #28 97795/block4 acquisition tail — PARTIAL / HISTORICAL_TAIL_IRRECOVERABLE
+
+- 复用既有 DLL coverage audit、DLL contract、原始 coverage manifest 与 FocusWave `ecg` source；RUN_ID=`issue28-tail-20260830-r1`。11 个 session/block 目录中 6 个可审计、5 个为 `MISSING_REQUIRED_LOG`。
+- `97795/block4` marker→last DLL frame gap=`24,809 ms`；w027/w028 的 end gap=`9,536/19,536 ms`。长尾候选为 `97795/97796/97994`；frame continuity 分别为 `true/false/false`，后两者含 `82/314` 个 gap，机制保持 unresolved，不能泛化为同一原因。
+- 结论为历史尾部不可恢复；不做 padding、backfill 或 synthetic frame，不改变 #24–#27 的 335-window primary 分母，也不阻塞主线。未来修复位置仅指向 producer 的 stop/drain/order 与 queue/drop/timeout instrumentation，本轮未改 producer、raw、firmware 或 portable V2。
+- 证据包为 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_ACQUISITION_TAIL_AUDIT_*`，入口为 `scripts/maintenance/run_mmwave_acquisition_tail_audit_20260830.py`；HR/BR 仍 `HOLD`，HRV `BLOCKED`。
+
 ## 2026-08-30 Issue #24 ECG reference eligibility — PARTIAL / ECG_REFERENCE_ELIGIBILITY_COMPLETE
 
 - 在 canonical `main` `805db1d3f2d701d46f678b7cd911990f779a4966` 上，复用 `scripts/gold_standard_qa.py` 的 ECG 清洗规则（0.5–40 Hz 三阶 SOS、R-peak 最小间距 0.30 s、固定 prominence 0.25、IBI 300–2000 ms、相邻 IBI >20% 异常波动剔除、有效 beat coverage ≥80%）和既有 `run_mmwave_targeted_validation_20260830.py` 的 block marker affine mapping。

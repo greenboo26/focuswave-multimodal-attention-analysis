@@ -1,5 +1,11 @@
 # 修改说明
 
+## 2026-08-30 — audit(mmwave): classify Issue #28 acquisition tail coverage
+
+- Added the bounded Issue #28 acquisition-tail audit, reusing the existing DLL-time coverage contract, historical manifest, and FocusWave `ecg` lifecycle source.
+- Classified `97795/block4` as a historical irrecoverable tail (`24,809 ms` marker-to-last-DLL gap; w027/w028 end gaps `9,536/19,536 ms`); continuity findings for `97796/97994` remain unresolved and are not generalized.
+- No padding, backfill, synthetic frame, producer, raw, firmware, portable-V2, or #24–#27 denominator change was made. Evidence is under `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_ACQUISITION_TAIL_AUDIT_*`.
+
 ## 2026-08-30 — audit(mmwave): complete ECG reference eligibility for DLL-time windows
 
 ### 改动

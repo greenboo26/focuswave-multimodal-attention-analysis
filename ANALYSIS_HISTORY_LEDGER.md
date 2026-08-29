@@ -8,6 +8,14 @@
 
 ---
 
+### 2026-08-30：Issue #28 97795/block4 acquisition tail audit — PARTIAL / HISTORICAL_TAIL_IRRECOVERABLE
+
+**复用与执行**：复用既有 `c0f1717` coverage audit、`426576e` DLL contract、原始 coverage manifest 与 FocusWave `ecg` 生命周期源码；RUN_ID=`issue28-tail-20260830-r1`。11 个 session/block 目录中 6 个可审计、5 个缺少必需日志，未重建缺失记录。
+
+**结果与边界**：`97795/block4` marker→last DLL frame gap=`24,809 ms`；w027/w028 end gap=`9,536/19,536 ms`。长尾候选为 `97795/97796/97994`，frame continuity=`true/false/false`，后两者分别含 `82/314` 个 gap，原因不能泛化。历史尾部不可恢复；不做 padding、backfill、synthetic frame，不改变 #24–#27 的 335-window primary 分母。未来修复位置仅为 producer stop/drain/order 与 queue/drop/timeout instrumentation，本轮不改 producer/raw/firmware/portable V2，且不阻塞 #24–#27。
+
+**证据与决策**：证据包为 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_ACQUISITION_TAIL_AUDIT_*`，入口为 `scripts/maintenance/run_mmwave_acquisition_tail_audit_20260830.py`。HR/BR 继续 `HOLD`，HRV `BLOCKED`；本条为 acquisition coverage 层的 `PARTIAL`，不是生理有效性结论。
+
 ### 2026-08-30：Issue #24 ECG reference eligibility on 335 DLL-time windows — PARTIAL / ECG_REFERENCE_ELIGIBILITY_COMPLETE
 
 **Reuse Gate 与适配原因**：已有 `scripts/gold_standard_qa.py` 已包含历史 gold-standard ECG 的滤波、R-peak、IBI plausibility、相邻 IBI artifact rejection 和 ≥80% 有效 beat coverage；已有 `scripts/maintenance/run_mmwave_targeted_validation_20260830.py` 已包含 block start/end marker 与 Biopac digital marker 的 block-local affine mapping；已有 `MMWAVE_HR_GATE_TARGET_ABLATION_2026-08-30.csv` 已固定 ARM0/ARM1/ARM2 estimator rows。旧入口不能直接输出当前 DLL-time window 的 `ECG_VALID/ECG_INVALID/UNRESOLVED`、逐窗 reject reason 并按新分母重算，因此只新增窄 adapter `scripts/maintenance/run_ecg_eligibility_dll_windows_20260830.py`；没有否决已有算法。`REUSE_REJECTION_REASON=existing scripts expose cleaning/mapping components but no combined 335-window eligibility output or valid-denominator ARM metrics`。
