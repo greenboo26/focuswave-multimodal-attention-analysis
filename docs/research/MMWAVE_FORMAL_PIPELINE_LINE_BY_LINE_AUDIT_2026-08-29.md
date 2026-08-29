@@ -157,3 +157,47 @@ Literature IDs `L1-L11` are defined in `MMWAVE_LITERATURE_EVIDENCE_REGISTER_2026
 - `L11`: HRV requires beat/IBI-level radar-to-ECG comparison.
 
 No new literature source was added in this audit; `L12` remains pending metadata verification and was not used as primary support.
+
+## 7. Ordered next execution audit (2026-08-30)
+
+This section follows `docs/research/MMWAVE_NEXT_EXECUTION_PROMPT_2026-08-29.md` in order. It does not reopen the closed Range FFT, 37 mm, or eight-channel discovery.
+
+### 7.1 A — device/firmware engineering residuals
+
+The full item-by-item record is `docs/research/MMWAVE_DEVICE_FIRMWARE_ENGINEERING_EVIDENCE_2026-08-30.csv`. The result is **PARTIAL**: no requested item is `CONFIRMED_ON_FORMAL_DEVICE` because a formal-session burn/boot/version receipt is absent. The source-level statuses are explicit rather than blanket unknowns:
+
+| Item | Status | Bound conclusion | Formal-device binding |
+|---|---|---|---|
+| pre-FFT window | `UNRESOLVED` | no exact window type/axis/coefficients | `UNRESOLVED` |
+| zero-padding / FFT scaling | `UNRESOLVED` | 256 reported range elements are known; padding/crop/scale are not | `UNRESOLVED` |
+| DC/static clutter | `SUPPORTED_BY_OFFICIAL_SDK_OR_MANUAL_ONLY` | SDK branch exists; inspected ReportDataCube1D source selects `MMW_CLUTTER_REMOVAL_NONE` | `UNRESOLVED` |
+| IQ correction | `UNRESOLVED` | no exact formal-path primary evidence | `UNRESOLVED` |
+| amplitude/phase calibration | `SUPPORTED_BY_OFFICIAL_SDK_OR_MANUAL_ONLY` | 2T4R calibration load/save/alignment capability exists | `UNRESOLVED` |
+| physical Tx/Rx map | `CONFIRMED_BY_OUTPUT_SEMANTICS` | logical 2Tx×4Rx order is supported; physical coordinates are not | `UNRESOLVED` |
+| TDM chirp timing | `SUPPORTED_BY_OFFICIAL_SDK_OR_MANUAL_ONLY` | source identifies 2T4R TD-MIMO, one-chirp accumulation, 10 ms frame; chirp order/interval absent | `UNRESOLVED` |
+| TDM phase compensation | `UNRESOLVED` | SDK alignment code is not proof of formal report-path compensation | `UNRESOLVED` |
+| formal burn/boot/version receipt | `UNRESOLVED` | local image hash is known, deployment receipt is missing | `UNRESOLVED` |
+
+### 7.2 B — existing-output target/bin/channel continuity
+
+Read-only audit of existing formal JSON/NPZ and canonical summaries finds:
+
+- A segment-level result persists one final `bins`/`channels` choice and NPZ `heart_peaks`; it does not persist a per-window selection history.
+- No canonical formal output contains the required cross-window `previous/current bin`, `previous/current channel`, `bin_displacement`, `channel_switch`, `phase_discontinuity`, or independent motion evidence sequence. Existing audit fields explicitly mark `range_bin_jump_rate` as not calculated.
+- The historical 8-window 37 mm robustness audit reports changes between counterfactual gate settings, not consecutive-window target hopping; it cannot answer continuity.
+
+Therefore B is **PARTIAL / INSTRUMENTATION_REQUIRED**, and execution stops at this gate for any new formal batch. The minimum future instrumentation/rerun contract is one row per baseline/block/window containing: `session_id`, `window_id`, `start_frame`, `end_frame`, `hr_bin`, `hr_channel`, `br_bin`, `br_channel`, prior-window choices, bin displacement, channel switch, phase discontinuity, phase stability, independent motion evidence, input root, producer commit, and firmware hash. No such rerun was started.
+
+### 7.3 C — formal harmonic suppression activation
+
+The exact chain is `run_timeline_gated_mmwave_quality.py:70-108` → `process_vital_signs_v3_1_1.py:3000-3054` → `_analyze_long_record_v23()` → `_heart_segment_reference_correction()` → `_window_hr_candidates()` → `respiration_harmonic_reject()` at `1800-1944`.
+
+`respiration_harmonic_reject()` is a conditional external-RSP branch. It requires `ext_br_bpm`; `analyze_long_record()` derives that only when `acq_path` is supplied. The standard formal runner calls `analyze_long_record()` without `acq_path` and without an external RSP value. Thus the external 2×/3× respiratory-harmonic suppression is **INACTIVE in the standard formal runner**. Internal reference/time harmonic folding remains a heuristic correction, not proof of active adaptive suppression. Classification: **not active suppression; conditional branch available, with post-hoc/reference-dependent handling only**.
+
+### 7.4 D — earliest HRV blocker
+
+The producer stores radar peak indices in NPZ and derives adjacent radar IBI-shaped intervals for SDNN/RMSSD. Independent ECG reference code stores ECG R peaks and ECG IBI summaries, with window/marker alignment at the reference layer. The first missing deliverable in the formal evidence chain is **radar-beat ↔ ECG-R-peak beat-level matching with synchronized timestamps** (including false-positive/false-negative and paired IBI agreement). Consequently HRV remains **BLOCKED**; the existing `SDNN_ms`/`RMSSD_ms` fields are exploratory radar-derived outputs, not ECG-validated HRV.
+
+### 7.5 Ordered execution result
+
+Overall status: **PARTIAL**. A has explicit source-level statuses but lacks formal-device deployment binding; B cannot provide a continuity rate without the specified instrumentation; C is inactive in the standard formal runner; D identifies the earliest missing HRV layer. No model run, #16, C2B/C2C, target-lock rerun, raw-data change, NIR/RGB change, or device burn was performed. Issue #16 remains **PAUSED**.

@@ -46,6 +46,26 @@ No Issue #16 quality-stratified sensitivity was run or authorized. No new scient
 | Range-bin continuity | One pair is selected per segment; no tracking/stitching/jump gate. | Stillness does not guarantee phase continuity across blocks/segments. | `POTENTIALLY_HARMFUL` |
 | Respiration-harmonic suppression | Optional scalar RSP prior exists but is not passed by standard formal runner. | Stable 2x/3x BR can survive as HR-like output. | `POTENTIALLY_HARMFUL` |
 | BR quality gate | BR receives only full-segment time/frequency consistency label. | Low-quality BR can remain numerically populated. | `POTENTIALLY_HARMFUL` |
+
+## 2026-08-30 ordered next execution decisions
+
+### D-AUDIT-20260830-01 — device/source capability is not formal-device activation
+
+The targeted SDK audit is recorded in `MMWAVE_DEVICE_FIRMWARE_ENGINEERING_EVIDENCE_2026-08-30.csv`. SDK/source capability is retained as evidence, but no lower-layer setting is promoted to formal runtime without an image-to-source match and a formal-session burn/boot/version/configuration receipt. The current source-tree ADC-mode edit is explicitly not the formal image behavior.
+
+### D-AUDIT-20260830-02 — continuity audit stops at missing history
+
+Existing outputs contain segment-level final bin/channel values and radar peak arrays, but not the previous/current target history required to calculate target/bin/channel continuity. No continuity rate is inferred from counterfactual 37 mm gate changes. A future rerun must persist the exact per-window instrumentation listed in the line-by-line audit; no formal batch begins before that gate is satisfied.
+
+### D-AUDIT-20260830-03 — formal harmonic suppression is inactive
+
+The external RSP 2×/3× rejection branch is present but requires `acq_path`/`ext_br_bpm`; the standard formal runner does not provide it. Internal harmonic folding/reference correction is classified as heuristic and reference-dependent, not active adaptive suppression.
+
+### D-AUDIT-20260830-04 — HRV earliest blocker is beat-level radar-to-ECG matching
+
+Radar-derived peak/IBI-shaped values and independent ECG R-peak values exist at separate layers, but no synchronized beat matching and paired IBI agreement output exists in the formal evidence package. HRV remains `BLOCKED`.
+
+Current gate result: **PARTIAL / #16 PAUSED**. No model, target-lock, C2B/C2C, raw-data, device-burn, NIR, or RGB operation was performed.
 | HRV beat-level validation | Radar IBI-shaped fields exist; no ECG R-peak matching. | RMSSD/SDNN could be mistaken for validated physiology. | `MISSING` |
 | Caller/provenance consistency | Runner summary uses `breathing_rate`, producer writes `breath_rate`; runner defaults contain legacy roots. | Reports may omit BR or read the wrong local root if rerun carelessly. | `POTENTIALLY_HARMFUL` |
 | Independent motion evidence | Current B flags use distance/phase proxies; C uses coverage. | Cannot translate Tier 2 into participant motion/compliance failure. | `MISSING` |

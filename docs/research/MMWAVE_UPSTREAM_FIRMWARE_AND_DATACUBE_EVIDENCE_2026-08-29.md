@@ -156,3 +156,13 @@ The exact formal image closes the following facts: stored formal data are not ra
 The complete downstream source trace is now in `docs/research/MMWAVE_FORMAL_PIPELINE_LINE_BY_LINE_AUDIT_2026-08-29.md`; the machine-readable comparison is `docs/research/MMWAVE_LITERATURE_VS_PROJECT_STAGE_MATRIX_2026-08-29.csv`; gaps and decisions are in `docs/research/MMWAVE_PIPELINE_GAPS_AND_DECISIONS_2026-08-29.md`; and the controlled Mermaid source is `docs/research/MMWAVE_PIPELINE_FLOWCHART_2026-08-29.md`.
 
 No model run, C2B/C2C rerun, target-lock rerun, raw-data change, NIR/RGB change, or Issue #16 execution occurred in this audit cycle. Issue #16 remains **PAUSED** until the evidence gate and its explicitly required scientific validation are separately authorized.
+
+## 8. Ordered next execution: device/firmware engineering residuals (2026-08-30)
+
+The prior Range FFT / 37 mm / eight-channel discovery is retained and was not repeated. The targeted SDK/source pass is registered in `MMWAVE_DEVICE_FIRMWARE_ENGINEERING_EVIDENCE_2026-08-30.csv`.
+
+The nine requested residuals have explicit statuses there. The current evidence closes only the following limited statements: the formal image is the previously verified `mrs6240_p2512.img` (`7a8ca41d...`), the formal output is eight logical 2T4R channels with 256 reported range elements, the SDK exposes a DC/clutter branch, and the SDK exposes 2T4R calibration load/save/alignment capability. It does not prove that windowing, zero-padding/scaling, IQ correction, calibration, TDM timing, or TDM phase compensation were active on the formal device.
+
+The current `ReportDataCube1D` source tree is itself not a formal-image build receipt: `prj_config.h:103-108` contains the 2026-08-12 experimental ADC-mode edit, while prior binary evidence identifies the formal image as `fft_mode=2`. This is recorded as a source/configuration mismatch, not silently promoted to formal runtime behavior.
+
+The remaining device engineering gate is therefore **PARTIAL / UNRESOLVED**: no formal-session burn, boot, version, or configuration receipt ties the image and lower-layer settings to the collected sessions. No device write, burn, reboot, or new acquisition was performed in this audit.

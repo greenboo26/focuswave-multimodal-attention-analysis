@@ -39,3 +39,11 @@ flowchart LR
 ```
 
 Legend: solid links are observed code/data flow; the RSP branch is optional and is not active in the standard formal batch; the red-flag conceptual branch records the known 0.08 m/bin dependency rather than changing it.
+
+## 2026-08-30 execution-gate annotation
+
+- A: SDK/source engineering capabilities are itemized in `MMWAVE_DEVICE_FIRMWARE_ENGINEERING_EVIDENCE_2026-08-30.csv`; formal-device binding is unresolved without a burn/boot/version receipt.
+- B: the persisted segment result has a final bin/channel and radar peak array, but no cross-window target-selection history; continuity audit stops at instrumentation required.
+- C: the external RSP harmonic-rejection branch is inactive in the standard formal runner because `acq_path` is not passed; internal folding is heuristic.
+- D: earliest HRV blocker is synchronized radar-beat to ECG-R-peak matching with paired IBI agreement; HRV remains blocked.
+- Overall result is `PARTIAL`; Issue #16 remains `PAUSED`.

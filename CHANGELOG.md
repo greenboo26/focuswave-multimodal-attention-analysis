@@ -1,5 +1,19 @@
 # 修改说明
 
+## 2026-08-30 — audit(mmwave): execute ordered next gate; keep #16 paused
+
+### 改动
+
+- 按最新 canonical prompt 顺序补齐 RS6240 设备/固件工程残余证据，并新增逐项状态矩阵 `docs/research/MMWAVE_DEVICE_FIRMWARE_ENGINEERING_EVIDENCE_2026-08-30.csv`。
+- 审计既有 formal JSON/NPZ 的 target/bin/channel 持久化边界；确认缺少跨 window continuity history，写入最小 instrumentation/rerun contract，未启动 formal batch。
+- 复核 formal runner 到 `respiration_harmonic_reject()` 的调用链；确认标准 formal runner 未传 `acq_path/ext_br_bpm`，external RSP harmonic rejection 未 active。
+- 定位 HRV 最早 blocker 为同步 radar beat 与 ECG R peak 的逐搏匹配及 paired IBI agreement 缺失。
+
+### 边界
+
+- Overall `PARTIAL`；无模型、#16、C2B/C2C、target-lock rerun、设备烧录、原始数据、NIR/RGB 变更；#16 继续 `PAUSED`。
+- 已闭合的 Range FFT / 37 mm / 8-channel discovery 保持原结论，不在本轮重复重开。
+
 ## 2026-08-29 — audit(mmwave): complete formal pipeline scientific audit
 
 ### 改动

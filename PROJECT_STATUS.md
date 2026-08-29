@@ -1,5 +1,14 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-30 ordered mmWave next-execution gate — PARTIAL / #16 PAUSED
+
+- 按 `docs/research/MMWAVE_NEXT_EXECUTION_PROMPT_2026-08-29.md` 顺序完成本轮只读审计；未重复已闭合的 Range FFT、37 mm、8-channel discovery。
+- A：新增 `docs/research/MMWAVE_DEVICE_FIRMWARE_ENGINEERING_EVIDENCE_2026-08-30.csv`，逐项给出 window、padding/scaling、DC/clutter、IQ、校准、Tx/Rx、TDM timing/compensation、烧录/启动/版本的状态。SDK 能力不等于正式设备激活；formal-session burn/boot/version/config receipt 仍缺失。
+- B：既有 JSON/NPZ 有 segment-level 最终 bin/channel 与 radar peak array，但没有跨 window previous/current target history、bin/channel switch 或 phase discontinuity；continuity rate 不可从现有产物推出，已记录最小 instrumentation/rerun contract，未启动 formal batch。
+- C：精确链 `formal runner → analyze_long_record → _analyze_long_record_v23 → _heart_segment_reference_correction → _window_hr_candidates → respiration_harmonic_reject` 已复核。标准 runner 不传 `acq_path/ext_br_bpm`，故 external RSP 2x/3x harmonic rejection 为 `INACTIVE`；内部 folding 仅 heuristic。
+- D：HRV 最早 blocker 为同步 radar beat ↔ ECG R-peak beat-level matching/paired IBI agreement 缺失；HRV 继续 `BLOCKED`。
+- 无模型、#16、C2B/C2C、target-lock rerun、设备烧录、原始数据、NIR/RGB 操作；#16 保持 `PAUSED`。
+
 ## 2026-08-29 mmWave literature/pipeline audit decision — PASS / #16 PAUSED
 
 - 已建立 canonical 文献证据与决策账本：`docs/research/MMWAVE_LITERATURE_EVIDENCE_AND_DECISION_LEDGER_2026-08-29.md`。
