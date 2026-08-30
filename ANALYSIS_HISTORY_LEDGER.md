@@ -14,9 +14,9 @@
 
 **A1 结果**：冻结 #24 分母为 `325/10/0`，其中 ECG_VALID 可评估=`323`、coverage-limited=`2`。既有 fixed path 在 102 wrong-selection 中 exact=`0`；sequential previous-anchor selector exact=`37`、nearby=`10`。在 182 nearby 中，sequential selector exact=`17`、nearby=`45`。无-anchor ablation 作为描述性对照保存；不将 selector replay 当 HR 性能提升。
 
-**A2 与窗口决策**：由于缺逐窗 candidate/bin/channel 对应关系，182 nearby 不能继续声称 same-target/different-candidate、neighbor-bin、neighbor-channel、switch 或 persistence 子类，状态为 `BLOCKED_ON_PER_WINDOW_CANDIDATE_BIN_CHANNEL_PROVENANCE`。既有 283 paired window diagnostic 的 20 s/60 s MAE=`14.703129/5.608574` bpm 与固定 path 不等同于 selector contract，故 #25 保持 `WAIT_ON_SELECTOR_VALIDITY`，不按 MAE 选择 60 s。
+**A2 与窗口决策**：将既有 335 行 target-ablation 的 selected bin/channel 与 replay/truth 按 `(subject, window_id)` 窄 join 后，182 nearby 的路径级子类为 neighbor-bin=`6`、neighbor-channel=`11`、target/channel switch=`164`、无替代 target 改变=`1`；同一 fixed target 上 selector candidate 改变=`182`。这不是独立 physical target truth；15 行 continuity 未与 335 窗对齐，candidate persistence/instability 仍 `NOT_AVAILABLE_FROM_EXISTING_ALIGNED_OUTPUTS`。既有 283 paired window diagnostic 的 20 s/60 s MAE=`14.703129/5.608574` bpm 与固定 path 不等同于 selector contract，故 #25 保持 `WAIT_ON_SELECTOR_VALIDITY`，不按 MAE 选择 60 s。
 
-**证据**：aggregate 与 manifest/report 位于 `docs/results/2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION/`；335-row replay 表为 `D:\Project\厚粲杯\11_数据\derived\mmwave_selector_path_reconciliation_20260830\MMWAVE_SELECTOR_PATH_REPLAY_335_WINDOWS_LOCAL_ONLY.csv`，仅 local-only。#26 独立物理真值检查未找到 session-level placement receipt，保持 `HARD_EXTERNAL_BLOCKER / PHYSICAL_GATE_UNRESOLVED`。HR/BR=`HOLD`，HRV=`BLOCKED`。
+**证据**：aggregate、A2 subtype 表和 manifest/report 位于 `docs/results/2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION/`；335-row replay 表与 182-row localization 表为 `D:\Project\厚粲杯\11_数据\derived\mmwave_selector_path_reconciliation_20260830\` 下的 local-only 文件。#26 独立物理真值检查未找到 session-level placement receipt，保持 `HARD_EXTERNAL_BLOCKER / PHYSICAL_GATE_UNRESOLVED`。HR/BR=`HOLD`，HRV=`BLOCKED`。
 
 ### 2026-08-30：#28 acquisition lifecycle future-prevention patch — ENGINEERING_PATCH_READY
 

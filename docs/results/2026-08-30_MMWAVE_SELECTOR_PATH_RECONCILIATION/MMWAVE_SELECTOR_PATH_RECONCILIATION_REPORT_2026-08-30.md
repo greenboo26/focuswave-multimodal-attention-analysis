@@ -1,6 +1,6 @@
 # mmWave selector-path reconciliation — 2026-08-30
 
-状态：`PARTIAL / SELECTOR_PATH_REPLAY_COMPLETE_LOCALIZATION_EVIDENCE_LIMITED`
+状态：`PARTIAL / SELECTOR_PATH_REPLAY_AND_PATH_LOCALIZATION_COMPLETE_PHYSICAL_TARGET_UNRESOLVED`
 
 ## 执行结果
 
@@ -14,10 +14,12 @@
 
 这次 replay 能回答“既有 spectral selector 在相同 target/bin/channel 上是否改变频率选择”，不能回答“selector 是否找到了真实胸腔 target”。在可评估的 323 个 ECG_VALID 窗中，sequential previous-anchor selector 对 102 个 wrong-selection 恢复 exact=`37`，对 182 个 nearby 恢复 exact=`17`；无 previous-anchor 对照见 summary，用于区分跨窗状态贡献。任何恢复都只是 supporting diagnostic，不是正式 HR 改善。
 
-## A2 定位证据边界
+## A2 路径级定位
 
-当前持久化的 `target_continuity_diagnostic.csv` 只有 `15` 行，是每个 subject 前 6000 frame 的早期 sliding-window 诊断；它不是 335 个完整 block-local 窗口，且没有逐窗 candidate→bin/channel 对应关系。因此不能把 182 个 nearby cases 进一步声称为 same-target/different-candidate、neighbor-bin、neighbor-channel、target/channel switching 或 candidate-persistence 子类。现阶段这部分是 `BLOCKED_ON_PER_WINDOW_CANDIDATE_BIN_CHANNEL_PROVENANCE`，不是算法 blocker，也不授权新增 instrumentation 或新算法。
+将现有 335 行 target-ablation 的 selected bin/channel 与本次 replay/truth 按 `(subject, window_id)` 对齐后，182 个 nearby 可得到路径级最小分类：neighbor-bin=`6`、neighbor-channel=`11`、target/channel switch=`164`、no alternative target change=`1`，合计 182；同一 fixed target 上 selector candidate 改变=`182`。逐窗分类表仅写入 `D:\Project\厚粲杯\11_数据\derived\mmwave_selector_path_reconciliation_20260830\MMWAVE_NEARBY_LOCALIZATION_SUBTYPES_182_WINDOWS_LOCAL_ONLY.csv`，聚合见 `MMWAVE_NEARBY_LOCALIZATION_SUBTYPES.csv`。
+
+这解决的是“已有路径之间如何分流”的证据缺口，不是“真实 target 在哪里”。`target_continuity_diagnostic.csv` 仍只有 `15` 条早期 sliding-window 记录，未提供与 335 窗对齐的连续 candidate persistence/instability，因此该子类保持 `NOT_AVAILABLE_FROM_EXISTING_ALIGNED_OUTPUTS`；独立 physical target truth 仍 `UNRESOLVED`。
 
 ## 复用与边界
 
-`REUSE_REJECTION_REASON`：既有 ECG_VALID spectral audit 没有持久化 canonical `_select_spectral_bpm()` 在 335 窗中的 replay 及 previous-anchor 输入；既有 continuity 诊断也没有与 335 窗逐窗对齐的 candidate-bin-channel provenance。因此只增加 downstream adapter 和 Git-safe aggregate，不修改 producer、raw、target、QC、gate、NIR/RGB、C2B/C2C 或 HR/HRV 状态。
+`REUSE_REJECTION_REASON`：既有 ECG_VALID spectral audit 没有 canonical `_select_spectral_bpm()` 的 335 窗 previous-anchor replay；target ablation、truth 和 replay 也未合并为 182 nearby 的路径级 subtype aggregate。因此只扩展现有 downstream adapter 做窄 join，不修改 producer、raw、target、QC、gate、NIR/RGB、C2B/C2C 或 HR/HRV 状态。

@@ -1,7 +1,7 @@
 {
   "run_id": "MMWAVE_SELECTOR_PATH_RECONCILIATION_20260830",
-  "run_started_utc": "2026-08-30T04:49:31.557796+00:00",
-  "status": "PARTIAL / SELECTOR_PATH_REPLAY_COMPLETE_LOCALIZATION_EVIDENCE_LIMITED",
+  "run_started_utc": "2026-08-30T05:24:30.314199+00:00",
+  "status": "PARTIAL / SELECTOR_PATH_REPLAY_AND_PATH_LOCALIZATION_COMPLETE_PHYSICAL_TARGET_UNRESOLVED",
   "denominators": {
     "all_windows": 335,
     "ecg_valid_primary": 325,
@@ -13,14 +13,16 @@
     "absent_or_weak": 17,
     "coverage_or_reference": 12
   },
-  "canonical_main_head_at_run": "6def82c2d5900ea96857151ca63e73ba02bff328",
-  "canonical_integration_commit": "e3553ac3a6bc616c2d68e61346fc1ef1e5d5d4fa",
-  "canonical_origin_main_at_run": "6def82c2d5900ea96857151ca63e73ba02bff328",
+  "canonical_main_head_at_run": "17320ea553f63e49dce641135962c5601e5ccff9",
+  "canonical_origin_main_at_run": "17320ea553f63e49dce641135962c5601e5ccff9",
   "inputs": {
     "fixed_windows": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\mmwave_ecg_block_window_comparison.csv",
     "fixed_windows_sha256": "06370f49681854a9dee6cb7ed3b524f4ab3aef7c59dc64a57e9c22c8988b4033",
     "truth_table": "D:\\Project\\厚粲杯\\11_数据\\derived\\ecg_valid_retrospective_spectral_truth_audit_20260830\\ECG_VALID_RETROSPECTIVE_SPECTRAL_TRUTH_TABLE.csv",
     "truth_table_sha256": "4a353d69cf345f797ed0231ef012c3bb26cc9830e9c9ec90a00ec7c6f2d75b0a",
+    "target_ablation": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_HR_GATE_TARGET_ABLATION_2026-08-30.csv",
+    "target_ablation_sha256": "74213ca10ae39541ae83e7e83ea2f671f1f52ed9201ae71d93455569d000a474",
+    "target_ablation_rows": 335,
     "continuity_diagnostic": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\target_continuity_diagnostic.csv",
     "continuity_rows": 15
   },
@@ -41,7 +43,7 @@
       "role": "#24 ECG oracle labels only"
     }
   ],
-  "reuse_rejection_reason": "Existing ECG_VALID spectral audit stores fixed-target candidates and truth labels but does not persist a 335-window replay of canonical _select_spectral_bpm with previous/reference-anchor inputs or a joined localization evidence table; add only this downstream adapter.",
+  "reuse_rejection_reason": "Existing ECG_VALID spectral audit, target ablation, and continuity outputs were separate; none joined the canonical selector replay to the 182 nearby subset with path-level bin/channel subtype counts. Add only this downstream join; do not add instrumentation or a new algorithm.",
   "selector_contract": {
     "target_bin_channel": "existing local_hr_bin/local_hr_channel unchanged",
     "heart_signal": "existing producer extract_displacement then _sos_bandpass",
@@ -51,12 +53,27 @@
     "ecg": "oracle-only retrospective label; no ECG value passed into selector",
     "formal_status": "diagnostic/supporting only; no producer write-back or HR promotion"
   },
-  "localization_boundary": "The existing target_continuity_diagnostic has 15 early sliding-window rows, not 335 complete-block rows. It records selected bin/channel switching but no per-window candidate-to-bin/channel mapping or independently observed true physical target. The 182 nearby cases therefore cannot be honestly split into same-target/different-candidate, neighbor-bin, neighbor-channel, switching, or persistence subclasses from current durable evidence.",
+  "localization_boundary": "The existing 335-row target ablation plus replay/truth join supports path-level subtypes: same fixed target/different candidate=182, neighbor bin=6, neighbor channel=11, target/channel switch=164, no alternative target change=1. The 15-row continuity diagnostic is not aligned to the 335 windows, so candidate persistence/instability remains unavailable; no subtype is independent physical target truth.",
+  "localization": {
+    "rows": 182,
+    "target_path_subtypes": {
+      "target_channel_switch": 164,
+      "neighbor_channel": 11,
+      "no_alternative_target_change_observed": 1,
+      "neighbor_bin": 6
+    },
+    "same_fixed_target_different_candidate": 182,
+    "candidate_persistence": "NOT_AVAILABLE_FROM_EXISTING_ALIGNED_OUTPUTS",
+    "physical_target_truth": "UNRESOLVED"
+  },
   "verification": {
     "py_compile": "PASS",
     "replay_run": "PASS",
+    "localization_join": "PASS",
     "output_rows": 335,
+    "localization_rows": 182,
     "local_full_table": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_selector_path_reconciliation_20260830\\MMWAVE_SELECTOR_PATH_REPLAY_335_WINDOWS_LOCAL_ONLY.csv",
+    "local_localization_table": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_selector_path_reconciliation_20260830\\MMWAVE_NEARBY_LOCALIZATION_SUBTYPES_182_WINDOWS_LOCAL_ONLY.csv",
     "producer_modified": false,
     "raw_modified": false,
     "ecg_used_for_selection": false

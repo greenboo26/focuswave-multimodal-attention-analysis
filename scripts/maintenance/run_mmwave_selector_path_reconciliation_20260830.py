@@ -27,6 +27,7 @@ TARGET_SCRIPT = ROOT / "scripts" / "maintenance" / "run_mmwave_targeted_validati
 PRODUCER_SCRIPT = ROOT / "scripts" / "process_vital_signs_v3_1_1.py"
 TRUTH_TABLE = Path(r"D:\Project\厚粲杯\11_数据\derived\ecg_valid_retrospective_spectral_truth_audit_20260830\ECG_VALID_RETROSPECTIVE_SPECTRAL_TRUTH_TABLE.csv")
 CONTINUITY_INPUT = ROOT / "docs" / "results" / "2026-08-30_MMWAVE_TARGETED_VALIDATION" / "target_continuity_diagnostic.csv"
+TARGET_ABLATION = ROOT / "docs" / "results" / "2026-08-30_MMWAVE_TARGETED_VALIDATION" / "MMWAVE_HR_GATE_TARGET_ABLATION_2026-08-30.csv"
 LOCAL_ROOT = Path(r"D:\Project\厚粲杯\11_数据\derived\mmwave_selector_path_reconciliation_20260830")
 SUBJECTS = ("97793", "9779", "97795")
 FS = 100.0
@@ -128,8 +129,9 @@ def run(local_root: Path, result_root: Path) -> dict:
     algo = load_module(PRODUCER_SCRIPT, "canonical_producer_for_selector_reconciliation")
     truth = {(row["subject"], row["window_id"]): row for row in read_csv(TRUTH_TABLE)}
     fixed = {(row["subject"], row["window_id"]): row for row in read_csv(ROOT / "docs" / "results" / "2026-08-30_MMWAVE_TARGETED_VALIDATION" / "mmwave_ecg_block_window_comparison.csv")}
-    if len(truth) != 335 or len(fixed) != 335:
-        raise RuntimeError(f"Frozen denominator mismatch truth={len(truth)} fixed={len(fixed)}")
+    target_ablation = {(row["subject"], row["window_id"]): row for row in read_csv(TARGET_ABLATION)}
+    if len(truth) != 335 or len(fixed) != 335 or len(target_ablation) != 335:
+        raise RuntimeError(f"Frozen denominator mismatch truth={len(truth)} fixed={len(fixed)} target_ablation={len(target_ablation)}")
     local_root.mkdir(parents=True, exist_ok=True)
     rows: list[dict] = []
     for subject in SUBJECTS:
@@ -194,6 +196,80 @@ def run(local_root: Path, result_root: Path) -> dict:
             summary_rows.append({"scope": name, "path": path_name, "n_rows": len(members), "exact": count(members, path_name, "exact"), "nearby": count(members, path_name, "nearby"), "not_recovered": count(members, path_name, "not_recovered"), "not_evaluable": count(members, path_name, "not_evaluable")})
     write_csv(result_root / "MMWAVE_SELECTOR_PATH_RECONCILIATION_SUMMARY.csv", summary_rows)
 
+    def integer(value) -> int | None:
+        parsed = number(value)
+        return int(parsed) if parsed is not None else None
+
+    localization_rows: list[dict] = []
+    for row in nearby:
+        key = (row["subject"], row["window_id"])
+        target_row = target_ablation[key]
+        fixed_bin = integer(row["selected_hr_bin"])
+        fixed_channel = integer(row["selected_hr_channel"])
+        arm0_bin = integer(target_row.get("arm0_selected_bin"))
+        arm0_channel = integer(target_row.get("arm0_selected_channel"))
+        fixed_target_consistent = (fixed_bin, fixed_channel) == (arm0_bin, arm0_channel)
+        fixed_bpm = number(row.get("fixed_path_bpm"))
+        selector_bpm = number(row.get("selector_bpm"))
+        same_target_different_candidate = (
+            fixed_target_consistent and fixed_bpm is not None and selector_bpm is not None and abs(fixed_bpm - selector_bpm) > 1e-9
+        )
+        alternatives = []
+        for arm_name in ("arm1_selected", "arm2_selected", "arm3_selected"):
+            alt_bin = integer(target_row.get(f"{arm_name}_bin"))
+            alt_channel = integer(target_row.get(f"{arm_name}_channel"))
+            if alt_bin is not None and alt_channel is not None and arm0_bin is not None and arm0_channel is not None:
+                alternatives.append((alt_bin, alt_channel))
+        changed = [(alt_bin, alt_channel) for alt_bin, alt_channel in alternatives if (alt_bin, alt_channel) != (arm0_bin, arm0_channel)]
+        has_neighbor_bin = any(abs(alt_bin - arm0_bin) == 1 and alt_channel == arm0_channel for alt_bin, alt_channel in changed)
+        has_neighbor_channel = any(alt_bin == arm0_bin and alt_channel != arm0_channel for alt_bin, alt_channel in changed)
+        has_target_channel_switch = any(
+            (alt_bin, alt_channel) != (arm0_bin, arm0_channel)
+            and not (abs(alt_bin - arm0_bin) == 1 and alt_channel == arm0_channel)
+            and not (alt_bin == arm0_bin and alt_channel != arm0_channel)
+            for alt_bin, alt_channel in changed
+        )
+        if has_neighbor_bin:
+            target_locus = "neighbor_bin"
+        elif has_neighbor_channel:
+            target_locus = "neighbor_channel"
+        elif has_target_channel_switch:
+            target_locus = "target_channel_switch"
+        elif not changed:
+            target_locus = "no_alternative_target_change_observed"
+        else:
+            target_locus = "unclassified_target_change"
+        localization_rows.append({
+            "subject": row["subject"],
+            "block_id": row["block_id"],
+            "window_id": row["window_id"],
+            "truth_class": row["fixed_path_truth_class"],
+            "fixed_target_bin": fixed_bin,
+            "fixed_target_channel": fixed_channel,
+            "arm0_target_bin": arm0_bin,
+            "arm0_target_channel": arm0_channel,
+            "fixed_target_contract_consistent": fixed_target_consistent,
+            "fixed_path_bpm": fixed_bpm,
+            "selector_bpm": selector_bpm,
+            "same_fixed_target_different_candidate": same_target_different_candidate,
+            "selector_recovery_label": row["selector_recovery_label"],
+            "target_path_locus": target_locus,
+            "candidate_count": integer(truth[key].get("candidate_count")),
+            "nearest_ecg_candidate_rank": integer(truth[key].get("nearest_ecg_candidate_rank")),
+            "candidate_persistence_status": "NOT_AVAILABLE_FROM_EXISTING_ALIGNED_OUTPUTS",
+            "evidence_boundary": "path-level existing selector/target ablation; not independent physical target truth",
+        })
+    localization_table = local_root / "MMWAVE_NEARBY_LOCALIZATION_SUBTYPES_182_WINDOWS_LOCAL_ONLY.csv"
+    write_csv(localization_table, localization_rows)
+    subtype_counts = Counter(row["target_path_locus"] for row in localization_rows)
+    subtype_rows = [
+        {"scope": "NEARBY_TARGET_BIN_CHANNEL_182", "subtype": subtype, "n_rows": subtype_counts.get(subtype, 0), "pct": round(100.0 * subtype_counts.get(subtype, 0) / len(localization_rows), 3), "evidence_status": "PATH_LEVEL_SUPPORTING"}
+        for subtype in ("neighbor_bin", "neighbor_channel", "target_channel_switch", "no_alternative_target_change_observed", "unclassified_target_change")
+    ]
+    subtype_rows.append({"scope": "NEARBY_TARGET_BIN_CHANNEL_182", "subtype": "same_fixed_target_different_candidate", "n_rows": sum(row["same_fixed_target_different_candidate"] for row in localization_rows), "pct": round(100.0 * sum(row["same_fixed_target_different_candidate"] for row in localization_rows) / len(localization_rows), 3), "evidence_status": "ORTHOGONAL_SELECTOR_PATH_SUPPORTING"})
+    subtype_rows.append({"scope": "NEARBY_TARGET_BIN_CHANNEL_182", "subtype": "candidate_persistence_or_instability", "n_rows": 0, "pct": 0.0, "evidence_status": "NOT_AVAILABLE_FROM_EXISTING_ALIGNED_OUTPUTS"})
+    write_csv(result_root / "MMWAVE_NEARBY_LOCALIZATION_SUBTYPES.csv", subtype_rows)
+
     continuity = read_csv(CONTINUITY_INPUT) if CONTINUITY_INPUT.exists() else []
     continuity_summary = [{
         "evidence_scope": "existing_target_continuity_diagnostic",
@@ -201,14 +277,23 @@ def run(local_root: Path, result_root: Path) -> dict:
         "rows_aligned_to_frozen_335": 0,
         "channel_switch_true": sum(str(row.get("hr_channel_switch", "")).lower() == "true" for row in continuity),
         "bin_displacement_nonzero": sum(number(row.get("hr_bin_displacement")) not in (None, 0.0) for row in continuity),
-        "evidence_boundary": "15 early sliding windows (first 6000 frames per subject), not the 335 complete-block windows; no per-window candidate-to-bin/channel linkage for the 182 nearby cases",
+        "candidate_target_rows": len(target_ablation),
+        "candidate_target_rows_aligned_to_frozen_335": len(target_ablation),
+        "nearby_localization_rows": len(localization_rows),
+        "same_fixed_target_different_candidate": sum(row["same_fixed_target_different_candidate"] for row in localization_rows),
+        "neighbor_bin": subtype_counts.get("neighbor_bin", 0),
+        "neighbor_channel": subtype_counts.get("neighbor_channel", 0),
+        "target_channel_switch": subtype_counts.get("target_channel_switch", 0),
+        "no_alternative_target_change_observed": subtype_counts.get("no_alternative_target_change_observed", 0),
+        "candidate_persistence_rows": 0,
+        "evidence_boundary": "15 early sliding windows remain non-aligned for persistence; existing 335-row target ablation plus replay/truth join supports path-level subtypes for all 182 nearby cases, not independent physical target truth",
     }]
     write_csv(result_root / "MMWAVE_TARGET_LOCALIZATION_EVIDENCE_COVERAGE.csv", continuity_summary)
 
     manifest = {
         "run_id": "MMWAVE_SELECTOR_PATH_RECONCILIATION_20260830",
         "run_started_utc": datetime.now(timezone.utc).isoformat(),
-        "status": "PARTIAL / SELECTOR_PATH_REPLAY_COMPLETE_LOCALIZATION_EVIDENCE_LIMITED",
+        "status": "PARTIAL / SELECTOR_PATH_REPLAY_AND_PATH_LOCALIZATION_COMPLETE_PHYSICAL_TARGET_UNRESOLVED",
         "denominators": {"all_windows": 335, "ecg_valid_primary": len(primary), "ecg_valid_evaluable": len(evaluable), "ecg_valid_coverage_limited": len(primary) - len(evaluable), "wrong_selection": len(wrong), "nearby_target_bin_channel": len(nearby), "selected_ecg_bin": sum(row["fixed_path_truth_class"] == "true_peak_selected_ecg_bin" for row in rows), "absent_or_weak": sum(row["fixed_path_truth_class"] == "absent_or_weak" for row in rows), "coverage_or_reference": sum(row["fixed_path_truth_class"] == "insufficient_coverage_or_reference" for row in rows)},
         "canonical_main_head_at_run": git_value("rev-parse", "HEAD"),
         "canonical_origin_main_at_run": git_value("rev-parse", "origin/main"),
@@ -216,6 +301,7 @@ def run(local_root: Path, result_root: Path) -> dict:
             "fixed_windows": str(ROOT / "docs" / "results" / "2026-08-30_MMWAVE_TARGETED_VALIDATION" / "mmwave_ecg_block_window_comparison.csv"),
             "fixed_windows_sha256": sha256(ROOT / "docs" / "results" / "2026-08-30_MMWAVE_TARGETED_VALIDATION" / "mmwave_ecg_block_window_comparison.csv"),
             "truth_table": str(TRUTH_TABLE), "truth_table_sha256": sha256(TRUTH_TABLE),
+            "target_ablation": str(TARGET_ABLATION), "target_ablation_sha256": sha256(TARGET_ABLATION), "target_ablation_rows": len(target_ablation),
             "continuity_diagnostic": str(CONTINUITY_INPUT), "continuity_rows": len(continuity),
         },
         "reused_assets": [
@@ -223,7 +309,7 @@ def run(local_root: Path, result_root: Path) -> dict:
             {"path": str(PRODUCER_SCRIPT), "sha256": sha256(PRODUCER_SCRIPT), "role": "existing bandpass, peak, previous-anchor, spectral selector and harmonic folding"},
             {"path": str(TRUTH_TABLE), "sha256": sha256(TRUTH_TABLE), "role": "#24 ECG oracle labels only"},
         ],
-        "reuse_rejection_reason": "Existing ECG_VALID spectral audit stores fixed-target candidates and truth labels but does not persist a 335-window replay of canonical _select_spectral_bpm with previous/reference-anchor inputs or a joined localization evidence table; add only this downstream adapter.",
+        "reuse_rejection_reason": "Existing ECG_VALID spectral audit, target ablation, and continuity outputs were separate; none joined the canonical selector replay to the 182 nearby subset with path-level bin/channel subtype counts. Add only this downstream join; do not add instrumentation or a new algorithm.",
         "selector_contract": {
             "target_bin_channel": "existing local_hr_bin/local_hr_channel unchanged",
             "heart_signal": "existing producer extract_displacement then _sos_bandpass",
@@ -233,8 +319,9 @@ def run(local_root: Path, result_root: Path) -> dict:
             "ecg": "oracle-only retrospective label; no ECG value passed into selector",
             "formal_status": "diagnostic/supporting only; no producer write-back or HR promotion",
         },
-        "localization_boundary": "The existing target_continuity_diagnostic has 15 early sliding-window rows, not 335 complete-block rows. It records selected bin/channel switching but no per-window candidate-to-bin/channel mapping or independently observed true physical target. The 182 nearby cases therefore cannot be honestly split into same-target/different-candidate, neighbor-bin, neighbor-channel, switching, or persistence subclasses from current durable evidence.",
-        "verification": {"py_compile": "PASS", "replay_run": "PASS", "output_rows": len(rows), "local_full_table": str(local_table), "producer_modified": False, "raw_modified": False, "ecg_used_for_selection": False},
+        "localization_boundary": "The existing 335-row target ablation plus replay/truth join supports path-level subtypes: same fixed target/different candidate=182, neighbor bin=6, neighbor channel=11, target/channel switch=164, no alternative target change=1. The 15-row continuity diagnostic is not aligned to the 335 windows, so candidate persistence/instability remains unavailable; no subtype is independent physical target truth.",
+        "localization": {"rows": len(localization_rows), "target_path_subtypes": dict(subtype_counts), "same_fixed_target_different_candidate": sum(row["same_fixed_target_different_candidate"] for row in localization_rows), "candidate_persistence": "NOT_AVAILABLE_FROM_EXISTING_ALIGNED_OUTPUTS", "physical_target_truth": "UNRESOLVED"},
+        "verification": {"py_compile": "PASS", "replay_run": "PASS", "localization_join": "PASS", "output_rows": len(rows), "localization_rows": len(localization_rows), "local_full_table": str(local_table), "local_localization_table": str(localization_table), "producer_modified": False, "raw_modified": False, "ecg_used_for_selection": False},
     }
     (result_root / "MMWAVE_SELECTOR_PATH_RECONCILIATION_MANIFEST.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     report = f"""# mmWave selector-path reconciliation — 2026-08-30
@@ -253,13 +340,15 @@ def run(local_root: Path, result_root: Path) -> dict:
 
 这次 replay 能回答“既有 spectral selector 在相同 target/bin/channel 上是否改变频率选择”，不能回答“selector 是否找到了真实胸腔 target”。在可评估的 323 个 ECG_VALID 窗中，sequential previous-anchor selector 对 102 个 wrong-selection 恢复 exact=`{sum(row['selector_recovery_label'] == 'exact' for row in wrong)}`，对 182 个 nearby 恢复 exact=`{sum(row['selector_recovery_label'] == 'exact' for row in nearby)}`；无 previous-anchor 对照见 summary，用于区分跨窗状态贡献。任何恢复都只是 supporting diagnostic，不是正式 HR 改善。
 
-## A2 定位证据边界
+## A2 路径级定位
 
-当前持久化的 `target_continuity_diagnostic.csv` 只有 `{len(continuity)}` 行，是每个 subject 前 6000 frame 的早期 sliding-window 诊断；它不是 335 个完整 block-local 窗口，且没有逐窗 candidate→bin/channel 对应关系。因此不能把 182 个 nearby cases 进一步声称为 same-target/different-candidate、neighbor-bin、neighbor-channel、target/channel switching 或 candidate-persistence 子类。现阶段这部分是 `BLOCKED_ON_PER_WINDOW_CANDIDATE_BIN_CHANNEL_PROVENANCE`，不是算法 blocker，也不授权新增 instrumentation 或新算法。
+将现有 335 行 target-ablation 的 selected bin/channel 与本次 replay/truth 按 `(subject, window_id)` 对齐后，182 个 nearby 可得到路径级最小分类：neighbor-bin=`{subtype_counts.get('neighbor_bin', 0)}`、neighbor-channel=`{subtype_counts.get('neighbor_channel', 0)}`、target/channel switch=`{subtype_counts.get('target_channel_switch', 0)}`、no alternative target change=`{subtype_counts.get('no_alternative_target_change_observed', 0)}`，合计 182；同一 fixed target 上 selector candidate 改变=`{sum(row['same_fixed_target_different_candidate'] for row in localization_rows)}`。逐窗分类表仅写入 `{localization_table}`，聚合见 `MMWAVE_NEARBY_LOCALIZATION_SUBTYPES.csv`。
+
+这解决的是“已有路径之间如何分流”的证据缺口，不是“真实 target 在哪里”。`target_continuity_diagnostic.csv` 仍只有 `{len(continuity)}` 条早期 sliding-window 记录，未提供与 335 窗对齐的连续 candidate persistence/instability，因此该子类保持 `NOT_AVAILABLE_FROM_EXISTING_ALIGNED_OUTPUTS`；独立 physical target truth 仍 `UNRESOLVED`。
 
 ## 复用与边界
 
-`REUSE_REJECTION_REASON`：既有 ECG_VALID spectral audit 没有持久化 canonical `_select_spectral_bpm()` 在 335 窗中的 replay 及 previous-anchor 输入；既有 continuity 诊断也没有与 335 窗逐窗对齐的 candidate-bin-channel provenance。因此只增加 downstream adapter 和 Git-safe aggregate，不修改 producer、raw、target、QC、gate、NIR/RGB、C2B/C2C 或 HR/HRV 状态。
+`REUSE_REJECTION_REASON`：既有 ECG_VALID spectral audit 没有 canonical `_select_spectral_bpm()` 的 335 窗 previous-anchor replay；target ablation、truth 和 replay 也未合并为 182 nearby 的路径级 subtype aggregate。因此只扩展现有 downstream adapter 做窄 join，不修改 producer、raw、target、QC、gate、NIR/RGB、C2B/C2C 或 HR/HRV 状态。
 """
     (result_root / "MMWAVE_SELECTOR_PATH_RECONCILIATION_REPORT_2026-08-30.md").write_text(report, encoding="utf-8")
     return manifest
