@@ -1,9 +1,14 @@
-"""pre_30s 对齐窗口 + 完整 selector 链 HR 重跑试跑（sub-97793）。
+"""pre_30s 对齐窗口 + 完整 selector 链 HR 重跑（6 场次扩样，08-31）。
 
 复用 producer 的完整 selector 链（自动选 bin/channel + spectral + 谐波折叠 +
 time/frequency fusion）和 targeted_validation 的 block-local ECG affine 对齐。
 两个估计器时长：30s 全程 + 25s 末尾段。仅下游 audit，不写 producer 输出、不
 用 ECG 选 target。
+
+场次：97793 / 9779 / 97795（原 3 场次）+ 97792 / 97796 / 97794（扩样）。
+命名坑：97795 的 acq 误写 97995.acq、97794 目录及目录内文件前缀误用 97994，
+映射见 ACQ_FILE_OVERRIDES / FILE_KEY_OVERRIDES。97792 无正式 block 行为数据
+（仅 baseline+practice），判 not_estimable 跳过。
 
 用法：
     .venv_t0/Scripts/python.exe scripts/maintenance/run_mmwave_pre30s_selector_hr_20260831.py
@@ -21,10 +26,38 @@ ALGO_ROOT = Path(__file__).resolve().parents[2]
 PRODUCER = ALGO_ROOT / "scripts" / "process_vital_signs_v3_1_1.py"
 TARGETED = ALGO_ROOT / "scripts" / "maintenance" / "run_mmwave_targeted_validation_20260830.py"
 DATA_ROOT = Path(r"D:\acq_mmwave_data")
-SUBJECTS = ("97793", "9779", "97795")
+SUBJECTS = ("97793", "9779", "97795", "97792", "97796", "97794")
 FS = 100.0
 PRE_WINDOW_MS = 30_000
 COURSE_S = 25.0
+
+# ---- 场次命名坑映射（08-16 现场日志口径，08-31 扩样只读复核确认） ----
+# 97795：目录 sub-97795_ 正确，acq 文件名误写 97995.acq（目录内唯一 acq，glob 本可命中，显式映射更稳）。
+# 97794：目录 sub-97994_ 及目录内 beh/mmwave 文件名前缀均为 97994（acq 文件名 97794.acq 正确）。
+#        口径统一为场次 97794；调用 target 模块读文件时用文件主体 97994，输出行的 subject 写回 97794。
+ACQ_FILE_OVERRIDES = {"97795": "97995.acq"}
+FILE_KEY_OVERRIDES = {"97794": "97994"}
+
+
+def install_target_overrides(target) -> None:
+    """给 targeted 模块装命名坑映射（仅内存 patch，不改任何文件）。
+
+    target 模块的 session_dir/PartReader 等按 f"sub-{subject}_" 拼路径，
+    对 97794 需改用文件主体 97994（由调用点翻译，见 run_subject）；本函数
+    只 patch acq_path：97795 显式取 97995.acq，其余保持 glob 原逻辑。
+    """
+    orig_acq_path = target.acq_path
+
+    def acq_path(subject: str) -> Path:
+        override = ACQ_FILE_OVERRIDES.get(subject)
+        if override:
+            path = target.session_dir(subject) / override
+            if not path.exists():
+                raise FileNotFoundError(f"Override acq missing: {path}")
+            return path
+        return orig_acq_path(subject)
+
+    target.acq_path = acq_path
 
 
 def load_module(path: Path, name: str):
@@ -95,17 +128,24 @@ def load_probe_onsets(subject: str) -> list[dict]:
 
 
 def run_subject(algo, target, subject: str) -> list[dict]:
-    timestamps = target.load_mmwave_timestamps(subject)
-    events = target.load_events(subject)
-    physical, _ = target.decode_biopac_markers(subject)
-    blocks, alignment = target.block_intervals(subject, timestamps, events, physical)
-    reader = target.PartReader(subject)
-    ecg, rsp, ecg_fs = target.load_ecg_reference(subject)
+    # 97794 的目录/文件前缀误用 97994，读文件时用文件主体 key；输出行 subject 保持 97794
+    file_key = FILE_KEY_OVERRIDES.get(subject, subject)
+    probes = load_probe_onsets(file_key)
+    if not probes:
+        # not_estimable：无 probe 窗口（97792 仅 baseline+practice，beh 无 Block CSV 且
+        # events.csv 无 block1-4 段事件）。不读 acq、不切 mmWave 帧，直接跳过。
+        print(f"[NOT_ESTIMABLE] {subject}: 无 probe 窗口（beh Block CSV 或 events.csv 正式 block 缺失），跳过")
+        return []
+    timestamps = target.load_mmwave_timestamps(file_key)
+    events = target.load_events(file_key)
+    physical, _ = target.decode_biopac_markers(file_key)
+    blocks, alignment = target.block_intervals(file_key, timestamps, events, physical)
+    reader = target.PartReader(file_key)
+    ecg, rsp, ecg_fs = target.load_ecg_reference(file_key)
 
     block_map = {b["block_id"]: b for b in blocks}
     align_map = {r["block_id"]: r for r in alignment}
 
-    probes = load_probe_onsets(subject)
     previous_by_block: dict[str, float | None] = {}
     rows: list[dict] = []
 
@@ -204,13 +244,17 @@ def summarize(subject: str | None, rows: list[dict]) -> None:
 def main() -> None:
     algo = load_module(PRODUCER, "producer_pre30s")
     target = load_module(TARGETED, "targeted_pre30s")
+    install_target_overrides(target)
 
-    out = Path(r"D:\Project\厚粲杯\11_数据\derived\mmwave_pre30s_selector_hr_20260831")
+    # 6 场次扩样输出写新目录，不覆盖 08-31 旧 3 场次结果目录 mmwave_pre30s_selector_hr_20260831
+    out = Path(r"D:\Project\厚粲杯\11_数据\derived\mmwave_pre30s_selector_hr_20260831_6subjects_expanded")
     out.mkdir(parents=True, exist_ok=True)
 
     all_rows: list[dict] = []
     for subject in SUBJECTS:
         rows = run_subject(algo, target, subject)
+        if not rows:
+            continue  # not_estimable 场次已在 run_subject 打印原因，不写空 CSV
         summarize(subject, rows)
         all_rows.extend(rows)
         fields = sorted({k for r in rows for k in r})
