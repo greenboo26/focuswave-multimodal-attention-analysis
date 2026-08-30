@@ -1,0 +1,31 @@
+field_name,level,type,unit,required,source_semantics,scientific_role,current_status,missingness_rule,multimodal_use
+repeat_participant_id,probe,string,id,yes,central frozen identity mapping,identity,CANONICAL,never infer from folder,JOIN_KEY
+session_id,probe,string,id,yes,central acquisition identity,identity,CANONICAL,retain all timeline rows,JOIN_KEY
+block_id,probe,string,id,yes,formal behavior block identity,identity,CANONICAL,retain all timeline rows,JOIN_KEY
+probe_id,probe,string,id,yes,canonical probe identity,identity,CANONICAL,retain all timeline rows,JOIN_KEY
+window_name,probe,string,name,yes,currently pre_30s,window,CANONICAL,retain all timeline rows,JOIN_KEY
+probe_onset_unix_ms,probe,integer,ms,yes,formal behavior master timeline real Unix milliseconds,time,CANONICAL,no local-clock substitution,AUDIT
+window_effective_start_unix_ms,probe,integer,ms,yes,max(probe_onset-30000 and formal block start),time,CANONICAL,explicit truncation,AUDIT
+window_end_unix_ms,probe,integer,ms,yes,probe onset exclusive endpoint,time,CANONICAL,no local-clock substitution,AUDIT
+mmwave_state,probe,string,enum,yes,modality row state,structural,STRUCTURAL_ALLOW,explicit state required,AUDIT_SENSITIVITY
+mmwave_observed,probe,boolean,bool,yes,whether usable source observations overlap window,structural,STRUCTURAL_ALLOW,false is not zero physiology,AUDIT_SENSITIVITY
+mmwave_missing_reason,probe,string,reason,yes,explicit structural/observation/QC reason,structural,STRUCTURAL_ALLOW,empty only when semantically not applicable,AUDIT_SENSITIVITY
+mmwave_source_run_id,probe,string,id,no,producer/adapter run identifier,provenance,STRUCTURAL_ALLOW,null when unavailable,AUDIT
+mmwave_source_commit,probe,string,git_sha,no,producer/adapter source commit,provenance,STRUCTURAL_ALLOW,null when unavailable,AUDIT
+mmwave_loadable,probe,boolean,bool,no,whether the source required for the window can be loaded,structural,STRUCTURAL_ALLOW,null when not assessable,AUDIT_SENSITIVITY
+mmwave_timestamp_coverage_fraction,probe,number,fraction,no,fraction of expected window covered by authoritative modality timestamps,structural,STRUCTURAL_ALLOW,null when timestamps unavailable,AUDIT_SENSITIVITY
+mmwave_hr_freq_bpm_median,probe,number,bpm,no,existing frequency-domain HR candidate aggregated within frozen window,physiology,SUPPORTING_HOLD,null when unavailable/withheld,NOT_PRIMARY
+mmwave_hr_time_bpm_median,probe,number,bpm,no,existing beat/time-domain HR candidate aggregated within frozen window,physiology,SUPPORTING_HOLD,null when unavailable/withheld,NOT_PRIMARY
+mmwave_hr_fused_bpm_median,probe,number,bpm,no,existing fused HR candidate aggregated within frozen window,physiology,SUPPORTING_HOLD,null when unavailable/withheld,NOT_PRIMARY
+mmwave_breath_rate_breaths_per_min_median,probe,number,breaths_per_min,no,existing producer breath_rate candidate aggregated within frozen window,physiology,SUPPORTING_HOLD,null when unavailable/withheld,NOT_PRIMARY
+mmwave_hr_usable_window_fraction,probe,number,fraction,no,fraction of internal HR windows marked usable by existing producer,quality,STRUCTURAL_ALLOW,null when not computed,AUDIT_SENSITIVITY
+mmwave_hr_mean_confidence,probe,number,score,no,existing producer confidence summary; not physiological validity,quality,STRUCTURAL_ALLOW,null when not computed,AUDIT_SENSITIVITY
+mmwave_selected_bin_mode,probe,integer,bin,no,modal selected range bin if selector provenance exists,target_diagnostic,DIAGNOSTIC_HOLD,null when unavailable,NOT_PRIMARY
+mmwave_selected_channel_mode,probe,integer,channel,no,modal selected channel if selector provenance exists,target_diagnostic,DIAGNOSTIC_HOLD,null when unavailable,NOT_PRIMARY
+mmwave_selected_bin_distance_proxy_m,probe,number,m,no,selected bin converted with frozen range spacing; not measured human distance,target_diagnostic,DIAGNOSTIC_HOLD,null when unavailable,NOT_PRIMARY
+mmwave_target_switch_rate,probe,number,fraction,no,within-window target/bin/channel switching metric only when exact semantics are frozen,target_diagnostic,DIAGNOSTIC_HOLD,null until semantics available,NOT_PRIMARY
+mmwave_phase_stability_median,probe,number,score,no,phase-stability field only when producer definition is explicitly frozen,signal_diagnostic,DIAGNOSTIC_HOLD,null until semantics available,NOT_PRIMARY
+mmwave_motion_proxy_median,probe,number,score,no,radar motion-like proxy only when producer definition is explicitly frozen,signal_diagnostic,DIAGNOSTIC_HOLD,null until semantics available,NOT_PRIMARY
+mmwave_ibi_median_ms,probe,number,ms,no,radar beat interval candidate,physiology,BLOCKED_EXCLUDE,must remain null for formal multimodal inference,EXCLUDE
+mmwave_rmssd_ms,probe,number,ms,no,HRV RMSSD candidate,physiology,BLOCKED_EXCLUDE,must remain null for formal multimodal inference,EXCLUDE
+mmwave_sdnn_ms,probe,number,ms,no,HRV SDNN candidate,physiology,BLOCKED_EXCLUDE,must remain null for formal multimodal inference,EXCLUDE

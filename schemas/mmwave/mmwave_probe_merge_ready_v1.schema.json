@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "focuswave:mmwave_probe_merge_ready_v1",
+  "title": "FocusWave mmWave probe merge-ready row v1",
+  "description": "Canonical probe-level reserve-interface schema. Scientific role restrictions are defined by docs/canonical/MMWAVE_FEATURE_CONTRACT_V1.csv.",
+  "type": "object",
+  "required": [
+    "repeat_participant_id",
+    "session_id",
+    "block_id",
+    "probe_id",
+    "window_name",
+    "probe_onset_unix_ms",
+    "window_effective_start_unix_ms",
+    "window_end_unix_ms",
+    "mmwave_state",
+    "mmwave_observed",
+    "mmwave_missing_reason"
+  ],
+  "properties": {
+    "repeat_participant_id": {"type": "string", "minLength": 1},
+    "session_id": {"type": "string", "minLength": 1},
+    "block_id": {"type": "string", "minLength": 1},
+    "probe_id": {"type": "string", "minLength": 1},
+    "window_name": {"const": "pre_30s"},
+    "probe_onset_unix_ms": {"type": "integer"},
+    "window_effective_start_unix_ms": {"type": "integer"},
+    "window_end_unix_ms": {"type": "integer"},
+    "mmwave_state": {
+      "enum": ["OBSERVED", "STRUCTURAL_MISSING", "OBSERVATION_MISSING", "QC_FAIL", "NOT_ELIGIBLE", "UNRESOLVED"]
+    },
+    "mmwave_observed": {"type": "boolean"},
+    "mmwave_missing_reason": {"type": ["string", "null"]},
+    "mmwave_source_run_id": {"type": ["string", "null"]},
+    "mmwave_source_commit": {"type": ["string", "null"]},
+    "mmwave_loadable": {"type": ["boolean", "null"]},
+    "mmwave_timestamp_coverage_fraction": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+    "mmwave_hr_freq_bpm_median": {"type": ["number", "null"]},
+    "mmwave_hr_time_bpm_median": {"type": ["number", "null"]},
+    "mmwave_hr_fused_bpm_median": {"type": ["number", "null"]},
+    "mmwave_breath_rate_breaths_per_min_median": {"type": ["number", "null"]},
+    "mmwave_hr_usable_window_fraction": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+    "mmwave_hr_mean_confidence": {"type": ["number", "null"]},
+    "mmwave_selected_bin_mode": {"type": ["integer", "null"], "minimum": 0},
+    "mmwave_selected_channel_mode": {"type": ["integer", "null"], "minimum": 0},
+    "mmwave_selected_bin_distance_proxy_m": {"type": ["number", "null"], "minimum": 0},
+    "mmwave_target_switch_rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+    "mmwave_phase_stability_median": {"type": ["number", "null"]},
+    "mmwave_motion_proxy_median": {"type": ["number", "null"]},
+    "mmwave_ibi_median_ms": {"type": "null"},
+    "mmwave_rmssd_ms": {"type": "null"},
+    "mmwave_sdnn_ms": {"type": "null"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"mmwave_observed": {"const": true}}, "required": ["mmwave_observed"]},
+      "then": {"properties": {"mmwave_state": {"enum": ["OBSERVED", "QC_FAIL", "NOT_ELIGIBLE"]}}}
+    },
+    {
+      "if": {"properties": {"mmwave_observed": {"const": false}}, "required": ["mmwave_observed"]},
+      "then": {"properties": {"mmwave_state": {"enum": ["STRUCTURAL_MISSING", "OBSERVATION_MISSING", "UNRESOLVED"]}}}
+    }
+  ],
+  "additionalProperties": false
+}
