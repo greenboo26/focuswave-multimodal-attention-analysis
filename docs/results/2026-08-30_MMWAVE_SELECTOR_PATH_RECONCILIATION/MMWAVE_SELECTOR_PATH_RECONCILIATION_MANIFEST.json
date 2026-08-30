@@ -14,6 +14,7 @@
     "coverage_or_reference": 12
   },
   "canonical_main_head_at_run": "6def82c2d5900ea96857151ca63e73ba02bff328",
+  "canonical_integration_commit": "e3553ac3a6bc616c2d68e61346fc1ef1e5d5d4fa",
   "canonical_origin_main_at_run": "6def82c2d5900ea96857151ca63e73ba02bff328",
   "inputs": {
     "fixed_windows": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\mmwave_ecg_block_window_comparison.csv",

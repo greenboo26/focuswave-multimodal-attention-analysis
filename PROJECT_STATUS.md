@@ -8,7 +8,7 @@
 - #25 的既有 283-pair diagnostic 20 s/60 s MAE=`14.703129/5.608574` bpm（差=`-9.094555`）与固定 targeted path 不同于 canonical selector replay，故窗口效应仍不可分离；保持 `WAIT_ON_SELECTOR_VALIDITY`，不按 MAE 推广 60 s。
 - #26 已完成本轮独立物理证据回收检查：仅找到 protocol 的 0.4m 摆位说明和 0.8m 工程验证目标，未找到 session-level 距离/朝向/照片/geometry receipt；保持 `PHYSICAL_GATE_UNRESOLVED / HARD_EXTERNAL_BLOCKER`。
 - #28 在 FocusWave `formaltest` 上完成最小 future-prevention patch：stop/disconnect 在 flush/close 前等待 worker 退出；不改历史 raw、采集参数或分析 producer 语义。该 patch 需以 FocusWave 外部仓库 commit 单独报告。
-- 结果包：`docs/results/2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION/`；逐窗表仍 local-only。HR/BR 继续 `HOLD`，HRV 继续 `BLOCKED`，未运行 C2B/C2C、未改 NIR/RGB。
+- 结果包：`docs/results/2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION/`，canonical integration=`e3553ac3a6bc616c2d68e61346fc1ef1e5d5d4fa`；逐窗表仍 local-only。HR/BR 继续 `HOLD`，HRV 继续 `BLOCKED`，未运行 C2B/C2C、未改 NIR/RGB。
 
 ## 2026-08-30 Issue #29 execution-evidence supervisor — REUSE_GATE=PASS / SCIENTIFIC_GATE=PARTIAL
 
