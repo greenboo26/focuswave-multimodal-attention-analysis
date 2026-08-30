@@ -3,6 +3,8 @@
   "run_id": "issue28-tail-20260830-r1",
   "run_utc": "2026-08-29T22:07:35.147373+00:00",
   "canonical_algorithm_head": "805db1d3f2d701d46f678b7cd911990f779a4966",
+  "canonical_algorithm_head_role": "PRE_INTEGRATION_BASELINE",
+  "integrated_canonical_main_head": "9bc423de70f19abab2a75f93c7a31d4d95a0a189",
   "source_commit": "8e6fe5c5d08f386661bc05aaf9d5c5715a43b317",
   "data_root": "D:\\acq_mmwave_data",
   "focuswave_root": "D:\\Project\\厚粲杯\\05_实验\\FocusWave",

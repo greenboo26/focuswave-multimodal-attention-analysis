@@ -2,20 +2,34 @@
   "issue": "#29",
   "role": "Supervisor execution-evidence audit for Issues #24-#28",
   "audit_round": "round1",
-  "canonical_main_head_at_audit": "805db1d3f2d701d46f678b7cd911990f779a4966",
-  "canonical_origin_main_at_audit": "805db1d3f2d701d46f678b7cd911990f779a4966",
+  "pre_integration_main_head_at_audit": "805db1d3f2d701d46f678b7cd911990f779a4966",
+  "pre_integration_main_head_role": "PRE_INTEGRATION_BASELINE_NOT_CURRENT_CANONICAL",
+  "integrated_canonical_main_head": "c2150c9bb5bb4509b09b9b7be0ada956c3e222cc",
   "remote_write": false,
   "producer_or_raw_change": false,
   "overall_reuse_gate": "PASS",
   "overall_scientific_gate": "PARTIAL",
   "scientific_state": "#24 ECG eligibility is complete for 335 targeted windows; #25 is a bounded 283-pair diagnostic comparison with formal window validity unresolved; #26 descriptive distance-error evidence passes while the physical gate is unresolved; #27 is supporting retrospective spectral truth only; #28 records historical tail irrecoverability and missing-log limits. HR remains HOLD and HRV remains BLOCKED.",
   "required_fix_before_issue25_acceptance": null,
-  "child_commits": {
+  "child_local_execution_commits": {
     "24": "d2d09f8ac502600d3a1241e33c429bd53756fa45",
     "25": "c4b5397971c98270520b1eec9ec81cda8592e9dd",
     "26": "6990364151d544d54b297ce394b4ff9e5f20c1d7",
     "27": "72140e8ea7ed99ecb0e668c632a4247305231d3d",
     "28": "92f47305570622cd64ddd4b375b797b4614a5ce3"
+  },
+  "child_canonical_main_commits": {
+    "24": "6b45a0829bb18e69a65eff3b987c548fe93b8de6",
+    "25": ["4986ca32716fe415c01b518587b031da55d481c1", "65b8e6547394be9c5bddba823ca7c72ce8e7ab38"],
+    "26": "d6b091756bb539f0cde426586444b41764888bdb",
+    "27": "2647ceeb90034fc461bba668728e478927220de5",
+    "28": "9bc423de70f19abab2a75f93c7a31d4d95a0a189",
+    "29": "c2150c9bb5bb4509b09b9b7be0ada956c3e222cc"
+  },
+  "path_verification": {
+    "verified_on_executing_machine": ["D:\\Project\\厚粲杯\\11_数据\\derived\\ecg_valid_retrospective_spectral_truth_audit_20260830"],
+    "repo_recorded_not_machine_verified": ["D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_issue29_supervisor_20260830", "D:\\Project\\厚粲杯\\11_数据\\derived\\issue28-tail-20260830-r1"],
+    "ephemeral_or_stale_excluded_from_durable_result_path": ["C:\\Users\\550ACW\\.codex\\worktrees\\de3a", "C:\\Users\\550ACW\\.codex\\worktrees\\0ce8"]
   },
   "matrix": "MMWAVE_ISSUE29_EXECUTION_EVIDENCE_MATRIX.csv",
   "verification_basis": [

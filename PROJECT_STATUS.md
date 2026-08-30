@@ -4,7 +4,8 @@
 
 - Supervisor 已核验 #24–#28 的实际脚本、结果、manifest、复用理由、分母边界和本地提交；不以会话文字替代证据。统一结果为 #24 ECG eligibility 层完成，#25 bounded diagnostic，#26 physical gate unresolved，#27 supporting-only，#28 历史 tail 不可恢复。
 - HR/BR 继续 `HOLD`，HRV 继续 `BLOCKED`；未修改 producer/raw/firmware/portable V2/NIR/RGB，未运行 C2B/C2C，无新 HR 算法族或 MAE 调参。
-- 证据包为 `docs/results/2026-08-30_MMWAVE_ISSUE29_SUPERVISOR/`，本轮远端写入前的审查基线为 `805db1d3f2d701d46f678b7cd911990f779a4966`；集成后的 canonical commit 另以 Git 提交记录为准。
+- 证据包为 `docs/results/2026-08-30_MMWAVE_ISSUE29_SUPERVISOR/`；审查使用的 `805db1d3f2d701d46f678b7cd911990f779a4966` 明确是 `PRE_INTEGRATION_BASELINE`，集成后的 canonical commit 是 `c2150c9bb5bb4509b09b9b7be0ada956c3e222cc`。
+- #24–#29 的唯一 local-execution→canonical 映射见 `docs/canonical/RESULT_INDEX_V1.md` 的 provenance map；本机仅验证了 #27 的稳定 local-only 结果目录存在；#24 仅有 manifest 记录的 ephemeral row-level 路径，#29 目录当前未存在，其他路径不在本轮机器验证范围。
 
 ## 2026-08-30 Issue #28 97795/block4 acquisition tail — PARTIAL / HISTORICAL_TAIL_IRRECOVERABLE
 
@@ -15,7 +16,7 @@
 
 ## 2026-08-30 Issue #24 ECG reference eligibility — PARTIAL / ECG_REFERENCE_ELIGIBILITY_COMPLETE
 
-- 在 canonical `main` `805db1d3f2d701d46f678b7cd911990f779a4966` 上，复用 `scripts/gold_standard_qa.py` 的 ECG 清洗规则（0.5–40 Hz 三阶 SOS、R-peak 最小间距 0.30 s、固定 prominence 0.25、IBI 300–2000 ms、相邻 IBI >20% 异常波动剔除、有效 beat coverage ≥80%）和既有 `run_mmwave_targeted_validation_20260830.py` 的 block marker affine mapping。
+- 在 `PRE_INTEGRATION_BASELINE` `805db1d3f2d701d46f678b7cd911990f779a4966` 上执行、后由 canonical `main` `c2150c9bb5bb4509b09b9b7be0ada956c3e222cc` 集成；复用 `scripts/gold_standard_qa.py` 的 ECG 清洗规则（0.5–40 Hz 三阶 SOS、R-peak 最小间距 0.30 s、固定 prominence 0.25、IBI 300–2000 ms、相邻 IBI >20% 异常波动剔除、有效 beat coverage ≥80%）和既有 `run_mmwave_targeted_validation_20260830.py` 的 block marker affine mapping。
 - 针对冻结的 335 个 DLL-time windows，实际结果为 `ECG_VALID=325`、`ECG_INVALID=10`、`UNRESOLVED=0`。10 个 invalid 的主 reason 全部是 `abnormal_adjacent_ibi_fluctuation_gt20pct`；marker mismatch 单独存于 `ecg_qc_warning`，不作为 invalid reason。`97793/block1` 的 57 个窗口保留 marker warning，但 affine mapping 可用。
 - 固定既有 ARM0/ARM1/ARM2 estimator rows，仅在 `ECG_VALID=325` 分母重算：ARM0 MAE=`25.005` bpm（325/325），ARM1=`21.906332` bpm（304/325），ARM2=`18.904008` bpm（325/325）。全 335 窗口的 `24.847938/21.774620/19.040268` 仅作 diagnostic，不作 validity denominator。
 - RUN_ID=`ecg_eligibility_dll_20260829T220533Z`。逐窗 eligibility 与每个 reject reason 保存在 local-only `work/ecg_eligibility_dll_windows_20260830/ECG_DLL_WINDOW_ELIGIBILITY_LOCAL_ONLY.csv`；Git-safe aggregate、manifest 和报告位于 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/`。
@@ -238,7 +239,7 @@ producer worktree 仍然保留。
 
 - 追溯确认：20 s 首次进入当前链路来自 `472735b6b6af5f98e92ab7815718e81863cb6098` 的 `scripts/maintenance/run_mmwave_targeted_validation_20260830.py`，用途是 block-local continuity / ECG-aligned bounded diagnostic；历史 60 s 来自 `64634159d226ee1ed892d53e56fcf3697fbff9b8` 的 `run_hr_course_99_corrected.py` 与 `build_hr_course_99_audit.py`，真实语义为 v3.1.1 HR course 的 25 s internal window、5 s step，在 60 s probe 内按 `(t > onset-60) & (t <= onset)` 取 median。
 - 依赖 #24 `d2d09f8ac502600d3a1241e33c429bd53756fa45` 的 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/ECG_ELIGIBILITY_MANIFEST.json`（commit 内容 SHA-256 `0806cb4f0e477788ee7cd604e3d04c811654fb692f2840767249982ebc5ba258`），口径为 ECG_VALID=325、ECG_INVALID=10、UNRESOLVED=0；marker mismatch 仅 warning，10 个 invalid 为相邻 IBI 异常波动。当前 20 s 与 trailing 60 s 均重新执行同一 0.5–40 Hz / R-peak / IBI / artifact / coverage adapter，不再使用简单 `ecg_status==valid`。
-- RUN_ID `issue25_window_length_20260830` 在 canonical HEAD `805db1d3f2d701d46f678b7cd911990f779a4966`、origin/main 同值上完成 303 endpoints / 8 blocks；两时长共同 ECG_VALID pair=283。20 s：coverage mean/median `0.655511/0.691708`、n=`283`、MAE/median AE/bias/Pearson/Spearman=`14.703129/14.514286/-12.598120/0.278024/0.268721`；60 s：`0.656046/0.691986`、n=`283`、`5.608574/4.083467/-3.630629/0.379439/0.399861`。名义频率分辨率为 20 s=`0.05 Hz/3 bpm`、60 s=`0.016666667 Hz/1 bpm`。这是 diagnostic comparison，formal window validity 仍 `UNRESOLVED`，HR 继续 `HOLD`。
+- RUN_ID `issue25_window_length_20260830` 在 `PRE_INTEGRATION_BASELINE` `805db1d3f2d701d46f678b7cd911990f779a4966` 上完成 303 endpoints / 8 blocks，结果随后由 canonical commits `4986ca32716fe415c01b518587b031da55d481c1` + `65b8e6547394be9c5bddba823ca7c72ce8e7ab38` 集成；两时长共同 ECG_VALID pair=283。20 s：coverage mean/median `0.655511/0.691708`、n=`283`、MAE/median AE/bias/Pearson/Spearman=`14.703129/14.514286/-12.598120/0.278024/0.268721`；60 s：`0.656046/0.691986`、n=`283`、`5.608574/4.083467/-3.630629/0.379439/0.399861`。名义频率分辨率为 20 s=`0.05 Hz/3 bpm`、60 s=`0.016666667 Hz/1 bpm`。这是 diagnostic comparison；selector validity 未闭合，formal window validity 仍 `UNRESOLVED`，HR 继续 `HOLD`。
 - `REUSE_REJECTION_REASON`：既有 same-window audit 只有冻结的 335-row 20 s 分母，并明确将 strict historical 60 s 标为 `NOT_APPLICABLE_TO_20S`，不构造 trailing 60 s DLL-time window 或 paired ECG_VALID reference，故只增加最小 execution wrapper；未改 estimator、target、producer、raw、firmware、portable V2、C2B/C2C、HRV 或全量 formal batch。
 - 证据：`docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_WINDOW_LENGTH_COMPARISON.csv`、`MMWAVE_WINDOW_LENGTH_METRICS.csv`、`MMWAVE_WINDOW_LENGTH_BLOCK_AUDIT.csv`、`MMWAVE_WINDOW_LENGTH_COMPARISON_REPORT_2026-08-30.md`、`MMWAVE_WINDOW_LENGTH_COMPARISON_MANIFEST.json`；入口 `scripts/maintenance/run_mmwave_window_length_comparison_20260830.py`。raw/row-level 与大型输出留在本地。
 

@@ -1,8 +1,12 @@
 {
   "run_id": "issue25_window_length_20260830",
   "canonical_head": "805db1d3f2d701d46f678b7cd911990f779a4966",
+  "canonical_head_role": "PRE_INTEGRATION_BASELINE",
+  "integrated_canonical_main_head": "4986ca32716fe415c01b518587b031da55d481c1",
   "canonical_main_head": "805db1d3f2d701d46f678b7cd911990f779a4966",
+  "canonical_main_head_role": "PRE_INTEGRATION_BASELINE",
   "origin_main": "805db1d3f2d701d46f678b7cd911990f779a4966\trefs/heads/main",
+  "origin_main_role": "PRE_INTEGRATION_BASELINE",
   "script": "C:\\Users\\550ACW\\.codex\\worktrees\\b132\\08_算法\\scripts\\maintenance\\run_mmwave_window_length_comparison_20260830.py",
   "script_sha256": "7a3aa50b63a237857af6577cb287549acbc790a6aa038bfd922ffe7aa4c9be85",
   "producer_script": "C:\\Users\\550ACW\\.codex\\worktrees\\b132\\08_算法\\scripts\\process_vital_signs_v3_1_1.py",

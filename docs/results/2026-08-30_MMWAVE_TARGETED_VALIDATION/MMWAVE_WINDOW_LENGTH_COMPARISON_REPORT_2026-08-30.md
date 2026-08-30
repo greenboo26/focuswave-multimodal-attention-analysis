@@ -48,6 +48,7 @@ The nominal periodogram bin spacing is `FS/N`: 20 s = 0.05 Hz = 3 bpm and 60 s =
 ## 6. Execution and artifacts
 
 - RUN_ID: `issue25_window_length_20260830`
+- Provenance clarification: the following execution-time SHA is `PRE_INTEGRATION_BASELINE`; integrated canonical commits are `4986ca32716fe415c01b518587b031da55d481c1` + `65b8e6547394be9c5bddba823ca7c72ce8e7ab38`.
 - Canonical HEAD at execution: `805db1d3f2d701d46f678b7cd911990f779a4966`; origin/main: `805db1d3f2d701d46f678b7cd911990f779a4966	refs/heads/main`
 - Input raw roots: `D:\acq_mmwave_data`; selected subjects: `97793, 9779, 97795`; source rows: 303 paired endpoints.
 - Script output: `MMWAVE_WINDOW_LENGTH_COMPARISON.csv`, `MMWAVE_WINDOW_LENGTH_METRICS.csv`, `MMWAVE_WINDOW_LENGTH_BLOCK_AUDIT.csv`, `MMWAVE_WINDOW_LENGTH_COMPARISON_REPORT_2026-08-30.md`, `MMWAVE_WINDOW_LENGTH_COMPARISON_MANIFEST.json`.

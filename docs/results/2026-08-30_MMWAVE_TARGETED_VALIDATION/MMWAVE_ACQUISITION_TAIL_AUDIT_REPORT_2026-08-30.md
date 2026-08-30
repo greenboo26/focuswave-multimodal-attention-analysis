@@ -7,7 +7,7 @@
 本审计只读取既有 `events.csv`、`*_mmwave_timestamps.csv` 的事件、首尾、计数与 frame-index 连续性，并检查 FocusWave `ecg` immutable source ref。没有重做 Python-vs-DLL timestamp discovery，没有读取或修改 NPZ/raw payload，没有 synthetic padding/backfill，没有改 primary 335-window provenance，也没有运行 C2B/C2C 或 HR analysis。
 
 - RUN_ID: `issue28-tail-20260830-r1`
-- canonical algorithm HEAD: `805db1d3f2d701d46f678b7cd911990f779a4966`
+- canonical algorithm HEAD at execution: `805db1d3f2d701d46f678b7cd911990f779a4966` (`PRE_INTEGRATION_BASELINE`); integrated canonical commit: `9bc423de70f19abab2a75f93c7a31d4d95a0a189`
 - FocusWave source: `ecg@8e6fe5c5d08f386661bc05aaf9d5c5715a43b317`
 - REUSE_REJECTION_REASON: existing c0f1717 coverage audit only covered the three targeted subjects and did not inspect acquisition lifecycle ordering or the other available session tails; a bounded new audit was required to answer Issue #28 items 1–3.
 - Existing coverage manifest reused without modification: `MMWAVE_DLL_WINDOW_COVERAGE_AUDIT_MANIFEST.json`; its recorded algorithm head remains `426576e0809252656b79729ac077e91a6bfca80d` and its historical input/reconstruction provenance remains the prior worktree (`D:\Project\厚粲杯\08_算法\work\mmwave_targeted_validation_20260830_rerun\docs\results\2026-08-30_MMWAVE_TARGETED_VALIDATION\MMWAVE_DLL_TIME_WINDOWS_2026-08-30.csv`).

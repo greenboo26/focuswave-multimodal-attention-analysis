@@ -26,7 +26,10 @@
     "ECG_VALID_WITH_COVERAGE_REFERENCE_LIMIT": 2
   },
   "canonical_main_head_at_run": "805db1d3f2d701d46f678b7cd911990f779a4966",
+  "canonical_main_head_at_run_role": "PRE_INTEGRATION_BASELINE",
+  "integrated_canonical_main_head": "2647ceeb90034fc461bba668728e478927220de5",
   "canonical_origin_main_at_run": "805db1d3f2d701d46f678b7cd911990f779a4966",
+  "canonical_origin_main_at_run_role": "PRE_INTEGRATION_BASELINE",
   "git_status_at_run": "detached_head; task-scoped outputs were staged after generation",
   "fixed_inputs": {
     "comparison": "C:\\Users\\550ACW\\.codex\\worktrees\\de3a\\08_算法\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\mmwave_ecg_block_window_comparison.csv",

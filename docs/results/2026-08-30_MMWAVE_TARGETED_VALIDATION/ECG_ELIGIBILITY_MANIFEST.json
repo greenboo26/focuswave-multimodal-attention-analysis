@@ -49,7 +49,10 @@
   },
   "git": {
     "head_at_run": "805db1d3f2d701d46f678b7cd911990f779a4966",
-    "origin_main_at_run": "805db1d3f2d701d46f678b7cd911990f779a4966"
+    "head_at_run_role": "PRE_INTEGRATION_BASELINE",
+    "integrated_canonical_main_head": "6b45a0829bb18e69a65eff3b987c548fe93b8de6",
+    "origin_main_at_run": "805db1d3f2d701d46f678b7cd911990f779a4966",
+    "origin_main_at_run_role": "PRE_INTEGRATION_BASELINE"
   },
   "excluded": [
     "mmWave estimator rerun",
