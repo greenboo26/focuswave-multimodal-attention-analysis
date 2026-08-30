@@ -85,6 +85,14 @@ def fmt(value: object, digits: int = 6) -> object:
     return value
 
 
+def portable_manifest_path(path: Path) -> str:
+    """Use repository-relative paths for tracked assets, absolute for local-only inputs."""
+    try:
+        return path.resolve().relative_to(ROOT.resolve()).as_posix()
+    except ValueError:
+        return str(path)
+
+
 def metrics(rows: list[dict[str, str]], method: str, estimate_field: str) -> dict[str, object]:
     paired: list[tuple[float, float]] = []
     for row in rows:
@@ -141,13 +149,13 @@ def stage_rows() -> list[dict[str, object]]:
         {"stage_id": "S03", "stage": "gross range ROI/gate", "code_location": "scripts/process_vital_signs_v3_1_1.py:2500-2517,2803-2900; historical run lineage", "input": "bin candidates and bin spacing", "operation": "historical 0.30-1.50 m = bins 9-40; current independent selector has no physical gate", "output": "gated candidate set or unrestricted set", "why": "constrain implausible target range", "historical_path_use": "YES", "current_formal_use": "YES", "targeted_path_use": "NO in independent selection", "direct_effect_evidence": "Existing ablation: ARM1 MAE < ARM0 on prior 335-row output; not ECG-tuned and not physical-truth proof", "canonical_reference": "L3 plus protocol prior; exact placement receipt absent", "decision": "RESTORE_EXISTING"},
         {"stage_id": "S04", "stage": "DC/static/clutter handling before selection", "code_location": "scripts/process_vital_signs_v3_1_1.py:1146-1172,1502-1557,1597-1636; audit fields/matrix", "input": "complex cube/profile", "operation": "no downstream DC/IQ/MTI/background subtraction before target selection; plot subtraction is display-only", "output": "raw profile remains selector input", "why": "must distinguish actual target processing from diagnostic visualization", "historical_path_use": "NO", "current_formal_use": "NO", "targeted_path_use": "NO", "direct_effect_evidence": "NONE; no project A/B isolates suppression", "canonical_reference": "L1, L4-L6 support the need/risk, not this implementation", "decision": "UNPROVEN"},
         {"stage_id": "S05", "stage": "phase extraction and displacement", "code_location": "scripts/process_vital_signs_v3_1_1.py:268-270,1415-1439", "input": "selected complex bin/channel", "operation": "unwrap(angle(iq)); wavelength_mm * phase/(4*pi)", "output": "unwrapped displacement time series", "why": "recover chest micro-motion phase", "historical_path_use": "YES", "current_formal_use": "YES", "targeted_path_use": "YES", "direct_effect_evidence": "Shared across historical/current replay; NONE for isolated stage effect", "canonical_reference": "L1-L2, L4-L5; project-parameter variant", "decision": "KEEP"},
-        {"stage_id": "S06", "stage": "BR/HR bandpass", "code_location": "scripts/process_vital_signs_v3_1_1.py:273-275,305-394,642-679", "input": "displacement", "operation": "4th-order SOS; BR 0.1-0.5 Hz branch; HR bp_heart 0.8-2.0 Hz; optional VMD K=3", "output": "filtered BR/HR signals", "why": "isolate physiological bands", "historical_path_use": "YES bp_heart", "current_formal_use": "YES", "targeted_path_use": "YES bandpass; NO VMD/full branch", "direct_effect_evidence": "Historical full-chain 20s adaptation outperforms current block-local on same 323 control rows; VMD isolated effect NONE", "canonical_reference": "L1-L2, L4-L6; parameters are project-specific", "decision": "KEEP"},
+        {"stage_id": "S06", "stage": "BR/HR bandpass", "code_location": "scripts/process_vital_signs_v3_1_1.py:273-275,305-394,642-679", "input": "displacement", "operation": "4th-order SOS; BR 0.1-0.5 Hz branch; HR bp_heart 0.8-2.0 Hz; optional VMD K=3", "output": "filtered BR/HR signals", "why": "isolate physiological bands", "historical_path_use": "YES bp_heart", "current_formal_use": "YES", "targeted_path_use": "YES bandpass; NO VMD/full branch", "direct_effect_evidence": "Historical full-chain 20s adaptation outperforms current block-local on same 323 control rows; VMD has no safe current-20s A/B seam. REUSE_REJECTION_REASON: persisted replay has no VMD branch output and current targeted path does not invoke it", "canonical_reference": "L1-L2, L4-L6; parameters are project-specific", "decision": "KEEP bandpass / UNPROVEN VMD"},
         {"stage_id": "S07", "stage": "window and segment construction", "code_location": "scripts/process_vital_signs_v3_1_1.py:857-1072,1947-2239; targeted wrapper:369-381", "input": "filtered displacement", "operation": "historical internal 25s/5s course and segment correction/consensus; targeted fixed windows 20s", "output": "segment/course estimates", "why": "stabilize short-window spectral estimates", "historical_path_use": "YES", "current_formal_use": "YES", "targeted_path_use": "PARTIAL", "direct_effect_evidence": "Historical 20s adaptation vs current paths; #25 20s/60s remains confounded", "canonical_reference": "L2; project validation only for exact parameters", "decision": "RESTORE_EXISTING"},
         {"stage_id": "S08", "stage": "periodogram/FFT and candidate generation", "code_location": "scripts/process_vital_signs_v3_1_1.py:727-775,1236-1241; targeted wrapper:309-335", "input": "filtered HR signal", "operation": "Hann periodogram, nfft padding, peak candidates, prominence/IBI candidates", "output": "frequency/time candidates", "why": "produce HR hypotheses", "historical_path_use": "YES", "current_formal_use": "YES", "targeted_path_use": "YES", "direct_effect_evidence": "Fixed-path vs sequential selector replay; selector exact recovery is supporting path evidence, not HR validity", "canonical_reference": "L1-L2; project heuristic", "decision": "KEEP"},
-        {"stage_id": "S09", "stage": "harmonic half/double folding", "code_location": "scripts/process_vital_signs_v3_1_1.py:713-724,1800-1944", "input": "time/frequency candidates and optional anchor", "operation": "existing half/double/triple heuristic; external RSP guard only when acq_path is supplied", "output": "folded candidates", "why": "reduce respiration harmonic/HR octave ambiguity", "historical_path_use": "YES internal; external RSP inactive", "current_formal_use": "YES internal; external inactive in formal runner", "targeted_path_use": "PARTIAL internal selector replay; NO external RSP", "direct_effect_evidence": "NONE as isolated ablation; fixed targeted path did not call internal guard", "canonical_reference": "L6 supports harmonic risk; exact folding is project heuristic", "decision": "UNPROVEN"},
+        {"stage_id": "S09", "stage": "harmonic half/double folding", "code_location": "scripts/process_vital_signs_v3_1_1.py:713-724,1800-1944", "input": "time/frequency candidates and optional anchor", "operation": "existing half/double/triple heuristic; external RSP guard only when acq_path is supplied", "output": "folded candidates", "why": "reduce respiration harmonic/HR octave ambiguity", "historical_path_use": "YES internal; external RSP inactive", "current_formal_use": "YES internal; external inactive in formal runner", "targeted_path_use": "PARTIAL internal selector replay; NO external RSP", "direct_effect_evidence": "No isolated effect. REUSE_REJECTION_REASON: persisted 335-row replay stores folded selector outputs but not pre-fold candidate lists; old targeted path did not call the internal guard and formal runner lacks external RSP input", "canonical_reference": "L6 supports harmonic risk; exact folding is project heuristic", "decision": "UNPROVEN"},
         {"stage_id": "S10", "stage": "previous/reference BPM continuity", "code_location": "scripts/process_vital_signs_v3_1_1.py:727-775,857-1072; selector replay script", "input": "candidate list plus previous BPM", "operation": "score penalty/anchor, reset per complete block; reference BPM=None in replay", "output": "anchored spectral BPM and next previous value", "why": "avoid implausible frame-to-frame jumps", "historical_path_use": "YES course continuity", "current_formal_use": "YES", "targeted_path_use": "RESTORED in selector replay; absent from old targeted estimator", "direct_effect_evidence": "No-anchor descriptive comparison; 37/102 wrong and 17/182 nearby exact recovery", "canonical_reference": "L2; project selector contract", "decision": "RESTORE_EXISTING"},
-        {"stage_id": "S11", "stage": "segment correction and consensus", "code_location": "scripts/process_vital_signs_v3_1_1.py:1947-2239", "input": "segment HR candidates", "operation": "correction, ±6 bpm clusters, median/fusion/time-course consensus", "output": "consensus HR", "why": "suppress isolated segment errors", "historical_path_use": "YES", "current_formal_use": "YES", "targeted_path_use": "NO in old targeted estimator", "direct_effect_evidence": "Historical full-chain 20s adaptation vs current block-local; bundle effect not isolated", "canonical_reference": "Project method; no canonical parameter-level external support", "decision": "RESTORE_EXISTING"},
-        {"stage_id": "S12", "stage": "final selector/output and signal gate", "code_location": "scripts/process_vital_signs_v3_1_1.py:2092-2313,2379-2497", "input": "candidate/consensus results", "operation": "quality gate, time/frequency fusion, final score and output; missing remains missing", "output": "HR/BR result plus QC/status", "why": "emit only quality-qualified estimates", "historical_path_use": "YES", "current_formal_use": "YES", "targeted_path_use": "NO/partial", "direct_effect_evidence": "Current formal runner uses full downstream chain; targeted old path stops at raw periodogram/peak", "canonical_reference": "L1-L2; project QC heuristic", "decision": "RESTORE_EXISTING"},
+        {"stage_id": "S11", "stage": "segment correction and consensus", "code_location": "scripts/process_vital_signs_v3_1_1.py:1947-2239", "input": "segment HR candidates", "operation": "correction, ±6 bpm clusters, median/fusion/time-course consensus", "output": "consensus HR", "why": "suppress isolated segment errors", "historical_path_use": "YES", "current_formal_use": "YES", "targeted_path_use": "NO in old targeted estimator", "direct_effect_evidence": "Historical full-chain 20s adaptation vs current block-local is a bundled comparison. REUSE_REJECTION_REASON: no persisted segment-level intermediate output or safe correction-only toggle for the same 323 rows", "canonical_reference": "Project method; no canonical parameter-level external support", "decision": "RESTORE_EXISTING (bundle only)"},
+        {"stage_id": "S12", "stage": "final selector/output and signal gate", "code_location": "scripts/process_vital_signs_v3_1_1.py:2092-2313,2379-2497", "input": "candidate/consensus results", "operation": "quality gate, time/frequency fusion, final score and output; missing remains missing", "output": "HR/BR result plus QC/status", "why": "emit only quality-qualified estimates", "historical_path_use": "YES", "current_formal_use": "YES", "targeted_path_use": "NO/partial", "direct_effect_evidence": "Current formal runner uses full downstream chain; targeted old path stops at raw periodogram/peak. REUSE_REJECTION_REASON: persisted replay does not expose pre-QC estimates under the same output contract, so QC-only effect is not separable", "canonical_reference": "L1-L2; project QC heuristic", "decision": "RESTORE_EXISTING (bundle only)"},
         {"stage_id": "S13", "stage": "ECG reference", "code_location": "#24 ECG eligibility outputs; replay manifest", "input": "ECG only after mmWave output", "operation": "oracle-only eligibility/reference; never passed to selector", "output": "fixed ECG_VALID denominator", "why": "predeclare evaluation cohort without tuning estimator", "historical_path_use": "REFERENCE ONLY", "current_formal_use": "VALIDATION ONLY", "targeted_path_use": "VALIDATION ONLY", "direct_effect_evidence": "323 COMPLETE ∩ ECG_VALID control windows", "canonical_reference": "Project #24 contract", "decision": "KEEP"},
     ]
 
@@ -260,7 +268,7 @@ def main() -> None:
             "estimator_contract": "bp_heart 0.8-2.0 Hz; periodogram/peak; phase unwrap; segment correction/consensus/time course",
             "window_contract": "60 s historical probe; 5 sessions; 99 valid windows",
             "output_provenance": "D:\\Project\\厚粲杯\\08_算法\\work\\mmwave_targeted_validation_20260830_rerun",
-            "source_lineage_file": str(LINEAGE),
+            "source_lineage_file": portable_manifest_path(LINEAGE),
         }
     ]
     lineage_path = RESULT_ROOT / "MMWAVE_HISTORICAL_PRODUCER_LINEAGE_2026-08-30.csv"
@@ -284,9 +292,25 @@ def main() -> None:
         "4. **本轮 restored replay**：固定已有 target，接回 existing spectral selector、previous-BPM state、harmonic folding and time/frequency fusion；这是 supporting replay，不是新 selector，也不把 ECG 传入选择。\n\n"
         "## 可验证决策\n\n"
         "- **KEEP**：complex input semantics、phase extraction、bandpass、periodogram/peak、ECG oracle-only denominator。\n"
-        "- **RESTORE_EXISTING**：historical physical gate/target contract、previous-BPM selector continuity、segment correction/consensus、final signal/QC output chain。先按已有实现接回并测量。\n"
-        "- **UNPROVEN**：near-field peak 已被 static/clutter suppression 去除；DC/static stage 的独立收益；VMD、harmonic guard 的独立收益；candidate persistence。\n"
+        "- **RESTORE_EXISTING**：historical physical gate/target contract、previous-BPM selector continuity、segment correction/consensus、final signal/QC output chain。previous anchor 与 time/frequency fusion 已在同一 323 窗直接重放；其余链段只有 bundled comparison，不能宣称单阶段因果贡献。\n"
+        "- **UNPROVEN**：near-field peak 已被 static/clutter suppression 去除；DC/static stage 的独立收益；VMD、harmonic guard、segment correction/consensus、final QC 的独立收益；candidate persistence。\n"
         "- **DROP**：new selector/new algorithm、ECG-informed gate tuning、tail repair、按 20 s vs 60 s MAE 直接推广窗口。#25 保持 `WAIT_ON_SELECTOR_VALIDITY`。\n\n"
+        "## 逐步人话解释\n\n"
+        "| 步骤 | 代码做什么 | 为什么 | 项目内效果 | 参考/依据 | 当前决策 |\n"
+        "|---|---|---|---|---|---|\n"
+        "| S01 输入 | 把 NPZ 的 8 个复数通道按 range bin 叠成数据立方体，不做第二次 Range FFT | 保留设备已经输出的距离域信息 | 形状/打包审计通过；没有单独 MAE 归因 | `process_vital_signs_v3_1_1.py:1099-1112` | KEEP |\n"
+        "| S02 候选 | 用平均功率、相位稳定性和频带分数列出可能的 bin/channel | 先回答哪里有可用动态信号 | target 会改变下游结果，但与后续步骤 bundled | `process_vital_signs_v3_1_1.py:1146-1233` | RESTORE_EXISTING |\n"
+        "| S03 距离门 | 历史链将 0.30–1.50 m 固定为 bins 9–40；当前 targeted 独立选择未使用它 | 排除物理上不合理的候选 | 既有 gate/target ablation 保留同一控制口径 | 0.037 m/bin 历史 lineage；既有 gate ablation | RESTORE_EXISTING |\n"
+        "| S04 静态项 | 审计确认选 bin 前仍使用 raw mean-power；绘图减均值不回写选择 | 区分真实去杂波和仅用于显示的处理 | 没有可复用的 pre-selection A/B | `process_vital_signs_v3_1_1.py:1146-1172` 与审计矩阵 | UNPROVEN |\n"
+        "| S05 相位 | 对选中复数样本取 angle、unwrap，再换算位移 | 从微小相位变化得到运动信号 | 为三条路径共享；无独立归因 | `process_vital_signs_v3_1_1.py:268-270,1415-1439` | KEEP |\n"
+        "| S06 带通 | 用既有 SOS 带通分开 BR/HR；VMD 是另一个已有分支 | 去掉带外成分 | bandpass 共享；VMD 没有当前 20 s 可切换输出 | `process_vital_signs_v3_1_1.py:273-394,1296-1369` | KEEP bandpass / UNPROVEN VMD |\n"
+        "| S07 窗口 | 历史链有 course/segment 结构，targeted 固定为 20 s | 让短窗估计有上下文 | historical 20 s adaptation 优于 block-local，但与窗口定义纠缠 | 既有 same-window estimator audit | RESTORE_EXISTING（bundle） |\n"
+        "| S08 频谱 | 做 Hann periodogram、峰候选和时域峰候选 | 产生 HR 假设 | fixed periodogram→selector 可直接比较 | `process_vital_signs_v3_1_1.py:727-775,1236-1241` | KEEP |\n"
+        "| S09 折叠 | 按已有 half/double/triple 规则处理谐波关系 | 避免倍频/半频误锁 | replay 没有折叠前候选列表，不能安全做一开关 A/B | `process_vital_signs_v3_1_1.py:713-724,1800-1944`；REUSE_REJECTION_REASON | UNPROVEN |\n"
+        "| S10 连续性 | 用上一窗 BPM 给候选打锚点并跨窗传递 | 限制不合理跳变 | MAE 24.902438→13.276285；同窗 245/323 更好 | `_select_spectral_bpm()` 与 selector replay | RESTORE_EXISTING |\n"
+        "| S11 段校正/共识 | 对 segment 结果做校正、聚类、中位数/融合 | 抑制孤立 segment 错误 | 只观察到 full-chain bundled gain；没有 correction-only 中间表 | `process_vital_signs_v3_1_1.py:1947-2239`；REUSE_REJECTION_REASON | RESTORE_EXISTING（bundle） |\n"
+        "| S12 最终门控 | 合并时域/频域、计算质量分并输出 QC；缺失保持缺失 | 控制最终输出可信度边界 | targeted old path 未暴露同契约门控前值，不能拆 QC-only delta | `process_vital_signs_v3_1_1.py:2092-2313,2379-2497`；REUSE_REJECTION_REASON | RESTORE_EXISTING（bundle） |\n"
+        "| S13 ECG | 只在 mmWave 输出之后读取 ECG eligibility/HR 作 oracle | 固定评估分母而不调参 | COMPLETE∩ECG_VALID=323；ECG 未进入选择 | #24 contract | KEEP |\n\n"
         "## 证据文件\n\n"
         "- `MMWAVE_PIPELINE_STAGE_EVIDENCE_2026-08-30.csv`：逐阶段代码位置、输入输出、用途、三路径是否使用、直接效果证据、文献支持与决策。\n"
         "- `MMWAVE_PIPELINE_STAGE_ABLATION_METRICS_2026-08-30.csv`：323-window fixed control 的 MAE/median AE/bias/RMSE/Pearson/Spearman/valid n。\n"
@@ -317,22 +341,31 @@ def main() -> None:
         "coverage_contract": "existing timestamp-only contract; COMPLETE=333, SEVERELY_INCOMPLETE=2; no padding/backfill/reconstruct",
         "ecg_contract": "existing ECG_VALID oracle-only labels; no ECG-informed selection/tuning",
         "reused_assets": [
-            {"path": str(REPLAY), "sha256": sha256(REPLAY)},
-            {"path": str(COVERAGE), "sha256": sha256(COVERAGE)},
-            {"path": str(TARGET_ABLATION), "sha256": sha256(TARGET_ABLATION)},
-            {"path": str(ESTIMATOR_COMPARISON), "sha256": sha256(ESTIMATOR_COMPARISON)},
-            {"path": str(LINEAGE), "sha256": sha256(LINEAGE)},
+            {"path": portable_manifest_path(REPLAY), "sha256": sha256(REPLAY)},
+            {"path": portable_manifest_path(COVERAGE), "sha256": sha256(COVERAGE)},
+            {"path": portable_manifest_path(TARGET_ABLATION), "sha256": sha256(TARGET_ABLATION)},
+            {"path": portable_manifest_path(ESTIMATOR_COMPARISON), "sha256": sha256(ESTIMATOR_COMPARISON)},
+            {"path": portable_manifest_path(LINEAGE), "sha256": sha256(LINEAGE)},
         ],
         "reuse_rejection_reason": "Existing replay, target-ablation, same-window estimator, lineage, and coverage outputs were separate; this adapter only joins them under the requested COMPLETE ∩ ECG_VALID denominator and records step-level evidence. No new selector or algorithm.",
+        "stage_replay_contract": [
+            {"stage": "previous_anchor", "status": "EXECUTED", "switch": "existing selector with previous BPM vs same selector with previous BPM reset per window", "evidence": "MAE 24.902438 -> 13.276285 bpm on common n=323"},
+            {"stage": "time_frequency_fusion", "status": "EXECUTED", "switch": "existing selector output vs existing time/frequency fused output", "evidence": "MAE 13.276285 -> 8.319342 bpm on common n=323"},
+            {"stage": "historical_gate_target", "status": "EXECUTED_BOUNDED", "switch": "existing 0.037 m/bin and bins 9-40 gate/6000-frame target arms", "evidence": "historical fixed-target arm MAE 19.427297; gate-only arm valid n=287, not ECG-tuned"},
+            {"stage": "harmonic_folding", "status": "NOT_APPLICABLE_UNPROVEN", "switch": "no safe persisted pre-fold candidate toggle", "evidence": "REUSE_REJECTION_REASON: replay lacks pre-fold candidate lists; external RSP input inactive"},
+            {"stage": "vmd", "status": "NOT_APPLICABLE_UNPROVEN", "switch": "no safe persisted VMD branch toggle for current 20 s contract", "evidence": "REUSE_REJECTION_REASON: current targeted replay is bandpass-only and has no VMD intermediate output"},
+            {"stage": "segment_correction_consensus", "status": "BUNDLED_ONLY", "switch": "no correction-only toggle in persisted 335-row output", "evidence": "REUSE_REJECTION_REASON: only historical full-chain 20 s adaptation is available"},
+            {"stage": "final_qc_output", "status": "BUNDLED_ONLY", "switch": "no pre-QC value under the same output contract", "evidence": "REUSE_REJECTION_REASON: QC-only delta is not separable"}
+        ],
         "near_field_conclusion": "UNPROVEN: raw mean-power target selection is used; no pre-selection DC/static/clutter suppression is present in the audited downstream producer; plot subtraction is display-only. Do not claim the near-field peak was removed.",
         "decision_summary": {"KEEP": 5, "RESTORE_EXISTING": 6, "UNPROVEN": 2, "DROP": 4},
         "outputs": {
-            "stage_evidence": str(stage_path),
-            "metrics": str(metric_path),
-            "pairwise": str(pairwise_path),
-            "failure_locus": str(failure_path),
-            "lineage": str(lineage_path),
-            "step_by_step_map": str(map_path),
+            "stage_evidence": portable_manifest_path(stage_path),
+            "metrics": portable_manifest_path(metric_path),
+            "pairwise": portable_manifest_path(pairwise_path),
+            "failure_locus": portable_manifest_path(failure_path),
+            "lineage": portable_manifest_path(lineage_path),
+            "step_by_step_map": portable_manifest_path(map_path),
         },
     }
     manifest_path = RESULT_ROOT / "MMWAVE_PIPELINE_STAGE_AUDIT_MANIFEST.json"

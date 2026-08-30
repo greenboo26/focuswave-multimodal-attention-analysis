@@ -586,3 +586,9 @@ HRV（仅供参考）：SDNN 49~173ms，RMSSD 40~223ms。
 - 审查 #24–#28 的实际脚本、结果、manifest、治理同步和本地提交；#24/#26/#27/#28 的边界证据可供父调度按提交整合，均不提升 HR/BR formal validity。
 - #25 已由本地提交 `c4b5397d65e26ab3d8951005be83ed1d8c5f25d4` 闭合同源 ECG eligibility 下 283 个共同有效配对的 diagnostic 比较；formal window validity 仍 unresolved，不把旧 0 分母结果解释为无差异。
 - 新增 Supervisor 矩阵与 manifest：`docs/results/2026-08-30_MMWAVE_ISSUE29_SUPERVISOR/`；整体 `REUSE_GATE=PASS`、`SCIENTIFIC_GATE=PARTIAL`；HR `HOLD`、HRV `BLOCKED`。
+## 2026-08-30 — audit(mmwave): refresh #27→#25 stage replay provenance at f01
+
+- Replayed the existing downstream stage adapter on canonical `main=f01c582e623025e091252d38ff52d276b323b830`; retained `COMPLETE=333` and `COMPLETE ∩ ECG_VALID=323` with unchanged metrics.
+- Recorded direct paired effects only for the existing previous-anchor and time/frequency fusion switches; historical gate/target remains bounded contract replay.
+- Added explicit reuse-rejection reasons for harmonic folding, VMD, segment correction/consensus, and final QC-only attribution; no producer, raw, ECG, gate parameter, or new algorithm was added.
+- Refreshed the stage manifest with repository-relative tracked paths and updated `PROJECT_STATUS.md`, `ANALYSIS_HISTORY_LEDGER.md`, and `docs/canonical/RESULT_INDEX_V1.md`; #25 remains `WAIT_ON_SELECTOR_VALIDITY` and #29 remains scientific-gate `PARTIAL`.
