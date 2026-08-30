@@ -1,0 +1,4 @@
+truth_subset,fixed_path_n,existing_selector_exact_n,existing_selector_nearby_n,existing_selector_not_recovered_n,target_path_subtype_counts,residual_locus,evidence_boundary
+wrong_selection,102,37,10,55,not applicable: fixed-target replay,candidate ranking/continuity remains; target/bin/channel is not tested by fixed-target replay,supporting path replay only; no physical target truth
+nearby_target_bin_channel,182,17,45,120,neighbor-bin=6; neighbor-channel=11; target/channel-switch=164; no-alternative=1,target/bin/channel and candidate ranking/continuity cannot be separated from existing aligned outputs,path-level subtype only; 15-row continuity diagnostic is not aligned; no physical target truth
+absent_or_weak,17,not applicable,not applicable,not applicable,not available,signal absent/weak; do not force selector recovery,retained truth class from #27 audit

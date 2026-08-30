@@ -1,5 +1,14 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-30 mmWave producer lineage + controlled stage audit — PARTIAL / #25 WAIT_ON_SELECTOR_VALIDITY
+
+- 按现有 timestamp-only coverage contract 固定控制集：335 windows 中 `COMPLETE=333`，`SEVERELY_INCOMPLETE=2`（`97795/block4/w027,w028`）；后续 validity/replay 排除两窗，不 padding/backfill/reconstruct，`24,809 ms` tail 只保留 provenance。与既有 `ECG_VALID` 相交后本轮 controlled n=`323`。
+- 已闭合历史最佳 HR≈`3.7772146 bpm` 的完整 lineage：`run_hr_course_99_corrected.py → process_vital_signs_v3_1_1.py`，producer commit=`64634159d226ee1ed892d53e56fcf3697fbff9b8`；8-channel complex range-domain input，前 6000 frames 选 target，`0.037 m/bin`、`0.30–1.50 m = bins 9–40`、`bp_heart`、phase unwrap、segment correction/consensus/time-course、历史 60 s probe / 5 sessions / 99 valid。它是目前证据上最完整的既有 lineage，但不是已证明可直接迁移到当前 20 s contract 的 formal-valid producer。
+- 固定同一 target/窗口/ECG_VALID 控制集的 downstream replay：raw fixed-target periodogram MAE=`24.902438`；接回已有 previous-anchor `_select_spectral_bpm`=`13.276285`；再接回已有 time/frequency fusion=`8.319342`；old targeted block-local=`26.161212`；historical fixed-target + full existing chain 的 20 s adaptation=`13.916131`。这些是 controlled supporting/bundled effects，不是 ECG-informed tuning，也不单独证明某一阶段因果改善。
+- 102 wrong-selection 中已有 selector replay 恢复 `37 exact + 10 nearby`，`55` 未恢复；182 nearby 中恢复 `17 exact + 45 nearby`，`120` 未恢复。nearby target-path subtype 仍为 neighbor-bin=`6`、neighbor-channel=`11`、target/channel-switch=`164`、no-alternative=`1`；剩余 locus 不能由现有对齐输出分离为 target/bin/channel、candidate ranking 或 continuity，15 条 continuity rows 不对齐。
+- near-field/static peak 已核实为 raw mean-power selection 输入；没有证实任何历史/current formal/targeted path 在选 bin 前做 DC/static/clutter suppression，绘图减均值是 display-only。因此“近场前峰已被去除”=`UNPROVEN`，不新增 static algorithm 或 0–1 m ECG-tuned gate。决策：既有 input/phase/bandpass/periodogram/ECG oracle=`KEEP`；历史 gate/target、previous selector、segment correction/consensus、final QC chain=`RESTORE_EXISTING`；static suppression/VMD/harmonic guard 独立收益与 candidate persistence=`UNPROVEN`；new selector、ECG tuning、tail repair、按 20 s/60 s MAE 推广=`DROP`。
+- 结果包：`docs/results/2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION/`，包含 step-by-step map、stage evidence、323-window metrics/pairwise、failure-locus summary 和 historical lineage。HR/BR 继续 `HOLD`，HRV 继续 `BLOCKED`；#25 保持 `WAIT_ON_SELECTOR_VALIDITY`；#29 监督结论更新为执行证据已补齐但 scientific gate 仍 partial。
+
 ## 2026-08-30 selector-path reconciliation and next-step gate — PARTIAL / #25 WAIT_ON_SELECTOR_VALIDITY
 
 - 实际复用 canonical `process_vital_signs_v3_1_1.py` 的 `_select_spectral_bpm()`、previous-BPM anchor、time/frequency fusion、harmonic folding，在冻结 #24 的 335 个 DLL-time windows 做 downstream replay；未修改 producer/raw/target/QC/gate，ECG 仅作 retrospective oracle。

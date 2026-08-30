@@ -1,0 +1,55 @@
+{
+  "run_id": "MMWAVE_PIPELINE_STAGE_AUDIT_20260830",
+  "status": "PARTIAL / CONTROLLED_STAGE_AUDIT_COMPLETE_SELECTOR_VALIDITY_SUPPORTING_ONLY",
+  "scope": "Downstream join/metrics/evidence only; no producer or estimator change",
+  "canonical_main_head_at_run": "b14ba0972700b22b5bf8ceea9137045a0d01a82e",
+  "denominators": {
+    "all_replay_rows": 335,
+    "complete_rows": 333,
+    "complete_ecg_valid_control_rows": 323,
+    "excluded_severely_incomplete": [
+      "97795/block4_w027",
+      "97795/block4_w028"
+    ]
+  },
+  "coverage_contract": "existing timestamp-only contract; COMPLETE=333, SEVERELY_INCOMPLETE=2; no padding/backfill/reconstruct",
+  "ecg_contract": "existing ECG_VALID oracle-only labels; no ECG-informed selection/tuning",
+  "reused_assets": [
+    {
+      "path": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_selector_path_reconciliation_20260830\\MMWAVE_SELECTOR_PATH_REPLAY_335_WINDOWS_LOCAL_ONLY.csv",
+      "sha256": "2e845cf222113ed0edd5fc98f063ed1e94292f077e9cd8173e12a6dbcbe2eb80"
+    },
+    {
+      "path": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_DLL_WINDOW_COVERAGE_AUDIT.csv",
+      "sha256": "e3b31619e2e2319a9636f1502ad935948188670b15b8e7fb41857b8acaf7e265"
+    },
+    {
+      "path": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_HR_GATE_TARGET_ABLATION_2026-08-30.csv",
+      "sha256": "74213ca10ae39541ae83e7e83ea2f671f1f52ed9201ae71d93455569d000a474"
+    },
+    {
+      "path": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_HR_ESTIMATOR_SAME_WINDOW_COMPARISON.csv",
+      "sha256": "a87e90ed8cdf4c0f966a8eca5a815c9be648485dc869a2d5049df38588c949d9"
+    },
+    {
+      "path": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\MMWAVE_HR_ESTIMATOR_LINEAGE.csv",
+      "sha256": "c554d2ff87b45c3f20ebe9990c93a9a3e05f977a6c8ac6d7a95b4a7230fbbd32"
+    }
+  ],
+  "reuse_rejection_reason": "Existing replay, target-ablation, same-window estimator, lineage, and coverage outputs were separate; this adapter only joins them under the requested COMPLETE ∩ ECG_VALID denominator and records step-level evidence. No new selector or algorithm.",
+  "near_field_conclusion": "UNPROVEN: raw mean-power target selection is used; no pre-selection DC/static/clutter suppression is present in the audited downstream producer; plot subtraction is display-only. Do not claim the near-field peak was removed.",
+  "decision_summary": {
+    "KEEP": 5,
+    "RESTORE_EXISTING": 6,
+    "UNPROVEN": 2,
+    "DROP": 4
+  },
+  "outputs": {
+    "stage_evidence": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION\\MMWAVE_PIPELINE_STAGE_EVIDENCE_2026-08-30.csv",
+    "metrics": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION\\MMWAVE_PIPELINE_STAGE_ABLATION_METRICS_2026-08-30.csv",
+    "pairwise": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION\\MMWAVE_PIPELINE_STAGE_ABLATION_PAIRWISE_2026-08-30.csv",
+    "failure_locus": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION\\MMWAVE_FAILURE_LOCUS_SUMMARY_2026-08-30.csv",
+    "lineage": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION\\MMWAVE_HISTORICAL_PRODUCER_LINEAGE_2026-08-30.csv",
+    "step_by_step_map": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION\\MMWAVE_PIPELINE_STEP_BY_STEP_MAP_2026-08-30.md"
+  }
+}

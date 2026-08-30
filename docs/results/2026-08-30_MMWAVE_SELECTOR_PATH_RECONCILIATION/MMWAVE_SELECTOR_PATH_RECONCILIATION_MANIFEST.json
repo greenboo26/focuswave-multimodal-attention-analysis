@@ -1,6 +1,6 @@
 {
   "run_id": "MMWAVE_SELECTOR_PATH_RECONCILIATION_20260830",
-  "run_started_utc": "2026-08-30T05:24:30.314199+00:00",
+  "run_started_utc": "2026-08-30T05:29:08.909739+00:00",
   "status": "PARTIAL / SELECTOR_PATH_REPLAY_AND_PATH_LOCALIZATION_COMPLETE_PHYSICAL_TARGET_UNRESOLVED",
   "denominators": {
     "all_windows": 335,
@@ -13,8 +13,8 @@
     "absent_or_weak": 17,
     "coverage_or_reference": 12
   },
-  "canonical_main_head_at_run": "17320ea553f63e49dce641135962c5601e5ccff9",
-  "canonical_origin_main_at_run": "17320ea553f63e49dce641135962c5601e5ccff9",
+  "canonical_main_head_at_run": "b14ba0972700b22b5bf8ceea9137045a0d01a82e",
+  "canonical_origin_main_at_run": "b14ba0972700b22b5bf8ceea9137045a0d01a82e",
   "inputs": {
     "fixed_windows": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\mmwave_ecg_block_window_comparison.csv",
     "fixed_windows_sha256": "06370f49681854a9dee6cb7ed3b524f4ab3aef7c59dc64a57e9c22c8988b4033",

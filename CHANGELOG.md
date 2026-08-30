@@ -1,5 +1,11 @@
 # 修改说明
 
+## 2026-08-30 — audit(mmwave): complete historical producer lineage and fixed-contract stage audit
+
+- Reused the existing timestamp-only coverage contract (`COMPLETE=333`, `SEVERELY_INCOMPLETE=2`) and existing selector, target-ablation, estimator-lineage and ECG oracle outputs; excluded w027/w028 from the controlled `COMPLETE ∩ ECG_VALID` n=`323` set without padding/backfill/reconstruction.
+- Added the step-by-step pipeline map, 13-stage evidence table, controlled MAE/median AE/bias/RMSE/correlation metrics, paired deltas, failure-locus summary, and explicit KEEP / RESTORE_EXISTING / UNPROVEN / DROP decisions.
+- Confirmed the historical `3.7772146 bpm` lineage and that audited historical/current/targeted paths have no proven pre-selection DC/static/clutter suppression; no producer, raw, target, ECG, or estimator algorithm was changed. #25 remains `WAIT_ON_SELECTOR_VALIDITY`.
+
 ## 2026-08-30 — audit(mmwave): classify Issue #28 acquisition tail coverage
 
 - Added the bounded Issue #28 acquisition-tail audit, reusing the existing DLL-time coverage contract, historical manifest, and FocusWave `ecg` lifecycle source.

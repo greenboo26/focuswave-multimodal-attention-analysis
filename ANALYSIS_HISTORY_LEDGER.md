@@ -8,6 +8,20 @@
 
 ---
 
+### 2026-08-30：#27 historical producer lineage + fixed-contract stage audit — PARTIAL
+
+**控制口径与复用**：沿用现有 timestamp-only coverage contract，335 windows 中 `COMPLETE=333`、`SEVERELY_INCOMPLETE=2`；排除 `97795/block4/w027,w028`，不 padding/backfill/reconstruct，tail gap 仅作 provenance。复用既有 selector replay、target ablation、same-window estimator comparison、historical lineage 与 #24 ECG oracle，新增的 maintenance adapter 只做 join、固定分母 metrics、stage evidence 和失败定位，不改 producer/raw/ECG/target/参数，不造新 selector。
+
+**历史 lineage**：HR≈`3.7772146 bpm` 已绑定到 `scripts/maintenance/run_hr_course_99_corrected.py → scripts/process_vital_signs_v3_1_1.py`，commit=`64634159d226ee1ed892d53e56fcf3697fbff9b8`；8-channel complex range-domain DataCube，前 6000 frames 固定 target，`0.037 m/bin`、`0.30–1.50 m = bins 9–40`、`bp_heart`、phase unwrap、segment correction/consensus/time-course，历史 60 s probe / 5 sessions / 99 valid。该 lineage 是当前最完整的既有证据链，但 current 20 s formal validity 尚未证明等价。
+
+**323-window controlled replay**：固定 target 的 raw periodogram / existing previous-anchor selector / selector plus time-frequency fusion MAE 分别为 `24.902438 / 13.276285 / 8.319342 bpm`；old targeted block-local=`26.161212`；historical fixed target + full existing downstream 20 s adaptation=`13.916131`。这证明 targeted path 漏接了已有 selector/continuity/final chain，属于 supporting/bundled effect，不能写成单阶段因果效果或 HR validity。
+
+**102/182 回看与 near-field 结论**：102 wrong 中 `37 exact + 10 nearby` 恢复、55 未恢复；182 nearby 中 `17 exact + 45 nearby` 恢复、120 未恢复。nearby path subtype 为 `6/11/164/1`（neighbor-bin/channel/target-channel-switch/no-alternative），仍无独立 physical target truth；candidate persistence 因 continuity 表不对齐仍 unavailable。三条 audited path 的 target selection 都以 raw mean-power profile 为输入，没有证实 pre-selection DC/static/clutter suppression；图上的减均值只是 display diagnostic。故 static removal=`UNPROVEN`，不在本轮新增算法；#25 继续 `WAIT_ON_SELECTOR_VALIDITY`。
+
+**决策与证据**：`KEEP` complex input、phase、bandpass、periodogram/peak、ECG oracle-only；`RESTORE_EXISTING` historical gate/target、previous selector、segment correction/consensus、final QC/output；`UNPROVEN` static suppression 独立效果、VMD/harmonic guard 独立效果、candidate persistence；`DROP` new selector、ECG-informed tuning、tail repair、按 20 s/60 s MAE 直接推广。证据位于 `docs/results/2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION/` 的 `MMWAVE_PIPELINE_STEP_BY_STEP_MAP_2026-08-30.md`、stage evidence/metrics/pairwise/failure-locus/lineage 文件。
+
+---
+
 ### 2026-08-30：#27 selector-path reconciliation / #25 contract decision — PARTIAL
 
 **Reuse Gate 与执行**：既有 ECG_VALID spectral audit 只有固定 `local_hr_bin/local_hr_channel` 的 candidate/truth 表，未持久化 canonical `_select_spectral_bpm()` 的 335-window previous-anchor replay；既有 continuity diagnostic 也只有 15 条早期 rows，缺少逐窗 candidate→bin/channel provenance。记录 `REUSE_REJECTION_REASON` 后，只增加 downstream replay adapter、aggregate 与报告，复用既有 `PartReader`、DLL-time 335-window contract、producer bandpass/peak/selector/folding/fusion；不改 producer/raw/target/QC/gate/ECG、NIR/RGB 或 C2B/C2C。

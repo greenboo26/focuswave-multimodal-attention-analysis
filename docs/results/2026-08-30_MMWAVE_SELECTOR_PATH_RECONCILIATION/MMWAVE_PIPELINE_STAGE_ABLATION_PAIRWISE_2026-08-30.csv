@@ -1,0 +1,6 @@
+method_a,method_b,common_valid_n,mae_method_a_bpm,mae_method_b_bpm,mean_ae_delta_a_minus_b_bpm,median_ae_delta_a_minus_b_bpm,method_a_better_n,method_b_better_n,tie_n
+existing_selector_previous_anchor,fixed_target_periodogram,323,13.276285,24.902438,-11.626153,-1.945557,245,78,0
+existing_selector_fused_previous_anchor,existing_selector_previous_anchor,323,8.319342,13.276285,-4.956943,-1.105304,219,86,18
+old_targeted_historical_gate,old_targeted_current_block_local,287,21.206219,25.982855,-4.776636,0.0,118,38,131
+old_targeted_historical_fixed_target,old_targeted_current_block_local,323,19.427297,26.161212,-6.733915,-6.237,205,87,31
+historical_full_chain_20s_adaptation,current_block_local_estimator_audit,323,13.916131,26.161212,-12.245081,-14.005,252,71,0
