@@ -1,5 +1,12 @@
 # 修改说明
 
+## 2026-08-30 — audit(mmwave): close reusable beat-level validation gate without HRV promotion
+
+- Reused existing full-record v3.1.1 `heart_peaks` and `heartbeat` NPZ outputs; no new radar beat detector, selector, gate, producer, raw-data, or BR algorithm change.
+- Added the narrow beat-level validation adapter, aggregate summary, tolerance sensitivity, manifest, and project code map. Eight complete blocks were evaluated with deterministic 60 s windows and existing ECG block-affine alignment.
+- At ±75 ms, pooled radar-to-ECG beat sensitivity/precision were `0.170243/0.210619` (`119/699` ECG R-peaks, `565` radar peaks); at ±150 ms they remained `0.359084/0.444248`. No formal RMSSD/SDNN/LF-HF was calculated.
+- HRV remains `BLOCKED`; HR/BR remain `HOLD`; #25 remains `WAIT_ON_SELECTOR_VALIDITY`.
+
 ## 2026-08-30 — audit(mmwave): complete historical producer lineage and fixed-contract stage audit
 
 - Reused the existing timestamp-only coverage contract (`COMPLETE=333`, `SEVERELY_INCOMPLETE=2`) and existing selector, target-ablation, estimator-lineage and ECG oracle outputs; excluded w027/w028 from the controlled `COMPLETE ∩ ECG_VALID` n=`323` set without padding/backfill/reconstruction.

@@ -1,0 +1,92 @@
+{
+  "status": "PARTIAL / HRV_BLOCKED",
+  "run_id": "mmwave_beat_level_validation_20260830",
+  "generated_at_utc": "2026-08-30T06:49:33.913919+00:00",
+  "canonical_repo_head": "704bec02dfb150c897c648847523b13104df20c9",
+  "subjects": [
+    "97793",
+    "9779",
+    "97795"
+  ],
+  "window_contract": {
+    "window_s": 60.0,
+    "boundary_guard_s": 30.0,
+    "selection": "first bounded 60 s interval after block start + 30 s, within complete block and before end - 30 s",
+    "formal_hrv_window_used": false
+  },
+  "matching_contract": {
+    "primary_tolerance_ms": 75.0,
+    "sensitivity_tolerances_ms": [
+      50.0,
+      75.0,
+      100.0,
+      150.0
+    ],
+    "matching": "one-to-one nearest radar peak to raw ECG R-peak; no per-window lag search",
+    "timing_error": "radar timestamp minus ECG R-peak time after existing block affine clock mapping",
+    "paired_ibi": "successive intervals among matched beats; constant offset cancels"
+  },
+  "reuse": {
+    "radar_beats": "existing full-record NPZ heart_peaks; no new radar detector",
+    "cardiac_waveform": "existing full-record NPZ heartbeat; only reused for same-window existing spectral HR consistency",
+    "ecg_rpeaks": "gold_standard_qa.py fixed 0.5-40 Hz / 0.30 s / prominence 0.25 parameters",
+    "block_alignment": "run_mmwave_targeted_validation_20260830.py existing block-local ECG affine mapping",
+    "reuse_rejection_reason": null
+  },
+  "source_code_hashes": {
+    "beat_level_adapter_sha256": "c579dcccf4ff6b5f34368a526b984d3dc6b4aa5cfef1474dd4e35ec58d240ae2",
+    "targeted_alignment_script_sha256": "4a17732cc4e11e3a206fc78a54b0584fc8fb6f41c7dfdc6a9cd3fb8ef57aec7d",
+    "gold_standard_script_sha256": "11f9233acd42d4c7f2e160ace5cbee9ac9425a35e278afc09d92590c81b244cb",
+    "producer_script_sha256": "e25e3f137360a78df1841c65ac442fba9fbb85508079e019d474a5d168014cfd"
+  },
+  "br_boundary": "existing full-record breath_rate retained as supporting metadata only; no BR algorithm or harmonic diagnostic was run",
+  "formal_hrv_metrics_calculated": false,
+  "source_records": [
+    {
+      "subject": "97793",
+      "json_name": "sub-97793_ses-SART_mmwave_vital_signs.json",
+      "npz_name": "sub-97793_ses-SART_mmwave_vital_signs.npz",
+      "json_sha256": "8c946024b908af5fea19c11091289bc918566eaa49f489ddaa784943c8319227",
+      "npz_sha256": "c0a7f3a1d58d34ec7fc9b2388a29f6b6506aa122b6d8886f170a20d15c2851f2",
+      "n_frames": 162924,
+      "n_heart_peaks": 1991,
+      "producer_version_in_json": "v3.1.1",
+      "producer_pipeline_in_json": "v3.1.1_phase_stable_bins_k3_breath_guided_vmd_guarded_hr_fusion",
+      "heart_channel": 4,
+      "heart_bin": 9
+    },
+    {
+      "subject": "9779",
+      "json_name": "sub-9779_ses-SART_mmwave_vital_signs.json",
+      "npz_name": "sub-9779_ses-SART_mmwave_vital_signs.npz",
+      "json_sha256": "cf341c6dcb309b10188e3097fee009ac9083dd7b1e27253cecd247fa1f378e68",
+      "npz_sha256": "0f269c9014acc2255b481f00214ab3abc4c14f9fa6a07aeab9064c999371e8c5",
+      "n_frames": 155557,
+      "n_heart_peaks": 1967,
+      "producer_version_in_json": "v3.1.1",
+      "producer_pipeline_in_json": "v3.1.1_phase_stable_bins_k3_breath_guided_vmd_guarded_hr_fusion",
+      "heart_channel": 5,
+      "heart_bin": 19
+    },
+    {
+      "subject": "97795",
+      "json_name": "sub-97795_ses-SART_mmwave_vital_signs.json",
+      "npz_name": "sub-97795_ses-SART_mmwave_vital_signs.npz",
+      "json_sha256": "cdc8e27349c9d7fabcbcd5be75f78536c560ed699d49e384b0d19262a9989043",
+      "npz_sha256": "67a03eeb852c3f53ce737c7c447991a10ac4df776d6770d1c1124e1d571e80f8",
+      "n_frames": 140648,
+      "n_heart_peaks": 1811,
+      "producer_version_in_json": "v3.1.1",
+      "producer_pipeline_in_json": "v3.1.1_phase_stable_bins_k3_breath_guided_vmd_guarded_hr_fusion",
+      "heart_channel": 7,
+      "heart_bin": 25
+    }
+  ],
+  "outputs": [
+    "MMWAVE_BEAT_LEVEL_VALIDATION_SUMMARY.csv",
+    "MMWAVE_BEAT_LEVEL_TOLERANCE_SENSITIVITY.csv",
+    "MMWAVE_BEAT_LEVEL_VALIDATION_REPORT_2026-08-30.md",
+    "MMWAVE_BEAT_LEVEL_VALIDATION_MANIFEST.json",
+    "local-only: MMWAVE_BEAT_LEVEL_VALIDATION_PER_WINDOW_LOCAL_ONLY.csv"
+  ]
+}

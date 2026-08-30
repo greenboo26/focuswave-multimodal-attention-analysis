@@ -8,6 +8,18 @@
 
 ---
 
+### 2026-08-30：mmWave beat-level reuse audit and ECG matching gate — PARTIAL / HRV BLOCKED
+
+**Reuse Gate 与输入**：先核对现有 v3.1.1 producer 和 full-record JSON/NPZ。existing NPZ 已保存 `heart_peaks` frame indices 与 `heartbeat` waveform，因此没有 `REUSE_REJECTION_REASON`，没有新 beat detector、peak export adapter、selector、gate 或 raw/producer 修改。旧 `_selection_60s` 输出实际是 raw frame 0–5999，早于 formal block，不能作为 ECG 对齐窗；本轮改用 existing full-record output 的 complete formal block 内子窗。
+
+**验证合同**：subjects=`97793/9779/97795`；8 个 complete blocks 各取 1 个固定 60 s 窗，block start 后 30 s 开始、距 block end 30 s 结束；radar frame index 经 authoritative DLL timestamp 映射；ECG 使用既有 block-local affine mapping 与 `gold_standard_qa.py` 固定 0.5–40 Hz、0.30 s、prominence 0.25 R-peak 参数。主匹配容差为既有合同的 ±75 ms，一对一 nearest matching，不在每个窗口搜索 lag；±50/100/150 ms 只作敏感性。
+
+**结果**：±75 ms 下 radar peaks=`565`、raw ECG R-peaks=`699`、matched=`119`，pooled sensitivity=`0.170243`、precision=`0.210619`；±150 ms sensitivity/precision 仍为 `0.359084/0.444248`。matched subset 的 per-window median paired-IBI MAE=`46.258 ms`，但 match rate 太低，不能作为 HRV 资格证据。由同一 matched beat sequence 得到的 beat-derived mean HR 与同一 60 s existing periodogram HR 的 median absolute difference=`49.114 bpm`。本轮明确没有计算正式 RMSSD、SDNN、LF/HF。
+
+**决策与边界**：`BEAT_LEVEL_GATE=NOT_PASSED_FOR_PROMOTION`；HRV 继续 `BLOCKED`，HR/BR 继续 `HOLD`，#25 继续 `WAIT_ON_SELECTOR_VALIDITY`。BR 只保留 full-record `breath_rate` supporting metadata，没有新增 BR/harmonic 算法。高相关的少量 paired IBI 不能脱离低匹配率单独解释为通过。证据包为 `docs/results/2026-08-30_MMWAVE_HRV_BEAT_LEVEL_GATE/`，代码映射为 `docs/research/MMWAVE_HR_BR_HRV_PROJECT_PIPELINE_MAP_2026-08-30.md`，逐窗表 local-only 位于 `D:\Project\厚粲杯\11_数据\derived\mmwave_beat_level_validation_20260830\`。入口为 `scripts/maintenance/run_mmwave_beat_level_validation_20260830.py`。
+
+---
+
 ### 2026-08-30：#27 historical producer lineage + fixed-contract stage audit — PARTIAL
 
 **控制口径与复用**：沿用现有 timestamp-only coverage contract，335 windows 中 `COMPLETE=333`、`SEVERELY_INCOMPLETE=2`；排除 `97795/block4/w027,w028`，不 padding/backfill/reconstruct，tail gap 仅作 provenance。复用既有 selector replay、target ablation、same-window estimator comparison、historical lineage 与 #24 ECG oracle，新增的 maintenance adapter 只做 join、固定分母 metrics、stage evidence 和失败定位，不改 producer/raw/ECG/target/参数，不造新 selector。

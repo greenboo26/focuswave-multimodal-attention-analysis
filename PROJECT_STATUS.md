@@ -1,5 +1,13 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-30 mmWave beat-level validation — PARTIAL / HRV BLOCKED / #25 WAIT_ON_SELECTOR_VALIDITY
+
+- B lane 通过 reuse-first 检查：existing full-record v3.1.1 NPZ 已保存 `heart_peaks` frame indices 和 `heartbeat` waveform；不需要新 detector、peak export adapter 或 producer 改动。旧 `_selection_60s` 文件从 raw frame 0 开始、早于 formal block，未直接用于 ECG 对齐。
+- 使用 authoritative DLL timestamp、existing block-local ECG affine mapping，在 8 个 complete blocks 各选 1 个固定 60 s 子窗（block start 后 30 s，距 block end 保留 30 s）。primary ±75 ms 一对一匹配：radar peaks=`565`、ECG raw R-peaks=`699`、matched=`119`，sensitivity=`0.170243`、precision=`0.210619`；±150 ms 仍仅 `0.359084/0.444248`。
+- paired IBI 只在 matched beat subset 上计算，per-window median IBI MAE=`46.258 ms`；该条件性数字不能抵消低 match rate。beat-derived mean HR 与同窗 existing periodogram HR 的 median absolute difference=`49.114 bpm`，因此 beat-level promotion gate 未通过。
+- BR 仅保留 existing full-record `breath_rate` supporting metadata；没有运行 per-window harmonic diagnostic 或新增 BR 算法。本轮未计算 RMSSD、SDNN、LF/HF 或其他正式 HRV 指标，HRV 继续 `BLOCKED`。
+- 证据包：`docs/results/2026-08-30_MMWAVE_HRV_BEAT_LEVEL_GATE/`；代码映射：`docs/research/MMWAVE_HR_BR_HRV_PROJECT_PIPELINE_MAP_2026-08-30.md`；逐窗细表 local-only：`D:\Project\厚粲杯\11_数据\derived\mmwave_beat_level_validation_20260830\`。#25 仍 `WAIT_ON_SELECTOR_VALIDITY`，HR/BR 仍 `HOLD`。
+
 ## 2026-08-30 mmWave producer lineage + controlled stage audit at f01c582e — PARTIAL / #25 WAIT_ON_SELECTOR_VALIDITY
 
 - 按现有 timestamp-only coverage contract 固定控制集：335 windows 中 `COMPLETE=333`，`SEVERELY_INCOMPLETE=2`（`97795/block4/w027,w028`）；后续 validity/replay 排除两窗，不 padding/backfill/reconstruct，`24,809 ms` tail 只保留 provenance。与既有 `ECG_VALID` 相交后本轮 controlled n=`323`。
