@@ -1,0 +1,5 @@
+arm,bin_switch_rate,bin_switches,channel_switch_rate,channel_switches,max_residence_windows,median_residence_windows,n_transitions,n_windows,role
+A_raw,0.501529,164,0.48318,158,11,1.0,327,335,hr
+A_raw,0.541284,177,0.599388,196,10,1.0,327,335,br
+B_complex_mean_subtracted,0.584098,191,0.556575,182,4,1.0,327,335,hr
+B_complex_mean_subtracted,0.522936,171,0.678899,222,6,1.0,327,335,br

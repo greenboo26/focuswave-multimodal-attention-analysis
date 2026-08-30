@@ -1,0 +1,27 @@
+{
+  "run_id": "MMWAVE_PRESELECTION_CLUTTER_AB_20260830",
+  "status": "PARTIAL_DIAGNOSTIC_ONLY",
+  "reuse_rejection_reason": "Existing assets contained display-only mean subtraction and no selector-integrated, same-window A/B aggregate; this minimal adapter reuses the existing selector without modifying it.",
+  "input": {
+    "windows": "mmwave_ecg_block_window_comparison.csv",
+    "windows_sha256": "06370f49681854a9dee6cb7ed3b524f4ab3aef7c59dc64a57e9c22c8988b4033",
+    "producer_sha256": "e25e3f137360a78df1841c65ac442fba9fbb85508079e019d474a5d168014cfd"
+  },
+  "contract": {
+    "n_windows": 335,
+    "subjects": [
+      "97793",
+      "9779",
+      "97795"
+    ],
+    "bin_spacing_m": 0.037,
+    "ecg_used": false,
+    "pre_fft_claim": false
+  },
+  "outputs": {
+    "MMWAVE_PRESELECTION_CLUTTER_AB_CHANNEL_GRID.csv": "191793aab09782cacd9c80dd013e9fbb8a3960fee22916d9c2e630820bdc40f3",
+    "MMWAVE_PRESELECTION_CLUTTER_AB_REPORT_2026-08-30.md": "8d4917c64f4c0037eea2c0855a396233081a9921659b9943f5115d97b8ba0d77",
+    "MMWAVE_PRESELECTION_CLUTTER_AB_STABILITY.csv": "bdd9647d601894776da0d670cfb61b5a9c65c327cdba21e998b2a02e22e49d10",
+    "MMWAVE_PRESELECTION_CLUTTER_AB_SUMMARY.csv": "b4eb6abd8599af855a4cc2756297379c696e3a92179cc138ebbd936af39e3fe6"
+  }
+}

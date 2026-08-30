@@ -1,5 +1,11 @@
 # 修改说明
 
+## 2026-08-30 — audit(mmwave): execute frozen near-field / pre-selection clutter A/B
+
+- Added the minimal `run_mmwave_preselection_clutter_ab_20260830.py` adapter, reusing the current v3.1.1 selector and block-local continuity on the existing 335-window formal-block diagnostic subset. A uses the raw mean-power profile; B applies slow-time complex-mean subtraction only after Range FFT, before that same selector.
+- A/B is ECG-independent and does not create an estimator, change HR/BR, reselect formal targets, alter a distance gate, or claim pre-FFT/firmware processing. Selector coverage is 100%; B reduces HR `<0.30m` selections but worsens bin/channel switching and does not improve BR near-side selection, so current preprocessing remains unchanged.
+- Added Git-safe aggregate, report and manifest under `docs/results/2026-08-30_MMWAVE_NEARFIELD_PRESELECTION_AB/`, plus a small unit test. Near-side structure remains observed; only its slow-time-removable component is likely static, while physical origin and numeric engineering ROI remain unresolved.
+
 ## 2026-08-30 — fix(mmwave): retain existing producer BR fields in diagnostic runner summaries
 
 - Reused the v3.1.1 public result schema: producer writes `breath_rate`, while `run_timeline_gated_mmwave_quality.py` incorrectly copied `breathing_rate` and therefore emitted an empty copied BR object.

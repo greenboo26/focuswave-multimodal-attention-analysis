@@ -8,6 +8,18 @@
 
 ---
 
+### 2026-08-30：near-side structure / pre-selection clutter A/B — PARTIAL / KEEP CURRENT SELECTOR
+
+**Reuse Gate**：复用 B2 的 71-session corrected-distance / range-map / channel-grid audit、冻结的 335 个 DLL-time formal-block diagnostic windows（`97793/9779/97795`）及 v3.1.1 原样 candidate scoring/channel selection/block-local continuity。既有资产只有 display-only temporal-mean subtraction，没有 selector-integrated 同窗 A/B aggregate；因此记录 `REUSE_REJECTION_REASON` 后只增加 maintenance adapter，没有改 producer、raw、Range FFT、HR/BR estimator、ECG、QC 或 distance gate。
+
+**A/B（ECG-independent）**：A 为现有 raw mean-power profile；B 仅在已 Range-FFT 的 complex DataCube 上做 slow-time complex-mean subtraction，再运行完全相同 selector。335 窗均有候选（A/B HR/BR coverage=`100%`）。HR `<0.30m` selected-bin rate=`36.1194%→24.1791%`，但 HR bin/channel switch=`50.1529%/48.3180%→58.4098%/55.6575%`；BR `<0.30m`=`7.1642%→7.4627%`，BR channel switch=`59.9388%→67.8899%`。未出现近端减少且稳定性不损伤的共同证据，决策为 `KEEP_CURRENT_SELECTOR / DO_NOT_ADD_PRESELECTION_PREPROCESSING`。
+
+**近场与距离决策**：near-side bright structure=`OBSERVED`；被 B 部分压低的慢变成分=`LIKELY_STATIC_COMPONENT`，不等同于结构来源；人体、direct leakage、fixed environment reflection=`AMBIGUOUS`。B2 的 16 near / 18 far / 9 reference 也未给出 likely leakage/reflection session label。正式 NPZ 是 8-channel complex range-domain DataCube；FFT 前 window/DC/clutter 的实际运行状态不能离线伪造，SDK source 的 ReportDataCube1D config 为 clutter removal `NONE`，exact formal runtime receipt 仍缺。无 session-level measured physical truth；不冻结数值 current engineering ROI，历史 `0.30–1.50m` 仅 `HISTORICAL_GATE_SENSITIVITY`，不得升级 formal 或按 HR MAE 选门。
+
+**证据与状态**：Git-safe package=`docs/results/2026-08-30_MMWAVE_NEARFIELD_PRESELECTION_AB/`；入口=`scripts/maintenance/run_mmwave_preselection_clutter_ab_20260830.py`。全项目=`PARTIAL`；HR/BR=`HOLD`、HRV=`BLOCKED` 不变。
+
+---
+
 ### 2026-08-30：formal runner BR summary schema repair and role-state synchronization — PASS / NO_SCIENCE_CHANGE
 
 **Reuse Gate**：复用 `process_vital_signs_v3_1_1.py` 已有 public result schema 和既有 BR code trace；没有新 pipeline、estimator、参数、gate 或 A/B 选择。发现 `run_timeline_gated_mmwave_quality.py` 读取不存在的 `breathing_rate`，而 producer 写入 `breath_rate`，会使 runner 复制到 `segment_analysis_summary.json` 的 BR object 为空。

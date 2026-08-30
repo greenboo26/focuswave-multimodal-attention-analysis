@@ -1,0 +1,17 @@
+arm,channel,n_windows,near_peak_bin_mode,near_peak_mode_fraction,near_peak_ratio_median
+A_raw,0,335,8,0.997015,0.127754
+A_raw,1,335,8,0.99403,0.259589
+A_raw,2,335,1,0.713433,0.311745
+A_raw,3,335,2,0.695522,0.370625
+A_raw,4,335,8,1.0,0.146501
+A_raw,5,335,8,1.0,0.291399
+A_raw,6,335,8,0.558209,0.176702
+A_raw,7,335,8,0.608955,0.230054
+B_complex_mean_subtracted,0,335,8,1.0,0.087896
+B_complex_mean_subtracted,1,335,8,1.0,0.168335
+B_complex_mean_subtracted,2,335,8,1.0,0.112803
+B_complex_mean_subtracted,3,335,8,1.0,0.144754
+B_complex_mean_subtracted,4,335,8,1.0,0.106839
+B_complex_mean_subtracted,5,335,8,1.0,0.182179
+B_complex_mean_subtracted,6,335,8,1.0,0.114838
+B_complex_mean_subtracted,7,335,8,1.0,0.13831

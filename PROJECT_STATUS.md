@@ -1,5 +1,13 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-30 near-field / distance-gate mainline — PARTIAL
+
+- 已执行：复用 71-session B2 near/far/reference front-end audit 与冻结的 335-window formal-block diagnostic subset，完成 selector 前 ECG-independent A/B。A 为 raw mean-power profile；B 只在 Range-FFT 后做 slow-time complex-mean subtraction，随后调用同一 v3.1.1 candidate/channel/continuity logic。
+- 335/335 窗 A/B 均有候选。HR `<0.30m`=`36.1194%→24.1791%`，但 HR bin/channel switch=`50.1529%/48.3180%→58.4098%/55.6575%`；BR `<0.30m`=`7.1642%→7.4627%`，BR channel switch=`59.9388%→67.8899%`。无 coverage 损失，但稳定性没有保持，故 `KEEP_CURRENT_SELECTOR`、`DO_NOT_ADD_PRESELECTION_PREPROCESSING`。
+- near-side bright structure=`OBSERVED`；被慢时间相减削弱的成分=`LIKELY_STATIC_COMPONENT`，其物理来源仍 `AMBIGUOUS`，不得称人体或泄漏。B2 没有支持 near-field/direct leakage 或 fixed reflection 的 session-level group verdict。
+- 正式 NPZ 是 8-channel complex range-domain DataCube（0.037m/bin）；不能离线声称或补做 FFT 前 window/DC/clutter。SDK source 的 ReportDataCube1D config 为 clutter removal `NONE`，exact formal runtime receipt 仍 unresolved。无 measured physical truth，故不冻结数值 current engineering ROI；0.30–1.50m 保持 `HISTORICAL_GATE_SENSITIVITY`，不进入 formal。
+- 证据：`docs/results/2026-08-30_MMWAVE_NEARFIELD_PRESELECTION_AB/`；入口：`scripts/maintenance/run_mmwave_preselection_clutter_ab_20260830.py`。HR/BR=`HOLD`、HRV=`BLOCKED` 不变。
+
 ## 2026-08-30 mmWave beat-level validation — PARTIAL / HRV BLOCKED / #25 WAIT_ON_SELECTOR_VALIDITY
 
 - B lane 通过 reuse-first 检查：existing full-record v3.1.1 NPZ 已保存 `heart_peaks` frame indices 和 `heartbeat` waveform；不需要新 detector、peak export adapter 或 producer 改动。旧 `_selection_60s` 文件从 raw frame 0 开始、早于 formal block，未直接用于 ECG 对齐。
