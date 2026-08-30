@@ -1,5 +1,15 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-30 selector-path reconciliation and next-step gate — PARTIAL / #25 WAIT_ON_SELECTOR_VALIDITY
+
+- 实际复用 canonical `process_vital_signs_v3_1_1.py` 的 `_select_spectral_bpm()`、previous-BPM anchor、time/frequency fusion、harmonic folding，在冻结 #24 的 335 个 DLL-time windows 做 downstream replay；未修改 producer/raw/target/QC/gate，ECG 仅作 retrospective oracle。
+- #27 分母保持 `ECG_VALID=325`、`ECG_INVALID=10`、`UNRESOLVED=0`；可评估 ECG_VALID=`323`，coverage-limited=`2`。在 102 个 wrong-selection 中，sequential selector 恢复 exact=`37`、nearby=`10`；在 182 个 nearby 中恢复 exact=`17`、nearby=`45`。这是 selector/path 影响的可重复 supporting 证据，不是 HR 改善或真实 target 恢复证明。
+- A2 仍受证据限制：已有 continuity 诊断只有 15 条早期 sliding rows，缺少 335 窗逐窗 candidate→bin/channel provenance，不能把 182 个 nearby 合法细分为同 target/候选、邻 bin、邻 channel、switch 或 persistence 子类。状态为 `BLOCKED_ON_PER_WINDOW_CANDIDATE_BIN_CHANNEL_PROVENANCE`，不是新算法 blocker。
+- #25 的既有 283-pair diagnostic 20 s/60 s MAE=`14.703129/5.608574` bpm（差=`-9.094555`）与固定 targeted path 不同于 canonical selector replay，故窗口效应仍不可分离；保持 `WAIT_ON_SELECTOR_VALIDITY`，不按 MAE 推广 60 s。
+- #26 已完成本轮独立物理证据回收检查：仅找到 protocol 的 0.4m 摆位说明和 0.8m 工程验证目标，未找到 session-level 距离/朝向/照片/geometry receipt；保持 `PHYSICAL_GATE_UNRESOLVED / HARD_EXTERNAL_BLOCKER`。
+- #28 在 FocusWave `formaltest` 上完成最小 future-prevention patch：stop/disconnect 在 flush/close 前等待 worker 退出；不改历史 raw、采集参数或分析 producer 语义。该 patch 需以 FocusWave 外部仓库 commit 单独报告。
+- 结果包：`docs/results/2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION/`；逐窗表仍 local-only。HR/BR 继续 `HOLD`，HRV 继续 `BLOCKED`，未运行 C2B/C2C、未改 NIR/RGB。
+
 ## 2026-08-30 Issue #29 execution-evidence supervisor — REUSE_GATE=PASS / SCIENTIFIC_GATE=PARTIAL
 
 - Supervisor 已核验 #24–#28 的实际脚本、结果、manifest、复用理由、分母边界和本地提交；不以会话文字替代证据。统一结果为 #24 ECG eligibility 层完成，#25 bounded diagnostic，#26 physical gate unresolved，#27 supporting-only，#28 历史 tail 不可恢复。

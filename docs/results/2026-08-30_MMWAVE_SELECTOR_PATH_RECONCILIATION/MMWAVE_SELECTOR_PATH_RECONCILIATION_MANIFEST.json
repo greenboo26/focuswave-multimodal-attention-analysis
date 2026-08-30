@@ -1,0 +1,63 @@
+{
+  "run_id": "MMWAVE_SELECTOR_PATH_RECONCILIATION_20260830",
+  "run_started_utc": "2026-08-30T04:49:31.557796+00:00",
+  "status": "PARTIAL / SELECTOR_PATH_REPLAY_COMPLETE_LOCALIZATION_EVIDENCE_LIMITED",
+  "denominators": {
+    "all_windows": 335,
+    "ecg_valid_primary": 325,
+    "ecg_valid_evaluable": 323,
+    "ecg_valid_coverage_limited": 2,
+    "wrong_selection": 102,
+    "nearby_target_bin_channel": 182,
+    "selected_ecg_bin": 22,
+    "absent_or_weak": 17,
+    "coverage_or_reference": 12
+  },
+  "canonical_main_head_at_run": "6def82c2d5900ea96857151ca63e73ba02bff328",
+  "canonical_origin_main_at_run": "6def82c2d5900ea96857151ca63e73ba02bff328",
+  "inputs": {
+    "fixed_windows": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\mmwave_ecg_block_window_comparison.csv",
+    "fixed_windows_sha256": "06370f49681854a9dee6cb7ed3b524f4ab3aef7c59dc64a57e9c22c8988b4033",
+    "truth_table": "D:\\Project\\厚粲杯\\11_数据\\derived\\ecg_valid_retrospective_spectral_truth_audit_20260830\\ECG_VALID_RETROSPECTIVE_SPECTRAL_TRUTH_TABLE.csv",
+    "truth_table_sha256": "4a353d69cf345f797ed0231ef012c3bb26cc9830e9c9ec90a00ec7c6f2d75b0a",
+    "continuity_diagnostic": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\docs\\results\\2026-08-30_MMWAVE_TARGETED_VALIDATION\\target_continuity_diagnostic.csv",
+    "continuity_rows": 15
+  },
+  "reused_assets": [
+    {
+      "path": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\scripts\\maintenance\\run_mmwave_targeted_validation_20260830.py",
+      "sha256": "4a17732cc4e11e3a206fc78a54b0584fc8fb6f41c7dfdc6a9cd3fb8ef57aec7d",
+      "role": "PartReader and frozen 335-window contract"
+    },
+    {
+      "path": "D:\\AI-Governance-Work\\focuswave-central-mmwave-v2\\scripts\\process_vital_signs_v3_1_1.py",
+      "sha256": "e25e3f137360a78df1841c65ac442fba9fbb85508079e019d474a5d168014cfd",
+      "role": "existing bandpass, peak, previous-anchor, spectral selector and harmonic folding"
+    },
+    {
+      "path": "D:\\Project\\厚粲杯\\11_数据\\derived\\ecg_valid_retrospective_spectral_truth_audit_20260830\\ECG_VALID_RETROSPECTIVE_SPECTRAL_TRUTH_TABLE.csv",
+      "sha256": "4a353d69cf345f797ed0231ef012c3bb26cc9830e9c9ec90a00ec7c6f2d75b0a",
+      "role": "#24 ECG oracle labels only"
+    }
+  ],
+  "reuse_rejection_reason": "Existing ECG_VALID spectral audit stores fixed-target candidates and truth labels but does not persist a 335-window replay of canonical _select_spectral_bpm with previous/reference-anchor inputs or a joined localization evidence table; add only this downstream adapter.",
+  "selector_contract": {
+    "target_bin_channel": "existing local_hr_bin/local_hr_channel unchanged",
+    "heart_signal": "existing producer extract_displacement then _sos_bandpass",
+    "selection": "existing _select_spectral_bpm; previous BPM reset per complete block; reference BPM=None because fixed targeted path has no external reference",
+    "fusion": "existing time-quality/frequency-quality fusion equations reproduced only to expose selector_fused_bpm",
+    "anchor_ablation": "same existing selector replay with previous_bpm=None per window; descriptive ablation only, no parameter change",
+    "ecg": "oracle-only retrospective label; no ECG value passed into selector",
+    "formal_status": "diagnostic/supporting only; no producer write-back or HR promotion"
+  },
+  "localization_boundary": "The existing target_continuity_diagnostic has 15 early sliding-window rows, not 335 complete-block rows. It records selected bin/channel switching but no per-window candidate-to-bin/channel mapping or independently observed true physical target. The 182 nearby cases therefore cannot be honestly split into same-target/different-candidate, neighbor-bin, neighbor-channel, switching, or persistence subclasses from current durable evidence.",
+  "verification": {
+    "py_compile": "PASS",
+    "replay_run": "PASS",
+    "output_rows": 335,
+    "local_full_table": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_selector_path_reconciliation_20260830\\MMWAVE_SELECTOR_PATH_REPLAY_335_WINDOWS_LOCAL_ONLY.csv",
+    "producer_modified": false,
+    "raw_modified": false,
+    "ecg_used_for_selection": false
+  }
+}

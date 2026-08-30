@@ -1,0 +1,2 @@
+﻿bin_displacement_nonzero,channel_switch_true,evidence_boundary,evidence_scope,frozen_windows,nearby_truth_windows,rows,rows_aligned_to_frozen_335
+8,11,"15 early sliding windows (first 6000 frames per subject), not the 335 complete-block windows; no per-window candidate-to-bin/channel linkage for the 182 nearby cases",existing_target_continuity_diagnostic,335,182,15,0

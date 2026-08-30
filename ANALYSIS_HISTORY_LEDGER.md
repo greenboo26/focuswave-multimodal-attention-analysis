@@ -8,6 +8,22 @@
 
 ---
 
+### 2026-08-30：#27 selector-path reconciliation / #25 contract decision — PARTIAL
+
+**Reuse Gate 与执行**：既有 ECG_VALID spectral audit 只有固定 `local_hr_bin/local_hr_channel` 的 candidate/truth 表，未持久化 canonical `_select_spectral_bpm()` 的 335-window previous-anchor replay；既有 continuity diagnostic 也只有 15 条早期 rows，缺少逐窗 candidate→bin/channel provenance。记录 `REUSE_REJECTION_REASON` 后，只增加 downstream replay adapter、aggregate 与报告，复用既有 `PartReader`、DLL-time 335-window contract、producer bandpass/peak/selector/folding/fusion；不改 producer/raw/target/QC/gate/ECG、NIR/RGB 或 C2B/C2C。
+
+**A1 结果**：冻结 #24 分母为 `325/10/0`，其中 ECG_VALID 可评估=`323`、coverage-limited=`2`。既有 fixed path 在 102 wrong-selection 中 exact=`0`；sequential previous-anchor selector exact=`37`、nearby=`10`。在 182 nearby 中，sequential selector exact=`17`、nearby=`45`。无-anchor ablation 作为描述性对照保存；不将 selector replay 当 HR 性能提升。
+
+**A2 与窗口决策**：由于缺逐窗 candidate/bin/channel 对应关系，182 nearby 不能继续声称 same-target/different-candidate、neighbor-bin、neighbor-channel、switch 或 persistence 子类，状态为 `BLOCKED_ON_PER_WINDOW_CANDIDATE_BIN_CHANNEL_PROVENANCE`。既有 283 paired window diagnostic 的 20 s/60 s MAE=`14.703129/5.608574` bpm 与固定 path 不等同于 selector contract，故 #25 保持 `WAIT_ON_SELECTOR_VALIDITY`，不按 MAE 选择 60 s。
+
+**证据**：aggregate 与 manifest/report 位于 `docs/results/2026-08-30_MMWAVE_SELECTOR_PATH_RECONCILIATION/`；335-row replay 表为 `D:\Project\厚粲杯\11_数据\derived\mmwave_selector_path_reconciliation_20260830\MMWAVE_SELECTOR_PATH_REPLAY_335_WINDOWS_LOCAL_ONLY.csv`，仅 local-only。#26 独立物理真值检查未找到 session-level placement receipt，保持 `HARD_EXTERNAL_BLOCKER / PHYSICAL_GATE_UNRESOLVED`。HR/BR=`HOLD`，HRV=`BLOCKED`。
+
+### 2026-08-30：#28 acquisition lifecycle future-prevention patch — ENGINEERING_PATCH_READY
+
+复用现有 FocusWave `formaltest` 分支的 `stop()`/`disconnect()` 生命周期，仅将 worker join 放到最终 flush/close 前，避免队列变空但 in-flight callback 仍与文件化并发；不回写历史 raw，不改变采集参数或 producer 分析语义。验证范围为 `py_compile`、diff/order review；真实硬件采集未执行，故不声称 runtime hardware PASS。
+
+---
+
 ### 2026-08-30：Issue #29 execution-evidence supervisor — REUSE_GATE=PASS / SCIENTIFIC_GATE=PARTIAL
 
 **审查范围**：Supervisor 读取并核验 #24–#28 的实际脚本、aggregate 结果、manifest、复用说明、分母边界和本地提交；不把会话文字当作科学证据。统一确认：#24 仅闭合 ECG reference eligibility；#25 为 283-pair bounded diagnostic；#26 的 distance/error 描述性证据通过但 physical gate unresolved；#27 仅 supporting retrospective truth；#28 为历史 acquisition tail 不可恢复。
