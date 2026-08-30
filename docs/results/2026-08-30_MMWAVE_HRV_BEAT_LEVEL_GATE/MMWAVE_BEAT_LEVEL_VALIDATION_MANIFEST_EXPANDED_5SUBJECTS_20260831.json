@@ -1,0 +1,180 @@
+{
+  "status": "PARTIAL / HRV_BLOCKED",
+  "run_id": "mmwave_beat_level_validation_20260831_expanded_5subjects",
+  "generated_at_utc": "2026-08-30T22:00:31.389366+00:00",
+  "canonical_repo_head": "e9eca963ffde77e95b6e3c7dea59991215e929ec",
+  "subjects": [
+    "97793",
+    "9779",
+    "97795",
+    "97796",
+    "97794"
+  ],
+  "skipped_subjects": [
+    {
+      "subject": "97792",
+      "status": "not_estimable",
+      "reason": "仅 baseline+practice；无 block1-4 事件、无 v3.1.1 NPZ 输出"
+    }
+  ],
+  "window_contract": {
+    "window_s": 60.0,
+    "boundary_guard_s": 30.0,
+    "selection": "first bounded 60 s interval after block start + 30 s, within complete block and before end - 30 s",
+    "formal_hrv_window_used": false
+  },
+  "matching_contract": {
+    "primary_tolerance_ms": 75.0,
+    "sensitivity_tolerances_ms": [
+      50.0,
+      75.0,
+      100.0,
+      150.0
+    ],
+    "matching": "one-to-one nearest radar peak to raw ECG R-peak; no per-window lag search",
+    "timing_error": "radar timestamp minus ECG R-peak time after existing block affine clock mapping",
+    "paired_ibi": "successive intervals among matched beats; constant offset cancels"
+  },
+  "reuse": {
+    "evaluate_window_imported_from": "run_mmwave_beat_level_validation_20260830.py (same code, same contract constants)",
+    "radar_beats": "existing full-record NPZ heart_peaks; no new radar detector",
+    "ecg_rpeaks": "gold_standard_qa.py fixed 0.5-40 Hz / 0.30 s / prominence 0.25 parameters",
+    "block_alignment": "run_mmwave_targeted_validation_20260830.py existing block-local ECG affine mapping",
+    "naming_overrides": {
+      "ACQ_FILE_OVERRIDES": {
+        "97795": "97995.acq"
+      },
+      "FILE_KEY_OVERRIDES": {
+        "97794": "97994"
+      },
+      "OUTPUT_FILE_OVERRIDES": {
+        "97794": "97994"
+      }
+    },
+    "reuse_rejection_reason": null
+  },
+  "verification": {
+    "old_8_windows_struct_fields_exact": true,
+    "exact_problems": [],
+    "timing_field_max_drift_ms": 0.0029296875,
+    "timing_field_drift_notes": [
+      "97793/block2.estimated_constant_offset_median_ms: delta=0.001953125 ms",
+      "97793/block2.timing_error_mae_ms: delta=0.000781250 ms",
+      "97793/block2.timing_error_median_ms: delta=0.001953125 ms",
+      "97793/block2.timing_error_p95_abs_ms: delta=0.001953125 ms",
+      "9779/block1.estimated_constant_offset_median_ms: delta=0.002929688 ms",
+      "9779/block1.timing_error_mae_ms: delta=0.001126803 ms",
+      "9779/block1.timing_error_median_ms: delta=0.002929688 ms",
+      "9779/block1.timing_error_p95_abs_ms: delta=0.000585938 ms",
+      "9779/block2.estimated_constant_offset_median_ms: delta=0.002929688 ms",
+      "9779/block2.timing_error_mae_ms: delta=0.000418527 ms",
+      "9779/block2.timing_error_median_ms: delta=0.002929688 ms",
+      "9779/block2.timing_error_p95_abs_ms: delta=0.002929688 ms",
+      "97795/block1.estimated_constant_offset_median_ms: delta=0.001464844 ms",
+      "97795/block1.timing_error_mae_ms: delta=0.000813802 ms",
+      "97795/block1.timing_error_median_ms: delta=0.001464844 ms",
+      "97795/block1.timing_error_p95_abs_ms: delta=0.000292969 ms",
+      "97795/block2.estimated_constant_offset_median_ms: delta=0.001464844 ms",
+      "97795/block2.timing_error_mae_ms: delta=0.000244141 ms",
+      "97795/block2.timing_error_median_ms: delta=0.001464844 ms",
+      "97795/block2.timing_error_p95_abs_ms: delta=0.001464844 ms",
+      "97795/block3.estimated_constant_offset_median_ms: delta=0.000976562 ms",
+      "97795/block3.timing_error_mae_ms: delta=0.000225361 ms",
+      "97795/block3.timing_error_median_ms: delta=0.000976562 ms",
+      "97795/block3.timing_error_p95_abs_ms: delta=0.000976562 ms",
+      "97795/block4.estimated_constant_offset_median_ms: delta=0.001220703 ms",
+      "97795/block4.timing_error_mae_ms: delta=0.000215418 ms",
+      "97795/block4.timing_error_median_ms: delta=0.001220703 ms",
+      "97795/block4.timing_error_p95_abs_ms: delta=0.000732422 ms"
+    ],
+    "timing_drift_root_cause": "08-30 run used a local script version predating its git commit (beat30 sha256 3b01b206 in 08-30 MANIFEST matches no committed version); committed version has <0.003 ms translation-level timing tweak; no matching metric affected",
+    "old_summary_source": "MMWAVE_BEAT_LEVEL_VALIDATION_SUMMARY.csv (2026-08-30)"
+  },
+  "source_code_hashes": {
+    "expanded_adapter_sha256": "b8436809a973c782ad53d023c23a78ac97945838ad12d7c68d1cb67eb7af4fee",
+    "beat30_script_sha256": "241fc80a35c8af31dd2a5ba88b13cf8d286213ecb79d2d1a1493b5dde4118a46",
+    "targeted_alignment_script_sha256": "4a17732cc4e11e3a206fc78a54b0584fc8fb6f41c7dfdc6a9cd3fb8ef57aec7d",
+    "gold_standard_script_sha256": "11f9233acd42d4c7f2e160ace5cbee9ac9425a35e278afc09d92590c81b244cb",
+    "producer_script_sha256": "bc65c2d2c99ebdfedea2500579caeb45cb8918466cf788ade718806bdd351fda"
+  },
+  "formal_hrv_metrics_calculated": false,
+  "source_records": [
+    {
+      "subject": "97793",
+      "file_key_for_reading": "97793",
+      "json_name": "sub-97793_ses-SART_mmwave_vital_signs.json",
+      "npz_name": "sub-97793_ses-SART_mmwave_vital_signs.npz",
+      "json_sha256": "8c946024b908af5fea19c11091289bc918566eaa49f489ddaa784943c8319227",
+      "npz_sha256": "c0a7f3a1d58d34ec7fc9b2388a29f6b6506aa122b6d8886f170a20d15c2851f2",
+      "n_frames": 162924,
+      "n_heart_peaks": 1991,
+      "producer_version_in_json": "v3.1.1",
+      "producer_pipeline_in_json": "v3.1.1_phase_stable_bins_k3_breath_guided_vmd_guarded_hr_fusion",
+      "heart_channel": 4,
+      "heart_bin": 9
+    },
+    {
+      "subject": "9779",
+      "file_key_for_reading": "9779",
+      "json_name": "sub-9779_ses-SART_mmwave_vital_signs.json",
+      "npz_name": "sub-9779_ses-SART_mmwave_vital_signs.npz",
+      "json_sha256": "cf341c6dcb309b10188e3097fee009ac9083dd7b1e27253cecd247fa1f378e68",
+      "npz_sha256": "0f269c9014acc2255b481f00214ab3abc4c14f9fa6a07aeab9064c999371e8c5",
+      "n_frames": 155557,
+      "n_heart_peaks": 1967,
+      "producer_version_in_json": "v3.1.1",
+      "producer_pipeline_in_json": "v3.1.1_phase_stable_bins_k3_breath_guided_vmd_guarded_hr_fusion",
+      "heart_channel": 5,
+      "heart_bin": 19
+    },
+    {
+      "subject": "97795",
+      "file_key_for_reading": "97795",
+      "json_name": "sub-97795_ses-SART_mmwave_vital_signs.json",
+      "npz_name": "sub-97795_ses-SART_mmwave_vital_signs.npz",
+      "json_sha256": "cdc8e27349c9d7fabcbcd5be75f78536c560ed699d49e384b0d19262a9989043",
+      "npz_sha256": "67a03eeb852c3f53ce737c7c447991a10ac4df776d6770d1c1124e1d571e80f8",
+      "n_frames": 140648,
+      "n_heart_peaks": 1811,
+      "producer_version_in_json": "v3.1.1",
+      "producer_pipeline_in_json": "v3.1.1_phase_stable_bins_k3_breath_guided_vmd_guarded_hr_fusion",
+      "heart_channel": 7,
+      "heart_bin": 25
+    },
+    {
+      "subject": "97796",
+      "file_key_for_reading": "97796",
+      "json_name": "sub-97796_ses-SART_mmwave_vital_signs.json",
+      "npz_name": "sub-97796_ses-SART_mmwave_vital_signs.npz",
+      "json_sha256": "4a22cba9101946d5ee21efa25b7a1e44cafc278578201b192ea6aac5910e3dac",
+      "npz_sha256": "f7092877f3ad21a1284379c0eb464a14ff9e495f5dafbb4a0cd40f721e51814f",
+      "n_frames": 141395,
+      "n_heart_peaks": 1793,
+      "producer_version_in_json": "v3.1.1",
+      "producer_pipeline_in_json": "v3.1.1_phase_stable_bins_k3_breath_guided_vmd_guarded_hr_fusion",
+      "heart_channel": 4,
+      "heart_bin": 10
+    },
+    {
+      "subject": "97794",
+      "file_key_for_reading": "97994",
+      "json_name": "sub-97994_ses-SART_mmwave_vital_signs.json",
+      "npz_name": "sub-97994_ses-SART_mmwave_vital_signs.npz",
+      "json_sha256": "6f593c89bb7cf7c9ff4dad7d879bff983e681480ee7b75850c2824bc82e36f79",
+      "npz_sha256": "e3816ba13b9467234d31556282642a77f4597cb0e5d5f6cfdd69ecccdc031172",
+      "n_frames": 133139,
+      "n_heart_peaks": 1629,
+      "producer_version_in_json": "v3.1.1",
+      "producer_pipeline_in_json": "v3.1.1_phase_stable_bins_k3_breath_guided_vmd_guarded_hr_fusion",
+      "heart_channel": 7,
+      "heart_bin": 19
+    }
+  ],
+  "outputs": [
+    "MMWAVE_BEAT_LEVEL_VALIDATION_SUMMARY_EXPANDED_5SUBJECTS_20260831.csv",
+    "MMWAVE_BEAT_LEVEL_TOLERANCE_SENSITIVITY_EXPANDED_5SUBJECTS_20260831.csv",
+    "MMWAVE_BEAT_LEVEL_VALIDATION_REPORT_EXPANDED_5SUBJECTS_2026-08-31.md",
+    "MMWAVE_BEAT_LEVEL_VALIDATION_MANIFEST_EXPANDED_5SUBJECTS_20260831.json",
+    "local-only: MMWAVE_BEAT_LEVEL_VALIDATION_PER_WINDOW_LOCAL_ONLY.csv"
+  ]
+}
