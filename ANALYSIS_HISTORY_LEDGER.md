@@ -8,6 +8,16 @@
 
 ---
 
+### 2026-08-30：formal runner BR summary schema repair and role-state synchronization — PASS / NO_SCIENCE_CHANGE
+
+**Reuse Gate**：复用 `process_vital_signs_v3_1_1.py` 已有 public result schema 和既有 BR code trace；没有新 pipeline、estimator、参数、gate 或 A/B 选择。发现 `run_timeline_gated_mmwave_quality.py` 读取不存在的 `breathing_rate`，而 producer 写入 `breath_rate`，会使 runner 复制到 `segment_analysis_summary.json` 的 BR object 为空。
+
+**最小修复与边界**：runner summary key 改为 `breath_rate`，并增加静态 schema regression test。历史 producer JSON/NPZ 本身的 BR 字段未被改写或重跑；修复只影响未来 diagnostic-runner summary 的字段保留，不是 BR 生理有效性验证。HR/BR 继续 `HOLD`，HRV 继续 `BLOCKED`。
+
+**状态同步**：legacy README、root-resident script inventory、2026-08-25 historical status snapshot 及 2026-08-28 progress map 已标明 historical/current boundary。v2/v3/v5/v9 与 `analyze_mmwave_hrv.py` 是 `HISTORICAL_REFERENCE`；v3.1.1 是 `HISTORICAL_CORRECTED_PRODUCER`；timeline/targeted adapters 是 `DIAGNOSTIC_ONLY`。未变更 #24 frozen ECG validity、科学分母、AoA/beamforming 或 distance gate。
+
+---
+
 ### 2026-08-30：mmWave beat-level reuse audit and ECG matching gate — PARTIAL / HRV BLOCKED
 
 **Reuse Gate 与输入**：先核对现有 v3.1.1 producer 和 full-record JSON/NPZ。existing NPZ 已保存 `heart_peaks` frame indices 与 `heartbeat` waveform，因此没有 `REUSE_REJECTION_REASON`，没有新 beat detector、peak export adapter、selector、gate 或 raw/producer 修改。旧 `_selection_60s` 输出实际是 raw frame 0–5999，早于 formal block，不能作为 ECG 对齐窗；本轮改用 existing full-record output 的 complete formal block 内子窗。

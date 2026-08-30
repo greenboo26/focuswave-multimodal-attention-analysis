@@ -1,5 +1,11 @@
 # 修改说明
 
+## 2026-08-30 — fix(mmwave): retain existing producer BR fields in diagnostic runner summaries
+
+- Reused the v3.1.1 public result schema: producer writes `breath_rate`, while `run_timeline_gated_mmwave_quality.py` incorrectly copied `breathing_rate` and therefore emitted an empty copied BR object.
+- Changed only the runner summary mapping to `breath_rate` and added a schema regression assertion. No producer, signal processing, target selection, distance gate, ECG contract, HRV calculation, or raw-data operation changed.
+- Documentation now labels root-script inventory and the 2026-08-25 status snapshot correctly; v9 and `analyze_mmwave_hrv.py` remain historical references. HR/BR remain `HOLD`; HRV remains `BLOCKED`.
+
 ## 2026-08-30 — audit(mmwave): close reusable beat-level validation gate without HRV promotion
 
 - Reused existing full-record v3.1.1 `heart_peaks` and `heartbeat` NPZ outputs; no new radar beat detector, selector, gate, producer, raw-data, or BR algorithm change.

@@ -1,7 +1,7 @@
 # archive_历史版本 — 历史脚本归档
 
 > 归档日期: 2026-08-10
-> 归档说明: 历史迭代版本与一次性调试脚本。**当前主线为 process_vital_signs_v9 + 窗级自适应选 bin(analyze_mmwave_hrv.py)**,这些文件不再使用。
+> 归档说明: 历史迭代版本与一次性调试脚本。`process_vital_signs_v9.py` 与 `analyze_mmwave_hrv.py` 都是 `HISTORICAL_REFERENCE`，不是 current formal producer 或 runner；当前角色和资格边界以 `docs/research/MMWAVE_HR_BR_HRV_PROJECT_PIPELINE_MAP_2026-08-30.md` 与根目录 `PROJECT_STATUS.md` 为准。
 > 注意: 部分脚本相互 import 依赖根目录模块,归档后不可直接运行,如需复现历史结果请将所需模块复制回 scripts/ 根目录。
 
 ## 内容
@@ -22,5 +22,4 @@
 | `archive_2026-08-08_v23_v24_cleanup/` | 2026-08-08 归档的 v2_3/v2_4 判伪清理包 |
 
 > 2026-08-10: legacy/ 与 exploration/ 已并入本目录。
-
 

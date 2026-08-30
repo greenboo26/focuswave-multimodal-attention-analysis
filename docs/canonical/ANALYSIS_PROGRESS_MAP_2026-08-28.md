@@ -6,6 +6,8 @@
 > 这份文件回答三个问题：**现在分析做到哪一步、哪些已经做完、各分析之间是什么关系。**
 > 新智能体在继续任何统计/算法任务前，应先读根目录 `ANALYSIS_HISTORY_LEDGER.md`，再读本文件。
 
+> **2026-08-30 current-state override:** this is a historical map. For mmWave, use `PROJECT_STATUS.md` and `docs/research/MMWAVE_HR_BR_HRV_PROJECT_PIPELINE_MAP_2026-08-30.md`: HR/BR are `HOLD`, HRV is `BLOCKED`; neither old QC strata nor v9/AgeBalanced descriptions are a current formal producer claim.
+
 ## 1. 证据来源
 
 本图不是从聊天记忆生成，当前主要依据：

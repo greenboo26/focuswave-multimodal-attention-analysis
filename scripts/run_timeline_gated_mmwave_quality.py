@@ -94,7 +94,10 @@ def run_analysis(records: list[dict], output_dir: Path, method: str) -> list[dic
                 "frame_count": segment["frame_count"],
                 "retained_duration_s": segment["retained_duration_s"],
                 "heart_rate": result.get("heart_rate", {}),
-                "breathing_rate": result.get("breathing_rate", {}),
+                # v3.1.1 formal producer's public result schema is ``breath_rate``.
+                # Keep the summary key aligned with that producer key so a runner
+                # invocation cannot silently discard the already-produced BR fields.
+                "breath_rate": result.get("breath_rate", {}),
                 "quality": result.get("quality", {}),
             })
         task_results = [item for item in segment_results if item["layer"] == "task"]

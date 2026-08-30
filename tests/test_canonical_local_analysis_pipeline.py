@@ -149,3 +149,9 @@ def test_c2b_uses_behavior_and_mmwave_intersection_for_fusion():
     assert "1,420" not in source
     assert "1,317" not in source
     assert "1,278" not in source
+
+
+def test_timeline_runner_preserves_v311_breath_rate_schema():
+    source = (ROOT / "scripts/run_timeline_gated_mmwave_quality.py").read_text(encoding="utf-8")
+    assert '"breath_rate": result.get("breath_rate", {})' in source
+    assert 'result.get("breathing_rate", {})' not in source

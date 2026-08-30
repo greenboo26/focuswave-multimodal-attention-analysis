@@ -182,10 +182,10 @@ producer worktree 仍然保留。
 
 更新时间：2026-08-25
 
-## 当前正式管线
+## 2026-08-25 historical snapshot — superseded by the 2026-08-30 sections above
 
 - ECG 正式管线保持不变。
-- `v3.1.1` 仅用于独立验证，暂不替代正式主链。
+- 当时记录：`v3.1.1` 仅用于独立验证，暂不替代正式主链；当前应以本文件顶部 2026-08-30 lineage/beat-level sections 为准，HR/BR=`HOLD`、HRV=`BLOCKED`。
 - 毫米波目标锁定验证先于 HR、BR、HRV；全场合理距离峰不是充分质量条件。
 - 尚未宣称毫米波 HR、BR 或 HRV 已经准确。
 
