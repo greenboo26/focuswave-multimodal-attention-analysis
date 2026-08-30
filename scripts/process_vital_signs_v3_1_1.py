@@ -276,14 +276,23 @@ def _sos_bandpass(x: np.ndarray, lo_hz: float, hi_hz: float) -> np.ndarray:
 
 
 def _load_vmd():
+    # Formal VMD is frozen to the maintained sktime backend; the standalone
+    # vmdpy package truncates odd-length signals and must never be a fallback.
+    from importlib.metadata import PackageNotFoundError, version
+
     try:
-        from sktime.libs.vmdpy import VMD
+        sktime_version = version("sktime")
+    except PackageNotFoundError as exc:
+        raise ImportError(
+            "sktime is not installed; formal VMD requires sktime==1.1.0"
+        ) from exc
+    if sktime_version != "1.1.0":
+        raise ImportError(
+            f"sktime {sktime_version} is installed; formal VMD requires exactly sktime==1.1.0"
+        )
+    from sktime.libs.vmdpy import VMD
 
-        return VMD, "sktime.libs.vmdpy"
-    except Exception:
-        from vmdpy import VMD
-
-        return VMD, "vmdpy"
+    return VMD, "sktime.libs.vmdpy", sktime_version
 
 
 def _heart_mode_score(mode_signal: np.ndarray, freqs: np.ndarray, hr_mask: np.ndarray, hr_freq_hint: float | None):
@@ -313,7 +322,7 @@ def separate_vmd_heart_only(
             "reason": "n_frames_lt_200",
         }
 
-    VMD, backend = _load_vmd()
+    VMD, backend, vmd_version = _load_vmd()
     # K=3 explicitly models respiration, heartbeat and residual/noise structure.
     u, _, omega = VMD(disp_hr, alpha=1000, tau=0, K=3, DC=False, init=1, tol=1e-6)
 
@@ -363,6 +372,7 @@ def separate_vmd_heart_only(
             "method": "bp_fallback_no_valid_mode",
             "reason": "no_valid_heart_mode",
             "backend": backend,
+            "vmd_version": vmd_version,
             "modes": mode_summary,
         }
 
@@ -383,6 +393,7 @@ def separate_vmd_heart_only(
     return heartbeat, {
         "method": "vmd_heart_only",
         "backend": backend,
+        "vmd_version": vmd_version,
         "k": 3,
         "decomposition_roles": ["respiration", "heartbeat", "noise_residual"],
         "mixed_respiration_heart_mode": bool(best_idx == breathing_idx),
