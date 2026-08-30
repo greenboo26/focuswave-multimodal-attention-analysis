@@ -1,7 +1,7 @@
 {
   "status": "PARTIAL / HRV_BLOCKED",
   "run_id": "mmwave_beat_level_validation_20260830",
-  "generated_at_utc": "2026-08-30T06:49:33.913919+00:00",
+  "generated_at_utc": "2026-08-30T06:56:06.217743+00:00",
   "canonical_repo_head": "704bec02dfb150c897c648847523b13104df20c9",
   "subjects": [
     "97793",
@@ -26,6 +26,14 @@
     "timing_error": "radar timestamp minus ECG R-peak time after existing block affine clock mapping",
     "paired_ibi": "successive intervals among matched beats; constant offset cancels"
   },
+  "aggregate_counts": {
+    "window_n": 8,
+    "ecg_rpeak_n": 699,
+    "radar_peak_n": 565,
+    "matched_n_at_primary_tolerance": 119,
+    "sensitivity_at_primary_tolerance": 0.17024320457796852,
+    "precision_at_primary_tolerance": 0.21061946902654868
+  },
   "reuse": {
     "radar_beats": "existing full-record NPZ heart_peaks; no new radar detector",
     "cardiac_waveform": "existing full-record NPZ heartbeat; only reused for same-window existing spectral HR consistency",
@@ -34,7 +42,7 @@
     "reuse_rejection_reason": null
   },
   "source_code_hashes": {
-    "beat_level_adapter_sha256": "c579dcccf4ff6b5f34368a526b984d3dc6b4aa5cfef1474dd4e35ec58d240ae2",
+    "beat_level_adapter_sha256": "3b01b206a453303d8219c7609378021dc0005472413992cac4399a80f44d5068",
     "targeted_alignment_script_sha256": "4a17732cc4e11e3a206fc78a54b0584fc8fb6f41c7dfdc6a9cd3fb8ef57aec7d",
     "gold_standard_script_sha256": "11f9233acd42d4c7f2e160ace5cbee9ac9425a35e278afc09d92590c81b244cb",
     "producer_script_sha256": "e25e3f137360a78df1841c65ac442fba9fbb85508079e019d474a5d168014cfd"

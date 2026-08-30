@@ -426,6 +426,14 @@ def main() -> int:
             "timing_error": "radar timestamp minus ECG R-peak time after existing block affine clock mapping",
             "paired_ibi": "successive intervals among matched beats; constant offset cancels",
         },
+        "aggregate_counts": {
+            "window_n": len(rows),
+            "ecg_rpeak_n": primary["ecg_rpeak_n"],
+            "radar_peak_n": primary["radar_peak_n"],
+            "matched_n_at_primary_tolerance": primary["matched_n"],
+            "sensitivity_at_primary_tolerance": primary["pooled_sensitivity"],
+            "precision_at_primary_tolerance": primary["pooled_precision"],
+        },
         "reuse": {
             "radar_beats": "existing full-record NPZ heart_peaks; no new radar detector",
             "cardiac_waveform": "existing full-record NPZ heartbeat; only reused for same-window existing spectral HR consistency",
