@@ -4,7 +4,27 @@
 >
 > 目的不是替代当前科学结论，而是回答四个问题：**以前做过什么、什么时候做的、结果怎样、为什么采用/放弃。** 只有能够说明“新证据、新输入语义、新参考标准或新研究问题与旧实验有什么实质差别”时，才允许重复已有路线。
 
-更新时间：2026-08-30（Asia/Shanghai）
+更新时间：2026-08-31（Asia/Shanghai）
+
+---
+
+### 2026-08-31：pre_30s 协议窗口 + 完整 selector 链 HR/BR 重跑 — PARTIAL / SUPPORTING
+
+**Reuse Gate**：复用 producer 既有完整链（`select_separate_channels_bins` 自动选 bin/channel + `detect_peaks_heart_lo`/`_robust_time_bpm`/`_fold_harmonic`/`_select_spectral_bpm` + fusion）与 targeted_validation 既有 block-local ECG affine 对齐、`gold_standard_qa` 冻结参数；没有新 estimator、新参数或 ECG-informed 选 target。`REUSE_REJECTION_REASON`：既有 335-window 是 20 s sliding diagnostic，没有 probe 对齐的 pre_30s 逐窗完整链输出，因此只新增窄 adapter `run_mmwave_pre30s_selector_hr_20260831.py`。
+
+**结果（3 subject / 60 probe 窗口）**：HR 25s fused MAE=`9.02`、30s fused=`11.40` bpm，锁半频 `0–2%`（97793=`7.56`、9779=`6.47`、97795=`17.92`；9779 25s medianAE=`1.13`）。BR MAE=`2.44` breaths/min、medianAE=`0.87`、锁半频 `8%`。spectral 单独 MAE=`12.7–16.1`，fusion 是纠错核心；`_fold_harmonic` 60 窗 0 次触发。97795 劣化=frame 空洞（#28 continuity）+ mechanical block 锁频残留，focus block 正常。
+
+**决策与边界**：证明 08-16「呼吸谐波半频锁定」被 fusion 解决，且 #24 冻结的 19–26 bpm 确为 20s targeted path 劣化配置污染。但 HR/BR 仍 `HOLD / SUPPORTING_ONLY`；pre_30s 是对齐窗口，估计器时长（25s/30s）仍待 T4；仅 3 subject，负 bias 约 -4~-6 bpm 需更大样本确认。证据 `docs/results/2026-08-31_MMWAVE_PRE30S_SELECTOR_HR/`；逐窗结果 local-only `D:\Project\厚粲杯\11_数据\derived\mmwave_pre30s_selector_hr_20260831\`。
+
+---
+
+### 2026-08-31：T0 VMD backend 软件收口 — PASS / CANONICAL_CLOSED
+
+**Reuse Gate**：复用 `_load_vmd()` 既有结构做最小 patch；不需要新 pipeline。前因：08-30 `7513dbe9`（kyandi233-dev）只改了 `requirements.txt`（vmdpy>=0.2 → sktime==1.1.0），源码 `_load_vmd()` 的 try/except fallback 未改，且任何本机环境此前均未装 sktime/vmdpy。
+
+**执行**：`_load_vmd()` 只 import `sktime.libs.vmdpy.VMD`，`importlib.metadata.version("sktime")` 严格 `1.1.0`，失败显式 `ImportError`，无 standalone fallback；backend + version 记录进结果。回归测试 4 个全过；parity audit 实锤 vmdpy==0.2 odd-length 截断（101→100）vs sktime 保留（101→101）；smoke test 产出 `vmd_heart_only` 并正确识别 1.2 Hz。隔离 venv `08_算法/.venv_t0`。
+
+**历史澄清**：VMD 08-27 曾用 vmdpy 跑过（`6e5cda0` SSA+VMD，MAE 28.12 BPM，结论 DOWNGRADE_PHYSIOLOGY），但那是 vmdpy 版且可能受 odd-length bug 影响；sktime 版 VMD 在正式数据上的表现为新验证项。canonical main HEAD=`758ce7a`。
 
 ---
 

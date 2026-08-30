@@ -1,5 +1,23 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-08-31 T0 VMD backend canonical closure — PASS（软件层核心收口）
+
+- `_load_vmd()` 移除 standalone `vmdpy` fallback，只 import `sktime.libs.vmdpy.VMD`，`importlib.metadata.version("sktime")` 严格 `1.1.0`，不匹配/未装显式 `ImportError`；backend + version 记录进结果 dict。
+- 回归测试 `tests/test_vmd_backend.py`（4 个）全过：backend 正确、版本不匹配 fail、缺失 sktime 不 fallback、源码无 vmdpy import。
+- parity audit 实锤 standalone `vmdpy==0.2` odd-length 截断 bug（input 101 → output 100），`sktime 1.1.0` 保留长度（101 → 101）。
+- smoke test：合成位移信号跑 `separate_vmd_heart_only` 产出 `vmd_heart_only` + 正确识别 1.2 Hz 心率。
+- canonical main HEAD=`758ce7a`（af39b58 + 018d6f7 + 2f606cb）。运行环境 `08_算法/.venv_t0`（sktime 1.1.0 + vmdpy 0.2 + bioread 2025.5.2，隔离 venv）。
+- 边界：`bp_fallback_short_signal`/`bp_fallback_no_valid_mode` 是算法合同，不是 backend fallback，不得与 `_load_vmd()` 依赖替换混同。
+
+## 2026-08-31 pre_30s + 完整 selector 链 HR/BR 重跑 — PARTIAL / SUPPORTING
+
+- 60 probe 窗口（97793/9779/97795 × 20），pre_30s 协议对齐窗口 + 完整 selector 链（自动选 bin/channel + time + harmonic fold + spectral + fusion），ECG/RSP 金标准比对。
+- HR 25s fused MAE=`9.02`、30s fused=`11.40` bpm，锁半频 `0–2%`；数据质量好的 subject（97793/9779）MAE `6.5–7.8`，9779 25s medianAE=`1.13`（08-16 锁半频最严重的 subject）。
+- BR MAE=`2.44` breaths/min，medianAE=`0.87`，锁半频 `8%`；对 frame 空洞鲁棒（97795 仍 `3.55`）。
+- 机制：纠错核心是 fusion，不是 `_fold_harmonic`（60 窗 0 次触发）；spectral 单独 MAE=`12.7–16.1`。
+- 97795 劣化原因明确：frame 空洞（#28 continuity 已知问题）+ mechanical block（1/3）锁频残留；focus block（2/4）HR 正常（89–103 vs ECG 92–95）。
+- 证据：`docs/results/2026-08-31_MMWAVE_PRE30S_SELECTOR_HR/`；脚本 `scripts/maintenance/run_mmwave_pre30s_selector_hr_20260831.py`。HR/BR=`HOLD / SUPPORTING_ONLY` 不变；pre_30s 是对齐窗口，估计器时长仍待 T4。
+
 ## 2026-08-30 near-field / distance-gate mainline — PARTIAL
 
 - 已执行：复用 71-session B2 near/far/reference front-end audit 与冻结的 335-window formal-block diagnostic subset，完成 selector 前 ECG-independent A/B。A 为 raw mean-power profile；B 只在 Range-FFT 后做 slow-time complex-mean subtraction，随后调用同一 v3.1.1 candidate/channel/continuity logic。
