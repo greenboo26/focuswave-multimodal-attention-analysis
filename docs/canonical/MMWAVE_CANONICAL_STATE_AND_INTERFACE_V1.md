@@ -112,3 +112,55 @@ Until that adapter passes schema/merge tests, final multimodal code must continu
 ## 6. AI handoff rule
 
 Any AI touching mmWave must read this file after the repository-wide history ledger and before interpreting old mmWave branches/PRs/issues. If a later material decision changes current state, branch disposition, field semantics, time/window semantics, or multimodal eligibility, update this file in the same canonical `main` work cycle together with the applicable history/status/changelog evidence. Do not reconstruct a newer state from chat memory alone.
+
+## 7. VMD backend decision, frontend clutter evidence, and window semantics — 2026-08-30
+
+### VMD software/backend decision
+
+Upstream facts were re-audited on 2026-08-30 rather than inferred from the old hardening PR:
+
+- standalone `vmdpy` is an archived/read-only project; its own repository states that the package has been officially distributed with and maintained in `sktime` since August 2023;
+- PyPI standalone `vmdpy` has only 0.1 and 0.2, with 0.2 released on 2020-08-11;
+- `sktime` documents its VMD implementation as the official continuation of `vmdpy`; current stable `sktime` is 1.1.0 (2026-07-28);
+- `sktime` 1.0.0 included an explicit VMD bug fix for odd-length input returning an even-length decomposition;
+- source review shows the old standalone implementation truncates an odd-length signal (`f = f[:-1]`), whereas the maintained implementation preserves the input length using corrected mirroring and also uses a safe weighted-average helper for zero spectral weights.
+
+Therefore the formal software decision is:
+
+`VMD_BACKEND = sktime.libs.vmdpy.VMD`
+
+`VMD_PACKAGE = sktime`
+
+`VMD_FORMAL_VERSION_TARGET = 1.1.0`
+
+`STANDALONE_VMDPY = HISTORICAL_REFERENCE_ONLY`
+
+`BACKEND_FALLBACK = FORBIDDEN_FOR_FORMAL_RUNS`
+
+The formal environment must pin the tested stable version, not use an open-ended `>=` dependency. A later sktime release must not silently alter a frozen formal run; it requires an explicit dependency update and validation. The maintained implementation follows the same VMD algorithm lineage and core iterative equations, so a fundamental runtime-speed difference is not expected; however byte/numerical identity is not assumed. Before re-authorizing VMD-generated physiology, run a frozen-input parity/smoke check covering representative even-length signals, an odd-length case, and zero/near-zero pathological input, and record downstream selected mode/HR as well as direct decomposition output and runtime. The old standalone package may be used only in an isolated comparison environment for that audit, not as a production fallback.
+
+Current-code mismatch recorded at this decision point: `requirements.txt` still contains `vmdpy>=0.2`, and `scripts/process_vital_signs_v3_1_1.py::_load_vmd()` still attempts `sktime.libs.vmdpy` and then standalone `vmdpy` on any exception. Those are legacy implementation details and are **not the formal contract after this decision**. The corrective code change must remove standalone `vmdpy` from the formal dependency set, pin the selected stable sktime version, import only the maintained backend for formal VMD execution, record package/backend version in outputs/manifests, and fail explicitly rather than changing backend. Do not claim this code correction complete until the two files and tests are actually changed and verified.
+
+The existing explicitly-labelled band-pass alternatives inside the scientific algorithm (`bp_fallback_short_signal`, `bp_fallback_no_valid_mode`) are a separate algorithm-contract question; they are not software-backend fallback and must not be conflated with `_load_vmd()` dependency substitution.
+
+### Near-side bright structure and preprocessing
+
+External FMCW vital-sign literature consistently documents strong static/background components from stationary objects and body parts, multipath/reflections, finite range/angular resolution and DC offset; antenna coupling/direct leakage is another physically possible source. Common front-end controls include range-FFT windowing when raw fast-time data are available, DC/IQ calibration, slow-time static-clutter subtraction or MTI/recursive background estimation, and spatial/temporal target consistency. A fixed near-side bright component therefore must not be labelled direct leakage from amplitude alone.
+
+FocusWave has already tested one directly relevant intervention on the frozen 335-window diagnostic set: post-Range-FFT slow-time complex-mean subtraction before the unchanged selector. It reduced HR selections below 0.30 m but worsened HR/BR bin/channel switching and did not improve BR near-side selection. The decision remains `KEEP_CURRENT_SELECTOR / DO_NOT_ADD_THIS_PRESELECTION_MEAN_SUBTRACTION`. This result rejects that specific implementation for the current selector; it does **not** prove that all physically motivated clutter/DC calibration is useless. The formal stored NPZ is already range-domain DataCube, so ADC/fast-time windowing and some hardware-level DC/IQ operations cannot be retrospectively reconstructed unless an earlier raw representation exists.
+
+### Distance gate
+
+No current numeric physical distance gate is scientifically frozen. Historical `0.30–1.50 m` remains `HISTORICAL_GATE_SENSITIVITY`; selected-bin distance is a radar-selection proxy, not measured participant placement. #26 remains `PHYSICAL_GATE_UNRESOLVED / HARD_EXTERNAL_BLOCKER` because the repository lacks independent session-level placement truth sufficient to establish a current exclusion interval. A distance interval must not be selected by whichever interval minimizes HR error. Reopen only with independent geometry/placement evidence or a protocol/hardware constraint that is external to the outcome being scored.
+
+### What “selector/path validity” means
+
+`selector` means the rules that choose range bin, channel and spectral candidate. `path` means the entire processing chain from range-domain data through target/channel selection, phase extraction, filtering/decomposition, spectral/beat candidates, previous-window continuity and time/frequency fusion to the final HR value. If a 20 s result and a 60 s result are produced through different selector/path states, an MAE difference cannot be attributed to window duration alone. Existing controlled replay showed that restoring the previous-anchor selector and time/frequency fusion can materially change error on the same windows, which is why #25 remains `WAIT_ON_SELECTOR_VALIDITY` rather than simply choosing the duration with lower MAE.
+
+### 20 s, 25 s, 40 s and 60 s are different contracts, not HRV standards
+
+The 20 s window first entered the current targeted-validation evidence chain at commit `472735b6b6af5f98e92ab7815718e81863cb6098` as a block-local target-continuity / ECG-aligned bounded diagnostic (`20 s window / 10 s step / 5 s boundary guard`). The preceding block-reset/ECG-alignment design contract froze block boundaries and marker alignment but did not establish a physiological reason that 20 s is an optimal formal HR window. The later 20 s versus 60 s comparison explicitly remained `PARTIAL / DIAGNOSTIC_ONLY / formal window validity UNRESOLVED`.
+
+Other durations in v3.1.1 have different roles: HR time-course estimation defaults to 25 s internal windows with 5 s steps; VMD decomposition is windowed at 40 s with 20 s steps; the historical 60 s probe-level HR result aggregates existing course points over a trailing 60 s interval. These durations must not be collapsed into one generic “analysis window”.
+
+None of the above authorizes 20 s HRV. Standard short-term HRV convention is approximately 5 min, while ultra-short HRV requires metric-specific validation and is not interchangeable with standard short-term HRV. For FocusWave the earlier blocker is even more fundamental: radar beat timing has not passed ECG R-peak/paired-IBI validation. Therefore `HRV = BLOCKED` remains independent of whether HR uses 20 s or 60 s. If HRV is reopened after beat-level validity passes, the formal HRV duration and metric set must be separately pre-specified; a standard 5 min segment should be the default comparator when available, while any shorter RMSSD/SDNN use requires its own validation and must not be generalized to frequency-domain HRV.
