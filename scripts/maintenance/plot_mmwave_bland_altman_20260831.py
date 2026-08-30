@@ -60,7 +60,7 @@ def main() -> None:
     ax.axhline(loa_hi, color=COLOR_LOA, linestyle="--", linewidth=0.9)
     ax.axhline(loa_lo, color=COLOR_LOA, linestyle="--", linewidth=0.9)
     ax.axhline(0, color="#CCCCCC", linewidth=0.7)
-    ax.text(xlim[1] - 0.3, bias + 1.2, f"bias = {bias:.1f}", ha="right", fontsize=9.5, color=COLOR_BIAS)
+    ax.text(xlim[1] - 0.3, bias + 1.2, f"偏倚 = {bias:.1f}", ha="right", fontsize=9.5, color=COLOR_BIAS)
     ax.text(xlim[1] - 0.3, loa_hi + 1.2, f"+1.96 SD = {loa_hi:.1f}", ha="right", fontsize=9, color="#666666")
     ax.text(xlim[1] - 0.3, loa_lo - 2.5, f"-1.96 SD = {loa_lo:.1f}", ha="right", fontsize=9, color="#666666")
     ax.set_xlim(xlim)
