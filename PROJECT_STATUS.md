@@ -1,5 +1,9 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-09-11 Issue #33 probe 修复 — PARTIAL
+
+固定 116 场/2320 probe 完成隔离修复重跑及逐 probe 比较，6 项回归测试通过。已观测 2200→2180，另 20 行帧数不匹配转为质量失败，结构缺失 120 不变；旧表哈希未变。J/E 新版已通过同一轻量质量审计，全模态共同集合 1793 不变。正式生理预测资格尚未放行：时间源迁移和独立生理验证仍未闭合。运行/字段/来源/后续门见 `docs/results/2026-09-11_ISSUE33_PROBE_REPAIR/REPORT.md`；未训练模型、未切换默认正式输入。
+
 ## 2026-08-31 T0 VMD backend canonical closure — PASS（软件层核心收口）
 
 - `_load_vmd()` 移除 standalone `vmdpy` fallback，只 import `sktime.libs.vmdpy.VMD`，`importlib.metadata.version("sktime")` 严格 `1.1.0`，不匹配/未装显式 `ImportError`；backend + version 记录进结果 dict。

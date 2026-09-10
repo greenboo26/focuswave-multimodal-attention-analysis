@@ -1,11 +1,13 @@
 """mmWave probe merge-ready adapter（T7 实现）。
 
-把 1440 行 canonical probe timeline 适配为 mmwave_probe_merge_ready_v1 行：
+把冻结的 probe timeline 适配为 mmwave_probe_merge_ready_v1 行：
 结构/质量字段 STRUCTURAL_ALLOW，HR/BR 用完整 selector 链填 SUPPORTING_HOLD
 （NOT_PRIMARY），target/phase/motion 填 DIAGNOSTIC_HOLD，IBI/RMSSD/SDNN 恒 null。
 
 用法：
-    .venv_t0/Scripts/python.exe scripts/maintenance/run_mmwave_probe_merge_ready_20260831.py [--sessions sub-056 sub-057 ...]
+    python scripts/maintenance/run_mmwave_probe_merge_ready_20260831.py --help
+
+路径、冻结清单、run id 和新输出目录均需显式传入；J/E 共用同一入口实现。
 """
 
 from __future__ import annotations
@@ -21,12 +23,6 @@ import numpy as np
 
 ALGO_ROOT = Path(__file__).resolve().parents[2]
 PRODUCER = ALGO_ROOT / "scripts" / "process_vital_signs_v3_1_1.py"
-TIMELINE = Path(
-    r"C:\Users\550ACW\Documents\Codex\2026-08-30\files-pasted-by-the-user-focuswave"
-    r"\outputs\FocusWave_formal_multimodal_v2_2026-08-30\canonical_probe_timeline.csv"
-)
-OUT_ROOT = Path(r"D:\Project\厚粲杯\11_数据\_FormalAnalysis\mmWave")
-DATA_ROOTS = (Path(r"E:\正式实验"), Path(r"J:\Data"))
 FS = 100.0
 COURSE_S = 25.0
 BIN_SPACING_M = 0.037
@@ -82,14 +78,6 @@ def selector_step(algo, heartbeat: np.ndarray, previous_bpm: float | None) -> di
     }
 
 
-def find_session_root(session: str) -> Path | None:
-    for root in DATA_ROOTS:
-        d = root / f"{session}_" / "mmwave"
-        if d.is_dir():
-            return d
-    return None
-
-
 def load_timestamps(mmw_root: Path) -> np.ndarray:
     path = next(mmw_root.glob("*_mmwave_timestamps.csv"), None)
     if path is None:
@@ -135,13 +123,15 @@ def process_probe(algo, row: dict, files: list[Path], timestamps: np.ndarray, pr
     """单个 probe 行 → schema 行。保持 timeline 全部通用列（与其他模态表一致）。"""
     session = row["session_id"]
     block_id = row["block_id"]
-    win_start = int(row["window_start_unix_ms"])
+    win_start = int(row["window_effective_start_unix_ms"])
     win_end = int(row["window_end_unix_ms"])
+    if not int(row["window_start_unix_ms"]) <= win_start < win_end:
+        raise ValueError("Invalid effective probe window")
 
     out = dict(row)
 
     i0 = int(np.searchsorted(timestamps[:, 2], win_start, side="left"))
-    i1 = int(np.searchsorted(timestamps[:, 2], win_end, side="right"))
+    i1 = int(np.searchsorted(timestamps[:, 2], win_end, side="left"))
     n_frames = i1 - i0
 
     ts_window = timestamps[i0:i1, 2].astype(np.int64) if n_frames > 0 else np.empty(0, dtype=np.int64)
@@ -192,11 +182,17 @@ def process_probe(algo, row: dict, files: list[Path], timestamps: np.ndarray, pr
     disp = algo.extract_displacement(iq_fd, hr_bin, hr_ch)
     heartbeat = algo._sos_bandpass(disp, algo.HR_LO_HZ, algo.HR_HI_HZ)
 
-    previous = previous_by_block.get(block_id)
-    step30 = selector_step(algo, heartbeat, previous)
-    n25 = int(COURSE_S * FS)
-    step25 = selector_step(algo, heartbeat[-n25:], previous) if len(heartbeat) >= n25 else None
-    hr_step = step25 if step25 is not None else step30
+    # All course points are computed strictly inside this pre-probe slice.
+    # Do not pass a previous probe as a physiological reference value.
+    peaks = algo.detect_peaks_heart_lo(heartbeat, lo_bpm=algo.HR_LO_BPM, hi_bpm=algo.HR_HI_BPM)
+    course = algo.estimate_hr_time_course(heartbeat, peaks, FS, window_s=COURSE_S, step_s=5.0)
+    confidence = [p["confidence"] for p in course["points"]]
+    hr_step = {
+        "spectral_bpm": course.get("freq_median_bpm"),
+        "time_bpm": course.get("time_median_bpm"),
+        "fused_bpm": course.get("fused_median_bpm"),
+        "confidence": float(np.mean(confidence)) if confidence else None,
+    }
 
     phi_br = np.unwrap(np.angle(iq_fd[:, br_bin, br_ch]))
     disp_br = algo.WAVELENGTH_MM * phi_br / (4 * np.pi)
@@ -220,7 +216,7 @@ def process_probe(algo, row: dict, files: list[Path], timestamps: np.ndarray, pr
         "mmwave_hr_time_bpm_median": round(hr_step["time_bpm"], 3) if hr_step["time_bpm"] is not None else None,
         "mmwave_hr_fused_bpm_median": round(hr_step["fused_bpm"], 3) if hr_step["fused_bpm"] is not None else None,
         "mmwave_breath_rate_breaths_per_min_median": round(br_bpm, 3) if br_bpm is not None else None,
-        "mmwave_hr_usable_window_fraction": 1.0 if hr_step["fused_bpm"] is not None else 0.0,
+        "mmwave_hr_usable_window_fraction": course["signal_quality"]["usable_ratio"] if course["points"] else None,
         "mmwave_hr_mean_confidence": round(hr_step["confidence"], 4) if hr_step["confidence"] is not None else None,
         "mmwave_selected_bin_mode": int(hr_bin),
         "mmwave_selected_channel_mode": int(hr_ch),
@@ -232,120 +228,9 @@ def process_probe(algo, row: dict, files: list[Path], timestamps: np.ndarray, pr
         "mmwave_rmssd_ms": None,
         "mmwave_sdnn_ms": None,
     })
-    previous_by_block[block_id] = hr_step["next_previous_bpm"]
     return out
 
 
-def build_output_fields() -> list[str]:
-    with TIMELINE.open(encoding="utf-8-sig", newline="") as handle:
-        timeline_fields = list(csv.DictReader(handle).fieldnames or [])
-    mmwave_fields = [
-        "mmwave_state", "mmwave_observed", "mmwave_missing_reason",
-        "mmwave_source_run_id", "mmwave_source_commit",
-        "mmwave_loadable", "mmwave_timestamp_coverage_fraction",
-        "mmwave_hr_freq_bpm_median", "mmwave_hr_time_bpm_median", "mmwave_hr_fused_bpm_median",
-        "mmwave_breath_rate_breaths_per_min_median",
-        "mmwave_hr_usable_window_fraction", "mmwave_hr_mean_confidence",
-        "mmwave_selected_bin_mode", "mmwave_selected_channel_mode",
-        "mmwave_selected_bin_distance_proxy_m", "mmwave_target_switch_rate",
-        "mmwave_phase_stability_median", "mmwave_motion_proxy_median",
-        "mmwave_ibi_median_ms", "mmwave_rmssd_ms", "mmwave_sdnn_ms",
-    ]
-    return timeline_fields + mmwave_fields
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--sessions", nargs="*", default=None, help="只处理指定 session（默认全部 72）")
-    args = parser.parse_args()
-
-    algo = load_module(PRODUCER, "producer_merge_ready")
-    rows = list(csv.DictReader(TIMELINE.open(encoding="utf-8-sig")))
-    sessions = sorted({r["session_id"] for r in rows})
-    if args.sessions:
-        sessions = [s for s in sessions if s in args.sessions]
-    print(f"处理 {len(sessions)} sessions / {sum(1 for r in rows if r['session_id'] in sessions)} probe 窗口")
-
-    out_rows: list[dict] = []
-    for session in sessions:
-        mmw_root = find_session_root(session)
-        session_rows = [r for r in rows if r["session_id"] == session]
-        previous_by_block: dict[str, float | None] = {}
-        if mmw_root is None:
-            for row in session_rows:
-                base = dict(row)
-                base.update({
-                    "mmwave_state": "STRUCTURAL_MISSING",
-                    "mmwave_observed": False,
-                    "mmwave_missing_reason": "no_mmwave_directory",
-                })
-                out_rows.append(base)
-            print(f"{session}: 无 mmwave 目录 → STRUCTURAL_MISSING ×{len(session_rows)}")
-            continue
-        try:
-            timestamps = load_timestamps(mmw_root)
-            files = load_npz_files(mmw_root, session)
-        except Exception as exc:
-            for row in session_rows:
-                base = dict(row)
-                base.update({
-                    "mmwave_state": "STRUCTURAL_MISSING",
-                    "mmwave_observed": False,
-                    "mmwave_missing_reason": f"load_failed:{type(exc).__name__}",
-                })
-                out_rows.append(base)
-            print(f"{session}: 加载失败 {type(exc).__name__}")
-            continue
-        for row in session_rows:
-            out_rows.append(process_probe(algo, row, files, timestamps, previous_by_block))
-        print(f"{session}: 完成 {len(session_rows)} 窗口")
-
-    OUT_ROOT.mkdir(parents=True, exist_ok=True)
-    import subprocess
-
-    try:
-        source_commit = subprocess.check_output(
-            ["git", "-C", str(ALGO_ROOT), "rev-parse", "HEAD"], text=True, stderr=subprocess.DEVNULL
-        ).strip()
-    except Exception:
-        source_commit = None
-    for r in out_rows:
-        r["mmwave_source_run_id"] = "mmwave_probe_merge_ready_20260831"
-        r["mmwave_source_commit"] = source_commit
-
-    fields = build_output_fields()
-    out_csv = OUT_ROOT / "mmwave_probe_merge_ready.csv"
-    with out_csv.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
-        writer.writeheader()
-        writer.writerows(out_rows)
-
-    state_counts: dict[str, int] = {}
-    observed = 0
-    for r in out_rows:
-        state_counts[r.get("mmwave_state", "?")] = state_counts.get(r.get("mmwave_state", "?"), 0) + 1
-        if r.get("mmwave_observed") in (True, "True"):
-            observed += 1
-    manifest = {
-        "schema": "mmwave_probe_merge_ready_v1",
-        "rows": len(out_rows),
-        "sessions": len(sessions),
-        "state_counts": state_counts,
-        "observed_rows": observed,
-        "physiology_role": "SUPPORTING_HOLD / NOT_PRIMARY",
-        "hrv_fields": "EXCLUDE / null",
-        "hr_estimator": "full_selector_chain_25s_course_fused",
-        "br_estimator": "select_separate_channels_bins + _select_breath_candidate",
-        "timeline_source": str(TIMELINE),
-        "run_date": "2026-08-31",
-    }
-    (OUT_ROOT / "mmwave_probe_merge_ready_manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
-    print(f"\n输出: {out_csv}")
-    print(f"状态分布: {state_counts}")
-    print(f"manifest: {OUT_ROOT / 'mmwave_probe_merge_ready_manifest.json'}")
-
-
 if __name__ == "__main__":
-    main()
+    from mmwave_frozen_cohort import main as frozen_main
+    frozen_main()

@@ -1,5 +1,7 @@
 # mmWave canonical state, branch consolidation, and multimodal interface — V1
 
+2026-09-11 engineering update: Issue #33 fixed-cohort replay and downstream quality-only audit are complete for 116 sessions/2320 probes. The adapter is now an engineering candidate with parameterized paths, frozen keys, effective/exclusive windows, producer course summaries and source manifests. The physiological roles below are unchanged; Python write-time versus targeted DLL-time transfer remains unresolved. See `docs/results/2026-09-11_ISSUE33_PROBE_REPAIR/REPORT.md`. This supersedes the implementation-pending description only at the engineering layer, not scientific admission.
+
 Status: `CANONICAL / MAIN-BOUND / INTERFACE_CONTRACT_FROZEN / ADAPTER_IMPLEMENTATION_PENDING`
 
 Effective date: 2026-08-30. This document is the first mmWave-specific state authority for any AI or human entering the canonical repository. It consolidates branch history, current scientific decisions, time semantics, and the reserved multimodal interface. It does not rerun science and does not promote HR/BR/HRV beyond their existing evidence boundaries.

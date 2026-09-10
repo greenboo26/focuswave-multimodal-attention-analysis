@@ -1,5 +1,11 @@
 # 修改说明
 
+## 2026-09-11 — fix(mmwave): frozen-cohort probe repair and quantitative replay
+
+- Parameterized J/E frozen-cohort runner, exclusive endpoint/effective start, behavioral block start/stop, existing producer heart-rate course summaries, source provenance before serialization, NPZ/timestamp checks and exclusive run directories.
+- Completed 2320-row real-input replay, metadata-only boundary finalization, exact-key old/new comparison and same-code quality-only audits; six targeted regression tests pass.
+- Engineering evidence and limits: `docs/results/2026-09-11_ISSUE33_PROBE_REPAIR/REPORT.md`. No physiological promotion, raw-data overwrite, cohort expansion or model training.
+
 ## 2026-08-30 — audit(mmwave): execute frozen near-field / pre-selection clutter A/B
 
 - Added the minimal `run_mmwave_preselection_clutter_ab_20260830.py` adapter, reusing the current v3.1.1 selector and block-local continuity on the existing 335-window formal-block diagnostic subset. A uses the raw mean-power profile; B applies slow-time complex-mean subtraction only after Range FFT, before that same selector.

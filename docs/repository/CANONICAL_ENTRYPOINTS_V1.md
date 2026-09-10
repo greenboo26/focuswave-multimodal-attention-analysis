@@ -1,5 +1,9 @@
 # Canonical entrypoints V1
 
+## Issue #33 engineering replay surface
+
+`python scripts/maintenance/mmwave_frozen_cohort.py --baseline OLD_CSV --freeze BASELINE_JSON --raw-root RAW_ROOT --output-dir NEW_RUN --run-id RUN_ID` replays only frozen keys. J/E historical command names delegate to this runner. `finalize_mmwave_boundaries.py` may enrich block-stop metadata only after proving unchanged input slices; `compare_mmwave_probe_versions.py` compares both batches by five keys. These are engineering/supporting entrypoints, not a physiological release or permission to fit primary mmWave models. See `docs/results/2026-09-11_ISSUE33_PROBE_REPAIR/REPORT.md` for results, limitations and handoff.
+
 ## Competition execution surface
 
 The canonical executable surface for analyses already completed locally is now:

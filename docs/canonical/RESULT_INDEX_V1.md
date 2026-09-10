@@ -1,5 +1,7 @@
 # Result index v1
 
+Issue #33 engineering candidate (2026-09-11): [repair, exact-key replay and quality audit](../results/2026-09-11_ISSUE33_PROBE_REPAIR/REPORT.md). 116 sessions/2320 probes; local-only run families and comparison hashes are indexed in that report. Overall PARTIAL; no primary physiological admission or model training.
+
 This index points to local full results without uploading them. See `ANALYSIS_REGISTRY_V1.csv` for the complete 29-entry table.
 
 | analysis_id | status | Git description / canonical commit | local full result path / verification state | report use |
