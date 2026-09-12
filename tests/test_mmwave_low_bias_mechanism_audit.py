@@ -281,15 +281,27 @@ def test_manifest_matches_disk_for_local_only_probe_table():
     assert out.returncode != 0, "local-only probe table must not be tracked by Git"
 
 
+def lf_normalised_sha256(path: Path) -> str:
+    """Return the SHA-256 of LF-normalised content (EOL-independent)."""
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest().upper()
+
+
 def test_markdown_deliverables_recorded_in_manifest():
-    """Rendered Markdown deliverables must be present and digest-recorded."""
+    """Rendered Markdown deliverables must be present and digest-recorded.
+
+    The manifest records LF-normalised digests so the check is stable across
+    CRLF/LF checkouts; raw uploaded bytes are verified by
+    CLOUD_HANDOFF_VERIFICATION.json.
+    """
     manifest = load_manifest()
     recorded = manifest["markdown_deliverables"]
     assert set(recorded) >= {"MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_REPORT.md", "FUSION_PATH_AUDIT.md"}
     for name, info in recorded.items():
         path = RESULT_DIR / name
         assert path.exists(), f"recorded deliverable missing: {name}"
-        assert info["sha256"] == sha256(path), f"stale digest recorded for {name}"
+        expected = info.get("sha256_lf_normalised")
+        assert expected, f"missing normalised digest for {name}"
+        assert expected == lf_normalised_sha256(path), f"stale digest recorded for {name}"
 
 
 def test_render_script_is_importable():

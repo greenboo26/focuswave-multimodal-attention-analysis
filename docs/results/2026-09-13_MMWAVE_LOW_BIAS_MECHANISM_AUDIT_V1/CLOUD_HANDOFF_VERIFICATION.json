@@ -25,7 +25,7 @@
     "WITHIN_SESSION_DISTANCE_CHECK.csv"
   ],
   "verified_by_readback": true,
-  "readback_dir": "D:\\Project\\.harness\\conv9",
+  "readback_dir": "D:\\Project\\.harness\\convA",
   "per_file": [
     {
       "name": "BIAS_ATTRIBUTION_DECOMPOSITION.csv",
@@ -90,8 +90,8 @@
     {
       "name": "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_MANIFEST.json",
       "status": "MATCH",
-      "local_sha256": "785CFB9FDC2DA92DB029615D998F62369E65E448566249B35ACEA3BCBB4E4654",
-      "cloud_sha256": "785CFB9FDC2DA92DB029615D998F62369E65E448566249B35ACEA3BCBB4E4654"
+      "local_sha256": "5584D3F59FBD22CED9A8E90047C05939F46CA22CB7C7C1AFD3419A8688DA3190",
+      "cloud_sha256": "5584D3F59FBD22CED9A8E90047C05939F46CA22CB7C7C1AFD3419A8688DA3190"
     },
     {
       "name": "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_REPORT.md",

@@ -152,6 +152,16 @@ def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest().upper()
 
 
+def sha256_text_normalised(path: Path) -> str:
+    """Return SHA-256 of LF-normalised content (EOL-independent digest).
+
+    交付物可能在 CRLF/LF checkout 之间变化；raw byte 摘要会随平台改变。需要
+    跨 checkout 稳定的登记值一律使用本函数；上传文件的真实字节仍由
+    CLOUD_HANDOFF_VERIFICATION.json 的逐文件回读负责。
+    """
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest().upper()
+
+
 def read_csv_rows(path: Path) -> list[dict]:
     """Read a CSV into a list of dicts, tolerant of a UTF-8 BOM."""
     with path.open(encoding="utf-8-sig", newline="") as handle:
@@ -1269,9 +1279,14 @@ def main(argv: list[str] | None = None) -> int:
         "mechanism_candidates": [r["MECHANISM_CANDIDATE"] for r in mechanism],
         "markdown_deliverables": {
             name: (
-                {"sha256": sha256_file(out / name)}
+                {
+                    "sha256_lf_normalised": sha256_text_normalised(out / name),
+                    "digest_basis": "LF-normalised content; raw uploaded bytes are verified in "
+                                    "CLOUD_HANDOFF_VERIFICATION.json",
+                }
                 if (out / name).exists()
-                else {"sha256": None, "note": "rendered by render_mmwave_mechanism_audit_docs_20260913.py"}
+                else {"sha256_lf_normalised": None,
+                      "note": "rendered by render_mmwave_mechanism_audit_docs_20260913.py"}
             )
             for name in MARKDOWN_DELIVERABLES
         },

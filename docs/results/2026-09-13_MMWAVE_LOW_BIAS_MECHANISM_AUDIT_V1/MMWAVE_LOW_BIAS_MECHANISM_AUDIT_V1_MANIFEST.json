@@ -2,10 +2,10 @@
   "task_id": "mmwave_systematic_low_bias_mechanism_audit_v1",
   "run_id": "mmwave_low_bias_mechanism_audit_v1_20260913_r1",
   "audit_type": "MECHANISM_AUDIT",
-  "source_commit": "57efd3bc78fdc195bd05f32899301be79a64fab5",
+  "source_commit": "4162cf93852ed061d3cc7b90679ffb022ffd6cfd",
   "script": {
     "path": "D:\\Project\\厚粲杯\\08_算法_worktrees\\mmwave_low_bias_mechanism_audit_v1_20260913\\scripts\\maintenance\\run_mmwave_low_bias_mechanism_audit_20260913.py",
-    "sha256": "EC23135D062198310D9A36553017B044E40772603C7CC559EE50882D8204128F"
+    "sha256": "525F543BDA61EC468BBD6EF3911A3406346A1D1F34EC9A44FB25F0677BDC308E"
   },
   "inputs": {
     "CONTROL_VS_CANDIDATES_100_PROBES_LOCAL_ONLY.csv": {
@@ -394,16 +394,20 @@
   ],
   "markdown_deliverables": {
     "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_REPORT.md": {
-      "sha256": "7040FE09EEBFDDC76298F263BA3530EFAAAC16369CFC386F383B0371CDBE0DA5"
+      "sha256_lf_normalised": "7040FE09EEBFDDC76298F263BA3530EFAAAC16369CFC386F383B0371CDBE0DA5",
+      "digest_basis": "LF-normalised content; raw uploaded bytes are verified in CLOUD_HANDOFF_VERIFICATION.json"
     },
     "FUSION_PATH_AUDIT.md": {
-      "sha256": "FF651556E6289AEB990DCA3413BA9E1A702C5C0FE9F6E4BB045B1050735648FB"
+      "sha256_lf_normalised": "FF651556E6289AEB990DCA3413BA9E1A702C5C0FE9F6E4BB045B1050735648FB",
+      "digest_basis": "LF-normalised content; raw uploaded bytes are verified in CLOUD_HANDOFF_VERIFICATION.json"
     },
     "HANDOFF.md": {
-      "sha256": "9F40ADE47977D2417D8E925322A53A358AD18A5C02200FCCA5D3C01D76480312"
+      "sha256_lf_normalised": "9F40ADE47977D2417D8E925322A53A358AD18A5C02200FCCA5D3C01D76480312",
+      "digest_basis": "LF-normalised content; raw uploaded bytes are verified in CLOUD_HANDOFF_VERIFICATION.json"
     },
     "ERROR_LOG.json": {
-      "sha256": "DD2D5142797D4B2DB18F1E6D8DA70AB18D3ECB638493C88B42F2C8FBE4212061"
+      "sha256_lf_normalised": "3A06666692411FC03BAA9C9FEE7527848A1718F2D82F457F6F9283F3D69C987B",
+      "digest_basis": "LF-normalised content; raw uploaded bytes are verified in CLOUD_HANDOFF_VERIFICATION.json"
     }
   },
   "qc_fields_used": [
