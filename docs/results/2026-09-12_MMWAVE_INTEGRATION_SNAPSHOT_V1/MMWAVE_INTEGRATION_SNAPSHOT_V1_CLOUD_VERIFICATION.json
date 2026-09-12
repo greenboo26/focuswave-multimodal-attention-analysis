@@ -1,10 +1,24 @@
 {
-  "status": "PENDING_INITIAL_GIT_COMMIT_AND_UPLOAD",
+  "status": "PASS_INITIAL_UPLOAD_READBACK",
   "folder_id": "1eAClViAQxtDGl0jnfb88-ivtYSSH-AXj",
   "folder_url": "https://drive.google.com/drive/folders/1eAClViAQxtDGl0jnfb88-ivtYSSH-AXj",
-  "cloud_file_count": null,
-  "cloud_files": [],
-  "cloud_manifest_match": false,
-  "verified_at_utc": null,
-  "repository_commit": null
+  "cloud_file_count": 11,
+  "cloud_files": [
+    {"title": "HANDOFF_MMWAVE_INTEGRATION_SNAPSHOT_V1.md", "id": "1R06suxXbzpIiJ_JJc4FAaAJz-p92_BJB"},
+    {"title": "MMWAVE_INTEGRATION_SNAPSHOT_V1_AVAILABILITY_SUMMARY.csv", "id": "1yvktnWFtuPQljiw-iLqyD9A_CEmcm3IQ"},
+    {"title": "MMWAVE_INTEGRATION_SNAPSHOT_V1_CLOUD_VERIFICATION.json", "id": "122vAcIQoz9QMFZ26x4EkM0bxsDzqBQ-s"},
+    {"title": "MMWAVE_INTEGRATION_SNAPSHOT_V1_ERROR_LOG.json", "id": "1RQVfpA8hBteDzCWZIcTFBzws8WGjzkTD"},
+    {"title": "MMWAVE_INTEGRATION_SNAPSHOT_V1_FEATURE_REGISTRY_MAP.csv", "id": "18hoZ6KPng1ytnDvwrzGAljWMTf56Tyd4"},
+    {"title": "MMWAVE_INTEGRATION_SNAPSHOT_V1_FIELD_ROLE_MAP.csv", "id": "1qg-uHhIbmeK8L5qhjjeEjYK1-QZRS4nx"},
+    {"title": "MMWAVE_INTEGRATION_SNAPSHOT_V1_MANIFEST.json", "id": "1C2qaJmkpBW7Ou0D9Gmdwya8ll48Tmuwe"},
+    {"title": "MMWAVE_INTEGRATION_SNAPSHOT_V1_REPLACEMENT_CONTRACT.md", "id": "1JsDGU3xj9lZF3MOkQ6Omrn5im-_Q1TF7"},
+    {"title": "MMWAVE_INTEGRATION_SNAPSHOT_V1_REPORT.md", "id": "1cCCPLfL81n7XNxtFiPFc5MgycMNGOazo"},
+    {"title": "MMWAVE_INTEGRATION_SNAPSHOT_V1_SCHEMA.json", "id": "10I1zqYN0O0EVSqOL9cz9qkDufSeAZnpI"},
+    {"title": "MMWAVE_INTEGRATION_SNAPSHOT_V1_SCHEMA_SMOKE.json", "id": "1cDZUWo_wZid_wV2o57FDVyhUOouKGpFr"}
+  ],
+  "cloud_manifest_match": true,
+  "verification_basis": "Google Drive folder list readback returned exactly the 11 intended unique titles and uploaded object IDs; byte replacement success is verified separately after the receipt commit.",
+  "verified_at_utc": "2026-09-12T14:35:03Z",
+  "initial_artifact_commit": "62878b88c7025d20bc5a83818447d6b31b7c3bcc",
+  "local_only_artifacts_uploaded": false
 }

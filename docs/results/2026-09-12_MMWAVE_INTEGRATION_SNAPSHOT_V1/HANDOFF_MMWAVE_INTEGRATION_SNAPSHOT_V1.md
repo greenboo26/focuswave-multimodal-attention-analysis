@@ -4,6 +4,8 @@
 - `STATUS`: `PROVISIONAL_INTEGRATION_READY / PHYSIOLOGY_LIMITED`
 - `RUN_ID`: `mmwave_integration_snapshot_v1_20260912_r4`
 - `SOURCE_COMMIT`: `16729b2ef245f9304dae8674f3bac433bc02e98c`
+- `INITIAL_ARTIFACT_COMMIT`: `62878b88c7025d20bc5a83818447d6b31b7c3bcc`
+- `FORMAL_METHOD_COMMIT`: `afa1e869d1ef4e80cf0bb91e910658d0b0efbb91`
 - `COHORT`: 116 sessions / 61 participant groups / 2,320 probes
 - `AVAILABLE`: 109 sessions / 2,180 probes
 - `KEY_GATE`: expected=2,320; observed=2,320; duplicate=0; missing=0; extra=0

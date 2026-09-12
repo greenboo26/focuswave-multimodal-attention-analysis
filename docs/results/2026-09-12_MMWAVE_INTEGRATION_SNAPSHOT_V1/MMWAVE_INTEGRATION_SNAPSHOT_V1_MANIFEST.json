@@ -288,14 +288,22 @@
     },
     {
       "path": "HANDOFF_MMWAVE_INTEGRATION_SNAPSHOT_V1.md",
-      "sha256": "7eacf32b7fddc71e1771f8cbe7ce8e0392239b1adf531e6bb1a085fbf4b11e5c"
+      "sha256": "2f9df895f9f19ead4a0608e4fb8d22d2561c261df4cc6d6ca9ccb69c5b57f924"
     },
     {
       "path": "MMWAVE_INTEGRATION_SNAPSHOT_V1_CLOUD_VERIFICATION.json",
-      "sha256": "f844593fc3e8a54048d93a47d97c812e5234a273ecc13df487bd1cdd0d4d0a4b",
-      "state": "PENDING_INITIAL_GIT_COMMIT_AND_UPLOAD"
+      "sha256": "a8bf1912ecba305159eb686d248dbad1ed5924679a9fcb1a80bf5c0466eb3739",
+      "state": "PASS_INITIAL_UPLOAD_READBACK"
     }
   ],
+  "cloud_delivery": {
+    "folder_id": "1eAClViAQxtDGl0jnfb88-ivtYSSH-AXj",
+    "folder_url": "https://drive.google.com/drive/folders/1eAClViAQxtDGl0jnfb88-ivtYSSH-AXj",
+    "file_count": 11,
+    "initial_artifact_commit": "62878b88c7025d20bc5a83818447d6b31b7c3bcc",
+    "name_and_object_id_readback": "PASS",
+    "local_only_artifacts_uploaded": false
+  },
   "models_trained": false,
   "algorithm_frozen": false
 }
