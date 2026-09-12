@@ -1,0 +1,4 @@
+﻿batch,frozen_sessions,observed_sessions,structural_missing_sessions,qc_fail_sessions,availability_fraction
+ALL,116,109,7,0,0.9396551724137931
+J,72,70,2,0,0.9722222222222222
+E,44,39,5,0,0.8863636363636364

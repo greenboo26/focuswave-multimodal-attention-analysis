@@ -1,0 +1,48 @@
+{
+  "schema": "focuswave_mmwave_baseline_personalization_audit_manifest_v1",
+  "task_id": "mmwave_baseline_personalization_audit",
+  "state": "AUDIT_COMPLETE_P3_EXECUTION_NOT_READY",
+  "canonical_source_baseline": "b33e277620d43ca0e0a9960b5702dea7cf2dac87",
+  "canonical_p0_dependency_integrated": "5bbb2de0b715d02d4c5de5de889c5ac8ec30e3b7",
+  "acquisition_formaltest_commit": "a4f2a6ee4eda2b4de42be538abb1ecf550380ca1",
+  "formal_dll_time_producer_commit": "16729b2ef245f9304dae8674f3bac433bc02e98c",
+  "scope": {
+    "audit_only": true,
+    "formal_hr_producer_modified": false,
+    "final_baseline_selector_implemented": false,
+    "ecg_used": false,
+    "attention_labels_used": false,
+    "models_trained": false
+  },
+  "denominators": {
+    "frozen_sessions": 116,
+    "frozen_probe_rows": 2320,
+    "repeat_participant_groups_nonempty_current_tables": 62,
+    "baseline_observed_sessions": 109,
+    "structural_missing_sessions": 7,
+    "audit_only_30s_windows": 654
+  },
+  "local_only_output": "D:\\Project\\厚粲杯\\11_数据\\_FormalAnalysis\\mmWave\\mmwave_baseline_personalization_audit_20260912",
+  "inputs": {
+    "j_frozen_table_sha256": "bc827dc317982ae0e920f661e28cec023473eccfcb034bc806e1a3583ef7828c",
+    "e_frozen_table_sha256": "b7ea774ccebb6e35397a56e76f108a63d41803bf697260d01977effa5fad3e36",
+    "producer_sha256": "bc65c2d2c99ebdfedea2500579caeb45cb8918466cf788ade718806bdd351fda",
+    "adapter_sha256": "434f0c60234f6ae9c319e0f20f151cc1b0794b0be65645e8e5df372a0ae575e9"
+  },
+  "outputs": {
+    "report_sha256": "f360874e4b91adc470cca37275f83a64c53e339828f827dd2cc16530cfca1f95",
+    "availability_summary_sha256": "e9aa54466b6e327e6d0e9421cb9c994ced4345d5e070600f547f977c9da9bac2",
+    "audit_summary_sha256": "b6fdfb975b70b788e9933858173fdb3b75b2f75299364dd6344438826f2614dd",
+    "local_session_table_sha256": "c4887afe79a0654df8e99a1acd7dd898cdb14689f3b3521c30c08851e24bae1b",
+    "local_window_table_sha256": "b5cd41475326e97efae69312e7b02c0209572fe590cf4e13cf50bec074f46aa7"
+  },
+  "scripts": {
+    "audit": "scripts/maintenance/audit_mmwave_baseline_personalization_20260912.py",
+    "audit_sha256": "d0f196856d303d99e299b0adcb82b6c96cc0f3b5a4195bceb06b6bd4d2bc67b5",
+    "summarize": "scripts/maintenance/summarize_mmwave_baseline_personalization_audit_20260912.py",
+    "summarize_sha256": "5584c4bb1345fd46a6ae76f32969036103a248d4424fff104daf0063476d1804"
+  },
+  "timestamp_contract": "DLL host receive/enqueue column 1 zero-based; inferred rest start is baseline_stop minus duration logged to 0.1 s",
+  "scientific_boundary": "HR/BR SUPPORTING_ONLY and HOLD; HRV BLOCKED; no formal physiology promotion",
+  "p3_design_ready": false
+}

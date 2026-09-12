@@ -547,3 +547,11 @@ ECG 并非“不能学”，而是不能发生答案泄漏。
 - 30 s/60 s 不是当前第一步，窗口比较必须后置到完整 candidate pipeline 冻结之后。
 
 当前项目状态：`PARTIAL / ACTIVE RECOVERY`。
+
+## 2026-09-12 P3 前置 baseline 资产审计回写
+
+只读审计已完成，详细证据见 `docs/results/2026-09-12_MMWAVE_BASELINE_PERSONALIZATION_AUDIT/MMWAVE_BASELINE_PERSONALIZATION_AUDIT_REPORT.md`。冻结分母保持 J72+E44=116；可分析推定 180 s baseline=109（J70/E39），结构性缺失=7。109 场的 654 个 audit-only 30 s slice 全部可运行。
+
+新增的关键 acquisition 限制是：`baseline_start` 在坐姿确认按键之前记录；115 场 marker envelope 为 180.944–245.788 s，因此纯静息 onset 只能由 `baseline_stop - rounded duration` 推定。当前动态 selector 的六窗 bin+channel pair persistence 中位数为 `.167`，unique pair 中位数为 `6`；历史 bins 9–40 只覆盖 309/654 个当前选择。该证据不支持直接把 baseline 众数作为最终 selector。
+
+P3 候选设计可以继续细化，但执行状态保持 `P3_DESIGN_READY=NO`：P0 已由 canonical `5bbb2de` 完成；仍须完成 P1，随后冻结 onset contract、30/60 s 候选规则、anchor/neighborhood/weight/fallback、62-group participant-disjoint manifest 与 baseline-aligned ECG reference denominator。本次未改正式 producer、未实现 selector、未用 ECG 或注意标签调参、未训练模型；HR/BR HOLD、HRV BLOCKED 不变。

@@ -7,6 +7,12 @@
 - Explicitly excluded physical gating, preselection DC/static/clutter processing, VMD, external-RSP harmonic logic, fixed-target/cross-probe persistence, baseline target calibration, 60 s aggregation, 30/60 final comparison, ECG tuning, and downstream model training.
 - Recorded that exact B1 source `16729b2` is locally resolvable but was not reachable from `origin/main=b33e2776` at audit start; P1 must lock that exact source or use a separately verified semantics-equivalent integration.
 
+## 2026-09-12 — audit(mmwave): inventory the formal 180 s baseline before P3
+
+- Added a read-only audit and aggregate summarizer for the frozen J72+E44 cohort. The run preserved all 116 sessions, classified 109 as baseline-observed and 7 as structural missing, and produced 654 audit-only 30 s diagnostics without changing the formal producer or implementing a final selector.
+- Documented that `baseline_start` precedes posture-confirmation input, so the pure-rest onset is inferred from `baseline_stop` minus the rounded duration. Quantified DLL-time/frame QC, target power/margin/phase/motion and six-slice target persistence.
+- Added the P3 candidate design, participant-disjoint leakage controls, historical fixed-target relationship, missing assets and explicit prohibitions. P3 remains not ready; HR/BR remain HOLD and HRV remains BLOCKED.
+
 ## 2026-08-30 — audit(mmwave): execute frozen near-field / pre-selection clutter A/B
 
 - Added the minimal `run_mmwave_preselection_clutter_ab_20260830.py` adapter, reusing the current v3.1.1 selector and block-local continuity on the existing 335-window formal-block diagnostic subset. A uses the raw mean-power profile; B applies slow-time complex-mean subtraction only after Range FFT, before that same selector.

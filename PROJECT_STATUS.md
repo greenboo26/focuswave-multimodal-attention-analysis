@@ -9,6 +9,13 @@
 - 源码前提：B1 exact SHA `16729b2ef245f9304dae8674f3bac433bc02e98c` 本机可解析，但审计开始时不在 `origin/main=b33e2776` 祖先链。P1 必须从 exact SHA 隔离执行，或先独立完成语义等价 canonical integration，不能猜测重建。
 - 证据：[P0 full audit](docs/canonical/2026-09-12_MMWAVE_HR_RECOVERY_P0_PIPELINE_LINEAGE_AUDIT.md)、[26-stage CSV](docs/canonical/2026-09-12_MMWAVE_HR_RECOVERY_P0_STAGE_EVIDENCE.csv)、[manifest](docs/canonical/2026-09-12_MMWAVE_HR_RECOVERY_P0_MANIFEST.json)。HR/BR=`HOLD / SUPPORTING_ONLY`，HRV=`BLOCKED`，formal mmWave downstream 未授权。
 
+## 2026-09-12 180 s mmWave baseline personalization audit — AUDIT_COMPLETE / P3 NOT READY
+
+- 冻结 `J72 + E44 = 116 sessions / 2320 probes`，实际只读检查得到可分析 180 s baseline=`109/116`（J=`70/72`，E=`39/44`）；7 场为既有结构性缺失。109 场共 654/654 个 audit-only 30 s 切片可运行，未修改正式 HR producer、未实现最终 baseline selector、未用 ECG 调 target、未训练模型。
+- `baseline_start` 在坐姿确认按键之前，115 个标记包络为 180.944–245.788 s；本轮静息起点只能由 `baseline_stop - 180.0 s rounded duration` 推定。该时间语义及 7 场缺失必须在 P3 保留，不能当直接静息 onset 或删去重定义分母。
+- 当前动态 selector 在六个静息切片内的 bin+channel pair persistence 中位数仅 `.167`，每场 unique pair 中位数=`6`；被选 bin 仅 `309/654` 位于历史 9–40 gate。结果支持把 baseline anchor 作为待预注册的 soft-prior candidate，不支持直接用众数替换 selector。
+- `P3_DESIGN_READY=NO`：P0 已完成；仍须完成 P1，并冻结 30/60 s、anchor/neighborhood/weight/fallback、participant-disjoint 62-group manifest 与 baseline-aligned ECG reference 分母。报告见 `docs/results/2026-09-12_MMWAVE_BASELINE_PERSONALIZATION_AUDIT/`；HR/BR=`HOLD / SUPPORTING_ONLY`，HRV=`BLOCKED`。
+
 ## 2026-08-31 T0 VMD backend canonical closure — PASS（软件层核心收口）
 
 - `_load_vmd()` 移除 standalone `vmdpy` fallback，只 import `sktime.libs.vmdpy.VMD`，`importlib.metadata.version("sktime")` 严格 `1.1.0`，不匹配/未装显式 `ImportError`；backend + version 记录进结果 dict。

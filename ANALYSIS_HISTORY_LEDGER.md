@@ -773,3 +773,14 @@ Behavior+mmWave 增量已经做过，不重跑：
 `日期 → repo/ref/commit → 输入范围 → 脚本/配置 → 核心结果 → 决策 → 是否允许以后重复 → 被什么证据替代（如有）`
 
 **不允许再出现“其实两周前做过，但后来智能体因为没看到记录又花钱重跑”的情况。**
+### 2026-09-12：180 s mmWave baseline personalization asset/method audit — AUDIT_COMPLETE / P3 NOT READY
+
+**范围与复用门**：固定旧表 `J72 + E44 = 116 sessions / 2320 probes`，复用 acquisition 的 180 s baseline 事件、DLL host receive timestamp、commit `16729b2` 的正式 adapter/producer、历史 fixed-target lineage 与旧 C2C baseline feature 代码；只新增 read-only audit/summarizer。未修改 producer/raw/acquisition，未实现最终 selector，未用 ECG/注意标签调 target，未训练模型。旧 C2C 因 J-only、Python-time、无 target/bin/channel anchor 且包含监督注意模型而不能原样作为 P3。
+
+**资产与时间结果**：可分析 baseline=`109/116`（J70/E39），结构性缺失=`7`（timeline absent=1、timestamp absent=2、empty timestamp=4）；109 场的 audit-only 30 s slices=`654/654` observed。`baseline_start` 先于坐姿确认，115 场 marker envelope=180.944–245.788 s，故纯静息 start 仅为 `baseline_stop - rounded duration` 推定。DLL interval median=10 ms，>50/>100 ms=0，frame-ID gaps=0；这些是资产/QC，不是 sensor-perfect 或 HR validity。
+
+**selector 描述与决策**：六窗 HR bin+channel pair persistence median=`.167`，unique pairs median=`6`；HR bins 9–40=`309/654`，outside=`345/654`；selection margin median=`0.052358`，无冻结阈值。所有 HR/BR 落在 producer 搜索范围只说明算法输出边界，不是 ECG validity。P3 仅保留 current dynamic、historical fixed 与 baseline soft-prior 三臂候选；30/60 s、anchor/neighborhood/weight/fallback 必须 participant-disjoint 开发后冻结。P0 已由 canonical `5bbb2de` 完成；`P3_DESIGN_READY=NO`，仍须完成 P1、onset contract、62-group identity manifest 与 baseline-aligned ECG denominator；HR/BR HOLD，HRV BLOCKED。
+
+**证据**：报告/aggregate 位于 `docs/results/2026-09-12_MMWAVE_BASELINE_PERSONALIZATION_AUDIT/`；逐 session 116 rows、逐窗 654 rows 与全输入 hash local-only 位于 `D:\Project\厚粲杯\11_数据\_FormalAnalysis\mmWave\mmwave_baseline_personalization_audit_20260912\`。入口为 `scripts/maintenance/audit_mmwave_baseline_personalization_20260912.py` 与 `summarize_mmwave_baseline_personalization_audit_20260912.py`。
+
+---
