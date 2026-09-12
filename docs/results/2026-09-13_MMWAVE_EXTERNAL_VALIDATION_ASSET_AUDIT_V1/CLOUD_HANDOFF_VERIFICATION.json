@@ -1,0 +1,68 @@
+{
+  "task_id": "mmwave_external_validation_asset_audit_v1",
+  "run_id": "mmwave_external_validation_asset_audit_v1_20260913_r1",
+  "folder_name": "2026-09-13_mmwave_external_validation_asset_audit_v1",
+  "folder_parent": "_AI_HANDOFF",
+  "folder_parent_id": "1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL",
+  "remote_path": "gdrive:2026-09-13_mmwave_external_validation_asset_audit_v1",
+  "access_pattern": "--drive-root-folder-id 1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL",
+  "transport": "rclone 1.75.1 (portable, D:\\Project\\.tools\\rclone.exe), Google Drive remote 'gdrive'; credentials live only in the machine-local rclone config and were never printed, logged or committed.",
+  "cloud_file_count": 6,
+  "cloud_files": [
+    "ERROR_LOG.json",
+    "EXTERNAL_ASSET_ASSESSMENT.csv",
+    "EXTERNAL_ASSET_HISTORY_TRACE.csv",
+    "HANDOFF.md",
+    "MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1_MANIFEST.json",
+    "MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1_REPORT.md"
+  ],
+  "verified_by_readback": true,
+  "readback_dir": "D:\\Project\\.harness\\extaudit_readback",
+  "per_file": [
+    {
+      "name": "ERROR_LOG.json",
+      "status": "MATCH",
+      "local_sha256": "4D2F0A85F8F8A450FAFCC6F8F05B4BFE327E5C01E736BF123C286AFA73C39534",
+      "cloud_sha256": "4D2F0A85F8F8A450FAFCC6F8F05B4BFE327E5C01E736BF123C286AFA73C39534"
+    },
+    {
+      "name": "EXTERNAL_ASSET_ASSESSMENT.csv",
+      "status": "MATCH",
+      "local_sha256": "37B5A82B013B761674B4A3127099B1ACE4A45FC8202DDE74F86E31FD6A27AD70",
+      "cloud_sha256": "37B5A82B013B761674B4A3127099B1ACE4A45FC8202DDE74F86E31FD6A27AD70"
+    },
+    {
+      "name": "EXTERNAL_ASSET_HISTORY_TRACE.csv",
+      "status": "MATCH",
+      "local_sha256": "4B32E572E2C7194C7FC8346CEA5C8AD8373BE739A31D32F2416E95F1D45B6B5A",
+      "cloud_sha256": "4B32E572E2C7194C7FC8346CEA5C8AD8373BE739A31D32F2416E95F1D45B6B5A"
+    },
+    {
+      "name": "HANDOFF.md",
+      "status": "MATCH",
+      "local_sha256": "904E6EF9C13B588988D8673AB645CF6E76C480F1E49F8DBCE8F201B028AFA271",
+      "cloud_sha256": "904E6EF9C13B588988D8673AB645CF6E76C480F1E49F8DBCE8F201B028AFA271"
+    },
+    {
+      "name": "MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1_MANIFEST.json",
+      "status": "MATCH",
+      "local_sha256": "F5589233D8F1912F86635B8749059EE045CEE52EA616C088461DC8F9CE3688A4",
+      "cloud_sha256": "F5589233D8F1912F86635B8749059EE045CEE52EA616C088461DC8F9CE3688A4"
+    },
+    {
+      "name": "MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1_REPORT.md",
+      "status": "MATCH",
+      "local_sha256": "3BA28C054088125544BC6A2E6ACF0A6F4FD3924FF92D722E7086DA662F8038D2",
+      "cloud_sha256": "3BA28C054088125544BC6A2E6ACF0A6F4FD3924FF92D722E7086DA662F8038D2"
+    }
+  ],
+  "frozen_artifacts_all_match": true,
+  "frozen_artifacts_checked": 6,
+  "no_prior_bundle_files_mixed": true,
+  "external_datasets_not_uploaded": true,
+  "external_datasets_note": "The three audited external datasets stay local-only and were not uploaded; this bundle carries only the Git-safe audit report, manifest, assessment/history tables, error log and handoff.",
+  "self_referential_files": [
+    "CLOUD_HANDOFF_VERIFICATION.json"
+  ],
+  "note": "CLOUD_HANDOFF_VERIFICATION.json is written last and cannot carry its own final digest; that digest is recorded in HANDOFF.md and the GitHub issue pointer."
+}

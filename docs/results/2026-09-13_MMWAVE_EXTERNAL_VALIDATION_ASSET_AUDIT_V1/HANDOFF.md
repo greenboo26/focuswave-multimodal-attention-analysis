@@ -50,7 +50,15 @@ not usable                   : AgeBalanced（路线暴露）、TI gby（无参�
 
 ## CLOUD_HANDOFF
 
-见 `CLOUD_HANDOFF_VERIFICATION.json`。目标为 canonical shared Drive `_AI_HANDOFF/2026-09-13_mmwave_external_validation_asset_audit_v1`，使用 `D:\Project\.tools\rclone.exe` 并显式带 `--drive-root-folder-id 1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL`，上传后执行 `rclone check --checksum` 与逐文件回读哈希验证。
+- target folder: canonical shared Drive `_AI_HANDOFF/2026-09-13_mmwave_external_validation_asset_audit_v1`
+- parent folder id: `1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL`（该共享 `_AI_HANDOFF` 不在 rclone remote 默认根下，必须显式带 `--drive-root-folder-id`）
+- transport: `D:\Project\.tools\rclone.exe` 1.75.1 + 既有已授权 Google Drive remote；凭据仅存本机配置，未打印、未入日志、未入库
+- uploaded files: 7（6 个 Git-safe 交付物 + `CLOUD_HANDOFF_VERIFICATION.json`）
+- verification: `rclone check --checksum` exit 0；随后整目录回读到本机 staging 并逐文件重算 SHA-256，7/7 与本地一致；未混入 snapshot v1 / estimator improvement / low-bias mechanism audit 文件
+- `CLOUD_HANDOFF_VERIFICATION.json` SHA-256: `B94E8836405C55AF65D1B345AEF0E7B799840EED206FBA9DE603564833FE3D37`
+- 三个外部数据集**未上传**：留在本机 local-only，本 bundle 只含 Git-safe 审计报告、manifest、assessment/history 表、error log 与 handoff
+
+CLOUD_UPLOAD: `UPLOADED_AND_VERIFIED`
 
 HR/BR: `HOLD / SUPPORTING_ONLY`
 
