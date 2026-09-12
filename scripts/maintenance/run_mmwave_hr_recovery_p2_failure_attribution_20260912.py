@@ -227,7 +227,20 @@ def aggregate(rows: list[dict], group_fields: tuple[str, ...]) -> list[dict]:
     return output
 
 
-def run(output_dir: Path) -> tuple[list[dict], dict]:
+def _reference_key(row: dict) -> tuple[str, int]:
+    subject = str(row.get("session_id", row.get("subject", ""))).strip()
+    subject = subject.removeprefix("sub-").removesuffix("_")
+    onset = row.get("onset_ms", row.get("probe_onset_unix_ms"))
+    return subject, int(float(onset))
+
+
+def run(
+    output_dir: Path,
+    *,
+    control_path: Path = CONTROL,
+    result_dir: Path = RESULT_DIR,
+    reference_csv: Path | None = None,
+) -> tuple[list[dict], dict]:
     if output_dir.exists():
         raise FileExistsError(f"exclusive output exists: {output_dir}")
     output_dir.mkdir(parents=True)
@@ -235,10 +248,16 @@ def run(output_dir: Path) -> tuple[list[dict], dict]:
     p1 = load_module(P1_RUNNER, "p2_p1_contract")
     target = load_module(p1.TARGETED, "p2_target")
     p1.install_target_overrides(target)
-    controls = read_csv(CONTROL)
+    controls = read_csv(control_path)
     control_by_key = {key(row): row for row in controls}
     if len(controls) != 100 or len(control_by_key) != 100 or set(r["subject"] for r in controls) != set(SUBJECTS):
         raise AssertionError("frozen control denominator is not exact 5-session/100-probe")
+    reference_by_key = {}
+    if reference_csv is not None:
+        reference_rows = read_csv(reference_csv)
+        reference_by_key = {_reference_key(row): row for row in reference_rows}
+        if len(reference_rows) != 100 or len(reference_by_key) != 100:
+            raise AssertionError("strict reference override is not exact 100-probe")
     rows = []
     invariant_diffs = []
     previous_by_block = {}
@@ -275,7 +294,18 @@ def run(output_dir: Path) -> tuple[list[dict], dict]:
             e0 = int(round(align["ecg_fit_slope_samples_per_ms"] * win_start + align["ecg_fit_intercept_sample"]))
             e1 = int(round(align["ecg_fit_slope_samples_per_ms"] * win_end + align["ecg_fit_intercept_sample"]))
             ref = target.ecg_rsp_window(ecg, rsp, ecg_fs, e0, e1)
-            ecg_bpm = number(ref.get("ecg_hr_bpm"))
+            strict_ref = reference_by_key.get((subject, onset)) if reference_by_key else None
+            if reference_by_key and strict_ref is None:
+                raise AssertionError(f"strict reference missing for {(subject, onset)}")
+            if strict_ref is not None:
+                ecg_usable = str(strict_ref.get("ecg_usable", "0")) == "1"
+                ecg_bpm = number(strict_ref.get("ecg_hr_bpm_goldclean")) if ecg_usable else None
+                rsp_bpm = number(strict_ref.get("rsp_br_bpm_goldclean"))
+                ecg_status = "ECG_VALID" if ecg_usable else "ECG_INVALID"
+            else:
+                ecg_bpm = number(ref.get("ecg_hr_bpm"))
+                rsp_bpm = number(ref.get("rsp_br_bpm"))
+                ecg_status = ref.get("ecg_status")
             control = control_by_key[(subject, block_id, onset)]
             frame_ids = np.asarray(timestamps[i0:i1, 0], dtype="<i8")
             frame_hash = hashlib.sha256(frame_ids.tobytes()).hexdigest().upper()
@@ -287,8 +317,10 @@ def run(output_dir: Path) -> tuple[list[dict], dict]:
                 "win_start_unix_ms": win_start, "win_end_unix_ms": win_end,
                 "hr_30s_fused_bpm": step["selector_fused_bpm"],
                 "hr_30s_time_bpm": step["selector_time_bpm"],
-                "hr_30s_spectral_bpm": step["selector_bpm"], "ecg_hr_bpm": ecg_bpm,
+                "hr_30s_spectral_bpm": step["selector_bpm"],
             }
+            if strict_ref is None:
+                checks["ecg_hr_bpm"] = ecg_bpm
             for field, actual in checks.items():
                 expected = control[field]
                 same = str(actual) == expected if isinstance(actual, str) else abs(float(actual)-float(expected)) <= 1e-9
@@ -326,7 +358,8 @@ def run(output_dir: Path) -> tuple[list[dict], dict]:
                 best_alt, alt_location = None, "NONE"
             phase_stability, phase_meta = algo._phase_stability_score(np.unwrap(np.angle(iq_fd[:, hr_bin, hr_ch])))
             motion = float(np.std(np.diff(algo.extract_displacement(iq_fd, hr_bin, hr_ch))))
-            base = {**control, "ecg_hr_bpm": ecg_bpm, "phase_stability": phase_stability,
+            base = {**control, "ecg_hr_bpm": ecg_bpm, "ecg_status": ecg_status,
+                    "rsp_br_bpm": rsp_bpm, "phase_stability": phase_stability,
                     "motion_proxy": motion, "hr_confidence": number(control["hr_confidence"]),
                     "hr_usable_ratio": number(control["hr_usable_ratio"])}
             primary, flags, old_class = classify(base, selected, alternate)
@@ -367,8 +400,9 @@ def run(output_dir: Path) -> tuple[list[dict], dict]:
     write_csv(table, rows)
     per_session = aggregate(rows, ("subject",))
     severity_rows = aggregate(rows, ("severity",))
-    write_csv(RESULT_DIR / "MMWAVE_HR_RECOVERY_P2_PER_SESSION.csv", per_session)
-    write_csv(RESULT_DIR / "MMWAVE_HR_RECOVERY_P2_SEVERITY_SUMMARY.csv", severity_rows)
+    result_dir.mkdir(parents=True, exist_ok=True)
+    write_csv(result_dir / "MMWAVE_HR_RECOVERY_P2_PER_SESSION.csv", per_session)
+    write_csv(result_dir / "MMWAVE_HR_RECOVERY_P2_SEVERITY_SUMMARY.csv", severity_rows)
     primary_counts = Counter(r["PRIMARY_FAILURE_CLASS"] for r in rows)
     fusion = {}
     for reference, field in (("time", "time_ae_bpm"), ("spectral", "spectral_ae_bpm")):
@@ -389,7 +423,7 @@ def run(output_dir: Path) -> tuple[list[dict], dict]:
         "alternate_target_true_candidate_available": sum(r["alternate_exact_candidate_available"] for r in rows),
         "per_session": per_session, "severity": severity_rows,
     }
-    summary_path = RESULT_DIR / "MMWAVE_HR_RECOVERY_P2_AGGREGATE_SUMMARY.json"
+    summary_path = result_dir / "MMWAVE_HR_RECOVERY_P2_AGGREGATE_SUMMARY.json"
     summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
     manifest = {
         "task_id": "mmwave_hr_recovery_p2_failure_attribution",
@@ -398,7 +432,9 @@ def run(output_dir: Path) -> tuple[list[dict], dict]:
         "cohort": {"sessions": list(SUBJECTS), "probes": 100},
         "window": "[probe_end - 30 s, probe_end)", "time_semantics": "DLL host receive/enqueue timestamp column 1",
         "ecg_role": "DIAGNOSTIC_ONLY / ORACLE_ASSISTED after mmWave candidate generation",
-        "control_input": {"path": str(CONTROL), "sha256": sha256(CONTROL)},
+        "control_input": {"path": str(control_path), "sha256": sha256(control_path)},
+        "reference_override": ({"path": str(reference_csv), "sha256": sha256(reference_csv)}
+                               if reference_csv is not None else None),
         "local_output": {"path": str(table), "sha256": sha256(table), "rows": 100},
         "scripts": [{"path": str(p), "sha256": sha256(p)} for p in (Path(__file__), PRODUCER, P1_RUNNER, OLD_TRUTH, OLD_RECON)],
         "parameters": {"exact_tolerance": "max(0.5 * spectral resolution bpm, 1.5 bpm)",
@@ -412,7 +448,7 @@ def run(output_dir: Path) -> tuple[list[dict], dict]:
         "models_trained": False, "formal_producer_modified": False,
         "hr_br_status": "HOLD_SUPPORTING_ONLY", "hrv_status": "BLOCKED",
     }
-    manifest_path = RESULT_DIR / "MMWAVE_HR_RECOVERY_P2_MANIFEST.json"
+    manifest_path = result_dir / "MMWAVE_HR_RECOVERY_P2_MANIFEST.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     return rows, {"summary": summary, "manifest": manifest, "manifest_path": manifest_path, "table": table}
 
@@ -420,8 +456,16 @@ def run(output_dir: Path) -> tuple[list[dict], dict]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--control", type=Path, default=CONTROL)
+    parser.add_argument("--result-dir", type=Path, default=RESULT_DIR)
+    parser.add_argument("--reference-csv", type=Path)
     args = parser.parse_args()
-    rows, result = run(args.output_dir)
+    rows, result = run(
+        args.output_dir,
+        control_path=args.control,
+        result_dir=args.result_dir,
+        reference_csv=args.reference_csv,
+    )
     print(json.dumps(result["summary"], ensure_ascii=False, indent=2))
     print(f"local_table={result['table']}")
     print(f"manifest={result['manifest_path']}")

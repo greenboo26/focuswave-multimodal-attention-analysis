@@ -1,0 +1,268 @@
+{
+  "task_id": "mmwave_estimator_improvement_v1",
+  "run_utc": "2026-09-12T14:46:00.330355+00:00",
+  "status": "NO_STABLE_IMPROVEMENT",
+  "phase_a_status": "PASS / REFERENCE_QC_LINEAGE_RECONCILED",
+  "source_commit": "e4c77ceed887ea0d06f21e067914d6f8e0f8aba4",
+  "cohort": {
+    "sessions": [
+      "9779",
+      "97793",
+      "97794",
+      "97795",
+      "97796"
+    ],
+    "probes": 100,
+    "ecg_valid": 100,
+    "ecg_invalid": 0,
+    "unresolved": 0
+  },
+  "window": "[window_effective_start, probe_onset), nominal 30 s, no cross-block",
+  "time_source": "DLL host receive/enqueue timestamp column 1",
+  "inputs": {
+    "goldclean": {
+      "path": "D:\\Project\\厚粲杯\\11_数据\\derived\\ecg_rsp_goldclean_reaudit_v1\\goldclean_reference_windows.csv",
+      "sha256": "D810E49AA6FAE7168312B272050E85422A965F35559723E31C2EAFAD7D6FDC40"
+    },
+    "strict_p2": {
+      "path": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_estimator_improvement_v1_20260912_r1\\phase_a_strict_p2_detail\\MMWAVE_HR_RECOVERY_P2_ATTRIBUTION_100_PROBES.csv",
+      "sha256": "FFED63DDE2E30F5A7B216E5996CB136012286CE4832CA82E6541A66E556C81B1"
+    },
+    "formal_qc": {
+      "path": "D:\\Project\\厚粲杯\\08_算法_worktrees\\mmwave_estimator_improvement_v1_20260912\\docs\\results\\mmwave_formal_vital_qc_v1\\MMWAVE_FORMAL_VITAL_QC_V1_REDACTED_MANIFEST.json",
+      "sha256": "792E838B0A5922B19733A8232F7FF3E9446CDA5877850E24924F544311EC385A"
+    }
+  },
+  "scripts": [
+    {
+      "path": "D:\\Project\\厚粲杯\\08_算法_worktrees\\mmwave_estimator_improvement_v1_20260912\\scripts\\maintenance\\run_mmwave_estimator_improvement_v1_20260912.py",
+      "sha256": "D19FCF0852931AFAF05A3275C5A735C762BF9C68998DB1DE1439AD2A93DEC135"
+    },
+    {
+      "path": "D:\\Project\\厚粲杯\\08_算法_worktrees\\mmwave_estimator_improvement_v1_20260912\\scripts\\maintenance\\run_mmwave_hr_recovery_p2_failure_attribution_20260912.py",
+      "sha256": "5F580959A64397519D9D129A7EA3B9310AC5369F6651691FA4AF01C22FBE665A"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H1_WARNING_TIME_GATE",
+      "rule": "Use time HR when abs(time HR - spectral HR) > 10 bpm; otherwise retain current fused HR.",
+      "source": "Existing producer HR_TIME_FREQ_WARNING_BPM=10.0.",
+      "accepted": false,
+      "failed_checks": [
+        "no_control_correct_to_gt10_transition",
+        "no_probe_worsens_gt5_bpm"
+      ]
+    },
+    {
+      "id": "H2_HARMONIC_CONFLICT_TIME_GATE",
+      "rule": "Use time HR only when the >10 bpm disagreement co-occurs with fused/spectral HR within 5 bpm of 2x or 3x mmWave BR.",
+      "source": "Existing 10 bpm warning plus frozen P2 5 bpm harmonic diagnostic tolerance.",
+      "accepted": false,
+      "failed_checks": [
+        "at_least_3_of_5_sessions_improve"
+      ]
+    },
+    {
+      "id": "H3_LOW_CONFIDENCE_TIME_GATE",
+      "rule": "Use time HR when disagreement >10 bpm and current confidence <0.12; otherwise retain fused HR.",
+      "source": "Existing producer confidence>=0.12 reliable-anchor threshold.",
+      "accepted": false,
+      "failed_checks": [
+        "no_control_correct_to_gt10_transition",
+        "no_probe_worsens_gt5_bpm"
+      ]
+    }
+  ],
+  "control_metrics": {
+    "CONTROL_FUSED": {
+      "estimator": "CONTROL_FUSED",
+      "n": 100,
+      "mae_bpm": 10.457079173363644,
+      "median_ae_bpm": 7.815392952963855,
+      "mean_signed_bias_bpm": -9.033105841645153,
+      "p90_ae_bpm": 24.054346217778583,
+      "max_ae_bpm": 37.5747143956997,
+      "ae_le_5_n": 39,
+      "ae_gt_5_n": 61,
+      "ae_gt_10_n": 42,
+      "ae_gt_20_n": 19,
+      "paired_improve": 0,
+      "paired_worsen": 0,
+      "paired_tie": 100,
+      "switched_n": 0
+    },
+    "CONTROL_TIME": {
+      "estimator": "CONTROL_TIME",
+      "n": 100,
+      "mae_bpm": 8.996965770296207,
+      "median_ae_bpm": 7.004180419470629,
+      "mean_signed_bias_bpm": -6.737621326761782,
+      "p90_ae_bpm": 21.711060573342433,
+      "max_ae_bpm": 32.618599283241196,
+      "ae_le_5_n": 41,
+      "ae_gt_5_n": 59,
+      "ae_gt_10_n": 32,
+      "ae_gt_20_n": 13,
+      "paired_improve": 0,
+      "paired_worsen": 0,
+      "paired_tie": 0,
+      "switched_n": 0
+    },
+    "CONTROL_SPECTRAL": {
+      "estimator": "CONTROL_SPECTRAL",
+      "n": 100,
+      "mae_bpm": 15.12383419314452,
+      "median_ae_bpm": 13.605083522880655,
+      "mean_signed_bias_bpm": -13.35101004598486,
+      "p90_ae_bpm": 30.813788975486204,
+      "max_ae_bpm": 39.29016487730061,
+      "ae_le_5_n": 31,
+      "ae_gt_5_n": 69,
+      "ae_gt_10_n": 57,
+      "ae_gt_20_n": 41,
+      "paired_improve": 0,
+      "paired_worsen": 0,
+      "paired_tie": 0,
+      "switched_n": 0
+    }
+  },
+  "best_candidate": null,
+  "best_candidate_metrics": null,
+  "best_observed_rule": "H1_WARNING_TIME_GATE",
+  "best_observed_rule_status": "REJECTED",
+  "best_observed_rule_metrics": {
+    "estimator": "H1_WARNING_TIME_GATE",
+    "n": 100,
+    "mae_bpm": 9.618843685367818,
+    "median_ae_bpm": 6.888377526981486,
+    "mean_signed_bias_bpm": -7.508495135891511,
+    "p90_ae_bpm": 24.054346217778583,
+    "max_ae_bpm": 37.5747143956997,
+    "ae_le_5_n": 41,
+    "ae_gt_5_n": 59,
+    "ae_gt_10_n": 36,
+    "ae_gt_20_n": 16,
+    "paired_improve": 8,
+    "paired_worsen": 1,
+    "paired_tie": 91,
+    "switched_n": 31
+  },
+  "best_candidate_outperforms_time_control_mae": false,
+  "independent_validation_status": "NOT_AVAILABLE_ORACLE_INSPECTED_5_SESSION_DEVELOPMENT_ONLY",
+  "ecg_used_for_production_rule": false,
+  "snapshot_v1_modified": false,
+  "formal_producer_modified": false,
+  "models_trained": false,
+  "hrv_status": "BLOCKED",
+  "local_only": [
+    {
+      "path": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_estimator_improvement_v1_20260912_r1\\final_r6\\REFERENCE_QC_ELIGIBILITY_100_PROBES_LOCAL_ONLY.csv",
+      "rows": 100,
+      "sha256": "EA9DB07FB37A2027569714B3193FC49AAFECA7C59690750BFFAF523C7188F479",
+      "reason": "probe-level reference/QC detail"
+    },
+    {
+      "path": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_estimator_improvement_v1_20260912_r1\\final_r6\\CONTROL_VS_CANDIDATES_100_PROBES_LOCAL_ONLY.csv",
+      "rows": 100,
+      "sha256": "B4251445B1938DF61F07EFECE9ECBA4DD29FEFFCEED699E0B5B5226D0571A76D",
+      "reason": "probe-level paired estimator detail"
+    },
+    {
+      "path": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_estimator_improvement_v1_20260912_r1\\final_r6\\LARGEST_ERROR_PROBES_TOP20_LOCAL_ONLY.csv",
+      "rows": 20,
+      "sha256": "A6DE5A62434A673FD3EA976AC786962F1B8D475B284C69898C6F9FD21DEEAC49",
+      "reason": "largest-error probe identifiers and values"
+    }
+  ],
+  "cloud_handoff": {
+    "destination_folder_name": "2026-09-12_mmwave_estimator_improvement_v1",
+    "destination_folder_id": "1gZC80XNklehALcuJ6U8NJe_aKy5iwzPd",
+    "destination_folder_url": "https://drive.google.com/drive/folders/1gZC80XNklehALcuJ6U8NJe_aKy5iwzPd",
+    "status": "UPLOADED_AND_VERIFIED",
+    "transport": "rclone 1.75.1 (portable, D:\\Project\\.tools\\rclone.exe) with a Google Drive remote authorized by the user on 2026-09-12; scope=drive; rclone shared client_id (retiring during 2026, one-time use).",
+    "verification": {
+      "verified_at_local": "2026-09-12T23:34+08:00",
+      "method": "upload with rclone copyto, then read back with rclone copyto into a local staging directory and recompute SHA-256 per file",
+      "files_verified": 11,
+      "file_verification_excluding_manifest": "11/11 SHA-256 match after read-back",
+      "manifest_self_note": "the manifest cannot carry its own final hash; its read-back verification is recorded in HANDOFF.md and the GitHub issue pointer",
+      "no_snapshot_v1_files_mixed": true,
+      "mismatch_found_and_resolved": "MMWAVE_ESTIMATOR_IMPROVEMENT_V1_REPORT.md was first recorded here with the pre-cloud-section hash 574BB1CB...; the report gained a cloud-handoff section afterwards, and the corrected hash BBCB22EB... was verified against the cloud copy."
+    },
+    "upload_files": [
+      {
+        "name": "HANDOFF.md",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/HANDOFF.md",
+        "sha256": "0DC1F2047FC69DF5EC991BD63976EFA89BAD5350C4D938A2976CEE6FEFE3DB48"
+      },
+      {
+        "name": "MMWAVE_ESTIMATOR_IMPROVEMENT_V1_REPORT.md",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/MMWAVE_ESTIMATOR_IMPROVEMENT_V1_REPORT.md",
+        "sha256": "3AF483947C9FC3B8CA869E30BBB491FEF755F78A4ED7C3918A8AA42296515ADC"
+      },
+      {
+        "name": "MMWAVE_ESTIMATOR_IMPROVEMENT_V1_MANIFEST.json",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/MMWAVE_ESTIMATOR_IMPROVEMENT_V1_MANIFEST.json",
+        "sha256": "self-referential: recompute after upload read-back; this manifest records its own content except this hash"
+      },
+      {
+        "name": "REFERENCE_QC_LINEAGE_REPORT.md",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/REFERENCE_QC_LINEAGE_REPORT.md",
+        "sha256": "C26AB0E4110C4B464E12235993143FC5E766F0B4F4A794A0665C209506D2FDDA"
+      },
+      {
+        "name": "REFERENCE_QC_ELIGIBILITY_SUMMARY.csv",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/REFERENCE_QC_ELIGIBILITY_SUMMARY.csv",
+        "sha256": "85D1A97E3D10E6EC283BD2B6E208CBC437F44BFCE04917C93A17D576A94D8266"
+      },
+      {
+        "name": "REFERENCE_QC_ELIGIBILITY_SUMMARY.json",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/REFERENCE_QC_ELIGIBILITY_SUMMARY.json",
+        "sha256": "C365F2A0E2ED4A467AF84AD6F6933F0C7EED2EE37A7053B8C6B45D59D7B1A6A4"
+      },
+      {
+        "name": "CONTROL_VS_CANDIDATES_SUMMARY.csv",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/CONTROL_VS_CANDIDATES_SUMMARY.csv",
+        "sha256": "FA9962D29E2333EC42E35B66F5C10F282450A24AB773C88427925C66DAB7F0C0"
+      },
+      {
+        "name": "PER_SESSION_COMPARISON.csv",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/PER_SESSION_COMPARISON.csv",
+        "sha256": "90E2C8F6DCD7C9CDF86BB5A5487435BC65B862D82B461E027697841748545BDD"
+      },
+      {
+        "name": "FAILURE_CLASS_DELTA.csv",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/FAILURE_CLASS_DELTA.csv",
+        "sha256": "D67C82F58E749D350319240B94517C4D05270F80D3695F6B8E0F89FD60F9CCCD"
+      },
+      {
+        "name": "CANDIDATE_DECISION_LOG.md",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/CANDIDATE_DECISION_LOG.md",
+        "sha256": "29066A3F1CF8D70C8555B7B274231F7A4C3426877405347B4131ACEC885C5926"
+      },
+      {
+        "name": "ERROR_LOG.json",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/ERROR_LOG.json",
+        "sha256": "ADC50ECF8AC6928CA8A451B0A3A1007607C4FFEEED57B8EDE9A1CDB96C1960EA"
+      },
+      {
+        "name": "SYSTEMATIC_BIAS_AUDIT.csv",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/SYSTEMATIC_BIAS_AUDIT.csv",
+        "sha256": "98700AC784B488E08DF9660BACA2D7702C60B8A840D59F602A646634A27C31BE"
+      },
+      {
+        "name": "CLOUD_HANDOFF_VERIFICATION.json",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/CLOUD_HANDOFF_VERIFICATION.json",
+        "sha256": "uploaded last and regenerated by scripts/maintenance/upload_cloud_handoff_20260912.py; its own digest is recorded in HANDOFF.md and the GitHub issue pointer"
+      }
+    ],
+    "not_uploaded_by_design": [
+      "probe-level reference/candidate/largest-error tables are local-only; see local_only above"
+    ],
+    "v2_candidate_files": "N/A — no candidate formed (NO_STABLE_IMPROVEMENT)"
+  },
+  "candidate_local_output": null,
+  "python": "3.14.6 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:29:05) [MSC v.1942 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26100-SP0"
+}

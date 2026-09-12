@@ -1,0 +1,65 @@
+{
+  "status": "PASS / REFERENCE_QC_LINEAGE_RECONCILED",
+  "by_session": [
+    {
+      "subject": "9779",
+      "n": 20,
+      "ECG_VALID": 20,
+      "ECG_INVALID": 0,
+      "UNRESOLVED": 0,
+      "RSP_BASIC_VALID": 20,
+      "RSP_STRICT_VALID": 19,
+      "MMWAVE_EXACT_QC_PRESENT": 20
+    },
+    {
+      "subject": "97793",
+      "n": 20,
+      "ECG_VALID": 20,
+      "ECG_INVALID": 0,
+      "UNRESOLVED": 0,
+      "RSP_BASIC_VALID": 20,
+      "RSP_STRICT_VALID": 18,
+      "MMWAVE_EXACT_QC_PRESENT": 20
+    },
+    {
+      "subject": "97794",
+      "n": 20,
+      "ECG_VALID": 20,
+      "ECG_INVALID": 0,
+      "UNRESOLVED": 0,
+      "RSP_BASIC_VALID": 20,
+      "RSP_STRICT_VALID": 17,
+      "MMWAVE_EXACT_QC_PRESENT": 20
+    },
+    {
+      "subject": "97795",
+      "n": 20,
+      "ECG_VALID": 20,
+      "ECG_INVALID": 0,
+      "UNRESOLVED": 0,
+      "RSP_BASIC_VALID": 19,
+      "RSP_STRICT_VALID": 18,
+      "MMWAVE_EXACT_QC_PRESENT": 20
+    },
+    {
+      "subject": "97796",
+      "n": 20,
+      "ECG_VALID": 20,
+      "ECG_INVALID": 0,
+      "UNRESOLVED": 0,
+      "RSP_BASIC_VALID": 16,
+      "RSP_STRICT_VALID": 7,
+      "MMWAVE_EXACT_QC_PRESENT": 20
+    },
+    {
+      "subject": "TOTAL",
+      "n": 100,
+      "ECG_VALID": 100,
+      "ECG_INVALID": 0,
+      "UNRESOLVED": 0,
+      "RSP_BASIC_VALID": 95,
+      "RSP_STRICT_VALID": 79,
+      "MMWAVE_EXACT_QC_PRESENT": 100
+    }
+  ]
+}

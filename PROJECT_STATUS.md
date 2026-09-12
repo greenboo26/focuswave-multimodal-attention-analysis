@@ -1,5 +1,14 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-09-12 mmWave estimator improvement v1 — NO_STABLE_IMPROVEMENT
+
+- Phase A 复用既有 `gold_standard_qa.py` 与 `ecg_rsp_goldclean_reaudit_v1`：当前 P2 5 场/100 probe/探针前 30 s 的 key 100/100 精确匹配；`ECG_VALID/ECG_INVALID/UNRESOLVED=100/0/0`，RSP 基本/严格可用=`95/79`。未调参考阈值，未删除窗口。
+- 严格 ECG 重归因后 P2 为 correct/near=`39`、selected-target wrong peak=`27`、harmonic/half-double=`18`、target bin/channel miss=`16`，主路线仍为 estimator/peak/harmonic/fusion；不是 target-only。
+- 冻结测试三条毫米波专用规则。观察上最优的 `H1_WARNING_TIME_GATE` 以既有 `>10 bpm` 时频警告触发时域心率回退，将融合心率平均绝对误差（mean absolute error [MAE]）从 `10.457079` 降至 `9.618844 bpm`，配对改善/恶化/持平=`8/1/91`，4/5 场改善、1 场持平；但它把一个原本绝对误差不超过 5 bpm 的窗口推至大于 10 bpm，且单窗恶化超过 5 bpm，违反灾难性失败门。`H3` 同样被该门拒绝；`H2` 因不足 3/5 场改善而拒绝。
+- 当前时域心率对照 MAE=`8.996966 bpm`，仍优于 H1；三条规则均未通过冻结门，故结论为 `NO_STABLE_IMPROVEMENT`，`BEST_CANDIDATE=NONE`，`V2_CANDIDATE_STATUS=NOT_FORMED`。5 场均已被心电图 oracle 反复查看，也没有未触碰、参与者/场次不重叠的验证集；未进入正式 producer，未发布 snapshot v2，未修改 integration snapshot v1。
+- 证据：`docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/`；逐 probe reference/candidate 与最大误差表保留 local-only，路径及 SHA-256 在 manifest 中。HR/BR 继续 `HOLD / SUPPORTING_ONLY`，HRV=`BLOCKED`，`models_trained=false`。
+- 云盘交接：`CLOUD_UPLOAD=UPLOADED_AND_VERIFIED`。经用户授权后使用 rclone 1.75.1（便携版，仓库外 `D:\Project\.tools`）的 Google Drive remote 上传 13 个文件到既有目录 `2026-09-12_mmwave_estimator_improvement_v1`，逐文件回读重算 SHA-256：11/11 冻结结果产物与 manifest 记录一致、两个协调文件与本地文本逐字节一致，未混入任何 snapshot v1 文件；token 仅存本机 rclone 配置，未入库、未进报告。回读证据见 `CLOUD_HANDOFF_VERIFICATION.json`。
+
 ## 2026-09-12 mmWave integration snapshot v1 — PROVISIONAL_INTEGRATION_READY / PHYSIOLOGY_LIMITED
 
 - 已将 corrected DLL-time 正式回放包装为版本化接口快照：116 sessions / 61 participant groups / 2,320 probes；109 sessions / 2,180 probes 可估计，7 sessions / 140 probes 以来源不可用或 malformed 状态保留为空。五字段源键与 Task B 四字段键均 2,320/2,320，duplicate/missing/extra=`0/0/0`。
@@ -7,6 +16,7 @@
 - 科学变量仅为 cardiopulmonary 的 fused HR 与 BR；motion proxy 仍 diagnostic-only，没有合格的 mmWave movement 特征。HR/BR=`PROVISIONAL / PHYSIOLOGY_LIMITED`，HRV=`BLOCKED`，未训练模型，未冻结算法。
 - 3-session/60-probe 真实 Task B/materialize smoke PASS，完整案例 20 probes；但 Attention-Analysis `5c7c82c` 的 1.16.10 modality/device migration 仍 pending，不能把 `mmwave` 当科学模态。
 - 证据：[report](docs/results/2026-09-12_MMWAVE_INTEGRATION_SNAPSHOT_V1/MMWAVE_INTEGRATION_SNAPSHOT_V1_REPORT.md)、[manifest](docs/results/2026-09-12_MMWAVE_INTEGRATION_SNAPSHOT_V1/MMWAVE_INTEGRATION_SNAPSHOT_V1_MANIFEST.json)、[replacement contract](docs/results/2026-09-12_MMWAVE_INTEGRATION_SNAPSHOT_V1/MMWAVE_INTEGRATION_SNAPSHOT_V1_REPLACEMENT_CONTRACT.md)。Issue #35/#36 保持开放；#41 为当前 durable integration lane。
+
 
 ## 2026-09-12 mmWave HR recovery P1 — PASS / RESTORATION NOT SUPPORTED
 

@@ -1,0 +1,14 @@
+{
+  "status": "PASS_WITH_RESOLVED_EXECUTION_ERROR",
+  "errors": [
+    {
+      "stage": "verification",
+      "error": "A test command referenced a mistyped non-existent test path.",
+      "impact": "No analysis output was produced or changed by the failed command.",
+      "resolution": "Reran the intended estimator-improvement test suite successfully."
+    }
+  ],
+  "warnings": [
+    "No untouched independent validation set was found; status limited to DEVELOPMENT_ONLY."
+  ]
+}

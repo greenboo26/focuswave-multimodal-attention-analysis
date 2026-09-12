@@ -8,6 +8,20 @@
 
 ---
 
+### 2026-09-12：mmWave estimator improvement v1 — NO_STABLE_IMPROVEMENT
+
+**Reuse Gate**：复用 P2 frozen control、P2 candidate enumeration、`gold_standard_qa.py`、`ecg_rsp_goldclean_reaudit_v1`、`ecg_rsp_goldclean_pairing_v1` 与 formal vital QC；没有新 ECG/RSP 阈值、target selector、window、time source、VMD/SSA、baseline personalization、60 s aggregation或监督学习。P2 审计脚本只增加可选 strict reference/result path 参数，默认历史行为不变。
+
+**Phase A**：current 5-session/100-probe/30 s P2 keys 与既有 gold-clean 30 s reference 100/100 精确一致；ECG=`100/0/0`，RSP basic/strict=`95/79`。严格 ECG 重归因保持 estimator/peak/harmonic/fusion 为主路线，类别从旧 `37/28/18/17` 小幅改为 correct/near `39`、wrong peak `27`、harmonic `18`、target miss `16`，未改变 P2 主结论。
+
+**Phase B**：在同一 100-probe denominator 预先冻结三条 mmWave-only 假设。H1 使用 producer 既有 `HR_TIME_FREQ_WARNING_BPM=10.0`，冲突时选 time HR；H3 再加既有 `<0.12` 低置信度条件；H2 只处理与 mmWave BR 2×/3× 接近的谐波冲突。观察上 H1 将 fused MAE `10.457079→9.618844 bpm`、`AE>10` `42→36`、`AE>20` `19→16`，paired `8/1/91`；但它把一个 control-correct 窗口推至 `AE>10 bpm` 且单窗恶化超过 5 bpm，H1/H3 因灾难性新增失败而拒绝。H2 因不足 3/5 sessions 改善而拒绝。current time HR MAE=`8.996966 bpm`，仍优于 H1。
+
+**决策与边界**：三条假设均拒绝，`BEST_CANDIDATE=NONE`、`V2_CANDIDATE_STATUS=NOT_FORMED`、`NO_STABLE_IMPROVEMENT`。现有 5 场均被反复 oracle 检查，未找到 untouched participant/session-disjoint ECG validation，故不得 formal promote、不得替换 snapshot v1、不得修改 Task B/materialize。报告、manifest、per-session、failure-class、bias 与 candidate log 位于 `docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/`；probe-level 表 local-only。HR/BR=`HOLD / SUPPORTING_ONLY`，HRV=`BLOCKED`，`models_trained=false`。
+
+**云盘状态**：`CLOUD_UPLOAD=UPLOADED_AND_VERIFIED` —— 经用户授权后用 rclone 1.75.1 Google Drive remote 上传 13 个文件到既有目录，逐文件回读重算 SHA-256：11/11 冻结结果产物与 manifest 记录一致、两个协调文件与本地文本逐字节一致，且无 snapshot v1 文件混入；验证中发现报告与 handoff 在上传后被继续编辑导致 manifest 哈希过期，已改为 manifest 只记录冻结产物哈希、自指文件摘要记在本账本与 issue，并加以测试断言；回读证据为 `CLOUD_HANDOFF_VERIFICATION.json`。
+
+---
+
 ### 2026-09-12：mmWave HR recovery P0 逐阶段 lineage audit — PASS / P1 READY WITH SOURCE PRECONDITION
 
 **Reuse Gate**：读取 central governance、canonical decision/master plan、Issues #34/#35、历史 runner/producer、当前 `16729b2` formal adapter、2026-08-30 controlled stage replay、2026-08-31 pre30 selector、B1–B4 与 180 s baseline pipeline。没有新算法、重跑、ECG 调参、target/gate/window 变更或模型训练。
