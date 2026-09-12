@@ -8,6 +8,20 @@
 
 ---
 
+### 2026-09-13：mmWave HR candidate preregistration v1 — FROZEN_PREREGISTRATION（未实现、未运行）
+
+**Reuse Gate**：本任务不重跑任何毫米波数据、不重算 ECG/RSP、不搜索阈值。复用 low-bias mechanism audit v1 的机制结论、`ecg_rsp_goldclean_reaudit_v1` 与 `physiology_reference_v1` 的既有 cohort 事实、以及 canonical producer 既有常量；没有新算法、没有新 gating rule、没有新 threshold。`REUSE_REJECTION_REASON`：既有 estimator improvement v1 只回答了"哪条规则能过门"（`NO_STABLE_IMPROVEMENT`），没有把机制假设固化成可验证的预注册，也没有建立独立验证集，因此需要一个只写规则与验证合同、不运行的步骤。
+
+**核心内容**：冻结两个候选 —— `C1_SPECTRAL_SCORING_NEUTRALITY`（频域打分中的 `-0.035*|c-time|` 与 `-0.025*|c-previous|` 邻近惩罚把谱峰拉向已经偏低的吸引子；依据是 `CONTROL_SPECTRAL` 的 bias 为三路最负 `-13.351010`）与 `C2_ANCHOR_PERSISTENCE`（anchor 以 `0.8*previous+0.2*fused` 且仅在 `confidence>=0.12` 时更新，`_smooth_track` 用 `alpha=0.20+0.30*confidence` 与 `±7.0 bpm` 限速，且 anchor 是 `gap>10 bpm` 时二选一的判据，本数据 31/100 个 probe 走该分支）。两者都只允许改"如何选择/如何记住心率"，共用同一套五条成功判据（MAE 改善 ≥ `1.0 bpm`、paired improve>worsen、单 session 恶化 ≤ `1.0 bpm`、`AE>10` 不增加、0 个 `correct→catastrophic` 转换）与四条失败判据。
+
+**关键调查结果**：当前唯一存在的 gold-clean per-window ECG 参考（`ecg_rsp_goldclean_reaudit_v1`，`sessions=5`、`ecg_usable_windows=100`）**只覆盖已被反复查看的 5 个开发 session**（`9779/97793/97794/97795/97796`），且该 cohort 设计为同一名参与者的重复测量，因此**参与者不重叠的验证集目前在该机器上不存在**。其余本地 ECG 来源（`sub-2_`–`sub-6_`、`sub-7_`、`sub-97792_`）是校准 session 或严重不足，不能直接当验证集。正式 cohort 有 `116 sessions / 61 participant groups / 2320 probes`，与开发集 session 重叠为 `0`，是现实可用的未触碰来源，唯一缺口是需要独立生成 per-window gold-clean ECG 参考。因此推荐 `OPT_A`（正式 cohort），并明确不推荐为了迁就现有数据而改窗口契约的 `OPT_B`。
+
+**决策与边界**：本任务状态为 `FROZEN_PREREGISTRATION / NO_CANDIDATE_IMPLEMENTED / NO_RUN_PERFORMED`；C1/C2 在 `MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1` 通过 `VS_1`–`VS_10` contract 之前**不得运行**。未修改 producer、snapshot v1、target/window/fusion/harmonic/threshold；未形成 snapshot v2；未训练模型；HRV 仍 `BLOCKED`。毫米波转为不阻塞主分析的受控验证并行线。
+
+**证据**：`docs/canonical/MMWAVE_HR_CANDIDATE_PREREGISTRATION_V1.md`、`docs/canonical/MMWAVE_HR_UNTOUCHED_VALIDATION_SET_PLAN_V1.md`、`docs/canonical/CANDIDATE_SUCCESS_CRITERIA_V1.csv`、`docs/canonical/MMWAVE_HR_CANDIDATE_PREREGISTRATION_V1_MANIFEST.json`、回归测试 `tests/test_mmwave_hr_candidate_preregistration.py`。
+
+---
+
 ### 2026-09-13：mmWave 系统性低估机制审计 v1 — MULTIFACTOR_MECHANISM_SUPPORTED
 
 **Reuse Gate**：完全复用 estimator improvement v1 冻结的同一批输入（5 sessions / 100 probes / ECG_VALID 100/100 / DLL host receive/enqueue 时间源 / `[window_effective_start, probe_onset)` nominal 30 s），三份输入 CSV 的 SHA-256 全部 exact match；没有新算法、没有新 threshold、没有新 gating rule。`REUSE_REJECTION_REASON`：既有 estimator improvement v1 只回答了"哪条 gating rule 能过门"（结论 NO_STABLE_IMPROVEMENT），没有回答"低估来自哪里"，因此需要一次只读的机制分解。

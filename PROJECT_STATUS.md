@@ -1,5 +1,14 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-09-13 mmWave HR candidate preregistration v1 — FROZEN_PREREGISTRATION（未实现、未运行）
+
+- 冻结两个机制来源明确的候选：`C1_SPECTRAL_SCORING_NEUTRALITY`（频域打分的 time/previous 邻近惩罚把谱峰拉向已偏低的吸引子；`CONTROL_SPECTRAL` bias `-13.351010` 为三路最负）与 `C2_ANCHOR_PERSISTENCE`（anchor 以 `0.8*previous+0.2*fused` 且仅在 `confidence>=0.12` 时更新；`_smooth_track` 用 `alpha=0.20+0.30*confidence` 与 `±7.0 bpm` 限速；anchor 又是 `gap>10 bpm` 时二选一的判据，本数据 31/100 probe 走该分支）。两者都只允许改"如何选择/如何记住心率"，共用同一套五条成功判据与四条失败判据。
+- 成功判据（两候选共用，实现前冻结）：MAE 相对 control 改善 ≥ `1.0 bpm`；paired improve>worsen；无单 session MAE 恶化 > `1.0 bpm`；`AE>10` 计数不增加；`control AE≤5 → candidate AE>10` 转换为 `0`。
+- 关键调查：唯一存在的 gold-clean per-window ECG 参考（`sessions=5`、`ecg_usable_windows=100`）**只覆盖已被反复查看的 5 个开发 session**，且为同一名参与者的重复测量，因此**参与者不重叠的验证集当前不存在**；其余本地 ECG 来源为校准 session 或窗口不足。正式 cohort `116 sessions / 61 participant groups / 2320 probes` 与开发集 session 重叠 `0`，推荐 `OPT_A` 作为未触碰验证来源，唯一缺口是独立生成 per-window gold-clean ECG 参考。
+- 硬门槛：C1/C2 在 `MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1` 通过 `VS_1`–`VS_10` contract 之前不得运行；通过独立验证才可讨论 snapshot v2；失败则保持 snapshot v1。
+- 本任务未运行任何数据、未实现任何候选、未改 producer / snapshot v1 / target / window / threshold，未形成 snapshot v2，HRV=`BLOCKED`。毫米波为不阻塞主分析的受控验证并行线。
+- 证据：`docs/canonical/MMWAVE_HR_CANDIDATE_PREREGISTRATION_V1.md`、`MMWAVE_HR_UNTOUCHED_VALIDATION_SET_PLAN_V1.md`、`CANDIDATE_SUCCESS_CRITERIA_V1.csv`、`MMWAVE_HR_CANDIDATE_PREREGISTRATION_V1_MANIFEST.json`；测试 `tests/test_mmwave_hr_candidate_preregistration.py`。
+
 ## 2026-09-13 mmWave 系统性低估机制审计 v1 — MULTIFACTOR_MECHANISM_SUPPORTED
 
 - 完全复用 estimator improvement v1 的冻结 denominator（5 sessions / 100 probes / ECG_VALID 100/100 / DLL-time 30 s），三份输入 SHA-256 exact match；`CONTROL_REPRODUCTION=PASS`（fused MAE `10.457079173` / bias `-9.033105842` / p90 AE `24.054346218`；time `8.996965770` / `-6.737621327`；spectral `15.123834193` / `-13.351010046`）。
