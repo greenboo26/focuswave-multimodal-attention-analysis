@@ -766,6 +766,16 @@ Behavior+mmWave 增量已经做过，不重跑：
 
 **复用门与决策**：`REUSE_REJECTION_REASON` 为既有 same-window audit 仅有 20 s denominator、strict 60 s=`NOT_APPLICABLE_TO_20S`，缺少 paired 60 s DLL-time window 与 paired ECG_VALID reference，故增加最小 wrapper；未按结果选长度，未新造 estimator。结论为 `PARTIAL / DIAGNOSTIC_ONLY`，formal window validity=`UNRESOLVED`，HR=`HOLD`；允许以后复用入口为 `scripts/maintenance/run_mmwave_window_length_comparison_20260830.py`，证据位于 `docs/results/2026-08-30_MMWAVE_TARGETED_VALIDATION/MMWAVE_WINDOW_LENGTH_*`，raw/row-level/large outputs 不入 Git。
 
+### 2026-09-12：mmWave integration snapshot v1 — PROVISIONAL_INTEGRATION_READY / PHYSIOLOGY_LIMITED
+
+**范围与复用门**：复用 exact producer `16729b2ef245f9304dae8674f3bac433bc02e98c` 已完成的 corrected DLL-time J72+E44 回放，不重跑 raw、producer、selector 或 estimator。正式分母固定为 116 sessions / 61 participant groups / 2,320 probes；五字段源键与 Task B 四字段键 expected/observed=`2320/2320`，duplicate/missing/extra=`0/0/0`。科学对齐明确为 CSV 零基索引第 1 列 DLL host receive/enqueue time；第 2 列 Python processing time 仅 QC。窗口保持 `[effective_start, probe_onset)`、30 s nominal、block-truncated。
+
+**可用性与变量**：109 sessions / 2,180 probes 的 fused HR 与 BR 可估计；5 sessions / 100 probes 为 malformed，2 sessions / 40 probes 为 source unavailable，均保留为空。科学特征只注册 cardiopulmonary 的 `mmwave_hr_fused_bpm_median` 与 `mmwave_breath_rate_breaths_per_min_median`。`mmwave_motion_proxy_median` 仍 diagnostic-only，没有合格 movement 特征；HRV 字段为空且状态继续 `BLOCKED`。未根据 P2 结果切换 HR representation。
+
+**接口验证与决策**：在 Attention-Analysis `5c7c82c53fd06477b8eef3b3ffedb7c630ead1a5` 上用 sub-031/sub-047/sub-099 共 60 个真实 probes 执行 Task B/materialize smoke；两类比较各 materialize 20 个 complete probes，duplicate=0，`models_trained=false`。科学映射使用 behavior/cardiopulmonary，设备单列 `required_devices=[mmwave]`。接口 PASS，但 `RegisteredFeature.modality`、`PlannedModel.modalities`、FeatureScheme、comparison plan 与 reporting 的 1.16.10 migration 仍 pending。结论为接口收口，不是生理或算法收口；Issue #35/#36 保持开放。
+
+**证据与复用**：Git-safe 包位于 `docs/results/2026-09-12_MMWAVE_INTEGRATION_SNAPSHOT_V1/`；local-only probe table 位于 `D:\Project\厚粲杯\11_数据\_FormalAnalysis\mmWave\mmwave_integration_snapshot_v1_20260912_r4\`，SHA-256=`fcf4baab0b5062c0500a5264c541f9f732c027c22adfeadf945e1397cadb7bd5`。失败的 r1-r3 仅为接口适配错误证据，不是结果。以后只有满足 replacement contract 的版本化受控重跑才可替代 v1。
+
 ## 14. 维护规则
 
 ### 2026-09-12：mmWave HR recovery P2 failure attribution — PASS / FAILURE_ATTRIBUTION_COMPLETE

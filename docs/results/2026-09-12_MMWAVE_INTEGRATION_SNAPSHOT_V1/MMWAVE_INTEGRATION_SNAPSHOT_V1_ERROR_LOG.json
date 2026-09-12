@@ -1,0 +1,25 @@
+{
+  "status": "PASS_WITH_RECORDED_LIMITATIONS",
+  "errors": [],
+  "problems": [
+    {
+      "id": "MMWAVE-V1-001",
+      "status": "OPEN_EXTERNAL",
+      "impact": "physiology limited",
+      "detail": "Issue #35/#36 remain open; no algorithm or physiology freeze"
+    },
+    {
+      "id": "MMWAVE-V1-002",
+      "status": "DEFERRED",
+      "impact": "no mmWave-derived movement scientific predictor",
+      "detail": "motion proxy remains diagnostic-only"
+    },
+    {
+      "id": "MMWAVE-V1-003",
+      "status": "OPEN_EXTERNAL",
+      "impact": "formal downstream model-plan migration pending",
+      "detail": "Attention-Analysis 1.16.10 modality/device split not implemented at inspected commit"
+    }
+  ],
+  "models_trained": false
+}

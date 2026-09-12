@@ -1,0 +1,5 @@
+﻿integration_state,rows,sessions,hr_finite,br_finite
+AVAILABLE,2180,109,2180,2180
+SOURCE_MALFORMED,100,5,0,0
+SOURCE_UNAVAILABLE,40,2,0,0
+TOTAL,2320,116,2180,2180

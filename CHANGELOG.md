@@ -1,5 +1,12 @@
 # 修改说明
 
+## 2026-09-12 — feat(mmwave): publish integration snapshot v1 without algorithm promotion
+
+- Packaged the existing corrected DLL-time J72+E44 replay into a versioned schema and feature registry, preserving 116 sessions, 61 participant groups and 2,320 probes. The availability split is 109 sessions / 2,180 estimable probes and 7 sessions / 140 retained unavailable or malformed probes.
+- Fixed the scientific interface clock to CSV zero-based column index 1 (DLL host receive/enqueue); index 2 remains Python-processing QC only. Preserved the right-open, block-truncated nominal 30 s window.
+- Registered only fused HR and BR as provisional cardiopulmonary features. Motion proxy remains diagnostic-only, no mmWave movement feature is eligible, and HRV remains blocked.
+- Added a real 3-session Task B/materialize smoke, schema, role map, manifest, error log, formal report, replacement contract and handoff. The interface passes; downstream Attention-Analysis 1.16.10 modality/device migration remains pending. No model was trained and no estimator was changed.
+
 ## 2026-09-12 — audit(mmwave): close P0 HR recovery lineage and freeze P1 restoration bundle
 
 - Added a 26-stage historical-versus-current pipeline audit, machine-readable stage evidence, and a provenance manifest. The audit distinguishes historical 5-session/99-valid 60 s fixed-target `3.7772146 bpm` from the current 5-session/100-probe 30 s DLL-time `10.46 bpm` supporting result.

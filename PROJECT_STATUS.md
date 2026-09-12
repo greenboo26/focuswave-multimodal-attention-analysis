@@ -1,5 +1,13 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-09-12 mmWave integration snapshot v1 — PROVISIONAL_INTEGRATION_READY / PHYSIOLOGY_LIMITED
+
+- 已将 corrected DLL-time 正式回放包装为版本化接口快照：116 sessions / 61 participant groups / 2,320 probes；109 sessions / 2,180 probes 可估计，7 sessions / 140 probes 以来源不可用或 malformed 状态保留为空。五字段源键与 Task B 四字段键均 2,320/2,320，duplicate/missing/extra=`0/0/0`。
+- 科学对齐固定为 CSV 零基索引第 1 列 DLL host receive/enqueue time；第 2 列 Python processing time 仅作 QC。窗口固定为 `[effective_start, probe_onset)`、30 s nominal、block-truncated。
+- 科学变量仅为 cardiopulmonary 的 fused HR 与 BR；motion proxy 仍 diagnostic-only，没有合格的 mmWave movement 特征。HR/BR=`PROVISIONAL / PHYSIOLOGY_LIMITED`，HRV=`BLOCKED`，未训练模型，未冻结算法。
+- 3-session/60-probe 真实 Task B/materialize smoke PASS，完整案例 20 probes；但 Attention-Analysis `5c7c82c` 的 1.16.10 modality/device migration 仍 pending，不能把 `mmwave` 当科学模态。
+- 证据：[report](docs/results/2026-09-12_MMWAVE_INTEGRATION_SNAPSHOT_V1/MMWAVE_INTEGRATION_SNAPSHOT_V1_REPORT.md)、[manifest](docs/results/2026-09-12_MMWAVE_INTEGRATION_SNAPSHOT_V1/MMWAVE_INTEGRATION_SNAPSHOT_V1_MANIFEST.json)、[replacement contract](docs/results/2026-09-12_MMWAVE_INTEGRATION_SNAPSHOT_V1/MMWAVE_INTEGRATION_SNAPSHOT_V1_REPLACEMENT_CONTRACT.md)。Issue #35/#36 保持开放；#41 为当前 durable integration lane。
+
 ## 2026-09-12 mmWave HR recovery P1 — PASS / RESTORATION NOT SUPPORTED
 
 - 在 exact `16729b2` 与冻结 B2 content identity 上先复现 5-session/100-probe control：CSV 与历史 B2 逐单元格差异=`0`、SHA-256 相同；fused HR MAE=`10.4601 bpm`、medianAE=`7.8590`、bias=`−9.0160`、coverage=`100/100`。

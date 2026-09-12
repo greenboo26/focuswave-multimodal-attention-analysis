@@ -1,0 +1,261 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "focuswave:mmwave_integration_snapshot_v1",
+  "title": "FocusWave mmWave integration snapshot v1 probe row",
+  "type": "object",
+  "required": [
+    "participant_group_id",
+    "repeat_participant_id",
+    "session_id",
+    "block_id",
+    "source_block_id",
+    "probe_index_in_block",
+    "probe_id",
+    "window_name",
+    "window_nominal_start_unix_ms",
+    "window_effective_start_unix_ms",
+    "window_end_unix_ms",
+    "probe_onset_unix_ms",
+    "alignment_clock_source",
+    "mmwave_hr_fused_bpm_median",
+    "mmwave_breath_rate_breaths_per_min_median",
+    "mmwave_timestamp_coverage_fraction",
+    "mmwave_hr_mean_confidence",
+    "mmwave_hr_usable_window_fraction",
+    "mmwave_phase_stability_median",
+    "mmwave_motion_proxy_median",
+    "mmwave_hr_freq_bpm_median",
+    "mmwave_hr_time_bpm_median",
+    "mmwave_selected_bin_mode",
+    "mmwave_selected_channel_mode",
+    "mmwave_selected_bin_distance_proxy_m",
+    "mmwave_target_switch_rate",
+    "source_availability_state",
+    "source_readability_state",
+    "estimability_state",
+    "measurement_qc_state",
+    "malformed_state",
+    "integration_state",
+    "producer_state",
+    "missing_reason",
+    "snapshot_version",
+    "producer_commit",
+    "producer_adapter_version",
+    "source_run_id",
+    "snapshot_run_id"
+  ],
+  "properties": {
+    "participant_group_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "repeat_participant_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "block_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_block_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "probe_index_in_block": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "probe_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "window_name": {
+      "const": "pre_30s"
+    },
+    "window_nominal_start_unix_ms": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "window_effective_start_unix_ms": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "window_end_unix_ms": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "probe_onset_unix_ms": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "alignment_clock_source": {
+      "const": "dll_host_receive_enqueue"
+    },
+    "mmwave_hr_fused_bpm_median": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "mmwave_breath_rate_breaths_per_min_median": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "mmwave_timestamp_coverage_fraction": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "mmwave_hr_mean_confidence": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "mmwave_hr_usable_window_fraction": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "mmwave_phase_stability_median": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "mmwave_motion_proxy_median": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "mmwave_hr_freq_bpm_median": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "mmwave_hr_time_bpm_median": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "mmwave_selected_bin_mode": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "mmwave_selected_channel_mode": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "mmwave_selected_bin_distance_proxy_m": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "mmwave_target_switch_rate": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "source_availability_state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_readability_state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "estimability_state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "measurement_qc_state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "malformed_state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "integration_state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "producer_state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "missing_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "snapshot_version": {
+      "const": "mmwave_integration_snapshot_v1"
+    },
+    "producer_commit": {
+      "type": "string",
+      "minLength": 1
+    },
+    "producer_adapter_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_run_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "snapshot_run_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,8 +1,16 @@
 # mmWave canonical state, branch consolidation, and multimodal interface — V1
 
-Status: `CANONICAL / MAIN-BOUND / INTERFACE_CONTRACT_FROZEN / ADAPTER_IMPLEMENTATION_PENDING`
+Status: `CANONICAL / MAIN-BOUND / MMWAVE_INTEGRATION_SNAPSHOT_V1_READY / PHYSIOLOGY_LIMITED`
 
 Effective date: 2026-08-30. This document is the first mmWave-specific state authority for any AI or human entering the canonical repository. It consolidates branch history, current scientific decisions, time semantics, and the reserved multimodal interface. It does not rerun science and does not promote HR/BR/HRV beyond their existing evidence boundaries.
+
+## Current implementation pointer — 2026-09-12
+
+The governed implementation is now `mmwave_integration_snapshot_v1`, documented under `docs/results/2026-09-12_MMWAVE_INTEGRATION_SNAPSHOT_V1/`. It packages the existing corrected replay without changing the algorithm: 116 sessions / 61 participant groups / 2,320 probes, with 109 sessions / 2,180 probes estimable and all 140 unavailable or malformed probes retained as missing.
+
+Scientific alignment uses CSV zero-based timestamp column index 1, the DLL host receive/enqueue time. Index 2 is Python worker processing time and is QC-only. The window remains right-open `[window_effective_start_unix_ms, probe_onset_unix_ms)`, nominally 30 s and truncated at block start. Any older natural-language reference to the “second timestamp column” is superseded by these explicit zero-based indices.
+
+Only fused HR and BR are registered as provisional cardiopulmonary scientific features. The motion proxy remains diagnostic-only, no mmWave movement feature is eligible, and HRV remains blocked. Task B/materialize schema smoke passed on three real sessions, but the downstream Attention-Analysis 1.16.10 modality/device migration remains pending. This is an integration closure, not an estimator or physiology closure.
 
 ## 1. Authority and time handling
 

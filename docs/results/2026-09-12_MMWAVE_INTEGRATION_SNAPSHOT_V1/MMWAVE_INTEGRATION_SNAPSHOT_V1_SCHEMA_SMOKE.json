@@ -1,0 +1,151 @@
+{
+  "status": "PASS_INTERFACE_WITH_DOWNSTREAM_1_16_10_MIGRATION_PENDING",
+  "attention_repository": "https://github.com/kyandi233-dev/Attention-Analysis.git",
+  "attention_commit": "5c7c82c53fd06477b8eef3b3ffedb7c630ead1a5",
+  "smoke_sessions": [
+    "sub-031",
+    "sub-047",
+    "sub-099"
+  ],
+  "smoke_session_roles": {
+    "sub-031": "available",
+    "sub-047": "source_unavailable",
+    "sub-099": "source_malformed_npz_timestamp_count_mismatch"
+  },
+  "input_probe_rows": 60,
+  "input_duplicate_keys": 0,
+  "scientific_modalities_used": [
+    "behavior",
+    "cardiopulmonary"
+  ],
+  "required_devices_for_cardiopulmonary": [
+    "mmwave"
+  ],
+  "required_features": {
+    "cardiopulmonary_only_snapshot_v1": {
+      "cardiopulmonary": [
+        "mmwave_hr_fused_bpm_median",
+        "mmwave_breath_rate_breaths_per_min_median"
+      ]
+    },
+    "behavior_vs_behavior_plus_cardiopulmonary_snapshot_v1": {
+      "behavior": [
+        "raw_go_omission_rate"
+      ],
+      "cardiopulmonary": [
+        "mmwave_hr_fused_bpm_median",
+        "mmwave_breath_rate_breaths_per_min_median"
+      ]
+    }
+  },
+  "analysis_set_summary": [
+    {
+      "analysis_set_id": "cardiopulmonary_only_snapshot_v1",
+      "membership": "included_complete",
+      "probe_n": 20,
+      "session_n": 1,
+      "participant_group_n": 1,
+      "required_features": "{\"cardiopulmonary\": [\"mmwave_hr_fused_bpm_median\", \"mmwave_breath_rate_breaths_per_min_median\"]}",
+      "required_outcomes": "[\"q1_nominal_4class\"]"
+    },
+    {
+      "analysis_set_id": "cardiopulmonary_only_snapshot_v1",
+      "membership": "included_missing_aware",
+      "probe_n": 20,
+      "session_n": 1,
+      "participant_group_n": 1,
+      "required_features": "{\"cardiopulmonary\": [\"mmwave_hr_fused_bpm_median\", \"mmwave_breath_rate_breaths_per_min_median\"]}",
+      "required_outcomes": "[\"q1_nominal_4class\"]"
+    },
+    {
+      "analysis_set_id": "behavior_vs_behavior_plus_cardiopulmonary_snapshot_v1",
+      "membership": "included_complete",
+      "probe_n": 20,
+      "session_n": 1,
+      "participant_group_n": 1,
+      "required_features": "{\"behavior\": [\"raw_go_omission_rate\"], \"cardiopulmonary\": [\"mmwave_hr_fused_bpm_median\", \"mmwave_breath_rate_breaths_per_min_median\"]}",
+      "required_outcomes": "[\"q1_nominal_4class\"]"
+    },
+    {
+      "analysis_set_id": "behavior_vs_behavior_plus_cardiopulmonary_snapshot_v1",
+      "membership": "included_missing_aware",
+      "probe_n": 20,
+      "session_n": 1,
+      "participant_group_n": 1,
+      "required_features": "{\"behavior\": [\"raw_go_omission_rate\"], \"cardiopulmonary\": [\"mmwave_hr_fused_bpm_median\", \"mmwave_breath_rate_breaths_per_min_median\"]}",
+      "required_outcomes": "[\"q1_nominal_4class\"]"
+    }
+  ],
+  "materialized_rows": {
+    "cardiopulmonary_only_snapshot_v1": 20,
+    "behavior_vs_behavior_plus_cardiopulmonary_snapshot_v1": 20
+  },
+  "materialized_duplicate_keys": {
+    "cardiopulmonary_only_snapshot_v1": 0,
+    "behavior_vs_behavior_plus_cardiopulmonary_snapshot_v1": 0
+  },
+  "materialized_columns": {
+    "cardiopulmonary_only_snapshot_v1": [
+      "session_id",
+      "block_id",
+      "probe_index_in_block",
+      "participant_group_id",
+      "analysis_set_id",
+      "probe_event_id",
+      "probe_order_in_block",
+      "q1_nominal_4class",
+      "q2_ordinal_4level",
+      "window_name",
+      "membership_type",
+      "comparison_models",
+      "required_features",
+      "required_outcomes",
+      "probe_time_ms",
+      "mmwave_hr_fused_bpm_median",
+      "mmwave_breath_rate_breaths_per_min_median"
+    ],
+    "behavior_vs_behavior_plus_cardiopulmonary_snapshot_v1": [
+      "session_id",
+      "block_id",
+      "probe_index_in_block",
+      "participant_group_id",
+      "analysis_set_id",
+      "probe_event_id",
+      "probe_order_in_block",
+      "q1_nominal_4class",
+      "q2_ordinal_4level",
+      "window_name",
+      "membership_type",
+      "comparison_models",
+      "required_features",
+      "required_outcomes",
+      "probe_time_ms",
+      "raw_go_omission_rate",
+      "mmwave_hr_fused_bpm_median",
+      "mmwave_breath_rate_breaths_per_min_median"
+    ]
+  },
+  "hrv_columns_present": [],
+  "models_trained": false,
+  "task_b_interface": "PASS",
+  "materialize_interface": "PASS",
+  "task_a_schema_consumable": "PASS",
+  "downstream_1_16_10_migration": "PENDING: RegisteredFeature.modality, PlannedModel.modalities, FeatureScheme modality/device split, comparison-plan and reporting",
+  "local_only_outputs": [
+    {
+      "path": "D:\\Project\\厚粲杯\\11_数据\\_FormalAnalysis\\mmWave\\mmwave_integration_snapshot_v1_20260912_r4\\SCHEMA_SMOKE_TASK_B_ANALYSIS_SETS_LOCAL_ONLY.csv",
+      "rows": 120,
+      "sha256": "ddf24d4873ff8a689f07757ef43efa61668ba6e72d7fa7e9529eb7592404f8f6"
+    },
+    {
+      "path": "D:\\Project\\厚粲杯\\11_数据\\_FormalAnalysis\\mmWave\\mmwave_integration_snapshot_v1_20260912_r4\\SCHEMA_SMOKE_PROBE_FEATURE_STATUS_LOCAL_ONLY.csv",
+      "rows": 180,
+      "sha256": "0760dc66b3b49ea5fa940e41f48c9fc8eeeb75af233235798c2f23b238031c79"
+    },
+    {
+      "path": "D:\\Project\\厚粲杯\\11_数据\\_FormalAnalysis\\mmWave\\mmwave_integration_snapshot_v1_20260912_r4\\SCHEMA_SMOKE_TASK_A_MATERIALIZED_LOCAL_ONLY.csv",
+      "rows": 20,
+      "sha256": "6df884e267d8aaf8936b5b485735132af764d2d53b6c0a4e83efe22386677ddc"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+﻿field,role,meaning,unit,first_round_scientific_predictor
+participant_group_id,identity,canonical statistical participant identity,id,False
+repeat_participant_id,identity,legacy/source participant identity,id,False
+session_id,identity,acquisition session identity,id,False
+block_id,identity,normalized formal block identity,id,False
+probe_index_in_block,identity,probe ordinal within block,index,False
+probe_id,identity,source probe identifier,id,False
+window_name,time,formal window name,name,False
+window_nominal_start_unix_ms,time,probe onset minus 30 seconds,ms,False
+window_effective_start_unix_ms,time,nominal start truncated at formal block start when required,ms,False
+window_end_unix_ms,time,right-exclusive probe onset,ms,False
+probe_onset_unix_ms,time,formal probe onset,ms,False
+alignment_clock_source,provenance,DLL host receive/enqueue timestamp,name,False
+mmwave_hr_fused_bpm_median,scientific,radar-derived heart-rate estimate; current formal fused representation,bpm,True
+mmwave_breath_rate_breaths_per_min_median,scientific,radar-derived respiration-rate estimate,breaths_per_min,True
+mmwave_timestamp_coverage_fraction,qc,authoritative timestamp coverage,fraction,False
+mmwave_hr_mean_confidence,qc,producer confidence summary; not physiological validity,score,False
+mmwave_hr_usable_window_fraction,qc,legacy adapter availability-like field; not a scientific predictor,fraction,False
+mmwave_phase_stability_median,qc,phase stability diagnostic,score,False
+mmwave_motion_proxy_median,diagnostic,radar motion-like QC proxy; no current movement-feature qualification,score,False
+mmwave_hr_freq_bpm_median,diagnostic,frequency-domain HR representation,bpm,False
+mmwave_hr_time_bpm_median,diagnostic,time-domain HR representation,bpm,False
+mmwave_selected_bin_mode,diagnostic,selected range-bin mode,bin,False
+mmwave_selected_channel_mode,diagnostic,selected channel mode,channel,False
+mmwave_selected_bin_distance_proxy_m,diagnostic,range-bin distance proxy; not measured chest distance,m,False
+mmwave_target_switch_rate,diagnostic,target-switch metric when available,fraction,False
+source_availability_state,state,source presence classification,enum,False
+source_readability_state,state,source readability classification,enum,False
+estimability_state,state,feature estimability classification,enum,False
+measurement_qc_state,state,measurement QC state separate from source state,enum,False
+malformed_state,state,malformed/error state separate from missingness,enum,False
+integration_state,state,normalized integration availability state,enum,False
+producer_state,state,unaltered producer/adapter row state,enum,False
+missing_reason,state,unaltered failure reason,reason,False
+snapshot_version,provenance,versioned replaceable interface identity,version,False
+producer_commit,provenance,exact producer source commit,git_sha,False
+producer_adapter_version,provenance,producer adapter pipeline version,version,False
+source_run_id,provenance,source replay run identifier,id,False
+snapshot_run_id,provenance,integration packaging run identifier,id,False
+mmwave_ibi_median_ms,prohibited,radar inter-beat interval; blocked,ms,False
+mmwave_rmssd_ms,prohibited,HRV RMSSD; blocked,ms,False
+mmwave_sdnn_ms,prohibited,HRV SDNN; blocked,ms,False
+LF,prohibited,HRV low-frequency power; not present,unknown,False
+HF,prohibited,HRV high-frequency power; not present,unknown,False
+LF_HF,prohibited,HRV LF/HF ratio; not present,ratio,False
