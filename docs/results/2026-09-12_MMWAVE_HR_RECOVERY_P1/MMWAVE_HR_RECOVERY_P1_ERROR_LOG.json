@@ -1,0 +1,28 @@
+{
+  "task_id": "mmwave_hr_recovery_p1",
+  "events": [
+    {
+      "id": "P1-RUN-ENV-001",
+      "state": "RESOLVED",
+      "impact": "No scientific computation started and no result was produced.",
+      "error": "ModuleNotFoundError: No module named 'bioread'",
+      "failed_output": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_hr_recovery_p1_20260912_control_r1",
+      "resolution": "Reused the existing .venv_t0 environment; reran in a new control_r2 directory."
+    },
+    {
+      "id": "P1-SUMMARY-IO-001",
+      "state": "RESOLVED",
+      "impact": "No paired result was produced or overwritten.",
+      "error": "Outer stdout redirection targeted a directory before the summarizer created it.",
+      "failed_output": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_hr_recovery_p1_20260912_paired_r2",
+      "resolution": "Removed outer redirection and used a fresh paired output directory."
+    },
+    {
+      "id": "P1-DENOMINATOR-97792",
+      "state": "FROZEN_NOT_ESTIMABLE",
+      "impact": "Not part of the fixed five-session/100-probe B2 denominator.",
+      "error": "No formal probe windows in behavior Block CSV/events.csv.",
+      "resolution": "Preserved the existing B2 five-session denominator; no row or session substitution."
+    }
+  ]
+}

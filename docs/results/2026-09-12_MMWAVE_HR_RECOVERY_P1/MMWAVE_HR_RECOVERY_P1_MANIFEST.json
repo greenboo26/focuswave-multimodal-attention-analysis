@@ -1,0 +1,41 @@
+{
+  "task_id": "mmwave_hr_recovery_p1",
+  "source_commit": "16729b2ef245f9304dae8674f3bac433bc02e98c",
+  "source_parent": "b2fddca2542859f62d5f4b57f1b4fdecd54a5b4c",
+  "remote_main_at_start": "ac740c8ca449416562203d48c3ddc738c9d47bf7",
+  "governance_main_at_start": "add39f53560f5547db04bbfc0db2607c24ff45e5",
+  "b2_frozen_identity": {
+    "adapter_sha256": "4854AAA20244FC35949E16F205072A2C45B0F7BAE939002CEB136C530DF3CB4D",
+    "test_sha256": "5D1195E3F86F7D6D1ADD4125E9C223314A236FAF9730D8DB374BFD0858D5865D",
+    "historical_output_sha256": "967FCC304EF4DDAB3B9CA9F9C8F6BC2AC6C6D20C02C43D880DFD436ACCFF00D9"
+  },
+  "inputs": {
+    "control": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_hr_recovery_p1_20260912_control_audit_r4\\all_subjects_pre30s_selector_hr.csv",
+    "control_sha256": "7FC0B77707B2F0D99987775D1DD01270C8D15B48BE3CEFDAAB12DF68EC328A21",
+    "restoration": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_hr_recovery_p1_20260912_restoration_r1\\all_subjects_pre30s_selector_hr.csv",
+    "restoration_sha256": "29E018AF73194CD0F78E0ADA052CB619466E178CCA0A8D550A88C5E6DEEA5467"
+  },
+  "outputs": {
+    "paired_table": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_hr_recovery_p1_20260912_paired_r4\\MMWAVE_HR_RECOVERY_P1_PAIRED_100_PROBES.csv",
+    "paired_table_sha256": "15A5E5C7C7FAEF5AB40AEE888321D2BDB08303ED1A0CCE80FFA7C30A9526C38F",
+    "summary": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_hr_recovery_p1_20260912_paired_r4\\MMWAVE_HR_RECOVERY_P1_SUMMARY.json",
+    "summary_sha256": "A1AF3EA91623A88196BAEBCC3AD72B522F25EC5F9BDFBCC82F6EE6A4C531C4B3",
+    "per_session": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_hr_recovery_p1_20260912_paired_r4\\MMWAVE_HR_RECOVERY_P1_PER_SESSION.csv",
+    "per_session_sha256": "274DA2AA950BA504D55E63E7D0675E765FED720A48C55BF84EDA0EBA0E5C4BB7",
+    "invariant_differences": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_hr_recovery_p1_20260912_paired_r4\\MMWAVE_HR_RECOVERY_P1_INVARIANT_DIFFERENCES.csv",
+    "invariant_differences_sha256": "CA9EB8C6FC8FA36F0E1DADCF547C63554FFA923CCDED8C46AFB3023DA5EB95F3",
+    "error_log": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_hr_recovery_p1_20260912_paired_r4\\MMWAVE_HR_RECOVERY_P1_ERROR_LOG.json",
+    "error_log_sha256": "CB9A7396D7624FC9049CFF75F05FD46C838F6D8FDA06C7ED6A9D82E2199C35B2",
+    "source_identity": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_hr_recovery_p1_20260912_paired_r4\\MMWAVE_HR_RECOVERY_P1_SOURCE_IDENTITY.json",
+    "source_identity_sha256": "7874E2880646FF25829CEC4C132977FC160E9D358CF3941BE826541A22392824"
+  },
+  "python": "3.14.6 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:29:05) [MSC v.1942 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26100-SP0",
+  "numpy": "2.4.6",
+  "models_trained": false,
+  "formal_producer_modified": false,
+  "hr_br_status": "HOLD_SUPPORTING_ONLY",
+  "hrv_status": "BLOCKED",
+  "p2_ready": true,
+  "p2_executed": false
+}

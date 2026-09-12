@@ -1,5 +1,13 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-09-12 mmWave HR recovery P1 — PASS / RESTORATION NOT SUPPORTED
+
+- 在 exact `16729b2` 与冻结 B2 content identity 上先复现 5-session/100-probe control：CSV 与历史 B2 逐单元格差异=`0`、SHA-256 相同；fused HR MAE=`10.4601 bpm`、medianAE=`7.8590`、bias=`−9.0160`、coverage=`100/100`。
+- 只恢复 P0 批准的 segment reference correction、window consensus、consensus-seeded 25 s/5 s course 与 existing global signal hard gate；未改 producer、target/bin/channel/window/BR/motion/phase/timestamp/QC deterministic fields，未用 ECG 调参。
+- Restoration fused HR MAE=`13.1737 bpm`、medianAE=`11.7075`、bias=`−11.9765`、RMSE=`17.4762`、coverage=`100/100`；improve/worsen/tie=`30/70/0`，五场 MAE 全部劣化，gate hit=`0`。100/100 paired keys 与 invariant gate PASS、越界 deterministic differences=`0`。
+- 结论为 `PASS / RESTORATION_NOT_SUPPORTED`：恢复束不进入正式 producer；HR/BR=`HOLD / SUPPORTING_ONLY`，HRV=`BLOCKED`，未训练模型。P2 依赖已解锁但未执行；P3/P5/HRV/下游仍未授权。
+- 证据：[P1 report](docs/results/2026-09-12_MMWAVE_HR_RECOVERY_P1/MMWAVE_HR_RECOVERY_P1_REPORT.md)、[summary](docs/results/2026-09-12_MMWAVE_HR_RECOVERY_P1/MMWAVE_HR_RECOVERY_P1_SUMMARY.json)、[manifest](docs/results/2026-09-12_MMWAVE_HR_RECOVERY_P1/MMWAVE_HR_RECOVERY_P1_MANIFEST.json)；逐 probe 100-row paired table 为 local-only，路径与 SHA-256 已登记。
+
 ## 2026-09-12 mmWave HR recovery P0 lineage audit — PASS / P1 READY WITH SOURCE PRECONDITION
 
 - 已逐项闭合历史 `run_hr_course_99_corrected.py → process_vital_signs_v3_1_1.py`（`64634159`，5 sessions/99 valid 60 s windows，HR MAE=`3.7772146 bpm`）与当前 DLL-time 正式 probe adapter（`16729b2`）的 26 阶段 lineage。`3.777` 是历史 fixed-target/full-chain comparator，不是当前 30 s DLL-time 同窗基线。

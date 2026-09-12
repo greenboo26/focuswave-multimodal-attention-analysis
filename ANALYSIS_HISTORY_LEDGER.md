@@ -773,6 +773,16 @@ Behavior+mmWave 增量已经做过，不重跑：
 `日期 → repo/ref/commit → 输入范围 → 脚本/配置 → 核心结果 → 决策 → 是否允许以后重复 → 被什么证据替代（如有）`
 
 **不允许再出现“其实两周前做过，但后来智能体因为没看到记录又花钱重跑”的情况。**
+### 2026-09-12：mmWave HR recovery P1 paired A/B — PASS / RESTORATION NOT SUPPORTED
+
+**范围与源码门**：启动时 canonical `main=ac740c8ca449416562203d48c3ddc738c9d47bf7`，execution source 固定为 exact `16729b2ef245f9304dae8674f3bac433bc02e98c`（parent=`b2fddca2542859f62d5f4b57f1b4fdecd54a5b4c`）。B2 adapter/test/output SHA-256 分别为 `4854AAA2...`、`5D1195E3...`、`967FCC30...`。先原样复现 5-session/100-probe control，CSV 与历史 B2 cell diff=`0` 且 hash 相同；未重做 P0，未进入 P2/P3/P5/HRV/注意模型。
+
+**唯一恢复束与 invariant**：只调用 producer existing `_heart_segment_reference_correction`、`_heart_window_consensus_bpm`、consensus-seeded `estimate_hr_time_course` 与 global signal hard gate；RSP harmonic input=`None`，ECG 仅在两臂独立估计后评价。100/100 paired keys；frame indices/hash/count、window、bin/channel、distance proxy、BR、motion、phase、timestamp/QC 等 deterministic differences=`0`；gate hit=`0`，missing/QC 为 `ESTIMATED→ESTIMATED=100`。
+
+**数值与决策**：control→restoration 的 spectral/time/fused HR MAE 为 `15.1134→16.6626`、`8.9695→10.6764`、`10.4601→13.1737 bpm`；fused medianAE=`7.8590→11.7075`，bias=`−9.0160→−11.9765`，RMSE=`14.2659→17.4762`，coverage=`100/100→100/100`。Probe improve/worsen/tie=`30/70/0`，五场 MAE 全部劣化。因此 `P1_VERDICT=PASS / RESTORATION_NOT_SUPPORTED`，不修改正式 producer；HR/BR HOLD，HRV BLOCKED。P2 依赖已解锁但未执行。
+
+**证据**：`docs/results/2026-09-12_MMWAVE_HR_RECOVERY_P1/`；入口为 `scripts/maintenance/run_mmwave_hr_recovery_p1_20260912.py` 与 `summarize_mmwave_hr_recovery_p1_20260912.py`。逐 probe paired table 与完整 diagnostics 为 local-only：`D:\Project\厚粲杯\11_数据\derived\mmwave_hr_recovery_p1_20260912_paired_r4\`。Issue #33/DLL/B2/P1 tests=`14 passed`，`py_compile` 与 diff check PASS，`models_trained=false`。
+
 ### 2026-09-12：180 s mmWave baseline personalization asset/method audit — AUDIT_COMPLETE / P3 NOT READY
 
 **范围与复用门**：固定旧表 `J72 + E44 = 116 sessions / 2320 probes`，复用 acquisition 的 180 s baseline 事件、DLL host receive timestamp、commit `16729b2` 的正式 adapter/producer、历史 fixed-target lineage 与旧 C2C baseline feature 代码；只新增 read-only audit/summarizer。未修改 producer/raw/acquisition，未实现最终 selector，未用 ECG/注意标签调 target，未训练模型。旧 C2C 因 J-only、Python-time、无 target/bin/channel anchor 且包含监督注意模型而不能原样作为 P3。
