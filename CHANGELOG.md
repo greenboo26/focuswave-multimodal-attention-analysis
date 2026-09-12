@@ -1,5 +1,11 @@
 # 修改说明
 
+## 2026-09-12 — audit(mmwave): reconcile strict reference lineage and reject unstable estimator candidates
+
+- Reused the exact 100-key gold-clean ECG/RSP reference and existing formal mmWave QC lineage without changing thresholds, windows, targets, the formal producer, or integration snapshot v1.
+- Parameterized the P2 audit runner for an optional strict reference input while preserving its default historical behavior, then re-attributed the same 100 probes with strict ECG values.
+- Added three predeclared mmWave-only estimator hypotheses, paired/session/failure-class/bias summaries, local-only probe details, tests, manifest, report, and handoff. H1 improved aggregate MAE but introduced a new >10 bpm failure from a previously correct window; H1/H3 failed the catastrophic-failure gate and H2 failed the 3-of-5-session gate. No stable candidate or snapshot v2 was formed.
+
 ## 2026-09-12 — audit(mmwave): close P0 HR recovery lineage and freeze P1 restoration bundle
 
 - Added a 26-stage historical-versus-current pipeline audit, machine-readable stage evidence, and a provenance manifest. The audit distinguishes historical 5-session/99-valid 60 s fixed-target `3.7772146 bpm` from the current 5-session/100-probe 30 s DLL-time `10.46 bpm` supporting result.

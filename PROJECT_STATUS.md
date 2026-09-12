@@ -1,5 +1,13 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-09-12 mmWave estimator improvement v1 — NO_STABLE_IMPROVEMENT
+
+- Phase A 复用既有 `gold_standard_qa.py` 与 `ecg_rsp_goldclean_reaudit_v1`：当前 P2 5 场/100 probe/探针前 30 s 的 key 100/100 精确匹配；`ECG_VALID/ECG_INVALID/UNRESOLVED=100/0/0`，RSP 基本/严格可用=`95/79`。未调参考阈值，未删除窗口。
+- 严格 ECG 重归因后 P2 为 correct/near=`39`、selected-target wrong peak=`27`、harmonic/half-double=`18`、target bin/channel miss=`16`，主路线仍为 estimator/peak/harmonic/fusion；不是 target-only。
+- 冻结测试三条毫米波专用规则。观察上最优的 `H1_WARNING_TIME_GATE` 以既有 `>10 bpm` 时频警告触发时域心率回退，将融合心率平均绝对误差（mean absolute error [MAE]）从 `10.457079` 降至 `9.618844 bpm`，配对改善/恶化/持平=`8/1/91`，4/5 场改善、1 场持平；但它把一个原本绝对误差不超过 5 bpm 的窗口推至大于 10 bpm，且单窗恶化超过 5 bpm，违反灾难性失败门。`H3` 同样被该门拒绝；`H2` 因不足 3/5 场改善而拒绝。
+- 当前时域心率对照 MAE=`8.996966 bpm`，仍优于 H1；三条规则均未通过冻结门，故结论为 `NO_STABLE_IMPROVEMENT`，`BEST_CANDIDATE=NONE`，`V2_CANDIDATE_STATUS=NOT_FORMED`。5 场均已被心电图 oracle 反复查看，也没有未触碰、参与者/场次不重叠的验证集；未进入正式 producer，未发布 snapshot v2，未修改 integration snapshot v1。
+- 证据：`docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/`；逐 probe reference/candidate 与最大误差表保留 local-only，路径及 SHA-256 在 manifest 中。HR/BR 继续 `HOLD / SUPPORTING_ONLY`，HRV=`BLOCKED`，`models_trained=false`。
+
 ## 2026-09-12 mmWave HR recovery P1 — PASS / RESTORATION NOT SUPPORTED
 
 - 在 exact `16729b2` 与冻结 B2 content identity 上先复现 5-session/100-probe control：CSV 与历史 B2 逐单元格差异=`0`、SHA-256 相同；fused HR MAE=`10.4601 bpm`、medianAE=`7.8590`、bias=`−9.0160`、coverage=`100/100`。
