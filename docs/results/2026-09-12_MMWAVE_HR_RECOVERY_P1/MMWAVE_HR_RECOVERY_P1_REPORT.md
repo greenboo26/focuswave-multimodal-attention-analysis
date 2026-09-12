@@ -1,8 +1,10 @@
 # FocusWave mmWave HR recovery P1 paired A/B report
 
-日期：2026-09-12  
-任务：`mmwave_hr_recovery_p1`  
-状态：`PASS / RESTORATION_NOT_SUPPORTED`  
+日期：2026-09-12
+
+任务：`mmwave_hr_recovery_p1`
+
+状态：`PASS / RESTORATION_NOT_SUPPORTED`
 研究边界：毫米波（millimeter wave [mmWave]）心率（heart rate [HR]）恢复链 P1；未执行 P2 failure attribution（失败归因）、P3 baseline personalization（基线个体化）、P5 30/60 s 比较、心率变异性（heart-rate variability [HRV]）或注意状态模型。
 
 ## 1. 结论
@@ -14,6 +16,7 @@
 ## 2. Reuse Gate 与源码身份
 
 - canonical repository：`greenboo26/focuswave-multimodal-attention-analysis`；启动时 `origin/main=ac740c8ca449416562203d48c3ddc738c9d47bf7`；治理 `origin/main=add39f53560f5547db04bbfc0db2607c24ff45e5`。
+- P1 durable artifact commit：`a6ebdb9295bb471b4da5c85c62137e52433efbe8`。
 - execution source：`16729b2ef245f9304dae8674f3bac433bc02e98c`；parent=`b2fddca2542859f62d5f4b57f1b4fdecd54a5b4c`；本地 exact git object、remote identity 和 DLL cutover 文件均重新核验。
 - B2 frozen adapter SHA-256=`4854AAA20244FC35949E16F205072A2C45B0F7BAE939002CEB136C530DF3CB4D`；test SHA-256=`5D1195E3F86F7D6D1ADD4125E9C223314A236FAF9730D8DB374BFD0858D5865D`；历史 B2 output SHA-256=`967FCC304EF4DDAB3B9CA9F9C8F6BC2AC6C6D20C02C43D880DFD436ACCFF00D9`。
 - P1 runner 与执行时内容字节相同，SHA-256=`D66BC4553042A9A6937DAD6843662C03AB5F03A3EA0E23D4BA77D795596FE148`；producer SHA-256=`BC65C2D2C99EBDFEDEA2500579CAEB45CB8918466CF788ADE718806BDD351FDA`。
