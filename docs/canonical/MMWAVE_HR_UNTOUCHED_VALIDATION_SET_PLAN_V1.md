@@ -130,7 +130,13 @@ Consequence: `VS_4_INDEPENDENT_ECG_REFERENCE`, `VS_5_WINDOW_CONTRACT`, `VS_6_ECG
 
 Evidence: `docs/results/2026-09-13_MMWAVE_HR_UNTOUCHED_ECG_VALIDATION_SET_V1/`.
 
+**ROUTING VOID (2026-09-13, `MMWAVE_IMPROVEMENT_LINE_CLOSURE_V1`): the `OPT_A` routing below is VOID. `OPT_A` is invalid.**
+
+The formal FocusWave cohort **never collected ECG by design**, so `OPT_A` cannot be built; `REM_1` will not be executed and no "missing formal ECG" search will be performed. This is recorded as a **corrected planning error**, not an unresolved data-location question. `C1_SPECTRAL_SCORING_NEUTRALITY` and `C2_ANCHOR_PERSISTENCE` are `PAUSED_PENDING_NEW_COLLECTION`, and no snapshot v2 will be formed. See `docs/canonical/MMWAVE_IMPROVEMENT_LINE_CLOSURE_V1.md`. The paragraphs below are retained only as provenance of the error.
+
 **Routing update (after the external audit): `OPT_A` is confirmed as the primary untouched validation source, to be built next.** The external audit did not remove the need for `OPT_A`; it added `VS_DATASET_healthy_v1` as secondary C2-only external evidence and excluded the other two assets. See section 2.3b.
+
+**RETRACTED RECOMMENDATION (see routing void above).** `OPT_A` is invalid, and the claim that its blocker was "a data-engineering task, not a science decision" was wrong: the input does not exist by design. The original text is retained below only as provenance.
 
 **Recommendation: `OPT_A`.** It is the only option that is simultaneously session-disjoint, participant-disjoint, probe-window based, and large enough (109 estimable sessions / 2,180 probes available; a subset can be frozen). Its single blocker is the missing independent gold-clean ECG reference, which is a data-engineering task, not a science decision.
 
