@@ -14,6 +14,7 @@
 - mmwave_current_preregistration: `docs/canonical/MMWAVE_HR_CANDIDATE_PREREGISTRATION_V1.md` (FROZEN_PREREGISTRATION; C1/C2 not implemented and not run)
 - mmwave_current_external_asset_audit: `docs/results/2026-09-13_MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1/` (no external asset is C1-eligible; VS_DATASET is C2-only secondary evidence)
 - mmwave_untouched_validation_blocker: `docs/results/2026-09-13_MMWAVE_HR_UNTOUCHED_ECG_VALIDATION_SET_V1/` (BLOCKED: no ECG source exists for the formal cohort, so no untouched validation set can be formed)
+- mmwave_line_closure: `docs/canonical/MMWAVE_IMPROVEMENT_LINE_CLOSURE_V1.md` (OPT_A invalid by design; C1/C2 = PAUSED_PENDING_NEW_COLLECTION; improvement line PAUSED, integration READY)
 - mmwave_next_dependency: untouched participant/session-disjoint ECG validation set (`docs/canonical/MMWAVE_HR_UNTOUCHED_VALIDATION_SET_PLAN_V1.md`, recommended `OPT_A`)
 - related_repository_roles: `FocusWave@formaltest` owns current formal experiment/acquisition implementation; `Attention-Analysis` owns Behavior/NIR/RGB producer engineering and single-modality analysis; `FocusWave-Formal-Analysis` owns analysis plans/report evidence; local `11_数据` owns data payloads
 

@@ -1,5 +1,15 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-09-13 mmWave improvement line CLOSURE v1 — OPT_A 无效，C1/C2 PAUSED_PENDING_NEW_COLLECTION
+
+- **用户裁决为权威**：正式 FocusWave cohort **从实验设计起就没有 ECG**。因此 `OPT_A` **无效**，`REM_1` **不再执行**，也不再搜索"漏掉的正式 ECG"。这是**已更正的规划错误（corrected planning error）**，不是未解的数据位置问题。
+- **C1/C2 状态**：`C1_SPECTRAL_SCORING_NEUTRALITY` 与 `C2_ANCHOR_PERSISTENCE` = **`PAUSED_PENDING_NEW_COLLECTION`**；不再寻找替代验证集；不形成 snapshot v2。
+- **保留的毫米波成果（不重跑）**：`MMWAVE_INTEGRATION_SNAPSHOT_V1` 继续作为多模态输入；`MMWAVE_ESTIMATOR_IMPROVEMENT_V1` = `NO_STABLE_IMPROVEMENT`；`MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1` = `MULTIFACTOR_MECHANISM_SUPPORTED`。
+- **边界**：HR/BR=`HOLD / SUPPORTING_ONLY`；HRV=`BLOCKED`；snapshot v1 未改；producer 未改；`models_trained=false`；未形成 v2。
+- **外部资产角色**：`VS_DATASET_healthy_v1` 仅作 **C2 secondary corroboration**（`UNTOUCHED=FALSE`、`PRIMARY_GATE_ELIGIBLE=FALSE`、`C1_EVIDENCE=NOT_PERMITTED`、`CAN_AUTHORIZE_V2=FALSE`）；`AgeBalanced_60GHz` 作为历史 external benchmark；TI gby `INELIGIBLE`。
+- **状态收口**：`MMWAVE_IMPROVEMENT_LINE = PAUSED`；`MMWAVE_INTEGRATION = READY`；`MAIN_ANALYSIS = PROCEED`。控制权交回主分析线（Behavior freeze / NIR freeze / RGB freeze → 统一 feature registry → 单模态分析 → 多模态增量分析）。
+- 证据：`docs/canonical/MMWAVE_IMPROVEMENT_LINE_CLOSURE_V1.md`。
+
 ## 2026-09-13 mmWave untouched ECG validation set v1 — BLOCKED / ECG 参考来源不存在
 
 - **`BLOCKED_ECG_REFERENCE_SOURCE_UNAVAILABLE`**：全机 `.acq` 穷尽扫描 —— `D:\acq_mmwave_data` **11**、`I:\预实验` **0**、`J:\Data`（72 sessions）**0**、`11_数据` **0**。只有 11 个 session 有 ECG，全部在校准根：5 个校准 session（`sub-2_`-`sub-6_`）有 ECG 但无 probe 窗口；5 个开发 session（`9779/97793/97994/97795/97796`）有 ECG 但已被消费；`sub-97792_` 无 block1-4 probe 段、已判 `not_estimable`。

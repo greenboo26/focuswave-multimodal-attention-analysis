@@ -8,6 +8,29 @@
 
 ---
 
+### 2026-09-13：mmWave improvement line CLOSURE v1 — OPT_A 无效，C1/C2 PAUSED_PENDING_NEW_COLLECTION
+
+**Reuse Gate**：本任务不跑任何算法、不改任何结果。复用 `MMWAVE_HR_UNTOUCHED_ECG_VALIDATION_SET_V1` 的前提核查结论与用户裁决；没有新计算。`REUSE_REJECTION_REASON`：`REM_1`（继续搜索"漏掉的正式 ECG"）已被判定为**不需要**，因此不重复该取证劳动。
+
+**用户裁决（本节为权威）**：正式 FocusWave cohort **从实验设计起就没有 ECG**。因此：
+
+- `OPT_A` **无效**（其定义要求为正式 cohort 生成独立 per-window gold-clean ECG 参考，而该输入在设计上不存在）；
+- **不再执行 `REM_1`**，也不再搜索所谓"漏掉的正式 ECG"；
+- 这是**已更正的规划错误（corrected planning error）**，不是"未解的数据位置问题"；
+- `C1_SPECTRAL_SCORING_NEUTRALITY` 与 `C2_ANCHOR_PERSISTENCE` 状态为 **`PAUSED_PENDING_NEW_COLLECTION`**；
+- 不再寻找替代验证集；
+- 不再形成 snapshot v2。
+
+**保留的毫米波成果（不重跑）**：`MMWAVE_INTEGRATION_SNAPSHOT_V1` 继续作为多模态输入；`MMWAVE_ESTIMATOR_IMPROVEMENT_V1` = `NO_STABLE_IMPROVEMENT`；`MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1` = `MULTIFACTOR_MECHANISM_SUPPORTED`；HR/BR=`HOLD / SUPPORTING_ONLY`；HRV=`BLOCKED`。
+
+**外部资产角色**：`VS_DATASET_healthy_v1` 仅保留 **C2 secondary corroboration**（`SECONDARY_EXTERNAL_CORROBORATION_ONLY`、`UNTOUCHED=FALSE`、`PRIMARY_GATE_ELIGIBLE=FALSE`、`C1_EVIDENCE=NOT_PERMITTED`、`C2_EVIDENCE=PERMITTED_SECONDARY_ONLY`、`CAN_AUTHORIZE_V2=FALSE`）；`AgeBalanced_60GHz` 作为**历史 external benchmark**保留；`mmWave_Heartbeat`（TI gby）`INELIGIBLE`。
+
+**更正记录**：`MMWAVE_HR_UNTOUCHED_VALIDATION_SET_PLAN_V1` 与 `MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1` 曾把 `OPT_A` 描述为"可用、只差一个可工程补齐的 ECG 参考"，并给出"`OPT_A` to be built next"的路由。**该路由已作废**。错误性质是**规划错误**：前序轮次核对了 session 重叠，却从未核对正式 cohort 是否具备 ECG 采集；而正确答案是"设计上就没有"。规划阶段未先把"参考信号是否存在"作为可行性前提，是本次错误的根本原因。
+
+**状态**：`MMWAVE_IMPROVEMENT_LINE = PAUSED`；`MMWAVE_INTEGRATION = READY`；`MAIN_ANALYSIS = PROCEED`。毫米波不再阻塞 Behavior / NIR / RGB 与正式多模态分析。
+
+---
+
 ### 2026-09-13：mmWave untouched ECG validation set v1 — BLOCKED / ECG 参考来源不存在
 
 **Reuse Gate**：本任务不重跑算法、不实现 C1/C2。复用 `ECG_RSP独立验证资产审计_20260824.md`（权威 ECG 资产性质记录）、`ecg_rsp_goldclean_reaudit_v1`、`physiology_reference_v1` 与 `configs/paths.local.json` 声明的四个候选根；没有新算法、没有新阈值。`REUSE_REJECTION_REASON`：preregistration 冻结的验证集 contract 要求"独立 per-window gold-clean ECG 参考"，而该输入是否存在从未被核对过，必须先做前提核查。

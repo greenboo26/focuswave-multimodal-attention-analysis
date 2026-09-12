@@ -87,6 +87,10 @@ preregistration v1 的 validation inventory 只扫了内部来源（开发集、
 
 ## 5. 路由决定
 
+**路由作废（2026-09-13）**：本节原写 `OPT_A_BUILD = PROCEED_AS_PRIMARY`，该路由已作废 —— 正式 cohort 从设计起就没有 ECG，`OPT_A` 无效，`REM_1` 不再执行。这是已更正的规划错误。`C1/C2 = PAUSED_PENDING_NEW_COLLECTION`；snapshot v1 不变；不形成 v2。见 `docs/canonical/MMWAVE_IMPROVEMENT_LINE_CLOSURE_V1.md`。以下原文仅作 provenance 保留。
+
+
+
 ```
 PREREGISTRATION            = DONE
 EXTERNAL_ASSET_INVENTORY   = COMPLETE
