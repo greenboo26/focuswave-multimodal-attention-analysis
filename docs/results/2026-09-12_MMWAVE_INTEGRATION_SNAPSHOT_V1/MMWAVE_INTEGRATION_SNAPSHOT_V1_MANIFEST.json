@@ -292,8 +292,8 @@
     },
     {
       "path": "MMWAVE_INTEGRATION_SNAPSHOT_V1_CLOUD_VERIFICATION.json",
-      "sha256": "a8bf1912ecba305159eb686d248dbad1ed5924679a9fcb1a80bf5c0466eb3739",
-      "state": "PASS_INITIAL_UPLOAD_READBACK"
+      "sha256": "b3c2036a0dda96a1353a8f573da674f757d91d63beded0247de1143409dd9a3e",
+      "state": "PASS_FINAL_NAME_ID_AND_UPDATE_READBACK"
     }
   ],
   "cloud_delivery": {

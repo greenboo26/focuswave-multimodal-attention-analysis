@@ -1,5 +1,5 @@
 {
-  "status": "PASS_INITIAL_UPLOAD_READBACK",
+  "status": "PASS_FINAL_NAME_ID_AND_UPDATE_READBACK",
   "folder_id": "1eAClViAQxtDGl0jnfb88-ivtYSSH-AXj",
   "folder_url": "https://drive.google.com/drive/folders/1eAClViAQxtDGl0jnfb88-ivtYSSH-AXj",
   "cloud_file_count": 11,
@@ -17,8 +17,8 @@
     {"title": "MMWAVE_INTEGRATION_SNAPSHOT_V1_SCHEMA_SMOKE.json", "id": "1cDZUWo_wZid_wV2o57FDVyhUOouKGpFr"}
   ],
   "cloud_manifest_match": true,
-  "verification_basis": "Google Drive folder list readback returned exactly the 11 intended unique titles and uploaded object IDs; byte replacement success is verified separately after the receipt commit.",
-  "verified_at_utc": "2026-09-12T14:35:03Z",
+  "verification_basis": "Google Drive accepted final byte replacements for all receipt-modified objects, then folder list readback returned exactly the 11 intended unique titles and the same object IDs.",
+  "verified_at_utc": "2026-09-12T14:45:06Z",
   "initial_artifact_commit": "62878b88c7025d20bc5a83818447d6b31b7c3bcc",
   "local_only_artifacts_uploaded": false
 }
