@@ -250,6 +250,14 @@ producer worktree 仍然保留。
 
 ## 当前下一步
 
+### 2026-09-12 mmWave HR recovery P2 — PASS / FAILURE_ATTRIBUTION_COMPLETE
+
+- 冻结 5-session/100-probe、DLL host receive/enqueue time、`[probe_end-30 s, probe_end)`、逐 probe dynamic-target control；重建后 key、window、frame membership/hash、target、HR 三路与 ECG identity 差异为 0。
+- Control fused/time/spectral HR MAE=`10.4601/8.9695/15.1134 bpm`。Primary classes：correct/near-correct 37、selected-target wrong peak 28、harmonic/half-double 18、target/bin/channel miss 17；weak/motion/coverage/ambiguous 均 0。
+- Fusion 相对 time improve/worsen/tie=`31/47/22`，相对 spectral=`72/19/9`；7 个 probe 为 time correct 但 fusion wrong。
+- 主要 bottleneck 为 selected-target estimator/peak/fusion path，置信度 `MODERATE`；P3 baseline-personalized target 未获 P2 优先证据。下一依赖为独立受控 `ESTIMATOR_PATH_NEXT`，P2 不实施修复。
+- 报告与 manifest：`docs/results/2026-09-12_MMWAVE_HR_RECOVERY_P2/`；完整 100-probe 表 local-only，路径与 SHA-256 已记录。正式 producer 未修改，未训练模型；HR/BR `HOLD / SUPPORTING_ONLY`，HRV `BLOCKED`。
+
 1. 保持本轮 `docs/research/` 审计证据、矩阵、缺口/决策与流程图为 canonical 入口。
 2. 对真正仍未闭合的 upstream 项逐项确认：DC/clutter、window、FFT length/zero padding、chirp aggregation/Doppler、normalization、channel calibration、8 通道物理映射、upstream phase correction。
 3. 若另行授权 #16，只能使用已冻结输入契约、corrected 0.037 m/bin 口径和本轮记录的 HR/BR/HRV/QC 边界。

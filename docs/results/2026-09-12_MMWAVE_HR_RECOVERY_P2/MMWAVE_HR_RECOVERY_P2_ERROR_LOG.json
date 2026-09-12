@@ -1,0 +1,28 @@
+{
+  "task_id": "mmwave_hr_recovery_p2_failure_attribution",
+  "problems": [
+    {
+      "id": "P2-METHOD-001",
+      "status": "RESOLVED_WITH_EXPLICIT_LINEAGE",
+      "impact": "The historical nearby_target_bin_channel name could be misread as physical bin adjacency.",
+      "root_cause_confidence": "HIGH",
+      "resolution": "Preserved the historical label in old_truth_semantics_class and created separate alternate_location topology fields. Discrete adjacency is delta bin = 1 and remains diagnostic-only.",
+      "retest": "100 rows contain both old_truth_semantics_class and alternate_location."
+    },
+    {
+      "id": "P2-METHOD-002",
+      "status": "OPEN_LIMITATION",
+      "impact": "At least one ECG-consistent frequency occurred among the broad mmWave-rule-generated alternate candidate set in 100/100 probes. This exhaustive retrospective availability is non-specific and cannot validate a target policy or prove a target miss by itself.",
+      "root_cause_confidence": "HIGH",
+      "fix_state": "No fix in P2; target personalization is not authorized from this availability count.",
+      "next_dependency": "Any target-path experiment must pre-freeze a mmWave-only candidate rank/soft-prior rule on participant-disjoint development data."
+    },
+    {
+      "id": "P2-ENV-001",
+      "status": "RESOLVED",
+      "impact": "The default Python was not used for data execution because P1 established the bioread-capable environment.",
+      "root_cause_confidence": "HIGH",
+      "resolution": "Reused D:\\Project\\厚粲杯\\08_算法\\.venv_t0\\Scripts\\python.exe; run completed before any scientific output claim."
+    }
+  ]
+}

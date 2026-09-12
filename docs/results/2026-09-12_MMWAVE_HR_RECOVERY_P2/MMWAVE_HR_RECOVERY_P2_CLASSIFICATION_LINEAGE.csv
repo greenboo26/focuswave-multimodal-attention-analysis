@@ -1,0 +1,10 @@
+old_class,current_primary_class,current_secondary_or_location,semantic_note
+true_peak_selected_ecg_bin,CORRECT_OR_NEAR_CORRECT,,Old exact spectral agreement is retained; current fused correctness is separately evaluated.
+true_peak_selected_ecg_bin,HARMONIC_OR_HALF_DOUBLE_LOCK,HARMONIC flags,Current fused/time/spectral mechanisms take precedence over the old spectral-only label.
+true_peak_available_selected_target_but_wrong_selection,SELECTED_TARGET_WRONG_PEAK,,Direct current counterpart when the selected target contains an exact ECG-consistent candidate.
+nearby_target_bin_channel,AMBIGUOUS,old_truth_semantics_class,Old nearby meant wider spectral tolerance on the selected target; it did not establish physical bin/channel proximity.
+nearby_target_bin_channel,TARGET_BIN_CHANNEL_MISS,alternate_location,Current target miss requires an exact candidate among mmWave-rule-generated alternate targets.
+absent_or_weak,WEAK_OR_ABSENT_HEART_EVIDENCE,,Weak prominence remains diagnostic and does not reject a row.
+insufficient_coverage_or_reference,COVERAGE_OR_REFERENCE_LIMITATION,,Coverage/reference limitation retains historical precedence.
+,HARMONIC_OR_HALF_DOUBLE_LOCK,FUSED/TIME/SPECTRAL near half/double ECG or 2x/3x BR,Current 30 s fused chain requires a mechanism label absent from the old spectral-only vocabulary.
+,MOTION_OR_SIGNAL_QUALITY,existing usable_ratio below 0.50,Uses only the existing producer gate; no outcome-derived cutoff.

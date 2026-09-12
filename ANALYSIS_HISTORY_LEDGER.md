@@ -768,6 +768,14 @@ Behavior+mmWave 增量已经做过，不重跑：
 
 ## 14. 维护规则
 
+### 2026-09-12：mmWave HR recovery P2 failure attribution — PASS / FAILURE_ATTRIBUTION_COMPLETE
+
+**范围与复用**：canonical start=`da6d8ac1a945e811be182723a92287b51ae5d5e0`；冻结 P1/B2 5-session/100-probe control、DLL host receive/enqueue timestamp、`[probe_end-30 s, probe_end)`、逐 probe dynamic target 与 frozen ECG reference。复用旧 truth audit exact/nearby/weak/harmonic definitions 和 current producer candidate/selector/fusion。旧 `nearby_target_bin_channel` 不是物理邻域，故保留旧字段并新增 diagnostic topology；未调 threshold、未修改 producer、未训练模型。
+
+**Invariant 与结果**：100 keys 唯一完整，window/frame membership/hash、bin/channel、spectral/time/fused HR、ECG identity 差异 0。Control fused/time/spectral MAE=`10.460107/8.969469/15.113444 bpm`。Primary counts：correct 37、selected-target wrong peak 28、harmonic/half-double 18、target/bin/channel miss 17，weak/motion/coverage/ambiguous=0。Fusion vs time improve/worsen/tie=`31/47/22`；vs spectral=`72/19/9`；time-correct-fusion-wrong=7。97795 MAE=`18.9463`，分布 correct/harmonic/wrong-peak/target-miss=`4/6/7/3`。
+
+**决策与证据**：主要机制为 selected-target estimator/peak/fusion path，`ROOT_CAUSE_CONFIDENCE=MODERATE`；target miss 17% 且 broad alternate candidate availability 受多重性限制，P2 不支持直接优先 P3。`NEXT_ROUTE=ESTIMATOR_PATH_NEXT`，须另立受控修复任务。证据为 `docs/results/2026-09-12_MMWAVE_HR_RECOVERY_P2/` 与 `scripts/maintenance/run_mmwave_hr_recovery_p2_failure_attribution_20260912.py`；完整 100-row table local-only。HR/BR HOLD，HRV BLOCKED。
+
 以后任何实际运行的新分析，只要产生“采用 / 放弃 / 结果无效 / 参考被替代 / 数据语义修复”之一，就必须在同一次交付中更新本账本，至少写：
 
 `日期 → repo/ref/commit → 输入范围 → 脚本/配置 → 核心结果 → 决策 → 是否允许以后重复 → 被什么证据替代（如有）`
