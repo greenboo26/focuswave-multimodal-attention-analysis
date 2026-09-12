@@ -8,6 +8,22 @@
 
 ---
 
+### 2026-09-13：mmWave 系统性低估机制审计 v1 — MULTIFACTOR_MECHANISM_SUPPORTED
+
+**Reuse Gate**：完全复用 estimator improvement v1 冻结的同一批输入（5 sessions / 100 probes / ECG_VALID 100/100 / DLL host receive/enqueue 时间源 / `[window_effective_start, probe_onset)` nominal 30 s），三份输入 CSV 的 SHA-256 全部 exact match；没有新算法、没有新 threshold、没有新 gating rule。`REUSE_REJECTION_REASON`：既有 estimator improvement v1 只回答了"哪条 gating rule 能过门"（结论 NO_STABLE_IMPROVEMENT），没有回答"低估来自哪里"，因此需要一次只读的机制分解。
+
+**复现**：`CONTROL_REPRODUCTION=PASS`。fused MAE=`10.457079173`、bias=`-9.033105842`、p90 AE=`24.054346218`；time MAE=`8.996965770`、bias=`-6.737621327`；spectral MAE=`15.123834193`、bias=`-13.351010046`。100/100 keys exact。
+
+**核心机制发现**：`CORRECT_OR_NEAR_CORRECT` 的 fused bias 仅 `+0.215472 bpm`（MAE `1.538915`），也就是说链路判断正确时估计器几乎无偏；总体 −9 bpm 全部由三个失败类别承担，按加性归因分别为 wrong peak 贡献 `-3.297976`（36.510%）、harmonic 贡献 `-3.486216`（38.594%）、target miss 贡献 `-2.332948`（25.827%）。频域路是三者中偏得最重的 arm（`-13.351010`），融合在 57/100 个 probe 上把结果拉到 time 以下、worsen/improve=`47/31`、净叠加 `1.460113 bpm`，并制造 4 个"time AE≤5 → fused AE>10"的可接受到灾难转换；但 fused 从不比 time 与 spectral 两路都差，因此融合不是主要低估来源。
+
+**次级机制与未解问题**：距离只有弱关联且被 session/类别混淆（连续 distance vs signed error 的 Spearman ρ=`0.020855`，DESCRIPTIVE_ONLY / CLUSTERED_NONINDEPENDENT；within-session far−near 在 4/5 个含远距离 probe 的 session 中为负但 97794 反号，GT1.5M 内 50% 为 wrong peak）；ECG 心率带无清晰特异性（75_TO_90 与 GT90 的 fused bias 接近）；既有 QC 字段无 session 一致关系（`hr_usable_ratio` 在 100 probes 中恒为 1.0、无方差，phase_stability 与 motion_proxy 的 pooled ρ 仅 0.32/0.27 且 97793 反号，`hr_confidence` 与 selection margin 为 NOT_AVAILABLE）。各 arm 相对 ECG 的比值没有落在 ≈0.5 或 ≈2.0 的谐波锁定位，但非谐波残留仍为 `-6.764500 bpm`，说明 −9 bpm 不是少数谐波灾难拉出来的。未解决的问题是"为什么失败模式一律偏向低端而不是对称错"。
+
+**决策与边界**：`MULTIFACTOR_MECHANISM_SUPPORTED`。只读审计，未改正式 producer、未改 snapshot v1、未发布 snapshot v2、未训练模型、未解锁 HRV。`NEXT_HYPOTHESIS`（不得本轮实现，且必须先进入 untouched validation）：频域打分中 `-0.035*|c-time|` 与 `-0.025*|c-previous|` 两项是否把谱峰系统性拉向低端；anchor 更新规则是否让历史低估长期驻留。
+
+**证据**：`docs/results/2026-09-13_MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1/`（report、manifest、`FUSION_PATH_AUDIT.md`、fusion/distance/failure-class/ECG-band/QC 分解表、机制证据矩阵、error log、handoff）；逐 probe 机制表 `PROBE_LEVEL_MECHANISM_100_PROBES.csv` 为 local-only，路径与 SHA-256 在 manifest。HR/BR=`HOLD / SUPPORTING_ONLY`，HRV=`BLOCKED`，`models_trained=false`。
+
+---
+
 ### 2026-09-12：mmWave estimator improvement v1 — NO_STABLE_IMPROVEMENT
 
 **Reuse Gate**：复用 P2 frozen control、P2 candidate enumeration、`gold_standard_qa.py`、`ecg_rsp_goldclean_reaudit_v1`、`ecg_rsp_goldclean_pairing_v1` 与 formal vital QC；没有新 ECG/RSP 阈值、target selector、window、time source、VMD/SSA、baseline personalization、60 s aggregation或监督学习。P2 审计脚本只增加可选 strict reference/result path 参数，默认历史行为不变。

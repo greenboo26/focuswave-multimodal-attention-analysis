@@ -1,0 +1,6 @@
+failure_class,n,share_of_probes_pct,mean_signed_error_fused_bpm,bias_contribution_to_pooled_bpm,share_of_pooled_bias_pct,mean_signed_error_time_bpm,time_bias_contribution_to_pooled_bpm,mean_fusion_penalty_vs_time_bpm,fusion_penalty_contribution_to_pooled_bpm
+CORRECT_OR_NEAR_CORRECT,39,39.000,0.215472,0.084034,-0.930,0.176566,0.068861,-1.368411,-0.533680
+SELECTED_TARGET_WRONG_PEAK,27,27.000,-12.214726,-3.297976,36.510,-9.652446,-2.606160,3.117038,0.841600
+HARMONIC_OR_HALF_DOUBLE_LOCK,18,18.000,-19.367868,-3.486216,38.594,-16.252071,-2.925373,2.124389,0.382390
+TARGET_BIN_CHANNEL_MISS,16,16.000,-14.580922,-2.332948,25.827,-7.968431,-1.274949,4.811271,0.769803
+ALL_PROBES,100,100.000,-9.033106,-9.033106,100.000,-6.737621,-6.737621,1.460113,1.460113

@@ -1,0 +1,123 @@
+{
+  "task_id": "mmwave_systematic_low_bias_mechanism_audit_v1",
+  "run_id": "mmwave_low_bias_mechanism_audit_v1_20260913_r1",
+  "folder_name": "2026-09-13_mmwave_low_bias_mechanism_audit_v1",
+  "folder_parent": "_AI_HANDOFF",
+  "remote_path": "gdrive:_AI_HANDOFF/2026-09-13_mmwave_low_bias_mechanism_audit_v1",
+  "transport": "rclone 1.75.1 (portable, D:\\Project\\.tools\\rclone.exe), Google Drive remote 'gdrive', authorized previously by the user; scope drive. Credentials live only in the machine-local rclone config and were never printed, logged, or committed.",
+  "cloud_file_count": 14,
+  "cloud_files": [
+    "BIAS_ATTRIBUTION_DECOMPOSITION.csv",
+    "DISTANCE_FAILURE_CLASS_MATRIX.csv",
+    "DISTANCE_SESSION_STRATIFIED.csv",
+    "ECG_HR_BAND_DECOMPOSITION.csv",
+    "ERROR_LOG.json",
+    "FAILURE_CLASS_BIAS_DECOMPOSITION.csv",
+    "FUSION_LOW_BIAS_DECOMPOSITION.csv",
+    "FUSION_PATH_AUDIT.md",
+    "HANDOFF.md",
+    "MECHANISM_EVIDENCE_MATRIX.csv",
+    "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_MANIFEST.json",
+    "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_REPORT.md",
+    "QC_BIAS_DECOMPOSITION.csv",
+    "WITHIN_SESSION_DISTANCE_CHECK.csv"
+  ],
+  "verified_by_readback": true,
+  "readback_dir": "D:\\Project\\.harness\\drive_readback_20260913b",
+  "per_file": [
+    {
+      "name": "BIAS_ATTRIBUTION_DECOMPOSITION.csv",
+      "status": "MATCH",
+      "local_sha256": "0D49C3E8F6E679F578B5260B7550DF5462A5C697951B848C2520E6F1BF94E237",
+      "cloud_sha256": "0D49C3E8F6E679F578B5260B7550DF5462A5C697951B848C2520E6F1BF94E237"
+    },
+    {
+      "name": "DISTANCE_FAILURE_CLASS_MATRIX.csv",
+      "status": "MATCH",
+      "local_sha256": "B09CB53A22F366A833F1F9E9553F48E04B941030C1E7449464B543C2E5A30EDE",
+      "cloud_sha256": "B09CB53A22F366A833F1F9E9553F48E04B941030C1E7449464B543C2E5A30EDE"
+    },
+    {
+      "name": "DISTANCE_SESSION_STRATIFIED.csv",
+      "status": "MATCH",
+      "local_sha256": "5794DCF57269F82B431F4E08762916BBB7E447E989D8F24C55C8A9D1F1D1D129",
+      "cloud_sha256": "5794DCF57269F82B431F4E08762916BBB7E447E989D8F24C55C8A9D1F1D1D129"
+    },
+    {
+      "name": "ECG_HR_BAND_DECOMPOSITION.csv",
+      "status": "MATCH",
+      "local_sha256": "E18FF51165F5B0D710EDD57C6B0164F25BBC08297D39A1C2DC215BA4009090C7",
+      "cloud_sha256": "E18FF51165F5B0D710EDD57C6B0164F25BBC08297D39A1C2DC215BA4009090C7"
+    },
+    {
+      "name": "ERROR_LOG.json",
+      "status": "MATCH",
+      "local_sha256": "0FA0A230D297F60671F21A84ABE0B3D46CF5DB95896B136E7F4B5BDDF92877FB",
+      "cloud_sha256": "0FA0A230D297F60671F21A84ABE0B3D46CF5DB95896B136E7F4B5BDDF92877FB"
+    },
+    {
+      "name": "FAILURE_CLASS_BIAS_DECOMPOSITION.csv",
+      "status": "MATCH",
+      "local_sha256": "96CC2CA270967D03D82E644093B4754431B546B8758184E7801C4151D95B1B17",
+      "cloud_sha256": "96CC2CA270967D03D82E644093B4754431B546B8758184E7801C4151D95B1B17"
+    },
+    {
+      "name": "FUSION_LOW_BIAS_DECOMPOSITION.csv",
+      "status": "MATCH",
+      "local_sha256": "51752DBEBED5892BD47C9395047A8622D11C96D35567098D26BB8CEFA9405486",
+      "cloud_sha256": "51752DBEBED5892BD47C9395047A8622D11C96D35567098D26BB8CEFA9405486"
+    },
+    {
+      "name": "FUSION_PATH_AUDIT.md",
+      "status": "MATCH",
+      "local_sha256": "17E1C447072C2F6294C0E0594EFA5754A8950C2525F66E7CDB77942C0B41761F",
+      "cloud_sha256": "17E1C447072C2F6294C0E0594EFA5754A8950C2525F66E7CDB77942C0B41761F"
+    },
+    {
+      "name": "HANDOFF.md",
+      "status": "MATCH",
+      "local_sha256": "40F3CB5C7B9BFBD5951A5F74A0A45F56F3263136D21692D6C6D6F120B6D32267",
+      "cloud_sha256": "40F3CB5C7B9BFBD5951A5F74A0A45F56F3263136D21692D6C6D6F120B6D32267"
+    },
+    {
+      "name": "MECHANISM_EVIDENCE_MATRIX.csv",
+      "status": "MATCH",
+      "local_sha256": "B80A3EEBCAEE6028246840F7F152DA76C9881AC84374FAF1E40DF8C3B56CB846",
+      "cloud_sha256": "B80A3EEBCAEE6028246840F7F152DA76C9881AC84374FAF1E40DF8C3B56CB846"
+    },
+    {
+      "name": "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_MANIFEST.json",
+      "status": "MATCH",
+      "local_sha256": "9E0E18575F9F3C4A6E032A8ACF800320AC5119D802EF1730788CAE91EAFC9FA1",
+      "cloud_sha256": "9E0E18575F9F3C4A6E032A8ACF800320AC5119D802EF1730788CAE91EAFC9FA1"
+    },
+    {
+      "name": "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_REPORT.md",
+      "status": "MATCH",
+      "local_sha256": "B04F9632F001922AC97557C56445F815FC8823D870052EE0BFA89BE0C451DAAE",
+      "cloud_sha256": "B04F9632F001922AC97557C56445F815FC8823D870052EE0BFA89BE0C451DAAE"
+    },
+    {
+      "name": "QC_BIAS_DECOMPOSITION.csv",
+      "status": "MATCH",
+      "local_sha256": "5E4F9BE57921BA2C95AFC2766C460EC89A69AA39C58840411D5BDB158ECCB131",
+      "cloud_sha256": "5E4F9BE57921BA2C95AFC2766C460EC89A69AA39C58840411D5BDB158ECCB131"
+    },
+    {
+      "name": "WITHIN_SESSION_DISTANCE_CHECK.csv",
+      "status": "MATCH",
+      "local_sha256": "E092C3EB089ABFE151D0470C976384C98556FBF5266026E7C50B9FCB168638B3",
+      "cloud_sha256": "E092C3EB089ABFE151D0470C976384C98556FBF5266026E7C50B9FCB168638B3"
+    }
+  ],
+  "frozen_artifacts_all_match": true,
+  "frozen_artifacts_checked": 14,
+  "no_snapshot_v1_files_mixed": true,
+  "no_estimator_improvement_files_mixed": true,
+  "local_only_not_uploaded": true,
+  "local_only_note": "PROBE_LEVEL_MECHANISM_100_PROBES.csv stays local-only (probe-level ECG reference and diagnostics) and is deliberately absent from both Git and the cloud folder; its SHA-256 is recorded in the audit manifest.",
+  "self_referential_files": [
+    "CLOUD_HANDOFF_VERIFICATION.json"
+  ],
+  "note": "CLOUD_HANDOFF_VERIFICATION.json is written last and cannot carry its own final digest; that digest is recorded in HANDOFF.md and the GitHub issue pointer."
+}
