@@ -1,5 +1,16 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-09-13 mmWave external validation asset audit v1 — ASSET_AUDIT_COMPLETE
+
+- **没有任何外部资产对 C1 可用**；C2 只有 `VS_DATASET_healthy_v1` 可用且只能作 secondary。preregistration v1 的 inventory 漏掉本机三个外部数据集，本任务补齐并据此调整路由。
+- `VS_DATASET_healthy_v1`（24 人 / 48 段）：有 Mindray ECG Lead II（500 Hz、120 s）金标准，但雷达侧只有**预提取单通道位移 `VitalSig`**（40,000 @ 333.3 Hz），无 range bin / 通道 / DataCube → C1 机制无法表达；且本机已有**已完成 C1b 基准**（`C1B_VS_DATASET_20260825_V1`，24 subjects / 48 pairs / 384 rows，含 HR/IBI/RMSSD/SDNN 指标，报告自述不构成 beat/IBI/HRV 验证）→ 仅 `PARTIAL_CANDIDATE_SECONDARY`。
+- `AgeBalanced_60GHz`（110 人，ECG ~250 Hz，range-FFT 帧 10 Hz）：**已被用于 HR 路线评估与选型**（commit `f4a8c74d…`；已公布 9.5 BPM、10.361 BPM 等数字）→ `INELIGIBLE_FOR_PRIMARY_VALIDATION`。
+- `mmWave_Heartbeat`（TI gby）：仅 10 个原始 ADC `.bin`，无 ECG、无时间戳、无采集配置 → `INELIGIBLE`。
+- **路由**：`OPT_A`（正式 cohort 116 sessions / 61 participant groups）确认为 primary untouched validation 并将执行；`VS_DATASET_healthy_v1` 追加为 **secondary external evidence（仅 C2）**；`AgeBalanced` 与 TI gby 不使用。
+- **新增硬边界**：`VS_DATASET` 不构成 C1 的任何证据；C2 的 primary 仍是 `OPT_A`，`VS_DATASET` 结果必须同时声明 secondary 与已被 C1b 消费的历史。判据与阈值不变。
+- 本任务只做资产追溯：未运行 C1/C2、未训练模型、未修改任何外部数据 / producer / snapshot v1，未形成 snapshot v2，HRV=`BLOCKED`。
+- 证据：`docs/results/2026-09-13_MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1/`；测试 `tests/test_mmwave_external_validation_asset_audit.py`。
+
 ## 2026-09-13 mmWave HR candidate preregistration v1 — FROZEN_PREREGISTRATION（未实现、未运行）
 
 - 冻结两个机制来源明确的候选：`C1_SPECTRAL_SCORING_NEUTRALITY`（频域打分的 time/previous 邻近惩罚把谱峰拉向已偏低的吸引子；`CONTROL_SPECTRAL` bias `-13.351010` 为三路最负）与 `C2_ANCHOR_PERSISTENCE`（anchor 以 `0.8*previous+0.2*fused` 且仅在 `confidence>=0.12` 时更新；`_smooth_track` 用 `alpha=0.20+0.30*confidence` 与 `±7.0 bpm` 限速；anchor 又是 `gap>10 bpm` 时二选一的判据，本数据 31/100 probe 走该分支）。两者都只允许改"如何选择/如何记住心率"，共用同一套五条成功判据与四条失败判据。

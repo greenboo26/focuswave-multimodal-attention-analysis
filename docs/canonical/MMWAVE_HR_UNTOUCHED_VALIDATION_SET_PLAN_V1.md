@@ -58,6 +58,25 @@ The only gold-clean per-window ECG/RSP reference product found is `11_数据/der
 
 These are calibration sessions anchored on `cal/events.csv calibration_start`; they are **not** probe-window sessions, so they cannot evaluate probe-window HR accuracy without first defining a probe-window contract that does not currently exist for them.
 
+### 2.3b External public datasets (added by `MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1`)
+
+The original version of this plan inventoried only internal sources and therefore missed three external datasets already present on this machine. The external audit closed that gap. Result: **no external asset is usable as a primary untouched validation set, and none can serve C1 at all.**
+
+| dataset | HR/ECG ground truth | radar input | 30 s feasible | C1 | C2 | exposure | verdict |
+|---|---|---|---|---|---|---|---|
+| `VS_DATASET_healthy_v1` | yes — Mindray ECG Lead II, 500 Hz, 120 s | pre-extracted single displacement channel (`VitalSig`, 40,000 @ 333.3 Hz); no DataCube | yes | **no** | yes | `DEVELOPMENT_EXPOSED` — completed C1b benchmark `C1B_VS_DATASET_20260825_V1`, 24 subjects / 48 pairs / 384 rows | `PARTIAL_CANDIDATE_SECONDARY` |
+| `AgeBalanced_60GHz` | yes — Movesense ECG ~250 Hz | compressed range-FFT frames (10 Hz) | yes | no | no | `DEVELOPMENT_EXPOSED` — HR route evaluation and selection, commit `f4a8c74d89ec28e005c537cbd5280a15dcb584e1` | `INELIGIBLE_FOR_PRIMARY_VALIDATION` |
+| `mmWave_Heartbeat` (TI gby) | **no** | raw ADC only | no | no | no | never run | `INELIGIBLE` |
+
+Two consequences bind the validation design:
+
+- **C1** can only be validated by `OPT_A`. `VS_DATASET` provides no C1 evidence at all, because C1 targets the spectral-candidate score inside the selection chain over a complex range-domain DataCube, and this dataset has no range bins, no channels and no DataCube.
+- **C2** keeps `OPT_A` as its primary validation. `VS_DATASET` is added as **secondary external evidence only**, and any C2 result reported from it must state both that it is secondary and that the cohort was previously consumed by the C1b benchmark.
+
+Frozen criteria and thresholds are unchanged; the availability of external data must not relax them.
+
+Evidence: `docs/results/2026-09-13_MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1/`.
+
 ### 2.4 The formal cohort (the realistic untouched pool)
 
 The governed integration-snapshot cohort is a different, much larger population:
@@ -102,6 +121,8 @@ A set failing any requirement is `NOT_A_VALIDATION_SET` and may be used for desc
 | `OPT_B` | calibration sessions `sub-3_`, `sub-4_`, `sub-5_` | session-disjoint `YES`; participant groups are separate people | **blocked on window contract** | these are calibration sessions without probe windows; would require defining and freezing a new window contract, which changes the target of validation; higher methodological risk |
 | `OPT_C` | `sub-97792_` | session-disjoint `YES` | **insufficient** | only 4 ECG-valid windows; cannot support the 5 success criteria |
 | `OPT_D` | new acquisition of participant/session-disjoint sessions with probe windows | ideal | **not available now** | requires new data collection; out of scope for this task |
+
+**Routing update (after the external audit): `OPT_A` is confirmed as the primary untouched validation source, to be built next.** The external audit did not remove the need for `OPT_A`; it added `VS_DATASET_healthy_v1` as secondary C2-only external evidence and excluded the other two assets. See section 2.3b.
 
 **Recommendation: `OPT_A`.** It is the only option that is simultaneously session-disjoint, participant-disjoint, probe-window based, and large enough (109 estimable sessions / 2,180 probes available; a subset can be frozen). Its single blocker is the missing independent gold-clean ECG reference, which is a data-engineering task, not a science decision.
 

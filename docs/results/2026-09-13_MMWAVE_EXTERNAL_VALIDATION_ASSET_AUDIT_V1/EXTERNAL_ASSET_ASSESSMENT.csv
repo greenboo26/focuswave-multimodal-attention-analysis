@@ -1,0 +1,4 @@
+dataset_id,role,subjects,hr_ecg_ground_truth,radar_input_kind,thirty_second_contract_feasible,c1_eligible,c2_eligible,development_exposure,verdict
+VS_DATASET_healthy_v1,EXTERNAL_PUBLIC_REFERENCE_DATASET,24,True,PRE_EXTRACTED_DISPLACEMENT,True,False,True,DEVELOPMENT_EXPOSED,PARTIAL_CANDIDATE_SECONDARY
+AgeBalanced_60GHz,EXTERNAL_PUBLIC_REFERENCE_DATASET,110,True,COMPRESSED_RANGE_FFT_FRAMES,True,False,False,DEVELOPMENT_EXPOSED,INELIGIBLE_FOR_PRIMARY_VALIDATION
+mmWave_Heartbeat_TI_gby,RAW_RADAR_BATCH_WITHOUT_REFERENCE,unknown (10 files named gby1..gby10; file-to-subject mapping not documented),False,RAW_ADC_BINARY,False,False,False,NOT_EXPOSED_BUT_UNUSABLE,INELIGIBLE

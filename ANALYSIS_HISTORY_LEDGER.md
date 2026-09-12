@@ -8,6 +8,22 @@
 
 ---
 
+### 2026-09-13：mmWave external validation asset audit v1 — ASSET_AUDIT_COMPLETE
+
+**Reuse Gate**：本任务不重跑任何 HR 算法、不实现 C1/C2、不改 producer。复用 `vitalsense_c1b_benchmark_v1`（本地已完成的 C1b 基准）、`ANALYSIS_HISTORY_LEDGER.md` 的 AgeBalanced 2026-08-14 条目、以及三个外部数据集的只读检查；没有新算法、没有新 threshold。`REUSE_REJECTION_REASON`：preregistration v1 的 validation inventory 只扫了内部来源，漏掉本机三个外部公开数据集，必须先查清才决定是否值得给正式 cohort 重建 ECG gold-clean。
+
+**核心结论**：**没有任何外部资产对 C1 可用；C2 只有 `VS_DATASET_healthy_v1` 可用且只能是 secondary。**
+
+- `VS_DATASET_healthy_v1`（24 人，Resting+Apnea 48 段）：有 Mindray ECG Lead II（500 Hz，120 s）与呼吸/脉搏/每分钟 HR/RR；但雷达侧只有**已提取的单通道位移 `VitalSig`**（40,000 @ 333.3 Hz），**无 range bin、无通道、无 DataCube**，因此 C1 的"选择链内频域候选打分"机制无法表达；且本机已有**已完成的 C1b 正式基准**（`RUN_ID=C1B_VS_DATASET_20260825_V1`，`status=BENCHMARK_COMPLETE`，24 subjects / 48 pairs / 384 rows，含 `raw_hr_abs_error_bpm`/IBI/RMSSD/SDNN/beat 匹配指标；方法 `project_bandpass_peak` 与 `vitalsense_amf`；仅用 VS01 Resting 估一个全局固定延迟 −18.0 ms；报告自述不构成 beat/IBI/HRV 验证）。判定 `PARTIAL_CANDIDATE_SECONDARY`。
+- `AgeBalanced_60GHz`（110 人，ECG ~250 Hz，range-FFT 帧 10 Hz）：**已被用于 HR 路线评估与选型**（commit `f4a8c74d89ec28e005c537cbd5280a15dcb584e1`；已公布 project route session-MAE median ≈ 9.5 BPM、HPS 10.6→9.7 保留、固定呼吸谐波陷波 9.5→10.4 回退、top3 multi-bin 9.5→9.3、VMD adaptive 不采用；官方 ECG FFT 参考重算 30 s pooled MAE = 10.361 BPM）。路线级暴露使其不再是未触碰验证集，判定 `INELIGIBLE_FOR_PRIMARY_VALIDATION`。
+- `mmWave_Heartbeat`（TI gby 批次）：只有 10 个原始 ADC `.bin`，**无 ECG、无时间戳、无采集配置、无被试映射**，既无 ground truth 也无时间基准。判定 `INELIGIBLE`。
+
+**路由决定**：`OPT_A` 确认为 **primary untouched validation** 并将执行；`VS_DATASET_healthy_v1` 追加为 **secondary external evidence（仅 C2）**；`AgeBalanced` 与 TI gby 不使用。新增硬边界：**`VS_DATASET` 不构成 C1 的任何证据**。判据与阈值不变，不因外部数据可用而放松。
+
+**证据**：`docs/results/2026-09-13_MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1/`（report、manifest、`EXTERNAL_ASSET_ASSESSMENT.csv`、`EXTERNAL_ASSET_HISTORY_TRACE.csv`、error log、handoff）；脚本 `scripts/maintenance/run_mmwave_external_validation_asset_audit_20260913.py`；测试 `tests/test_mmwave_external_validation_asset_audit.py`。本地证据 `11_数据/derived/vitalsense_c1b_benchmark_v1/` 为 local-only。未修改任何外部数据、producer 或 snapshot v1；HRV 仍 `BLOCKED`。
+
+---
+
 ### 2026-09-13：mmWave HR candidate preregistration v1 — FROZEN_PREREGISTRATION（未实现、未运行）
 
 **Reuse Gate**：本任务不重跑任何毫米波数据、不重算 ECG/RSP、不搜索阈值。复用 low-bias mechanism audit v1 的机制结论、`ecg_rsp_goldclean_reaudit_v1` 与 `physiology_reference_v1` 的既有 cohort 事实、以及 canonical producer 既有常量；没有新算法、没有新 gating rule、没有新 threshold。`REUSE_REJECTION_REASON`：既有 estimator improvement v1 只回答了"哪条规则能过门"（`NO_STABLE_IMPROVEMENT`），没有把机制假设固化成可验证的预注册，也没有建立独立验证集，因此需要一个只写规则与验证合同、不运行的步骤。
