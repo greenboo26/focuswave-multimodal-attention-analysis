@@ -2,7 +2,7 @@
   "task_id": "mmwave_systematic_low_bias_mechanism_audit_v1",
   "run_id": "mmwave_low_bias_mechanism_audit_v1_20260913_r1",
   "audit_type": "MECHANISM_AUDIT",
-  "source_commit": "291e50ab4313685b0645210756c9921ec9e8f245",
+  "source_commit": "c87d969e0c7780f7a2544fec17eace6cd15b6222",
   "script": {
     "path": "D:\\Project\\厚粲杯\\08_算法_worktrees\\mmwave_low_bias_mechanism_audit_v1_20260913\\scripts\\maintenance\\run_mmwave_low_bias_mechanism_audit_20260913.py",
     "sha256": "ECFFC4937EADB2DBAB68FFD45D39085F81954351AAE0655E61B83D7071B4E67B"
@@ -392,7 +392,7 @@
       "sha256": "17E1C447072C2F6294C0E0594EFA5754A8950C2525F66E7CDB77942C0B41761F"
     },
     "HANDOFF.md": {
-      "sha256": "D2B118557C2E2EC69D4F76A6021B74C51A92C3F78559687ED70CFC7E12D61D73"
+      "sha256": "A40221E0C9A0D17520F9CAAF248579FFA9A3A3D54BC3E26CA6C8504DD05DBE61"
     },
     "ERROR_LOG.json": {
       "sha256": "0FA0A230D297F60671F21A84ABE0B3D46CF5DB95896B136E7F4B5BDDF92877FB"
@@ -421,6 +421,7 @@
   ],
   "git_safe_outputs": [
     "BIAS_ATTRIBUTION_DECOMPOSITION.csv",
+    "CLOUD_HANDOFF_VERIFICATION.json",
     "DISTANCE_FAILURE_CLASS_MATRIX.csv",
     "DISTANCE_SESSION_STRATIFIED.csv",
     "ECG_HR_BAND_DECOMPOSITION.csv",
