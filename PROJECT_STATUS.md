@@ -1,5 +1,14 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-09-12 mmWave HR recovery P0 lineage audit — PASS / P1 READY WITH SOURCE PRECONDITION
+
+- 已逐项闭合历史 `run_hr_course_99_corrected.py → process_vital_signs_v3_1_1.py`（`64634159`，5 sessions/99 valid 60 s windows，HR MAE=`3.7772146 bpm`）与当前 DLL-time 正式 probe adapter（`16729b2`）的 26 阶段 lineage。`3.777` 是历史 fixed-target/full-chain comparator，不是当前 30 s DLL-time 同窗基线。
+- 当前链已接入 phase/bandpass/peak/time/spectral/half-double fold/probe 内 previous anchor/time-frequency fusion/confidence/usable-ratio；P1 只恢复 target 后的 existing bundle：segment reference correction、window consensus reference、HR-course reference seed、existing global signal-quality hard gate。
+- P1 不恢复 historical physical gate、preselection mean subtraction/DC/clutter、VMD、external-RSP harmonic path、fixed target/cross-probe persistence、180 s baseline target calibration或 60 s aggregation；不执行 30/60 最终比较。
+- B1 保持 116 sessions/2320 rows、`models_trained=false`；B2 fused HR MAE=`10.46 bpm` 仅 supporting；B3 sensitivity/precision=`.2177/.2490`，HRV 继续 `BLOCKED`；B4 A–D 为 method diagnostic，独立 runner/manifest 与 `3.777` 同窗 comparator lineage 未闭合。
+- 源码前提：B1 exact SHA `16729b2ef245f9304dae8674f3bac433bc02e98c` 本机可解析，但审计开始时不在 `origin/main=b33e2776` 祖先链。P1 必须从 exact SHA 隔离执行，或先独立完成语义等价 canonical integration，不能猜测重建。
+- 证据：[P0 full audit](docs/canonical/2026-09-12_MMWAVE_HR_RECOVERY_P0_PIPELINE_LINEAGE_AUDIT.md)、[26-stage CSV](docs/canonical/2026-09-12_MMWAVE_HR_RECOVERY_P0_STAGE_EVIDENCE.csv)、[manifest](docs/canonical/2026-09-12_MMWAVE_HR_RECOVERY_P0_MANIFEST.json)。HR/BR=`HOLD / SUPPORTING_ONLY`，HRV=`BLOCKED`，formal mmWave downstream 未授权。
+
 ## 2026-08-31 T0 VMD backend canonical closure — PASS（软件层核心收口）
 
 - `_load_vmd()` 移除 standalone `vmdpy` fallback，只 import `sktime.libs.vmdpy.VMD`，`importlib.metadata.version("sktime")` 严格 `1.1.0`，不匹配/未装显式 `ImportError`；backend + version 记录进结果 dict。

@@ -1,0 +1,27 @@
+stage_id,stage,historical_implementation,current_implementation,same,evidence_level,status,p1_action
+1,raw_input,"8-channel post-Range-FFT complex DataCube","same data family loaded from NPZ",YES,CODE_AND_DATA_CONTRACT,KEEP,NONE
+2,dll_timestamp,"not current DLL-time probe slicer","DLL host receive/enqueue CSV col1; Python col2 QC only",NO,ISSUE34_AND_B1,KEEP,KEEP_DLL_TIME
+3,block_probe_boundary,"60s trailing evaluation after full-record processing","[probe_end-30s,probe_end) with block-start clipping",NO,FROZEN_CONTRACTS,KEEP,NO_WINDOW_CHANGE
+4,target_selection,"first 6000 frames refined target within historical gate then fixed","per-probe simple separate selector without gate",NO,HISTORICAL_BUNDLE_ONLY,BUNDLED_ONLY,DEFER_TO_P3
+5,range_bin,"fixed after historical selection","reselected per probe",NO,HISTORICAL_BUNDLE_ONLY,BUNDLED_ONLY,NONE
+6,channel,"fixed after historical selection","reselected per probe",NO,HISTORICAL_BUNDLE_ONLY,BUNDLED_ONLY,NONE
+7,bin_spacing_distance,"0.037 m/bin used by gate and labels","0.037 m/bin used as selected-distance proxy",PARTIAL,CODE_AND_PHYSICAL_BOUNDARY,KEEP,KEEP_PROXY_ONLY
+8,physical_range_gate,"0.30-1.50m bins 9-40","none",NO,PHYSICAL_TRUTH_UNRESOLVED,REJECT,NONE
+9,static_dc_clutter,"no proven preselection suppression","no preselection suppression",YES,CONTROLLED_PRESELECTION_AB,REJECT,KEEP_ABSENCE
+10,phase_unwrap,"unwrap(angle)*wavelength/(4pi)","same producer helper",YES,CODE_TRACE,KEEP,NONE
+11,cardiac_bandpass,"Butterworth SOS order4 0.8-2.0Hz fs100","same",YES,CODE_TRACE,KEEP,NONE
+12,vmd,"not used because method=bp_heart","not called by formal adapter",YES,HISTORICAL_RUNNER_AND_CODE,UNPROVEN,DO_NOT_RESTORE
+13,heartbeat_waveform,"bandpassed displacement saved in full-record NPZ","same signal in probe memory",YES,CODE_TRACE,KEEP,NONE
+14,beat_detector,"detect_peaks_heart_lo","same function",YES,CODE_TRACE_AND_B3,KEEP,NO_NEW_DETECTOR
+15,time_domain_hr,"global segment and course robust time BPM","course robust time BPM",PARTIAL,CODE_TRACE,KEEP,RESTORE_SEGMENT_PATH_ONLY
+16,spectral_hr,"global segment and course spectral paths","course spectral selector 48-120bpm",PARTIAL,CODE_TRACE,KEEP,RESTORE_REFERENCE_PATH_ONLY
+17,candidate_generation,"global segment and course periodogram candidates","course top-8 candidates",PARTIAL,CODE_TRACE,RESTORE_EXISTING,RESTORE_REFERENCE_BUNDLE
+18,harmonic_handling,"course half/double plus segment half/double/triple; no RSP passed","course half/double present",PARTIAL,CODE_TRACE,BUNDLED_ONLY,SEGMENT_ONLY_NO_EXTERNAL_RSP
+19,previous_reference_anchor,"window-consensus seed plus within-course previous","within-course previous with reference=None",PARTIAL,CONTROLLED_STAGE_REPLAY,RESTORE_EXISTING,SEED_WITH_EXISTING_CONSENSUS
+20,time_frequency_fusion,"existing course fusion and smoothing","same",YES,CONTROLLED_STAGE_REPLAY,KEEP,NONE
+21,segment_correction,"_heart_segment_reference_correction 20s/10s","not called",NO,HISTORICAL_BUNDLE_ONLY,RESTORE_EXISTING,CALL_EXISTING_FUNCTION
+22,consensus_time_course,"window consensus seeds 25s/5s course","25s/5s course only; reference=None",PARTIAL,HISTORICAL_BUNDLE_AND_A3,RESTORE_EXISTING,ADD_CONSENSUS_SEED_ONLY
+23,confidence_usable_qc,"course quality plus global hard signal gate","course confidence/usable ratio; no producer final hard gate",PARTIAL,HISTORICAL_BUNDLE_ONLY,RESTORE_EXISTING,RESTORE_GATE_WITH_ROW_RETENTION
+24,persistence_reset,"fixed full-record target and continuous course","target and previous reset per probe",NO,NO_INDEPENDENT_EFFECT,UNPROVEN,KEEP_CURRENT_RESET
+25,baseline_180s,"first-6000 selection prefix not equivalent to formal baseline","feature median/MAD normalization exists; HR target calibration absent",NO,BASELINE_PIPELINE_CODE,UNPROVEN,DEFER_HR_TARGET_TO_P3
+26,final_aggregation,"60s evaluation-window course median; 99 valid","30s probe course medians; 2320 retained rows",NO,FROZEN_CONTRACTS,KEEP,KEEP_CURRENT_SCHEMA_AND_DENOMINATOR

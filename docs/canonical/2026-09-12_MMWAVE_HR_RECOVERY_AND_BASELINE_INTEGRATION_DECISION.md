@@ -1,9 +1,11 @@
 # mmWave HR 恢复、基线个体化与正式分析顺序决策
 
 日期：2026-09-12  
-状态：`ACTIVE / DECISION_FROZEN / EXECUTION_PENDING`  
+状态：`ACTIVE / DECISION_FROZEN / P0_COMPLETE / P1_READY_WITH_SOURCE_PRECONDITION`
 作用：统一毫米波 HR/BR/beat/HRV 的历史证据、当前已修问题、尚未收口问题、3 分钟基线的角色，以及后续正式执行顺序。  
 本文件是后续任务的高优先级方法与执行依据；任何新 HR/BR/beat/HRV 任务必须先读本文和 `docs/decisions/2026-09-12_MMWAVE_ECG_HRV_MASTER_ANALYSIS_PLAN.md`。
+
+P0 已于 2026-09-12 完成。完整的 26 阶段 lineage、P1 唯一允许恢复的 existing downstream bundle、B1–B4 provenance 限制与停止条件见 `docs/canonical/2026-09-12_MMWAVE_HR_RECOVERY_P0_PIPELINE_LINEAGE_AUDIT.md`；机器可读表和 manifest 分别为同目录的 `2026-09-12_MMWAVE_HR_RECOVERY_P0_STAGE_EVIDENCE.csv` 与 `2026-09-12_MMWAVE_HR_RECOVERY_P0_MANIFEST.json`。P1 的 source precondition 是 exact `16729b2` 或经独立验证的语义等价 canonical integration；P0 不授权 formal HR/BR/HRV 或 downstream model 晋升。
 
 ---
 

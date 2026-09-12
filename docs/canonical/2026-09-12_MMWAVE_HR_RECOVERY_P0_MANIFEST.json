@@ -1,0 +1,98 @@
+{
+  "task_id": "mmwave_hr_recovery_p0",
+  "generated_date": "2026-09-12",
+  "state": "PASS",
+  "reuse_gate": "PASS",
+  "p0_verdict": "COMPATIBLE_DOWNSTREAM_BUNDLE_MISSING_FROM_CURRENT_FORMAL_ADAPTER",
+  "p1_ready": true,
+  "p1_source_precondition": "Use exact 16729b2ef245f9304dae8674f3bac433bc02e98c in an isolated worktree or first produce a separately verified semantics-equivalent canonical integration commit.",
+  "canonical_repo_at_audit_start": "b33e277620d43ca0e0a9960b5702dea7cf2dac87",
+  "governance_repo_read_sha": "996930a86dad54a12d23587ae2bce59b2cdc4998",
+  "historical": {
+    "runner": "scripts/maintenance/run_hr_course_99_corrected.py",
+    "producer": "scripts/process_vital_signs_v3_1_1.py",
+    "producer_sha": "64634159d226ee1ed892d53e56fcf3697fbff9b8",
+    "sessions": 5,
+    "rows": 100,
+    "valid_rows": 99,
+    "window_s": 60,
+    "mae_bpm": 3.7772146,
+    "role": "HISTORICAL_COMPLETE_CHAIN_COMPARATOR"
+  },
+  "current_formal_source": {
+    "runner": "scripts/maintenance/run_mmwave_probe_merge_ready_20260831.py",
+    "producer": "scripts/process_vital_signs_v3_1_1.py",
+    "dll_cutover_sha": "16729b2ef245f9304dae8674f3bac433bc02e98c",
+    "dll_cutover_parent_sha": "b2fddca2542859f62d5f4b57f1b4fdecd54a5b4c",
+    "reachable_from_origin_main_at_audit_start": false
+  },
+  "b1": {
+    "local_root": "D:\\Project\\厚粲杯\\11_数据\\_FormalAnalysis\\mmWave\\mmwave_b1_formal_dll_replay_20260912_r2",
+    "sessions": 116,
+    "rows": 2320,
+    "computable_probes": 2180,
+    "changed_frame_membership": 1847,
+    "identical_frame_membership": 333,
+    "deterministic_feature_changed_when_membership_identical": 0,
+    "regression_gate": "PASS",
+    "models_trained": false,
+    "execution_summary_sha256": "E6347B9BCC01471380F4EEF01D9D0426D39DBBB3E46DE866964468AF669B428D",
+    "comparison_summary_sha256": "9A9D63700479F4931F3505D9348FE9C53A7665F519633E81B0B3CC5BD3CAB0B4",
+    "per_probe_comparison_sha256": "C1CCC7E4D3C01FC462D4A59BE41145D747A6D9B78B013390944F6FD49CD0C523"
+  },
+  "b2": {
+    "local_output": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_b2_ecg_rsp_window_dll_20260912_v2\\all_subjects_pre30s_selector_hr.csv",
+    "sessions": 5,
+    "probes": 100,
+    "fused_hr_mae_bpm": 10.46,
+    "output_sha256": "967FCC304EF4DDAB3B9CA9F9C8F6BC2AC6C6D20C02C43D880DFD436ACCFF00D9",
+    "adapter_sha256": "4854AAA20244FC35949E16F205072A2C45B0F7BAE939002CEB136C530DF3CB4D",
+    "test_sha256": "5D1195E3F86F7D6D1ADD4125E9C223314A236FAF9730D8DB374BFD0858D5865D",
+    "source_state_note": "Adapter and test were uncommitted modifications on a worktree at 16729b2; the run is content-addressed here and must not be described as an unmodified 16729b2 run."
+  },
+  "b3": {
+    "manifest_sha256": "97E7BD86F810E79FCF4AFDFB22801827EDADD586136C2E80DF0767B2C294272F",
+    "report_sha256": "0E86D731F4D19BC2C20BD8290588803F6B5998D7E9AEEC37A4FFA1EC265AE777",
+    "summary_sha256": "D425E8D682B4FDCAC916CABF7B9E8BFCE33660FB9DD3FDCAE0A4894DA31DC847",
+    "tolerance_sha256": "CE9534D1328FD7BF57CFC7578E03D3E3747E9F4F4DE7928046C26A5E77000B45",
+    "source_head_recorded_in_manifest": "9cbaca004aa1f6e4977b620e4efda247f343f932",
+    "hrv_gate": "BLOCKED"
+  },
+  "b4": {
+    "durable_source": "docs/canonical/2026-09-12_MMWAVE_HR_RECOVERY_AND_BASELINE_INTEGRATION_DECISION.md",
+    "independent_runner_manifest_located": false,
+    "legacy_comparator_lineage_closed": false,
+    "formal_producer_change_recommended": false
+  },
+  "restore_list": [
+    "_heart_segment_reference_correction",
+    "_heart_window_consensus_bpm",
+    "estimate_hr_time_course reference_bpm seed from existing consensus",
+    "existing producer global signal-quality hard gate with row retention"
+  ],
+  "do_not_restore_list": [
+    "historical physical range gate",
+    "preselection mean subtraction or new DC/static/clutter processing",
+    "VMD",
+    "external RSP-guided harmonic path",
+    "historical fixed target or cross-probe persistence",
+    "180s baseline HR target calibration in P1",
+    "60s aggregation or final 30s/60s comparison"
+  ],
+  "models_trained": false,
+  "formal_downstream_authorized": false,
+  "hr_br_status": "HOLD_SUPPORTING_ONLY",
+  "hrv_status": "BLOCKED",
+  "verification": {
+    "issue33_dll_and_b2_regression_tests": "12 passed",
+    "py_compile": "PASS",
+    "stage_csv_rows": 26,
+    "manifest_json_parse": "PASS",
+    "git_diff_check": "PASS after formatting cleanup"
+  },
+  "outputs": [
+    "docs/canonical/2026-09-12_MMWAVE_HR_RECOVERY_P0_PIPELINE_LINEAGE_AUDIT.md",
+    "docs/canonical/2026-09-12_MMWAVE_HR_RECOVERY_P0_STAGE_EVIDENCE.csv",
+    "docs/canonical/2026-09-12_MMWAVE_HR_RECOVERY_P0_MANIFEST.json"
+  ]
+}

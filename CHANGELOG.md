@@ -1,5 +1,12 @@
 # 修改说明
 
+## 2026-09-12 — audit(mmwave): close P0 HR recovery lineage and freeze P1 restoration bundle
+
+- Added a 26-stage historical-versus-current pipeline audit, machine-readable stage evidence, and a provenance manifest. The audit distinguishes historical 5-session/99-valid 60 s fixed-target `3.7772146 bpm` from the current 5-session/100-probe 30 s DLL-time `10.46 bpm` supporting result.
+- Confirmed that the current formal adapter already includes phase/bandpass/peak/time/spectral/harmonic-fold/within-probe previous-anchor/fusion/confidence logic. P1 is limited to existing post-target segment correction, window consensus reference, HR-course reference seeding, and the existing global signal-quality gate.
+- Explicitly excluded physical gating, preselection DC/static/clutter processing, VMD, external-RSP harmonic logic, fixed-target/cross-probe persistence, baseline target calibration, 60 s aggregation, 30/60 final comparison, ECG tuning, and downstream model training.
+- Recorded that exact B1 source `16729b2` is locally resolvable but was not reachable from `origin/main=b33e2776` at audit start; P1 must lock that exact source or use a separately verified semantics-equivalent integration.
+
 ## 2026-08-30 — audit(mmwave): execute frozen near-field / pre-selection clutter A/B
 
 - Added the minimal `run_mmwave_preselection_clutter_ab_20260830.py` adapter, reusing the current v3.1.1 selector and block-local continuity on the existing 335-window formal-block diagnostic subset. A uses the raw mean-power profile; B applies slow-time complex-mean subtraction only after Range FFT, before that same selector.

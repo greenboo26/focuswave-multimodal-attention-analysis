@@ -4,7 +4,19 @@
 >
 > 目的不是替代当前科学结论，而是回答四个问题：**以前做过什么、什么时候做的、结果怎样、为什么采用/放弃。** 只有能够说明“新证据、新输入语义、新参考标准或新研究问题与旧实验有什么实质差别”时，才允许重复已有路线。
 
-更新时间：2026-08-31（Asia/Shanghai）
+更新时间：2026-09-12（Asia/Shanghai）
+
+---
+
+### 2026-09-12：mmWave HR recovery P0 逐阶段 lineage audit — PASS / P1 READY WITH SOURCE PRECONDITION
+
+**Reuse Gate**：读取 central governance、canonical decision/master plan、Issues #34/#35、历史 runner/producer、当前 `16729b2` formal adapter、2026-08-30 controlled stage replay、2026-08-31 pre30 selector、B1–B4 与 180 s baseline pipeline。没有新算法、重跑、ECG 调参、target/gate/window 变更或模型训练。
+
+**核心判断**：历史 `3.7772146 bpm` 来自 5 sessions/99 valid 60 s windows、first-6000 selection 后 full-record fixed target 与完整 v3.1.1 chain；当前 B2 `10.46 bpm` 来自 5 sessions/100 DLL-time 30 s probes、per-probe target。两者不可直接归因比较。当前 adapter 已含 phase、0.8–2.0 Hz bandpass、peak、time/spectral、half/double fold、probe 内 previous anchor、fusion、confidence/usable ratio；遗漏的 compatible downstream bundle 为 segment reference correction、window consensus reference、HR-course reference seed 与 existing global signal-quality hard gate。previous-anchor 与 fusion 有 323-window direct supporting evidence（`24.902438→13.276285→8.319342 bpm`）；遗漏束仅有 historical bundled evidence，须 P1 同窗 A/B。
+
+**决策与边界**：P1 只从 exact `16729b2` 在 target 后恢复上述 existing bundle，冻结 DLL frames、30 s window、五键、bin/channel、denominator 与非 HR fields。physical gate、preselection DC/static/clutter、VMD、external RSP、fixed target/cross-probe persistence、180 s baseline HR target calibration、60 s aggregation不进入 P1。B1 116/2320 engineering replay维持；B2 supporting-only；B3 HRV blocked；B4 artifact/comparator lineage未闭合。`16729b2` 审计开始时不在 origin/main 祖先链，P1 必须锁 exact SHA 或先独立做语义等价集成。
+
+**证据**：`docs/canonical/2026-09-12_MMWAVE_HR_RECOVERY_P0_PIPELINE_LINEAGE_AUDIT.md`、`2026-09-12_MMWAVE_HR_RECOVERY_P0_STAGE_EVIDENCE.csv`、`2026-09-12_MMWAVE_HR_RECOVERY_P0_MANIFEST.json`。HR/BR=`HOLD / SUPPORTING_ONLY`；HRV=`BLOCKED`；`models_trained=false`。
 
 ---
 
