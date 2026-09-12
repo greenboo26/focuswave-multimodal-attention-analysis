@@ -2,7 +2,7 @@
 
 STATUS: PASS / FAILURE_ATTRIBUTION_COMPLETE
 
-Canonical repository: `greenboo26/focuswave-multimodal-attention-analysis@main`  
+Canonical repository: `greenboo26/focuswave-multimodal-attention-analysis@main`
 Canonical commit: `be8c9f0f82b4a99bc6bb438ee0c3267b5310cde1`
 
 Frozen scope: sessions `9779/97793/97794/97795/97796`; 100 probes; DLL host receive/enqueue timestamp; `[probe_end - 30 s, probe_end)`; current per-probe dynamic target; frozen ECG reference.
