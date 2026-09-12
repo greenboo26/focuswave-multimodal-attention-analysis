@@ -1,5 +1,14 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-09-13 mmWave 系统性低估机制审计 v1 — MULTIFACTOR_MECHANISM_SUPPORTED
+
+- 完全复用 estimator improvement v1 的冻结 denominator（5 sessions / 100 probes / ECG_VALID 100/100 / DLL-time 30 s），三份输入 SHA-256 exact match；`CONTROL_REPRODUCTION=PASS`（fused MAE `10.457079173` / bias `-9.033105842` / p90 AE `24.054346218`；time `8.996965770` / `-6.737621327`；spectral `15.123834193` / `-13.351010046`）。
+- 关键发现：`CORRECT_OR_NEAR_CORRECT` 的 fused bias 仅 `+0.215472 bpm`（MAE `1.538915`），即链路判断正确时估计器几乎无偏；总体 −9 bpm 全部由三个失败类别承担（wrong peak 贡献 `-3.297976`、harmonic `-3.486216`、target miss `-2.332948`）。
+- 频域路偏低最重（`-13.351010`），融合在 57/100 个 probe 上把结果拉低于 time、worsen/improve=`47/31`、净叠加 `1.460113 bpm`，并产生 4 个"time AE≤5 → fused AE>10"转换；但 fused 从不比 time 与 spectral 都差，故融合不是主要来源。
+- 距离为弱且被 session/类别混淆的关联（ρ=`0.020855`，DESCRIPTIVE_ONLY / CLUSTERED_NONINDEPENDENT；within-session far−near 在 4/5 个可评估 session 中为负、97794 反号）；ECG 心率带无清晰特异性；既有 QC 字段无 session 一致关系（`hr_usable_ratio` 恒为 1.0 无方差；phase_stability/motion_proxy 的 ρ 仅 0.32/0.27 且 97793 反号；`hr_confidence` 与 selection margin 为 NOT_AVAILABLE）；无 ≈0.5/≈2.0 谐波锁定，但非谐波残留仍为 `-6.764500 bpm`。
+- 只读审计：未改正式 producer、未改 integration snapshot v1、未形成 snapshot v2、未训练模型、HRV=`BLOCKED`。`NEXT_HYPOTHESIS`（不在本轮实现，须先进入 untouched validation）：频域打分的 time/previous 邻近项是否把谱峰系统性拉低；anchor 更新规则是否让历史低估驻留。
+- 证据：`docs/results/2026-09-13_MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1/`（report、manifest、`FUSION_PATH_AUDIT.md`、各分解表、机制证据矩阵、error log、handoff）；逐 probe 表 local-only，路径与 SHA-256 已登记。Issue #35 保持 OPEN 作为 improvement 主线；Issue #36 已 CLOSED / COMPLETED；Issue #41 保持 integration snapshot v1 身份。
+
 ## 2026-09-12 mmWave estimator improvement v1 — NO_STABLE_IMPROVEMENT
 
 - Phase A 复用既有 `gold_standard_qa.py` 与 `ecg_rsp_goldclean_reaudit_v1`：当前 P2 5 场/100 probe/探针前 30 s 的 key 100/100 精确匹配；`ECG_VALID/ECG_INVALID/UNRESOLVED=100/0/0`，RSP 基本/严格可用=`95/79`。未调参考阈值，未删除窗口。

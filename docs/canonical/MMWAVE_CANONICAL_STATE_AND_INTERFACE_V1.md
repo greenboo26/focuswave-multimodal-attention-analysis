@@ -5,6 +5,14 @@ Status: `CANONICAL / MAIN-BOUND / MMWAVE_INTEGRATION_SNAPSHOT_V1_READY / PHYSIOL
 Effective date: 2026-08-30. This document is the first mmWave-specific state authority for any AI or human entering the canonical repository. It consolidates branch history, current scientific decisions, time semantics, and the reserved multimodal interface. It does not rerun science and does not promote HR/BR/HRV beyond their existing evidence boundaries.
 
 ## Current implementation pointer — 2026-09-12
+## Mechanism-audit pointer — 2026-09-13
+
+The low-bias mechanism audit v1 (`MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1`) is a read-only diagnostic on the frozen 5-session / 100-probe development set. Its conclusion is `MULTIFACTOR_MECHANISM_SUPPORTED`: on probes whose failure class is `CORRECT_OR_NEAR_CORRECT` the fused estimator is nearly unbiased (`+0.215 bpm`), so the pooled `-9 bpm` is carried by the `SELECTED_TARGET_WRONG_PEAK`, `HARMONIC_OR_HALF_DOUBLE_LOCK` and `TARGET_BIN_CHANNEL_MISS` classes; the spectral arm is the most low-biased arm and the fusion step adds a further `~1.46 bpm` penalty without ever being worse than both arms. Distance is only a weak, session-confounded association, the ECG HR bands show no clean specificity, and the available QC fields are not session-consistent.
+
+This does not change the integration snapshot, the formal producer, the feature registry, or any HR/BR/HRV boundary. HR/BR remain `HOLD / SUPPORTING_ONLY`, HRV remains `BLOCKED`, and no candidate or snapshot v2 exists. The mechanism-derived ideas are recorded only as `NEXT_HYPOTHESIS` and must pass an untouched participant/session-disjoint validation before implementation.
+
+Evidence: `docs/results/2026-09-13_MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1/`.
+
 
 The governed implementation is now `mmwave_integration_snapshot_v1`, documented under `docs/results/2026-09-12_MMWAVE_INTEGRATION_SNAPSHOT_V1/`. It packages the existing corrected replay without changing the algorithm: 116 sessions / 61 participant groups / 2,320 probes, with 109 sessions / 2,180 probes estimable and all 140 unavailable or malformed probes retained as missing.
 

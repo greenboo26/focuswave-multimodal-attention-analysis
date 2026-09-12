@@ -1,0 +1,447 @@
+{
+  "task_id": "mmwave_systematic_low_bias_mechanism_audit_v1",
+  "run_id": "mmwave_low_bias_mechanism_audit_v1_20260913_r1",
+  "audit_type": "MECHANISM_AUDIT",
+  "source_commit": "291e50ab4313685b0645210756c9921ec9e8f245",
+  "script": {
+    "path": "D:\\Project\\厚粲杯\\08_算法_worktrees\\mmwave_low_bias_mechanism_audit_v1_20260913\\scripts\\maintenance\\run_mmwave_low_bias_mechanism_audit_20260913.py",
+    "sha256": "ECFFC4937EADB2DBAB68FFD45D39085F81954351AAE0655E61B83D7071B4E67B"
+  },
+  "inputs": {
+    "CONTROL_VS_CANDIDATES_100_PROBES_LOCAL_ONLY.csv": {
+      "path": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_estimator_improvement_v1_20260912_r1\\final_r6\\CONTROL_VS_CANDIDATES_100_PROBES_LOCAL_ONLY.csv",
+      "sha256": "B4251445B1938DF61F07EFECE9ECBA4DD29FEFFCEED699E0B5B5226D0571A76D",
+      "rows": 100
+    },
+    "REFERENCE_QC_ELIGIBILITY_100_PROBES_LOCAL_ONLY.csv": {
+      "path": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_estimator_improvement_v1_20260912_r1\\final_r6\\REFERENCE_QC_ELIGIBILITY_100_PROBES_LOCAL_ONLY.csv",
+      "sha256": "EA9DB07FB37A2027569714B3193FC49AAFECA7C59690750BFFAF523C7188F479",
+      "rows": 100
+    },
+    "MMWAVE_HR_RECOVERY_P2_ATTRIBUTION_100_PROBES.csv": {
+      "path": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_estimator_improvement_v1_20260912_r1\\phase_a_strict_p2_detail\\MMWAVE_HR_RECOVERY_P2_ATTRIBUTION_100_PROBES.csv",
+      "sha256": "FFED63DDE2E30F5A7B216E5996CB136012286CE4832CA82E6541A66E556C81B1",
+      "rows": 100
+    }
+  },
+  "denominator": {
+    "n_probes": 100,
+    "n_sessions": 5,
+    "session_counts": {
+      "9779": 20,
+      "97793": 20,
+      "97794": 20,
+      "97795": 20,
+      "97796": 20
+    },
+    "failure_class_counts": {
+      "CORRECT_OR_NEAR_CORRECT": 39,
+      "SELECTED_TARGET_WRONG_PEAK": 27,
+      "HARMONIC_OR_HALF_DOUBLE_LOCK": 18,
+      "TARGET_BIN_CHANNEL_MISS": 16
+    }
+  },
+  "frozen_control_expected": {
+    "fused": {
+      "mae": 10.457079173363644,
+      "bias": -9.033105841645153,
+      "p90_ae": 24.054346217778583
+    },
+    "time": {
+      "mae": 8.996965770296207,
+      "bias": -6.737621326761782
+    },
+    "spectral": {
+      "mae": 15.12383419314452,
+      "bias": -13.35101004598486
+    }
+  },
+  "frozen_control_reproduced": {
+    "fused": {
+      "mae": 10.457079173,
+      "bias": -9.033105842,
+      "p90_ae": 24.054346218
+    },
+    "time": {
+      "mae": 8.99696577,
+      "bias": -6.737621327
+    },
+    "spectral": {
+      "mae": 15.123834193,
+      "bias": -13.351010046
+    }
+  },
+  "control_tolerance": 1e-06,
+  "fusion_summary": {
+    "POOLED": {
+      "n": 100,
+      "spectral_lt_time_n": 78,
+      "fused_lt_time_n": 57,
+      "spectral_pulled_fused_down_n": 57,
+      "time_ae_le5_fused_gt5_n": 7,
+      "time_ae_le5_fused_gt10_n": 4,
+      "improve_n": 31,
+      "worsen_n": 47,
+      "tie_n": 22,
+      "mean_fusion_penalty_vs_time_bpm": 1.4601134030674368,
+      "mean_fusion_signed_shift_vs_time_bpm": -2.29548451488337,
+      "mean_spectral_signed_shift_vs_time_bpm": -6.613388719223079,
+      "gap_gt10_n": 31,
+      "fusion_worse_than_both_arms_n": 0
+    },
+    "9779": {
+      "n": 20,
+      "spectral_lt_time_n": 15,
+      "fused_lt_time_n": 12,
+      "spectral_pulled_fused_down_n": 12,
+      "time_ae_le5_fused_gt5_n": 1,
+      "time_ae_le5_fused_gt10_n": 1,
+      "improve_n": 10,
+      "worsen_n": 7,
+      "tie_n": 3,
+      "mean_fusion_penalty_vs_time_bpm": 0.9224202215397227,
+      "mean_fusion_signed_shift_vs_time_bpm": -1.455757921964998,
+      "mean_spectral_signed_shift_vs_time_bpm": -4.7932702186165566,
+      "gap_gt10_n": 4,
+      "fusion_worse_than_both_arms_n": 0
+    },
+    "97793": {
+      "n": 20,
+      "spectral_lt_time_n": 17,
+      "fused_lt_time_n": 10,
+      "spectral_pulled_fused_down_n": 10,
+      "time_ae_le5_fused_gt5_n": 1,
+      "time_ae_le5_fused_gt10_n": 1,
+      "improve_n": 5,
+      "worsen_n": 8,
+      "tie_n": 7,
+      "mean_fusion_penalty_vs_time_bpm": 0.9880292124755069,
+      "mean_fusion_signed_shift_vs_time_bpm": -2.209840940345306,
+      "mean_spectral_signed_shift_vs_time_bpm": -10.37189174592126,
+      "gap_gt10_n": 9,
+      "fusion_worse_than_both_arms_n": 0
+    },
+    "97794": {
+      "n": 20,
+      "spectral_lt_time_n": 16,
+      "fused_lt_time_n": 12,
+      "spectral_pulled_fused_down_n": 12,
+      "time_ae_le5_fused_gt5_n": 3,
+      "time_ae_le5_fused_gt10_n": 1,
+      "improve_n": 7,
+      "worsen_n": 9,
+      "tie_n": 4,
+      "mean_fusion_penalty_vs_time_bpm": 1.8260438954650102,
+      "mean_fusion_signed_shift_vs_time_bpm": -4.568150988979103,
+      "mean_spectral_signed_shift_vs_time_bpm": -8.14844675998529,
+      "gap_gt10_n": 8,
+      "fusion_worse_than_both_arms_n": 0
+    },
+    "97795": {
+      "n": 20,
+      "spectral_lt_time_n": 16,
+      "fused_lt_time_n": 14,
+      "spectral_pulled_fused_down_n": 14,
+      "time_ae_le5_fused_gt5_n": 1,
+      "time_ae_le5_fused_gt10_n": 0,
+      "improve_n": 2,
+      "worsen_n": 15,
+      "tie_n": 3,
+      "mean_fusion_penalty_vs_time_bpm": 3.2766689123170267,
+      "mean_fusion_signed_shift_vs_time_bpm": -2.978245237444544,
+      "mean_spectral_signed_shift_vs_time_bpm": -4.946488786857349,
+      "gap_gt10_n": 5,
+      "fusion_worse_than_both_arms_n": 0
+    },
+    "97796": {
+      "n": 20,
+      "spectral_lt_time_n": 14,
+      "fused_lt_time_n": 9,
+      "spectral_pulled_fused_down_n": 9,
+      "time_ae_le5_fused_gt5_n": 1,
+      "time_ae_le5_fused_gt10_n": 1,
+      "improve_n": 7,
+      "worsen_n": 8,
+      "tie_n": 5,
+      "mean_fusion_penalty_vs_time_bpm": 0.2874047735399177,
+      "mean_fusion_signed_shift_vs_time_bpm": -0.26542748568289803,
+      "mean_spectral_signed_shift_vs_time_bpm": -4.806846084734942,
+      "gap_gt10_n": 5,
+      "fusion_worse_than_both_arms_n": 0
+    }
+  },
+  "distance_descriptives": {
+    "label": "DESCRIPTIVE_ONLY / CLUSTERED_NONINDEPENDENT",
+    "note": "100 probes come from 5 sessions; no population inference and no cutpoint search.",
+    "spearman_distance_vs_signed_error_fused": 0.02085450623068847,
+    "spearman_distance_vs_absolute_error_fused": 0.004382162524885624,
+    "spearman_distance_vs_fusion_penalty_vs_time": 0.00661148597594336,
+    "spearman_distance_vs_signed_error_time": 0.06547288830225119,
+    "spearman_distance_vs_signed_error_spectral": 0.14157523694379104,
+    "distance_min_m": 0.259,
+    "distance_median_m": 0.4625,
+    "distance_max_m": 9.176
+  },
+  "within_session_distance": [
+    {
+      "subject": "9779",
+      "n_total": 20,
+      "n_near_lt1.5m": 15,
+      "n_far_ge1.5m": 5,
+      "near_fused_bias_bpm": "-5.272624",
+      "far_fused_bias_bpm": "-7.426486",
+      "within_session_far_minus_near_bias_bpm": "-2.153862",
+      "near_time_bias_bpm": "-4.852790",
+      "far_time_bias_bpm": "-2.862954",
+      "far_pooled_fused_bias_bpm": "-13.308421",
+      "far_pooled_n": 24,
+      "far_share_of_this_session_pct": "25.000",
+      "far_share_of_all_far_pct": "20.833"
+    },
+    {
+      "subject": "97793",
+      "n_total": 20,
+      "n_near_lt1.5m": 16,
+      "n_far_ge1.5m": 4,
+      "near_fused_bias_bpm": "-6.042120",
+      "far_fused_bias_bpm": "-12.301104",
+      "within_session_far_minus_near_bias_bpm": "-6.258984",
+      "near_time_bias_bpm": "-3.870305",
+      "far_time_bias_bpm": "-9.939157",
+      "far_pooled_fused_bias_bpm": "-13.308421",
+      "far_pooled_n": 24,
+      "far_share_of_this_session_pct": "20.000",
+      "far_share_of_all_far_pct": "16.667"
+    },
+    {
+      "subject": "97794",
+      "n_total": 20,
+      "n_near_lt1.5m": 18,
+      "n_far_ge1.5m": 2,
+      "near_fused_bias_bpm": "-5.176956",
+      "far_fused_bias_bpm": "-3.395781",
+      "within_session_far_minus_near_bias_bpm": "1.781175",
+      "near_time_bias_bpm": "-0.193800",
+      "far_time_bias_bpm": "-2.562675",
+      "far_pooled_fused_bias_bpm": "-13.308421",
+      "far_pooled_n": 24,
+      "far_share_of_this_session_pct": "10.000",
+      "far_share_of_all_far_pct": "8.333"
+    },
+    {
+      "subject": "97795",
+      "n_total": 20,
+      "n_near_lt1.5m": 15,
+      "n_far_ge1.5m": 5,
+      "near_fused_bias_bpm": "-16.241280",
+      "far_fused_bias_bpm": "-21.232975",
+      "within_session_far_minus_near_bias_bpm": "-4.991694",
+      "near_time_bias_bpm": "-12.214844",
+      "far_time_bias_bpm": "-21.399303",
+      "far_pooled_fused_bias_bpm": "-13.308421",
+      "far_pooled_n": 24,
+      "far_share_of_this_session_pct": "25.000",
+      "far_share_of_all_far_pct": "20.833"
+    },
+    {
+      "subject": "97796",
+      "n_total": 20,
+      "n_near_lt1.5m": 12,
+      "n_far_ge1.5m": 8,
+      "near_fused_bias_bpm": "-5.945066",
+      "far_fused_bias_bpm": "-15.013604",
+      "within_session_far_minus_near_bias_bpm": "-9.068538",
+      "near_time_bias_bpm": "-6.294517",
+      "far_time_bias_bpm": "-13.825859",
+      "far_pooled_fused_bias_bpm": "-13.308421",
+      "far_pooled_n": 24,
+      "far_share_of_this_session_pct": "40.000",
+      "far_share_of_all_far_pct": "33.333"
+    }
+  ],
+  "bias_attribution": [
+    {
+      "failure_class": "CORRECT_OR_NEAR_CORRECT",
+      "n": 39,
+      "share_of_probes_pct": "39.000",
+      "mean_signed_error_fused_bpm": "0.215472",
+      "bias_contribution_to_pooled_bpm": "0.084034",
+      "share_of_pooled_bias_pct": "-0.930",
+      "mean_signed_error_time_bpm": "0.176566",
+      "time_bias_contribution_to_pooled_bpm": "0.068861",
+      "mean_fusion_penalty_vs_time_bpm": "-1.368411",
+      "fusion_penalty_contribution_to_pooled_bpm": "-0.533680"
+    },
+    {
+      "failure_class": "SELECTED_TARGET_WRONG_PEAK",
+      "n": 27,
+      "share_of_probes_pct": "27.000",
+      "mean_signed_error_fused_bpm": "-12.214726",
+      "bias_contribution_to_pooled_bpm": "-3.297976",
+      "share_of_pooled_bias_pct": "36.510",
+      "mean_signed_error_time_bpm": "-9.652446",
+      "time_bias_contribution_to_pooled_bpm": "-2.606160",
+      "mean_fusion_penalty_vs_time_bpm": "3.117038",
+      "fusion_penalty_contribution_to_pooled_bpm": "0.841600"
+    },
+    {
+      "failure_class": "HARMONIC_OR_HALF_DOUBLE_LOCK",
+      "n": 18,
+      "share_of_probes_pct": "18.000",
+      "mean_signed_error_fused_bpm": "-19.367868",
+      "bias_contribution_to_pooled_bpm": "-3.486216",
+      "share_of_pooled_bias_pct": "38.594",
+      "mean_signed_error_time_bpm": "-16.252071",
+      "time_bias_contribution_to_pooled_bpm": "-2.925373",
+      "mean_fusion_penalty_vs_time_bpm": "2.124389",
+      "fusion_penalty_contribution_to_pooled_bpm": "0.382390"
+    },
+    {
+      "failure_class": "TARGET_BIN_CHANNEL_MISS",
+      "n": 16,
+      "share_of_probes_pct": "16.000",
+      "mean_signed_error_fused_bpm": "-14.580922",
+      "bias_contribution_to_pooled_bpm": "-2.332948",
+      "share_of_pooled_bias_pct": "25.827",
+      "mean_signed_error_time_bpm": "-7.968431",
+      "time_bias_contribution_to_pooled_bpm": "-1.274949",
+      "mean_fusion_penalty_vs_time_bpm": "4.811271",
+      "fusion_penalty_contribution_to_pooled_bpm": "0.769803"
+    },
+    {
+      "failure_class": "ALL_PROBES",
+      "n": 100,
+      "share_of_probes_pct": "100.000",
+      "mean_signed_error_fused_bpm": "-9.033106",
+      "bias_contribution_to_pooled_bpm": "-9.033106",
+      "share_of_pooled_bias_pct": "100.000",
+      "mean_signed_error_time_bpm": "-6.737621",
+      "time_bias_contribution_to_pooled_bpm": "-6.737621",
+      "mean_fusion_penalty_vs_time_bpm": "1.460113",
+      "fusion_penalty_contribution_to_pooled_bpm": "1.460113"
+    }
+  ],
+  "harmonic_relations": [
+    {
+      "arm": "fused",
+      "n": 100,
+      "ratio_median": "0.909652",
+      "ratio_p10": "0.717184",
+      "ratio_p90": "1.021576",
+      "n_near_half_lock_0.45_0.55": 0,
+      "n_near_double_lock_1.9_2.1": 0,
+      "n_strongly_low_ratio_lt0.8": 27,
+      "note": "frozen diagnostic relations only; no tolerance re-optimisation"
+    },
+    {
+      "arm": "time",
+      "n": 100,
+      "ratio_median": "0.935695",
+      "ratio_p10": "0.755060",
+      "ratio_p90": "1.056199",
+      "n_near_half_lock_0.45_0.55": 0,
+      "n_near_double_lock_1.9_2.1": 0,
+      "n_strongly_low_ratio_lt0.8": 16,
+      "note": "frozen diagnostic relations only; no tolerance re-optimisation"
+    },
+    {
+      "arm": "spectral",
+      "n": 100,
+      "ratio_median": "0.840575",
+      "ratio_p10": "0.630688",
+      "ratio_p90": "1.022796",
+      "n_near_half_lock_0.45_0.55": 0,
+      "n_near_double_lock_1.9_2.1": 0,
+      "n_strongly_low_ratio_lt0.8": 46,
+      "note": "frozen diagnostic relations only; no tolerance re-optimisation"
+    }
+  ],
+  "secondary_flag_frequency": {
+    "DIAGNOSTIC_ONLY": 100,
+    "ORACLE_ASSISTED": 100,
+    "FUSION_IMPROVED_VS_SPECTRAL": 70,
+    "TIME_AND_SPECTRAL_WRONG": 53,
+    "FUSION_WORSENED_VS_TIME": 47,
+    "FUSION_IMPROVED_VS_TIME": 31,
+    "FUSION_TIED_VS_TIME": 22,
+    "FUSION_WORSENED_VS_SPECTRAL": 21,
+    "SPECTRAL_NEAR_2X3X_BR": 13,
+    "FUSED_NEAR_2X3X_BR": 12,
+    "TIME_NEAR_2X3X_BR": 12,
+    "FUSION_TIED_VS_SPECTRAL": 9,
+    "TIME_CORRECT_FUSION_WRONG": 7,
+    "SPECTRAL_CORRECT_FUSION_WRONG": 1
+  },
+  "mechanism_status": "MULTIFACTOR_MECHANISM_SUPPORTED",
+  "primary_mechanism": "FAILURE_MODE_CONDITIONAL_LOW_BIAS: 当链路判断正确时融合心率几乎无偏，总体低估集中在 wrong peak / harmonic / target miss 三个失败类别，且这些类别的估计一律偏向低端。",
+  "secondary_mechanism": "SPECTRAL_LOW_BIAS_PULLS_FUSION_DOWN: 频域路相对时域路系统性偏低，融合在多数 probe 上把结果进一步拉低并贡献约 1.5 bpm 额外绝对误差。",
+  "mechanism_candidates": [
+    "SPECTRAL_LOW_BIAS_PULLS_FUSION_DOWN",
+    "DISTANCE_OR_GEOMETRY_ASSOCIATION",
+    "TARGET_SELECTION_ERROR",
+    "SELECTED_TARGET_PEAK_ESTIMATION_ERROR",
+    "HARMONIC_ERROR",
+    "LOW_SIGNAL_OR_QC",
+    "SESSION_SPECIFIC_DATA_QUALITY"
+  ],
+  "markdown_deliverables": {
+    "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_REPORT.md": {
+      "sha256": "B04F9632F001922AC97557C56445F815FC8823D870052EE0BFA89BE0C451DAAE"
+    },
+    "FUSION_PATH_AUDIT.md": {
+      "sha256": "17E1C447072C2F6294C0E0594EFA5754A8950C2525F66E7CDB77942C0B41761F"
+    },
+    "HANDOFF.md": {
+      "sha256": "D2B118557C2E2EC69D4F76A6021B74C51A92C3F78559687ED70CFC7E12D61D73"
+    },
+    "ERROR_LOG.json": {
+      "sha256": "0FA0A230D297F60671F21A84ABE0B3D46CF5DB95896B136E7F4B5BDDF92877FB"
+    }
+  },
+  "qc_fields_used": [
+    "hr_usable_ratio",
+    "phase_stability",
+    "motion_proxy",
+    "mmwave_frames"
+  ],
+  "qc_fields_not_available": {
+    "hr_confidence": "P2 detail 的 hr_confidence 在本轮冻结 output 中为空；不补算。",
+    "selected_channel_selection_margin": "P2 detail 该列本轮为空值；不补算。",
+    "selected_candidate_power": "P2 detail 该列为单个 selected candidate 值，非窗口级 margin；不作为 QC 门使用。",
+    "gate_hit": "control 表 gate_hit 全为 False，无区分度（记录了未被全局硬门拦截）。"
+  },
+  "local_only_outputs": [
+    {
+      "name": "PROBE_LEVEL_MECHANISM_100_PROBES.csv",
+      "path": "D:\\Project\\厚粲杯\\11_数据\\derived\\mmwave_low_bias_mechanism_audit_v1_20260913\\PROBE_LEVEL_MECHANISM_100_PROBES.csv",
+      "rows": 100,
+      "sha256": "76EABD8B114D7769E47508C7EC66BEE4370A658C353014A056C7AECDAF8F5BD5",
+      "reason": "probe-level ECG reference and per-probe diagnostics; not Git-safe"
+    }
+  ],
+  "git_safe_outputs": [
+    "BIAS_ATTRIBUTION_DECOMPOSITION.csv",
+    "DISTANCE_FAILURE_CLASS_MATRIX.csv",
+    "DISTANCE_SESSION_STRATIFIED.csv",
+    "ECG_HR_BAND_DECOMPOSITION.csv",
+    "ERROR_LOG.json",
+    "FAILURE_CLASS_BIAS_DECOMPOSITION.csv",
+    "FUSION_LOW_BIAS_DECOMPOSITION.csv",
+    "FUSION_PATH_AUDIT.md",
+    "HANDOFF.md",
+    "MECHANISM_EVIDENCE_MATRIX.csv",
+    "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_MANIFEST.json",
+    "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_REPORT.md",
+    "QC_BIAS_DECOMPOSITION.csv",
+    "WITHIN_SESSION_DISTANCE_CHECK.csv"
+  ],
+  "boundaries": {
+    "no_new_gating_rule": true,
+    "no_new_threshold": true,
+    "no_production_candidate": true,
+    "snapshot_v1_modified": false,
+    "formal_producer_modified": false,
+    "models_trained": false,
+    "hrv_status": "BLOCKED"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "task_id": "mmwave_systematic_low_bias_mechanism_audit_v1",
+  "run_id": "mmwave_low_bias_mechanism_audit_v1_20260913_r1",
+  "errors": [],
+  "warnings": [
+    {
+      "id": "QC_HR_USABLE_RATIO_CONSTANT",
+      "detail": "hr_usable_ratio is 1.0 for all 100 probes, so it has no discriminating power in this development set; rank correlations are undefined, not missing."
+    },
+    {
+      "id": "QC_FIELDS_NOT_AVAILABLE",
+      "detail": {
+        "hr_confidence": "P2 detail 的 hr_confidence 在本轮冻结 output 中为空；不补算。",
+        "selected_channel_selection_margin": "P2 detail 该列本轮为空值；不补算。",
+        "selected_candidate_power": "P2 detail 该列为单个 selected candidate 值，非窗口级 margin；不作为 QC 门使用。",
+        "gate_hit": "control 表 gate_hit 全为 False，无区分度（记录了未被全局硬门拦截）。"
+      }
+    },
+    {
+      "id": "P2_CLASS_LABEL_SOURCE",
+      "detail": "The frozen per-probe failure class is taken from the P2 detail column PRIMARY_FAILURE_CLASS. The copy of that label inside the control table differs and was not used."
+    },
+    {
+      "id": "SESSION_CONFOUNDING",
+      "detail": "Distance-band and ECG-band cells are confounded with the 5 calibration sessions; every pooled number in the report is accompanied by a per-session table and must not be read as population inference."
+    }
+  ],
+  "blocked_conditions_encountered": [],
+  "state": "AUDIT_COMPLETE"
+}
