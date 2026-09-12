@@ -1,0 +1,140 @@
+{
+  "task_id": "mmwave_hr_candidate_preregistration_v1",
+  "run_id": "mmwave_hr_candidate_preregistration_v1_20260913_r1",
+  "document_type": "PREREGISTRATION",
+  "status": "FROZEN_PREREGISTRATION / NO_CANDIDATE_IMPLEMENTED / NO_RUN_PERFORMED",
+  "date": "2026-09-13",
+  "base_commit": "97cfa4e9a539d4f5df63913b24f63a1288636b6c",
+  "preregistration_only": true,
+  "data_run_performed": false,
+  "candidates_frozen": [
+    {
+      "candidate_id": "C1_SPECTRAL_SCORING_NEUTRALITY",
+      "mechanism_basis": "spectral candidate scoring subtracts 0.035*|candidate - time_bpm| and 0.025*|candidate - previous_bpm|; both attractors are themselves biased low, and CONTROL_SPECTRAL carries the most negative bias (-13.351010 bpm) of the three arms in the low-bias mechanism audit",
+      "code_path": "scripts/process_vital_signs_v3_1_1.py::_select_spectral_bpm",
+      "allowed_change": "weaken or remove the time/previous proximity penalties only; mmWave-derived quantities and frozen constants only; at most one registered variant",
+      "forbidden_change": "ECG-informed selection; band change; new distance/quality/confidence gate; harmonic-fold tolerance change; fusion change; target or window change",
+      "implemented": false
+    },
+    {
+      "candidate_id": "C2_ANCHOR_PERSISTENCE",
+      "mechanism_basis": "anchor persistence uses next_previous = 0.8*previous + 0.2*fused gated at confidence>=0.12, and _smooth_track uses alpha = 0.20 + 0.30*clip(confidence,0,1) with a +/-7.0 bpm step limit; the anchor is also the tie-breaker when |time-spectral| > 10 bpm (31/100 development probes), so a low anchor favours the lower arm",
+      "code_paths": [
+        "scripts/maintenance/run_mmwave_pre30s_selector_hr_20260831.py::selector_step (probe-level adapter reusing producer methods)",
+        "scripts/process_vital_signs_v3_1_1.py::_smooth_track"
+      ],
+      "allowed_change": "anchor update dynamics only (faster escape from history, no low-confidence update, symmetric rate limit) using mmWave-derived quantities and existing constants",
+      "forbidden_change": "ECG-decided anchor update; harmonic-fold tolerance change; fusion weighted-average change; target or window change",
+      "implemented": false
+    }
+  ],
+  "success_criteria": {
+    "shared_by_both_candidates": true,
+    "criteria": {
+      "mae_improvement_bpm": 1.0,
+      "paired_improve_gt_worsen": true,
+      "max_per_session_mae_increase_bpm": 1.0,
+      "ae_gt_10_count_not_increased": true,
+      "correct_to_catastrophic_transitions": 0
+    },
+    "failure_conditions": [
+      "any success criterion unmet",
+      "candidate not computable on the validation set",
+      "implementation deviates from this preregistration",
+      "variant chosen after seeing validation results"
+    ],
+    "register": "docs/canonical/CANDIDATE_SUCCESS_CRITERIA_V1.csv"
+  },
+  "development_set_frozen": {
+    "sessions": [
+      "9779",
+      "97793",
+      "97794",
+      "97795",
+      "97796"
+    ],
+    "design": "single_person_repeated_measurement_ecg_rsp_calibration_reference",
+    "probes": 100,
+    "participant_disjoint": false,
+    "usable_as_validation": false
+  },
+  "validation_gate": {
+    "required_set": "MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1",
+    "formed": false,
+    "contract": "docs/canonical/MMWAVE_HR_UNTOUCHED_VALIDATION_SET_PLAN_V1.md",
+    "contract_checks": [
+      "VS_1_SESSION_DISJOINT",
+      "VS_2_PARTICIPANT_DISJOINT",
+      "VS_3_UNTOUCHED",
+      "VS_4_INDEPENDENT_ECG_REFERENCE",
+      "VS_5_WINDOW_CONTRACT",
+      "VS_6_ECG_ELIGIBILITY",
+      "VS_7_DENOMINATOR_FROZEN",
+      "VS_8_NO_REUSE",
+      "VS_9_NO_DEVELOPMENT_LEAKAGE",
+      "VS_10_NO_SNAPSHOT_V2"
+    ],
+    "run_permitted": false
+  },
+  "validation_set_inventory": {
+    "development_gold_clean_reference": {
+      "source": "11_数据/derived/ecg_rsp_goldclean_reaudit_v1",
+      "sessions": 5,
+      "ecg_usable_windows": 100,
+      "covers_only_development_sessions": true
+    },
+    "formal_cohort": {
+      "source": "docs/results/2026-09-12_MMWAVE_INTEGRATION_SNAPSHOT_V1/",
+      "sessions": 116,
+      "participant_groups": 61,
+      "probes": 2320,
+      "estimable_sessions": 109,
+      "estimable_probes": 2180,
+      "session_overlap_with_development": 0,
+      "per_window_gold_clean_ecg_reference_exists": false
+    },
+    "other_local_ecg_sources": {
+      "calibration_sessions": [
+        "sub-2_",
+        "sub-3_",
+        "sub-4_",
+        "sub-5_",
+        "sub-6_"
+      ],
+      "no_probe_window_pairing": true,
+      "sub_7_raw_source_absent": true,
+      "sub_97792_windows": 4
+    },
+    "recommended_option": "OPT_A",
+    "recommended_option_note": "formal-cohort sessions; session- and participant-disjoint; blocked only on an independent per-window gold-clean ECG reference",
+    "explicitly_not_recommended": "OPT_B (calibration sessions) because adapting the window contract to available data would weaken comparability"
+  },
+  "boundaries": {
+    "snapshot_v1_modified": false,
+    "formal_producer_modified": false,
+    "v2_formed": false,
+    "models_trained": false,
+    "hrv_status": "BLOCKED",
+    "hr_br_status": "HOLD / SUPPORTING_ONLY",
+    "candidate_implemented": false,
+    "production_candidate": false,
+    "threshold_changed": false,
+    "distance_gate_created": false,
+    "global_bias_correction_applied": false
+  },
+  "main_analysis_blocking": false,
+  "mmwave_role": "PARALLEL_CONTROLLED_VALIDATION_LINE",
+  "deliverables": [
+    "docs/canonical/MMWAVE_HR_CANDIDATE_PREREGISTRATION_V1.md",
+    "docs/canonical/MMWAVE_HR_UNTOUCHED_VALIDATION_SET_PLAN_V1.md",
+    "docs/canonical/CANDIDATE_SUCCESS_CRITERIA_V1.csv",
+    "tests/test_mmwave_hr_candidate_preregistration.py"
+  ],
+  "next_task": "mmwave_hr_untouched_ecg_validation_set_v1 (OPT_A construction; separate task)",
+  "document_digests_lf_normalised": {
+    "docs/canonical/MMWAVE_HR_CANDIDATE_PREREGISTRATION_V1.md": "0667A0D6165D93FF5FF5417564020F680323254EE30FF5B69AB31ACFFCBF9613",
+    "docs/canonical/MMWAVE_HR_UNTOUCHED_VALIDATION_SET_PLAN_V1.md": "C73C90BA48EC688E4EE92BDFC9483BE58B81F7635AF90F1654972549CABEBAFD",
+    "docs/canonical/CANDIDATE_SUCCESS_CRITERIA_V1.csv": "9CE29D9E199DAB65205BFEC5E03A7A3CB9CA4648BD7D6AAD7D9C2BF8C7A41F04"
+  },
+  "digest_basis": "SHA-256 of LF-normalised content so the value is stable across CRLF/LF checkouts"
+}

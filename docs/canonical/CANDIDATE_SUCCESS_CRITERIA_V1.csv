@@ -1,0 +1,29 @@
+criterion_id,candidate,kind,metric,comparison,threshold,unit,denominator,notes
+C1_SUCCESS_1,C1_SPECTRAL_SCORING_NEUTRALITY,success,fused_hr_mae,"candidate mae <= control mae - 1.0",1.0,bpm,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,frozen before implementation; control is the unmodified canonical producer
+C1_SUCCESS_2,C1_SPECTRAL_SCORING_NEUTRALITY,success,paired_improve_vs_worsen,"paired_improve > paired_worsen",0.0,count,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,probe-level pairing; ties excluded
+C1_SUCCESS_3,C1_SPECTRAL_SCORING_NEUTRALITY,success,per_session_mae_worst_case,"max per-session mae increase <= 1.0",1.0,bpm,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,no single session may degrade beyond this
+C1_SUCCESS_4,C1_SPECTRAL_SCORING_NEUTRALITY,success,ae_gt_10_count,"candidate count <= control count",0.0,count,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,tail count must not increase
+C1_SUCCESS_5,C1_SPECTRAL_SCORING_NEUTRALITY,success,correct_to_catastrophic_transitions,"count == 0",0.0,count,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,control AE<=5 becoming candidate AE>10
+C1_FAIL_1,C1_SPECTRAL_SCORING_NEUTRALITY,failure,any_success_criterion_unmet,"any of C1_SUCCESS_1..5 false",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,
+C1_FAIL_2,C1_SPECTRAL_SCORING_NEUTRALITY,failure,candidate_not_computable,"none_returned_ratio > 0",0.0,ratio,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,candidate must always produce a value
+C1_FAIL_3,C1_SPECTRAL_SCORING_NEUTRALITY,failure,deviation_from_preregistration,"implemented change outside allowed set",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,includes changed criteria thresholds metrics or denominator
+C1_FAIL_4,C1_SPECTRAL_SCORING_NEUTRALITY,failure,post_hoc_variant_selection,"variant chosen after seeing validation results",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,variant must be frozen before any validation look
+C2_SUCCESS_1,C2_ANCHOR_PERSISTENCE,success,fused_hr_mae,"candidate mae <= control mae - 1.0",1.0,bpm,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,identical criteria to C1 by design
+C2_SUCCESS_2,C2_ANCHOR_PERSISTENCE,success,paired_improve_vs_worsen,"paired_improve > paired_worsen",0.0,count,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,ties excluded
+C2_SUCCESS_3,C2_ANCHOR_PERSISTENCE,success,per_session_mae_worst_case,"max per-session mae increase <= 1.0",1.0,bpm,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,
+C2_SUCCESS_4,C2_ANCHOR_PERSISTENCE,success,ae_gt_10_count,"candidate count <= control count",0.0,count,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,
+C2_SUCCESS_5,C2_ANCHOR_PERSISTENCE,success,correct_to_catastrophic_transitions,"count == 0",0.0,count,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,
+C2_FAIL_1,C2_ANCHOR_PERSISTENCE,failure,any_success_criterion_unmet,"any of C2_SUCCESS_1..5 false",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,
+C2_FAIL_2,C2_ANCHOR_PERSISTENCE,failure,candidate_not_computable,"none_returned_ratio > 0",0.0,ratio,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,
+C2_FAIL_3,C2_ANCHOR_PERSISTENCE,failure,deviation_from_preregistration,"implemented change outside allowed set",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,
+C2_FAIL_4,C2_ANCHOR_PERSISTENCE,failure,post_hoc_variant_selection,"variant chosen after seeing validation results",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,
+VS_1_SESSION_DISJOINT,VALIDATION_SET_CONTRACT,requirement,session_disjointness,"no overlap with development sessions",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,development sessions are 9779 97793 97794/97994 97795 97796
+VS_2_PARTICIPANT_DISJOINT,VALIDATION_SET_CONTRACT,requirement,participant_disjointness,"no overlap with development participant group",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,
+VS_3_UNTOUCHED,VALIDATION_SET_CONTRACT,requirement,untouched_assertion,"no probe previously used for development or oracle inspection",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,asserted for the whole set
+VS_4_INDEPENDENT_ECG_REFERENCE,VALIDATION_SET_CONTRACT,requirement,independent_ecg_reference,"independently generated with identical cleaning rules",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,must not reuse development cleaning outputs
+VS_5_WINDOW_CONTRACT,VALIDATION_SET_CONTRACT,requirement,window_contract,"window_effective_start to probe_onset nominal 30 s block truncated",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,DLL host receive/enqueue frame clock
+VS_6_ECG_ELIGIBILITY,VALIDATION_SET_CONTRACT,requirement,ecg_eligibility_reported,"valid invalid unresolved reported per probe",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,only ECG_VALID enters the primary denominator
+VS_7_DENOMINATOR_FROZEN,VALIDATION_SET_CONTRACT,requirement,denominator_frozen_before_evaluation,"frozen in manifest prior to any candidate evaluation",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,
+VS_8_NO_REUSE,VALIDATION_SET_CONTRACT,requirement,no_reuse,"consumed after first candidate evaluation",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,
+VS_9_NO_DEVELOPMENT_LEAKAGE,VALIDATION_SET_CONTRACT,requirement,no_development_leakage,"not used during implementation debugging or variant selection",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,
+VS_10_NO_SNAPSHOT_V2,VALIDATION_SET_CONTRACT,requirement,no_snapshot_v2_authorization,"set membership does not authorize any snapshot change",0.0,boolean,MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1,

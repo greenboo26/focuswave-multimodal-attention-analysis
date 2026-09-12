@@ -11,6 +11,8 @@
 - mmwave_current_mechanism_audit: `docs/results/2026-09-13_MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1/`
 - mmwave_current_handoff: `docs/results/2026-09-13_MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1/HANDOFF.md`
 - mmwave_hr_execution_issue: `https://github.com/greenboo26/focuswave-multimodal-attention-analysis/issues/35`
+- mmwave_current_preregistration: `docs/canonical/MMWAVE_HR_CANDIDATE_PREREGISTRATION_V1.md` (FROZEN_PREREGISTRATION; C1/C2 not implemented and not run)
+- mmwave_next_dependency: untouched participant/session-disjoint ECG validation set (`docs/canonical/MMWAVE_HR_UNTOUCHED_VALIDATION_SET_PLAN_V1.md`, recommended `OPT_A`)
 - related_repository_roles: `FocusWave@formaltest` owns current formal experiment/acquisition implementation; `Attention-Analysis` owns Behavior/NIR/RGB producer engineering and single-modality analysis; `FocusWave-Formal-Analysis` owns analysis plans/report evidence; local `11_数据` owns data payloads
 
 This file is navigation only. Current scientific and engineering truth remains in this repository's canonical state, status, tests, manifests, handoffs and evidence. Prefer those durable sources over reconstructing project state from chat memory.
