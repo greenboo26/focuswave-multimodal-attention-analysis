@@ -133,9 +133,9 @@
   "next_task": "mmwave_hr_untouched_ecg_validation_set_v1 (OPT_A construction; separate task)",
   "document_digests_lf_normalised": {
     "docs/canonical/MMWAVE_HR_CANDIDATE_PREREGISTRATION_V1.md": "0667A0D6165D93FF5FF5417564020F680323254EE30FF5B69AB31ACFFCBF9613",
-    "docs/canonical/MMWAVE_HR_UNTOUCHED_VALIDATION_SET_PLAN_V1.md": "4C1A5241EBAC1E22472F02586E6A683AE4937E2B34E770E61423C652132BD3FB",
+    "docs/canonical/MMWAVE_HR_UNTOUCHED_VALIDATION_SET_PLAN_V1.md": "72FDB08AA2D8157E9C5ABA167A5A674B4D9E420684CB3EF15F4D969466D57F7E",
     "docs/canonical/CANDIDATE_SUCCESS_CRITERIA_V1.csv": "9CE29D9E199DAB65205BFEC5E03A7A3CB9CA4648BD7D6AAD7D9C2BF8C7A41F04"
   },
   "digest_basis": "SHA-256 of LF-normalised content so the value is stable across CRLF/LF checkouts",
-  "document_digests_note": "digests are LF-normalised; the validation-set plan digest was refreshed after MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1 synced its routing result into it"
+  "document_digests_note": "digests are LF-normalised; the validation-set plan digest was refreshed after MMWAVE_HR_UNTOUCHED_ECG_VALIDATION_SET_V1 retracted the OPT_A recommendation in it"
 }

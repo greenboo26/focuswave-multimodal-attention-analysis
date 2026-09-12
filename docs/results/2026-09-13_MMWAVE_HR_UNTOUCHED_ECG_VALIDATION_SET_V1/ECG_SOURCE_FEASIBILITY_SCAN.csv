@@ -1,0 +1,6 @@
+source_label,path,exists,session_dir_count,ecg_artefact_count,ecg_artefacts_sample,non_session_subdirs
+formal_data_root_J,J:\Data,True,72,0,,beh|mmwave|nir|rgb|sub-056_|sub-057_|sub-058_|sub-059_
+preexperiment_root_I,I:\预实验,True,10,0,,beh|mmwave|mmwave_truncated_backup|nir|rgb|sub-000_|sub-002_|sub-003_
+calibration_root_D,D:\acq_mmwave_data,True,11,11,sub-2_\sub2.acq|sub-3_\sub3.acq|sub-4_\sub4.acq|sub-5_\sub5.acq|sub-6_\sub6.acq,beh|cal|mmwave|nir|rgb|sub-2_|sub-3_|sub-4_
+derived_root,D:\Project\厚粲杯\11_数据\derived,True,0,17,acq_reference_reaudit_20260824.md|acq_reference_window_inventory_20260824.csv|ecg_rsp_cleaning_audit_20260824.md|ECG_RSP独立验证资产审计_20260824.md|mmwave_reanalysis_v2_issue10_official_ecg_existing_routes_20260827_rows.jsonl,.git|7.3.0|9779|97793|97795|ATS-SDK|AlazarTech|Include
+formal_analysis_root,D:\Project\厚粲杯\11_数据\_FormalAnalysis,True,0,1,mmWave\issue33\issue34_dual_clock_20260911\vendor_sdk_2_1_1_review\Software_Kit\02_SDK\psdf_sdk\tools\python\WPy64-31321b1\python\tcl\tcl8.6\tzdata\Antarctica\Macquarie,01_Document|02_SDK|03_Tool|04_Image|10_analysis_ready|11_analysis_tables|11_analysis_tables_116cohort|12_pipeline_validation

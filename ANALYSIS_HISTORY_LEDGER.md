@@ -8,6 +8,24 @@
 
 ---
 
+### 2026-09-13：mmWave untouched ECG validation set v1 — BLOCKED / ECG 参考来源不存在
+
+**Reuse Gate**：本任务不重跑算法、不实现 C1/C2。复用 `ECG_RSP独立验证资产审计_20260824.md`（权威 ECG 资产性质记录）、`ecg_rsp_goldclean_reaudit_v1`、`physiology_reference_v1` 与 `configs/paths.local.json` 声明的四个候选根；没有新算法、没有新阈值。`REUSE_REJECTION_REASON`：preregistration 冻结的验证集 contract 要求"独立 per-window gold-clean ECG 参考"，而该输入是否存在从未被核对过，必须先做前提核查。
+
+**核心结论 `BLOCKED_ECG_REFERENCE_SOURCE_UNAVAILABLE`**：全机 `.acq` 穷尽扫描结果为 —— `D:\acq_mmwave_data` **11** 个、`I:\预实验`（E-batch，10 sessions）**0** 个、`J:\Data`（J-batch，72 sessions）**0** 个、`11_数据` **0** 个。**只有 11 个 session 有 ECG，全部在校准根**，且分三类：5 个校准 session（`sub-2_`-`sub-6_`）有 ECG 但**无 probe 窗口**；5 个开发 session（`9779/97793/97994/97795/97796`）有 ECG 且有 probe 窗口但**已被反复消费**；`sub-97792_` 有 ECG 但 `events.csv` 无 block1-4 probe 段，既有记录已判 `not_estimable`。
+
+**决定性设计证据**：`11_数据/derived/ECG_RSP独立验证资产审计_20260824.md` 明确 `D:\acq_mmwave_data` **不是正式实验的多被试队列，而是同一人反复测量的双机校准**（电脑 A 采毫米波并经并口发 marker，电脑 B 的 BIOPAC MP160 记录 ECG/RSP），并标注 `calibration_reference_only_not_formal_subject_effect`、不得与正式被试主索引合并。正式 `J:\Data` session 结构为 `beh/mmwave/nir/rgb` 四目录，**无 ECG 通道**。
+
+**因此 `VS_4`（独立 ECG 参考）、`VS_5`（窗口契约，依赖 ECG/BIOPAC marker 对齐）、`VS_6`（ECG 资格）、`VS_7`（分母冻结）无法满足，contract 满足 6/10，验证集无法形成，C1/C2 不得运行。**
+
+**更正**：`MMWAVE_HR_UNTOUCHED_VALIDATION_SET_PLAN_V1` 与 `MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1` 此前把 OPT_A 描述为"唯一只差一个可工程补齐的 ECG 参考"，并把该缺口称为"数据工程任务而非科学决策"。**该表述错误**：缺口是**输入根本不存在**。错误根因是前两轮只核对"正式 session 是否与开发集重叠"，**没有核对"正式 cohort 是否有 ECG"**。本任务撤回该建议并记录更正。
+
+**修复选项（需裁决）**：`REM_1` 确认正式 cohort 是否采集过 ECG 并取回（推荐先做）；`REM_2` 新采集一组 participant/session 不重叠且同时有 mmWave+ECG 的数据；`REM_3` 用校准 session 建新窗口契约（**不推荐**，与开发集同属同一名参与者，参与者不重叠不成立，且需改冻结契约）；`REM_4` 接受当前不存在合规验证集，保持 HR/BR `HOLD`、HRV `BLOCKED` 并挂起 C1/C2 与 snapshot v2。
+
+**证据**：`docs/results/2026-09-13_MMWAVE_HR_UNTOUCHED_ECG_VALIDATION_SET_V1/`（report、manifest、`ECG_SOURCE_FEASIBILITY_SCAN.csv`、`VALIDATION_SET_CONTRACT_PRECONDITIONS.csv`、error log、handoff）；脚本 `scripts/maintenance/run_mmwave_untouched_ecg_validation_feasibility_20260913.py`；测试 `tests/test_mmwave_hr_untouched_ecg_validation_set.py`。未改 producer、snapshot v1 或任何原始数据；HRV 仍 `BLOCKED`。
+
+---
+
 ### 2026-09-13：mmWave external validation asset audit v1 — ASSET_AUDIT_COMPLETE
 
 **Reuse Gate**：本任务不重跑任何 HR 算法、不实现 C1/C2、不改 producer。复用 `vitalsense_c1b_benchmark_v1`（本地已完成的 C1b 基准）、`ANALYSIS_HISTORY_LEDGER.md` 的 AgeBalanced 2026-08-14 条目、以及三个外部数据集的只读检查；没有新算法、没有新 threshold。`REUSE_REJECTION_REASON`：preregistration v1 的 validation inventory 只扫了内部来源，漏掉本机三个外部公开数据集，必须先查清才决定是否值得给正式 cohort 重建 ECG gold-clean。

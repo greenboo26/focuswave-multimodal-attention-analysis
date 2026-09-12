@@ -1,5 +1,15 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-09-13 mmWave untouched ECG validation set v1 — BLOCKED / ECG 参考来源不存在
+
+- **`BLOCKED_ECG_REFERENCE_SOURCE_UNAVAILABLE`**：全机 `.acq` 穷尽扫描 —— `D:\acq_mmwave_data` **11**、`I:\预实验` **0**、`J:\Data`（72 sessions）**0**、`11_数据` **0**。只有 11 个 session 有 ECG，全部在校准根：5 个校准 session（`sub-2_`-`sub-6_`）有 ECG 但无 probe 窗口；5 个开发 session（`9779/97793/97994/97795/97796`）有 ECG 但已被消费；`sub-97792_` 无 block1-4 probe 段、已判 `not_estimable`。
+- **设计证据**：`ECG_RSP独立验证资产审计_20260824.md` 明确该池是**同一人反复测量的双机校准**（`calibration_reference_only_not_formal_subject_effect`），不是多被试队列；正式 `J:\Data` 只有 `beh/mmwave/nir/rgb`，**从未采集 ECG**。
+- **后果**：`VS_4`/`VS_5`/`VS_6`/`VS_7` 无法满足（contract 6/10），`MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1` 无法形成，**C1/C2 不得运行**，snapshot v2 无从讨论。
+- **更正**：此前把 OPT_A 描述为"只差一个可工程补齐的 ECG 参考"是**错误**的；缺口是输入不存在。根因是前两轮未核对正式 cohort 是否有 ECG。该建议已撤回。
+- **修复选项**：`REM_1` 确认/取回正式 cohort ECG（推荐先做）→ 否则 `REM_2` 新采集 或 `REM_4` 接受缺失（HR/BR `HOLD`、HRV `BLOCKED`）。`REM_3`（用校准 session）**不推荐**。
+- 本任务只做前提核查：未实现候选、未跑候选、未改 producer / snapshot v1 / 原始数据，未形成 snapshot v2，HRV=`BLOCKED`。
+- 证据：`docs/results/2026-09-13_MMWAVE_HR_UNTOUCHED_ECG_VALIDATION_SET_V1/`；测试 `tests/test_mmwave_hr_untouched_ecg_validation_set.py`。
+
 ## 2026-09-13 mmWave external validation asset audit v1 — ASSET_AUDIT_COMPLETE
 
 - **没有任何外部资产对 C1 可用**；C2 只有 `VS_DATASET_healthy_v1` 可用且只能作 secondary。preregistration v1 的 inventory 漏掉本机三个外部数据集，本任务补齐并据此调整路由。
