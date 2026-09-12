@@ -33,10 +33,12 @@ CLOUD_HANDOFF:
 
 - target folder: `2026-09-12_mmwave_estimator_improvement_v1`
 - folder id: `1gZC80XNklehALcuJ6U8NJe_aKy5iwzPd`
-- uploaded files: `NONE — CLOUD_UPLOAD_BLOCKED_NO_DRIVE_CONNECTOR_IN_EXECUTION_ENVIRONMENT`
-- CLOUD_UPLOAD: `BLOCKED`
-- blocker: the execution environment for this run exposes no Google Drive connector/MCP tool and no Drive OAuth credential; the Codex connector route (`mcp__codex_apps__google_drive_*`) is only available inside the Codex/ChatGPT app session, and the Codex CLI route returned `usage limit` at 2026-09-13T03:06 (Asia/Shanghai). Upload and read-back must therefore be executed from a session with the Google Drive connector before the task is reported as complete.
-- upload manifest (exact files staged for upload): see `MMWAVE_ESTIMATOR_IMPROVEMENT_V1_MANIFEST.json` → `cloud_handoff`.
+- uploaded files: 13 (11 tracked result files + this manifest + `CLOUD_HANDOFF_VERIFICATION.json`)
+- CLOUD_UPLOAD: `UPLOADED_AND_VERIFIED`
+- transport: rclone 1.75.1 (portable, `D:\Project\.tools\rclone.exe`) with a Google Drive remote authorized by the user on 2026-09-12; scope `drive`; rclone shared client_id (retiring during 2026, one-time use). The OAuth token lives only in the machine-local rclone config; it is not in Git and not in any report.
+- verification: every cloud file was read back into a local staging directory and re-hashed. The 11 frozen result artifacts matched the SHA-256 recorded in the manifest, the two coordination files (this handoff and the manifest) matched their local text, and no `mmwave_integration_snapshot_v1` file was mixed into the folder. Per-file results are in `CLOUD_HANDOFF_VERIFICATION.json` (uploaded last, so it cannot carry its own final digest; that digest is recorded in the GitHub issue pointer together with this handoff's and the manifest's digests).
+- frozen artifacts: after this upload the listed result files are not edited again; any later correction must be a new commit, a new upload and a new verification report.
+- upload manifest (exact files and hashes): see `MMWAVE_ESTIMATOR_IMPROVEMENT_V1_MANIFEST.json` → `cloud_handoff`.
 
 HR/BR: `HOLD / SUPPORTING_ONLY`
 

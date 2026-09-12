@@ -22,7 +22,7 @@
 
 ## 云盘交接
 
-GitHub 侧结果、报告、manifest 与决策日志已提交；云端交接为 `CLOUD_UPLOAD=BLOCKED`。本次运行环境没有 Google Drive connector/MCP 工具，也没有本机 Drive OAuth 凭据，Codex CLI 路径在 2026-09-13T03:06（Asia/Shanghai）返回用量上限。待上传文件清单与各自 SHA-256 见 `MMWAVE_ESTIMATOR_IMPROVEMENT_V1_MANIFEST.json` 的 `cloud_handoff` 段；必须在具备 Google Drive connector 的会话中完成上传与回读验证后，本任务才能报告为完成。
+云端交接已完成：`CLOUD_UPLOAD=UPLOADED_AND_VERIFIED`。经用户授权后使用 rclone 1.75.1（便携版，`D:\Project\.tools\rclone.exe`）的 Google Drive remote，将 12 个文件上传到既有目录 `2026-09-12_mmwave_estimator_improvement_v1`（folder id `1gZC80XNklehALcuJ6U8NJe_aKy5iwzPd`，未新建目录），随后逐文件回读并重算 SHA-256：11/11 tracked 文件与 manifest 一致，未混入任何 `mmwave_integration_snapshot_v1` 文件。OAuth token 只保存在本机 rclone 配置中，未进入 Git、未进入任何报告。清单与哈希见 `MMWAVE_ESTIMATOR_IMPROVEMENT_V1_MANIFEST.json` 的 `cloud_handoff` 段。
 
 ## 证据边界
 

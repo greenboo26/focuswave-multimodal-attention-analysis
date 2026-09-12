@@ -18,7 +18,7 @@
 
 **决策与边界**：三条假设均拒绝，`BEST_CANDIDATE=NONE`、`V2_CANDIDATE_STATUS=NOT_FORMED`、`NO_STABLE_IMPROVEMENT`。现有 5 场均被反复 oracle 检查，未找到 untouched participant/session-disjoint ECG validation，故不得 formal promote、不得替换 snapshot v1、不得修改 Task B/materialize。报告、manifest、per-session、failure-class、bias 与 candidate log 位于 `docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/`；probe-level 表 local-only。HR/BR=`HOLD / SUPPORTING_ONLY`，HRV=`BLOCKED`，`models_trained=false`。
 
-**云盘状态**：`CLOUD_UPLOAD=BLOCKED` —— 执行环境无 Google Drive connector/MCP 工具与本机 Drive 凭据，Codex CLI 路径返回用量上限；上传与回读必须在具备 Drive connector 的会话中补做，因此本轮不得报告为完整完成。
+**云盘状态**：`CLOUD_UPLOAD=UPLOADED_AND_VERIFIED` —— 经用户授权后用 rclone 1.75.1 Google Drive remote 上传 12 个文件到既有目录，逐文件回读重算 SHA-256，11/11 tracked 文件一致且无 snapshot v1 文件混入；manifest 中报告哈希已从 `574BB1CB…` 更正为 `BBCB22EB…` 并同步云端。
 
 ---
 

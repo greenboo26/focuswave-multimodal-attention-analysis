@@ -4,7 +4,8 @@ from pathlib import Path
 
 
 PATH = Path(__file__).resolve().parents[1] / "scripts" / "maintenance" / "run_mmwave_estimator_improvement_v1_20260912.py"
-RESULT_DIR = Path(__file__).resolve().parents[1] / "docs" / "results" / "2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1"
+REPO = Path(__file__).resolve().parents[1]
+RESULT_DIR = REPO / "docs" / "results" / "2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1"
 SPEC = importlib.util.spec_from_file_location("improvement", PATH)
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
@@ -85,3 +86,19 @@ def test_manifest_declares_no_snapshot_v1_change_and_cloud_handoff_files():
     ]:
         assert required in names, f"missing upload entry: {required}"
     assert cloud["status"] in {"BLOCKED", "UPLOADED_AND_VERIFIED"}
+    # 已上传状态下，清单里每个带具体哈希的文件都必须与磁盘当前内容一致；
+    # manifest 自身与最后上传的验证报告是自指文件，其摘要记录在 HANDOFF 与 GitHub issue。
+    self_referential = {
+        "MMWAVE_ESTIMATOR_IMPROVEMENT_V1_MANIFEST.json",
+        "CLOUD_HANDOFF_VERIFICATION.json",
+    }
+    if cloud["status"] == "UPLOADED_AND_VERIFIED":
+        import hashlib
+
+        for item in cloud["upload_files"]:
+            digest = item["sha256"]
+            if item["name"] in self_referential or "\n" in digest:
+                continue
+            target = REPO / item["repo_path"]
+            actual = hashlib.sha256(target.read_bytes()).hexdigest().upper()
+            assert actual == digest, f"stale hash recorded for {item['name']}"
