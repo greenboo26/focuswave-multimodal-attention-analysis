@@ -7,7 +7,7 @@
 - 冻结测试三条毫米波专用规则。观察上最优的 `H1_WARNING_TIME_GATE` 以既有 `>10 bpm` 时频警告触发时域心率回退，将融合心率平均绝对误差（mean absolute error [MAE]）从 `10.457079` 降至 `9.618844 bpm`，配对改善/恶化/持平=`8/1/91`，4/5 场改善、1 场持平；但它把一个原本绝对误差不超过 5 bpm 的窗口推至大于 10 bpm，且单窗恶化超过 5 bpm，违反灾难性失败门。`H3` 同样被该门拒绝；`H2` 因不足 3/5 场改善而拒绝。
 - 当前时域心率对照 MAE=`8.996966 bpm`，仍优于 H1；三条规则均未通过冻结门，故结论为 `NO_STABLE_IMPROVEMENT`，`BEST_CANDIDATE=NONE`，`V2_CANDIDATE_STATUS=NOT_FORMED`。5 场均已被心电图 oracle 反复查看，也没有未触碰、参与者/场次不重叠的验证集；未进入正式 producer，未发布 snapshot v2，未修改 integration snapshot v1。
 - 证据：`docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/`；逐 probe reference/candidate 与最大误差表保留 local-only，路径及 SHA-256 在 manifest 中。HR/BR 继续 `HOLD / SUPPORTING_ONLY`，HRV=`BLOCKED`，`models_trained=false`。
-- 云盘交接：`CLOUD_UPLOAD=UPLOADED_AND_VERIFIED`。经用户授权后使用 rclone 1.75.1 的 Google Drive remote 上传 12 个文件到既有目录 `2026-09-12_mmwave_estimator_improvement_v1`，逐文件回读并重算 SHA-256：11/11 tracked 文件与 manifest 一致，未混入任何 snapshot v1 文件；token 仅存本机 rclone 配置，未入库、未进报告。
+- 云盘交接：`CLOUD_UPLOAD=UPLOADED_AND_VERIFIED`。经用户授权后使用 rclone 1.75.1（便携版，仓库外 `D:\Project\.tools`）的 Google Drive remote 上传 13 个文件到既有目录 `2026-09-12_mmwave_estimator_improvement_v1`，逐文件回读重算 SHA-256：11/11 冻结结果产物与 manifest 记录一致、两个协调文件与本地文本逐字节一致，未混入任何 snapshot v1 文件；token 仅存本机 rclone 配置，未入库、未进报告。回读证据见 `CLOUD_HANDOFF_VERIFICATION.json`。
 
 ## 2026-09-12 mmWave HR recovery P1 — PASS / RESTORATION NOT SUPPORTED
 
