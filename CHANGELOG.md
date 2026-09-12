@@ -1,5 +1,14 @@
 # 修改说明
 
+## 2026-09-13 — chore(repository): audit branch surface and retire three merged branches
+
+- Audited all 13 non-`main` remote branches against live refs using common-ancestor existence, the ancestor test, unique-commit count, path-level blob comparison, and immutable-tag coverage. Recorded the full surface in `docs/repository/BRANCH_RETIREMENT_MATRIX_V2.csv` and the execution evidence in `docs/repository/BRANCH_RETIREMENT_EXECUTION_V2.md`.
+- Retired only `codex/mmwave-estimator-improvement-v1-20260912`, `codex/mmwave-pre30s-selector-hr-20260831`, and `codex/t0-vmd-fix`, each proven to be an ancestor of `main` with zero unique commits. No tag was needed because every commit reachable from them remains reachable from `main`.
+- Left ten branches untouched: five carrying open PR/issue dependencies, one carrying the active report deliverable line, three superseded pre-restructure branches with no archive tag yet, and the historical `master` base kept on its legacy tag.
+- Corrected two stale claims in the V1 records: the V1 matrix lists the `q1` branch at its archive-tag commit rather than its live tip, which is 28 commits further on, and the V1 execution ledger states that the `q1` live SHA equalled its archive tag, which no longer holds. The V1 files were left unmodified as provenance.
+- No scientific analysis, result, producer, contract, or data was changed. No tag was created, deleted, or force-moved; no default branch, local branch, worktree, or working-copy file was touched.
+- Recorded, without resolving, three carried-forward risks: the primary working copy has `HEAD` on the `q1` branch rather than `main`, that copy is dirty in a partially migrated state, and three independent Git repositories are nested inside it as untracked directories.
+
 ## 2026-09-12 — audit(mmwave): reconcile strict reference lineage and reject unstable estimator candidates
 
 - Reused the exact 100-key gold-clean ECG/RSP reference and existing formal mmWave QC lineage without changing thresholds, windows, targets, the formal producer, or integration snapshot v1.

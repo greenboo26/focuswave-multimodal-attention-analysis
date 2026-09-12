@@ -1,5 +1,14 @@
 # FocusWave Multimodal Attention Analysis 状态
 
+## 2026-09-13 分支清理 v2 — 只退休 3 个已合入 main 的分支，其余 10 个保留
+
+- **清理范围**：13 个非 `main` 远端分支中，只有 3 个的 tip 是 `main` 的祖先且独有提交为 `0`，因此被授权删除：`codex/mmwave-estimator-improvement-v1-20260912`（`da84260c…`）、`codex/mmwave-pre30s-selector-hr-20260831`（`2f606cb9…`）、`codex/t0-vmd-fix`（`018d6f79…`）。它们的全部提交仍可从 `main` 到达，这就是恢复路径，不需要额外 archive tag。
+- **明确不删的 10 个**：5 个有 OPEN PR 或 Issue 依赖（`codex/formal-bb-behavior-v1`、`codex/formal-bb-probe-window-fix`、`codex/behavior-science-v3-baseline`、`codex/behavior-formal-v3-rejected-baseline-fix`、`fix/issue33-probe-contract`）；1 个承载报告交付线（`codex/q1-questionnaire-criterion-validity-20260826`）；3 个已取代但**尚无任何 tag 固定内容**（`codex/mmwave-formal-reanalysis-v2`、`codex/mmwave-production-contract-hardening`、`codex/project-state-map-20260829`，共约 48,706 + 49,447 行独有改动，`main` 中没有对应路径）；1 个历史基线 `master`（仍由 `legacy/mmwave-hrv-master-pre-focuswave-20260826` 固定）。后三类必须先打 `archive/20260913/...` tag 才能继续，本轮未执行。
+- **更正既有记录**：`BRANCH_RETIREMENT_MATRIX_V1.csv` 把 q1 分支的 `head_sha` 记为 tag 提交 `ba7a2c6`，但实际 tip 是 `d8a2870`，比 tag 多 28 个提交；`BRANCH_RETIREMENT_EXECUTION_V1.md` 称 q1 已按“live SHA 等于 archive tag”完成删除，该陈述对该行不成立。V1 文件保留不改，仅作 provenance。
+- **未解决风险（本轮只记录不处理）**：主工作副本 `D:\Project\厚粲杯\08_算法` 的 HEAD 停在 q1 分支而非 `main`，工作区处于约 110 modified / 54 deleted / 40 untracked 的半迁移脏状态；其下嵌了 3 个独立 Git 仓库（`FocusWave-Formal-Analysis`、`Attention-Analysis`、`01_Attention-Analysis_rgb-nvidia`），递归 `git clean -fdx` 会摧毁它们。报告 `.docx` 的主线实际在 `kyandi233-dev/FocusWave-Formal-Analysis`，本仓库内的副本是较旧的镜像。
+- **边界**：本任务不改任何科学结果、producer、contract 或数据；未创建/删除/移动任何 tag；未 force push；未改默认分支；未删任何本地分支、worktree 或工作区文件。
+- 证据：`docs/repository/BRANCH_RETIREMENT_EXECUTION_V2.md`、`docs/repository/BRANCH_RETIREMENT_MATRIX_V2.csv`；测试 `tests/test_branch_retirement_execution_v2.py`。
+
 ## 2026-09-13 mmWave improvement line CLOSURE v1 — OPT_A 无效，C1/C2 PAUSED_PENDING_NEW_COLLECTION
 
 - **用户裁决为权威**：正式 FocusWave cohort **从实验设计起就没有 ECG**。因此 `OPT_A` **无效**，`REM_1` **不再执行**，也不再搜索"漏掉的正式 ECG"。这是**已更正的规划错误（corrected planning error）**，不是未解的数据位置问题。
