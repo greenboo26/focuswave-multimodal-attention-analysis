@@ -122,6 +122,14 @@ A set failing any requirement is `NOT_A_VALIDATION_SET` and may be used for desc
 | `OPT_C` | `sub-97792_` | session-disjoint `YES` | **insufficient** | only 4 ECG-valid windows; cannot support the 5 success criteria |
 | `OPT_D` | new acquisition of participant/session-disjoint sessions with probe windows | ideal | **not available now** | requires new data collection; out of scope for this task |
 
+**CORRECTION (2026-09-13, `MMWAVE_HR_UNTOUCHED_ECG_VALIDATION_SET_V1`): `OPT_A` CANNOT BE BUILT. This plan's `OPT_A` description is retracted.**
+
+`OPT_A` was described here and in `MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1` as available apart from a missing independent per-window gold-clean ECG reference, and that gap was called a data-engineering task rather than a science decision. **That was wrong.** The gap is a **missing input**: the formal cohort never acquired ECG at all. An exhaustive `.acq` scan found only 11 ECG-bearing sessions on this machine, all under `D:\acq_mmwave_data`: 5 calibration sessions with no probe windows, 5 already-consumed development sessions, and `sub-97792_` which has no block1-4 probe events and is recorded as `not_estimable`. The authoritative local record `11_数据/derived/ECG_RSP独立验证资产审计_20260824.md` states that this pool is **one participant measured repeatedly for two-machine calibration** (`calibration_reference_only_not_formal_subject_effect`), not a multi-subject cohort. Root cause of the error: earlier rounds verified that formal sessions do not overlap the development set, but never verified that the formal cohort has ECG.
+
+Consequence: `VS_4_INDEPENDENT_ECG_REFERENCE`, `VS_5_WINDOW_CONTRACT`, `VS_6_ECG_ELIGIBILITY` and `VS_7_DENOMINATOR_FROZEN` cannot be satisfied (contract 6/10), so `MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1` cannot be formed and C1/C2 must not be run. Next dependency: `REM_1` (determine whether the formal cohort ever acquired ECG and retrieve it), otherwise `REM_2` (new acquisition) or `REM_4` (accept the absence and keep HR/BR `HOLD`, HRV `BLOCKED`). `REM_3` (calibration sessions under a new window contract) remains **not recommended**.
+
+Evidence: `docs/results/2026-09-13_MMWAVE_HR_UNTOUCHED_ECG_VALIDATION_SET_V1/`.
+
 **Routing update (after the external audit): `OPT_A` is confirmed as the primary untouched validation source, to be built next.** The external audit did not remove the need for `OPT_A`; it added `VS_DATASET_healthy_v1` as secondary C2-only external evidence and excluded the other two assets. See section 2.3b.
 
 **Recommendation: `OPT_A`.** It is the only option that is simultaneously session-disjoint, participant-disjoint, probe-window based, and large enough (109 estimable sessions / 2,180 probes available; a subset can be frozen). Its single blocker is the missing independent gold-clean ECG reference, which is a data-engineering task, not a science decision.

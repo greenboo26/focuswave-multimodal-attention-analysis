@@ -1,0 +1,11 @@
+contract_item,precondition_met,evidence
+VS_1_SESSION_DISJOINT,True,"formal J root exposes 72 session dirs, none of which is a development session; session-disjointness is satisfiable"
+VS_2_PARTICIPANT_DISJOINT,True,formal ids are a different id space from the development calibration sessions
+VS_3_UNTOUCHED,True,formal sessions have not been used for HR algorithm development
+VS_4_INDEPENDENT_ECG_REFERENCE,False,"no ECG/BIOPAC acquisition artefact exists for any formal session: formal-root ECG artefacts=0; per-session subdirs=['beh', 'mmwave', 'nir', 'rgb']; the only gold-clean per-window ECG reference on this machine covers the 5 exhausted development sessions"
+VS_5_WINDOW_CONTRACT,False,"the frozen window contract is defined by mmWave frames plus block markers derived from the ECG/BIOPAC acquisition; without that acquisition, marker alignment and therefore window_effective_start cannot be reproduced for formal sessions"
+VS_6_ECG_ELIGIBILITY,False,eligibility requires a per-probe ECG reference to classify valid/invalid/unresolved
+VS_7_DENOMINATOR_FROZEN,False,the denominator cannot be frozen without per-probe ECG eligibility
+VS_8_NO_REUSE,True,procedural item; satisfiable by keeping build and first use in separate tasks
+VS_9_NO_DEVELOPMENT_LEAKAGE,True,procedural item; satisfiable by the separate-task sequencing already frozen
+VS_10_NO_SNAPSHOT_V2,True,procedural item; unchanged from the preregistration

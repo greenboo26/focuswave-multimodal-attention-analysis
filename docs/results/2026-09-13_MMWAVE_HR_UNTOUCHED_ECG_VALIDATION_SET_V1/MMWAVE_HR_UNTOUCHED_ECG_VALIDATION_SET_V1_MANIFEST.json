@@ -1,0 +1,402 @@
+{
+  "task_id": "mmwave_hr_untouched_ecg_validation_set_v1",
+  "run_id": "mmwave_hr_untouched_ecg_validation_set_v1_20260913_r1",
+  "document_type": "PRECONDITION_FEASIBILITY_AUDIT",
+  "state": "BLOCKED_ECG_REFERENCE_SOURCE_UNAVAILABLE",
+  "date": "2026-09-13",
+  "base_commit": "40240750f740898709feb257f5188ec954b1d08b",
+  "expected_main_at_task_start": "40240750f740898709feb257f5188ec954b1d08b",
+  "validation_set_built": false,
+  "candidate_run_performed": false,
+  "source_roots_scanned": [
+    {
+      "label": "formal_data_root_J",
+      "path": "J:\\Data",
+      "exists": true,
+      "session_dir_count": 72,
+      "session_ids_sample": [
+        "sub-056",
+        "sub-057",
+        "sub-058",
+        "sub-059",
+        "sub-062",
+        "sub-064",
+        "sub-065",
+        "sub-067",
+        "sub-068",
+        "sub-070",
+        "sub-071",
+        "sub-072"
+      ],
+      "non_session_subdirs": [
+        "beh",
+        "mmwave",
+        "nir",
+        "rgb",
+        "sub-056_",
+        "sub-057_",
+        "sub-058_",
+        "sub-059_",
+        "sub-062_",
+        "sub-064_",
+        "sub-065_",
+        "sub-067_",
+        "sub-068_",
+        "sub-070_",
+        "sub-071_",
+        "sub-072_",
+        "sub-073_",
+        "sub-074_",
+        "sub-075_",
+        "sub-076_"
+      ],
+      "ecg_artefact_count": 0,
+      "ecg_artefacts_sample": [],
+      "files_scanned": 13217
+    },
+    {
+      "label": "preexperiment_root_I",
+      "path": "I:\\预实验",
+      "exists": true,
+      "session_dir_count": 10,
+      "session_ids_sample": [
+        "sub-000",
+        "sub-002",
+        "sub-003",
+        "sub-004",
+        "sub-005",
+        "sub-006",
+        "sub-007",
+        "sub-008",
+        "sub-009",
+        "sub-010"
+      ],
+      "non_session_subdirs": [
+        "beh",
+        "mmwave",
+        "mmwave_truncated_backup",
+        "nir",
+        "rgb",
+        "sub-000_",
+        "sub-002_",
+        "sub-003_",
+        "sub-004_",
+        "sub-005_",
+        "sub-006_",
+        "sub-007_",
+        "sub-008_",
+        "sub-009_",
+        "sub-010_",
+        "工作"
+      ],
+      "ecg_artefact_count": 0,
+      "ecg_artefacts_sample": [],
+      "files_scanned": 2739
+    },
+    {
+      "label": "calibration_root_D",
+      "path": "D:\\acq_mmwave_data",
+      "exists": true,
+      "session_dir_count": 11,
+      "session_ids_sample": [
+        "sub-2",
+        "sub-3",
+        "sub-4",
+        "sub-5",
+        "sub-6",
+        "sub-9779",
+        "sub-97792",
+        "sub-97793",
+        "sub-97795",
+        "sub-97796",
+        "sub-97994"
+      ],
+      "non_session_subdirs": [
+        "beh",
+        "cal",
+        "mmwave",
+        "nir",
+        "rgb",
+        "sub-2_",
+        "sub-3_",
+        "sub-4_",
+        "sub-5_",
+        "sub-6_",
+        "sub-97792_",
+        "sub-97793_",
+        "sub-97795_",
+        "sub-97796_",
+        "sub-9779_",
+        "sub-97994_"
+      ],
+      "ecg_artefact_count": 11,
+      "ecg_artefacts_sample": [
+        "sub-2_\\sub2.acq",
+        "sub-3_\\sub3.acq",
+        "sub-4_\\sub4.acq",
+        "sub-5_\\sub5.acq",
+        "sub-6_\\sub6.acq",
+        "sub-97792_\\97792.acq",
+        "sub-97793_\\97793.acq",
+        "sub-97795_\\97995.acq",
+        "sub-97796_\\97796.acq",
+        "sub-9779_\\9779.acq",
+        "sub-97994_\\97794.acq"
+      ],
+      "files_scanned": 1325
+    },
+    {
+      "label": "derived_root",
+      "path": "D:\\Project\\厚粲杯\\11_数据\\derived",
+      "exists": true,
+      "session_dir_count": 0,
+      "session_ids_sample": [],
+      "non_session_subdirs": [
+        ".git",
+        "7.3.0",
+        "9779",
+        "97793",
+        "97795",
+        "ATS-SDK",
+        "AlazarTech",
+        "Include",
+        "Samples_MATLAB",
+        "VS_DATASET",
+        "VitalSense2024",
+        "__pycache__",
+        "_stale_runtime_verification_20260827",
+        "acq_calibration_harmonic_audit_v1",
+        "acq_calibration_segment_qa_v1",
+        "aggregate",
+        "aggregate_public",
+        "amd_e44_probe_merge_audit_20260830_v1",
+        "analysis_tables_v1",
+        "analysis_tables_v2"
+      ],
+      "ecg_artefact_count": 17,
+      "ecg_artefacts_sample": [
+        "acq_reference_reaudit_20260824.md",
+        "acq_reference_window_inventory_20260824.csv",
+        "ecg_rsp_cleaning_audit_20260824.md",
+        "ECG_RSP独立验证资产审计_20260824.md",
+        "mmwave_reanalysis_v2_issue10_official_ecg_existing_routes_20260827_rows.jsonl",
+        "rerun_ecg_rsp_goldclean_v1.py",
+        "summarize_ecg_mmwave_v311_rerun_v1.py",
+        "acq_calibration_segment_qa_v1\\sub2_ecg_only.json",
+        "analysis_tables_v1\\ECG_RSP_pipeline_status.csv",
+        "ecg_valid_retrospective_spectral_truth_audit_20260830\\ECG_VALID_RETROSPECTIVE_SPECTRAL_TRUTH_TABLE.csv",
+        "physiology_reference_v1\\ecg_rsp_cleaning_sync_report.md",
+        "__pycache__\\rerun_ecg_rsp_goldclean_v1.cpython-314.pyc"
+      ],
+      "files_scanned": 1943
+    },
+    {
+      "label": "formal_analysis_root",
+      "path": "D:\\Project\\厚粲杯\\11_数据\\_FormalAnalysis",
+      "exists": true,
+      "session_dir_count": 0,
+      "session_ids_sample": [],
+      "non_session_subdirs": [
+        "01_Document",
+        "02_SDK",
+        "03_Tool",
+        "04_Image",
+        "10_analysis_ready",
+        "11_analysis_tables",
+        "11_analysis_tables_116cohort",
+        "12_pipeline_validation",
+        "2026-09-12_behavior116-nir-g1-audit",
+        "2026-09-12_nir-g1-measurement-audit-fixed",
+        "20260827-003454-face-formal",
+        "21_analysis_tables_5.5",
+        "6dc1f3f4f0e6ca13cb42ddf4d6cbc8af",
+        "8.4",
+        "8.5",
+        "8.6",
+        "A_tables",
+        "Africa",
+        "America",
+        "Antarctica"
+      ],
+      "ecg_artefact_count": 1,
+      "ecg_artefacts_sample": [
+        "mmWave\\issue33\\issue34_dual_clock_20260911\\vendor_sdk_2_1_1_review\\Software_Kit\\02_SDK\\psdf_sdk\\tools\\python\\WPy64-31321b1\\python\\tcl\\tcl8.6\\tzdata\\Antarctica\\Macquarie"
+      ],
+      "files_scanned": 11752
+    }
+  ],
+  "formal_session_subdirs": {
+    "beh": 12,
+    "mmwave": 12,
+    "nir": 12,
+    "rgb": 12
+  },
+  "development_sessions_excluded": [
+    "9779",
+    "97793",
+    "97794",
+    "97795",
+    "97796"
+  ],
+  "contract_preconditions": [
+    {
+      "contract_item": "VS_1_SESSION_DISJOINT",
+      "precondition_met": true,
+      "evidence": "formal J root exposes 72 session dirs, none of which is a development session; session-disjointness is satisfiable"
+    },
+    {
+      "contract_item": "VS_2_PARTICIPANT_DISJOINT",
+      "precondition_met": true,
+      "evidence": "formal ids are a different id space from the development calibration sessions"
+    },
+    {
+      "contract_item": "VS_3_UNTOUCHED",
+      "precondition_met": true,
+      "evidence": "formal sessions have not been used for HR algorithm development"
+    },
+    {
+      "contract_item": "VS_4_INDEPENDENT_ECG_REFERENCE",
+      "precondition_met": false,
+      "evidence": "no ECG/BIOPAC acquisition artefact exists for any formal session: formal-root ECG artefacts=0; per-session subdirs=['beh', 'mmwave', 'nir', 'rgb']; the only gold-clean per-window ECG reference on this machine covers the 5 exhausted development sessions"
+    },
+    {
+      "contract_item": "VS_5_WINDOW_CONTRACT",
+      "precondition_met": false,
+      "evidence": "the frozen window contract is defined by mmWave frames plus block markers derived from the ECG/BIOPAC acquisition; without that acquisition, marker alignment and therefore window_effective_start cannot be reproduced for formal sessions"
+    },
+    {
+      "contract_item": "VS_6_ECG_ELIGIBILITY",
+      "precondition_met": false,
+      "evidence": "eligibility requires a per-probe ECG reference to classify valid/invalid/unresolved"
+    },
+    {
+      "contract_item": "VS_7_DENOMINATOR_FROZEN",
+      "precondition_met": false,
+      "evidence": "the denominator cannot be frozen without per-probe ECG eligibility"
+    },
+    {
+      "contract_item": "VS_8_NO_REUSE",
+      "precondition_met": true,
+      "evidence": "procedural item; satisfiable by keeping build and first use in separate tasks"
+    },
+    {
+      "contract_item": "VS_9_NO_DEVELOPMENT_LEAKAGE",
+      "precondition_met": true,
+      "evidence": "procedural item; satisfiable by the separate-task sequencing already frozen"
+    },
+    {
+      "contract_item": "VS_10_NO_SNAPSHOT_V2",
+      "precondition_met": true,
+      "evidence": "procedural item; unchanged from the preregistration"
+    }
+  ],
+  "blocking_contract_items": [
+    "VS_4_INDEPENDENT_ECG_REFERENCE",
+    "VS_5_WINDOW_CONTRACT",
+    "VS_6_ECG_ELIGIBILITY",
+    "VS_7_DENOMINATOR_FROZEN"
+  ],
+  "blocker": {
+    "id": "ECG_REFERENCE_SOURCE_UNAVAILABLE_FOR_FORMAL_COHORT",
+    "detail": "OPT_A requires an independent per-window gold-clean ECG reference for formal-cohort sessions. The formal cohort never acquired ECG: J:/Data (72 sessions) and the pre-experiment root (10 sessions) contain only beh/mmwave/nir/rgb with zero .acq files, and D:/acq_mmwave_data is by design one participant measured repeatedly for two-machine calibration. The machine holds exactly 11 ECG-bearing sessions: 5 calibration sessions with no probe windows, 5 already-consumed development sessions, and sub-97792 which has no block1-4 probe events and is recorded as not_estimable. No participant/session-disjoint ECG reference pool exists on this machine or in the design.",
+    "consequence": "VS_4, VS_5, VS_6 and VS_7 cannot be satisfied, so MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1 cannot be formed and C1/C2 must not be run. This is a missing-input blocker, not a data-engineering gap."
+  },
+  "remediation_options": [
+    {
+      "id": "REM_1_LOCATE_FORMAL_ECG",
+      "detail": "Determine whether the formal cohort ever acquired ECG and, if so, retrieve it from the acquisition machine, archive drive or collaborating site, then rerun the gold-clean reference for the chosen sessions.",
+      "effort": "UNKNOWN_UNTIL_SOURCED",
+      "note": "recommended first step; the only option that may resolve the blocker at low cost without changing the validation design"
+    },
+    {
+      "id": "REM_2_NEW_ACQUISITION",
+      "detail": "Collect new participant/session-disjoint data with synchronized mmWave and ECG under the frozen window contract.",
+      "effort": "HIGH",
+      "note": "the only option guaranteed to yield a contract-compliant untouched validation set"
+    },
+    {
+      "id": "REM_3_CALIBRATION_WINDOW_CONTRACT",
+      "detail": "Use the sub-2_ .. sub-6_ calibration sessions under a newly defined calibration window contract.",
+      "effort": "MEDIUM",
+      "note": "NOT RECOMMENDED: those sessions belong to the same repeatedly-measured participant as the development set, so participant-disjointness fails, and the frozen window contract would have to change, weakening the comparison the validation exists to support"
+    },
+    {
+      "id": "REM_4_ACCEPT_ABSENCE",
+      "detail": "Accept that no contract-compliant untouched validation set exists for now, keep HR/BR at HOLD and HRV BLOCKED, and suspend C1/C2 and any snapshot v2 discussion until REM_1 or REM_2 resources exist.",
+      "effort": "NONE",
+      "note": "the honest default if no ECG source can be obtained"
+    }
+  ],
+  "boundaries": {
+    "snapshot_v1_modified": false,
+    "formal_producer_modified": false,
+    "v2_formed": false,
+    "models_trained": false,
+    "hrv_status": "BLOCKED",
+    "hr_br_status": "HOLD / SUPPORTING_ONLY",
+    "candidate_implemented": false,
+    "source_data_modified": false
+  },
+  "vs_dataset_role": {
+    "role": "SECONDARY_EXTERNAL_CORROBORATION_ONLY",
+    "untouched": false,
+    "primary_gate_eligible": false,
+    "c1_evidence": "NOT_PERMITTED",
+    "c2_evidence": "PERMITTED_SECONDARY_ONLY",
+    "can_authorize_v2": false
+  },
+  "next_dependency": "REM_1 first: determine whether the formal cohort ever acquired ECG, and retrieve it if so. If the formal cohort truly has no ECG, the choice is REM_2 (new acquisition) or REM_4 (accept absence and keep HR/BR HOLD, HRV BLOCKED). C1/C2 and snapshot v2 remain blocked meanwhile.",
+  "ecg_coverage_authoritative": {
+    "note": "exhaustive .acq scan across every physiology-capable root on this machine",
+    "roots": {
+      "D:\\acq_mmwave_data": {
+        "role": "calibration_root",
+        "acq": 11,
+        "sessions": 11
+      },
+      "I:\\preexperiment": {
+        "role": "preexperiment_root_E_batch",
+        "acq": 0,
+        "sessions": 10
+      },
+      "J:\\Data": {
+        "role": "formal_data_root_J_batch",
+        "acq": 0,
+        "sessions": 72
+      },
+      "D:\\Project\\houcanbei\\11_data": {
+        "role": "derived_formal_analysis_root",
+        "acq": 0
+      }
+    },
+    "total_ecg_bearing_sessions": 11,
+    "session_classes": {
+      "calibration_sessions_no_probe_windows": [
+        "sub-2_",
+        "sub-3_",
+        "sub-4_",
+        "sub-5_",
+        "sub-6_"
+      ],
+      "already_consumed_development_sessions": [
+        "sub-9779_",
+        "sub-97793_",
+        "sub-97994_",
+        "sub-97795_",
+        "sub-97796_"
+      ],
+      "not_estimable_no_probe_events": [
+        "sub-97792_"
+      ]
+    },
+    "design_evidence": "11_data/derived/ECG_RSP_independent_validation_asset_audit_20260824.md states the D:/acq_mmwave_data pool is NOT a multi-subject formal cohort but ONE participant measured repeatedly for two-machine calibration, and must stay calibration_reference_only_not_formal_subject_effect, never merged into the formal subject index"
+  },
+  "previous_opt_a_recommendation_was_wrong": {
+    "what_was_claimed": "OPT_A was described as available apart from a missing independent per-window gold-clean ECG reference, and that gap was called a data-engineering task rather than a science decision.",
+    "why_wrong": "The gap is a missing input, not an engineering task: the formal cohort never acquired ECG, so no formal-session ECG reference can be generated. Earlier rounds checked only whether formal sessions overlapped the development set, and never checked whether the formal cohort had ECG at all.",
+    "corrected_by": "exhaustive ECG coverage scan across all physiology-capable roots plus the authoritative 2026-08-24 local ECG/RSP independent-validation audit"
+  },
+  "contract_preconditions_met": 6,
+  "contract_preconditions_total": 10,
+  "c1_c2_run_permitted": false
+}

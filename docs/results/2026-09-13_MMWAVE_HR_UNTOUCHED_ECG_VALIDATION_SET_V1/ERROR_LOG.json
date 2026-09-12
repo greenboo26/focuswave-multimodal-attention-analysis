@@ -1,0 +1,35 @@
+{
+  "task_id": "mmwave_hr_untouched_ecg_validation_set_v1",
+  "run_id": "mmwave_hr_untouched_ecg_validation_set_v1_20260913_r1",
+  "state": "BLOCKED_ECG_REFERENCE_SOURCE_UNAVAILABLE",
+  "errors": [
+    {
+      "id": "BLOCKER_ECG_REFERENCE_SOURCE_UNAVAILABLE",
+      "detail": "No ECG acquisition source exists for the formal cohort, so VS_4/VS_5/VS_6/VS_7 cannot be satisfied and MMWAVE_HR_UNTOUCHED_VALIDATION_SET_V1 cannot be formed.",
+      "action_taken": "Reported as BLOCKED per the preregistration gate; no denominator was fabricated and no substitute window contract was introduced."
+    }
+  ],
+  "warnings": [
+    {
+      "id": "PRIOR_OPT_A_RECOMMENDATION_RETRACTED",
+      "detail": "MMWAVE_HR_UNTOUCHED_VALIDATION_SET_PLAN_V1 and MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1 both described OPT_A as available apart from a missing independent gold-clean ECG reference, calling that gap a data-engineering task. That was wrong: the gap is a missing input, because the formal cohort never acquired ECG. Root cause: earlier rounds verified that formal sessions do not overlap the development set but never verified that the formal cohort has ECG at all. This task retracts the earlier recommendation and records the correction."
+    },
+    {
+      "id": "ECG_POOL_IS_SINGLE_PARTICIPANT_BY_DESIGN",
+      "detail": "11_data/derived/ECG_RSP_independent_validation_asset_audit_20260824.md states the D:/acq_mmwave_data pool is one participant measured repeatedly for two-machine calibration, marked calibration_reference_only_not_formal_subject_effect, and explicitly not mergeable into the formal 179-session subject index. Therefore the five development sessions and the five calibration sessions share a participant, and participant-disjointness cannot be satisfied from that pool."
+    },
+    {
+      "id": "PREEXPERIMENT_BATCH_HAS_NO_ECG",
+      "detail": "The I:/preexperiment root (E-batch, 10 sessions) contains only beh/mmwave/nir/rgb with zero .acq files, so it cannot supply an ECG reference either. This also removes the earlier REM_3 idea of using pre-experiment sessions as a pilot validation set."
+    },
+    {
+      "id": "SUB_97792_NOT_ESTIMABLE",
+      "detail": "sub-97792_ is the only ECG-bearing session outside the development set that has probe-style behavior files, but the repository already records it as not_estimable because events.csv has no block1-4 probe events (baseline + practice only). It therefore has no probe windows and cannot serve as a validation session."
+    },
+    {
+      "id": "DERIVED_ROOT_NAME_HINT_OVERCOUNT",
+      "detail": "The scan's ECG artefact counter for the derived and formal-analysis roots includes filename hints (ecg/acq) rather than only acquisition files; those are derived products and documentation, not ECG acquisition. Only D:/acq_mmwave_data contributes real .acq acquisitions (11)."
+    }
+  ],
+  "blocked_conditions_encountered": ["ECG_REFERENCE_SOURCE_UNAVAILABLE_FOR_FORMAL_COHORT"]
+}
