@@ -21,6 +21,10 @@
       "detail": "The frozen per-probe failure class is taken from the P2 detail column PRIMARY_FAILURE_CLASS. The copy of that label inside the control table differs and was not used."
     },
     {
+      "id": "DRIVE_LOCATION_DIAGNOSIS_ERROR",
+      "detail": "An earlier location check used an ASCII-transliterated path segment in the rclone listing, so the canonical shared Drive _AI_HANDOFF appeared to be absent and an alternative listing was misread as the bundle's parent. The shared _AI_HANDOFF is NOT reachable from the rclone remote default root; it must be addressed with --drive-root-folder-id 1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL. The bundle itself was always in the correct folder; the probe command was wrong. Re-verified afterwards: 15/15 files match by read-back in the canonical folder, and no duplicate copy exists elsewhere in the Drive tree."
+    },
+    {
       "id": "SESSION_CONFOUNDING",
       "detail": "Distance-band and ECG-band cells are confounded with the 5 calibration sessions; every pooled number in the report is accompanied by a per-session table and must not be read as population inference."
     }

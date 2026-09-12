@@ -38,12 +38,13 @@ LOCAL_OUTPUTS:
 
 CLOUD_HANDOFF:
 
-- target folder: `_AI_HANDOFF/2026-09-13_mmwave_low_bias_mechanism_audit_v1`（本任务独立目录，未混入 snapshot v1 或 estimator improvement 文件）
-- transport: rclone 1.75.1（便携版，仓库外 `D:\Project\.tools\rclone.exe`），既有已授权 Google Drive remote `gdrive`；凭据只存在于本机 rclone 配置，未打印、未入日志、未入库
+- target folder: canonical shared Drive `_AI_HANDOFF/2026-09-13_mmwave_low_bias_mechanism_audit_v1`（本任务独立目录，未混入 snapshot v1 或 estimator improvement 文件）
+- parent folder id: `1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL`（该共享 `_AI_HANDOFF` 不在 rclone remote 默认根下，必须用 `--drive-root-folder-id 1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL` 访问）
+- transport: rclone 1.75.1（便携版，仓库外 `D:\Project\.tools\rclone.exe`），既有已授权 Google Drive remote；凭据只存在于本机 rclone 配置，未打印、未入日志、未入库
 - uploaded files: 15（14 个 Git-safe 交付物 + `CLOUD_HANDOFF_VERIFICATION.json`）
 - CLOUD_UPLOAD: `UPLOADED_AND_VERIFIED`
-- verification: `rclone check --checksum` exit 0；随后把整目录回读到本机 staging 并逐文件重算 SHA-256，14/14 与本地一致，目录内不含任何 snapshot v1 / estimator improvement 文件
-- `CLOUD_HANDOFF_VERIFICATION.json` SHA-256: `0DAB2E3483A1958787352DADBD3AD5A7E58653846A7CF9A6ED10D9FCD4F29FA9`（该文件最后写入，无法收录自身摘要，故记于本 handoff 与 GitHub issue pointer）
+- verification: `rclone check --checksum` exit 0；随后把整目录回读到本机 staging 并逐文件重算 SHA-256，15/15 与本地一致，目录内不含任何 snapshot v1 / estimator improvement 文件
+- `CLOUD_HANDOFF_VERIFICATION.json`：逐文件回读结果记录；该文件最后写入，其自身 SHA-256 只登记在 GitHub Issue #35 pointer（收录于此会改变本文件摘要，故不收录）
 - local-only: `PROBE_LEVEL_MECHANISM_100_PROBES.csv` 未上传、未入 Git；摘要记录在审计 manifest
 
 HR/BR: `HOLD / SUPPORTING_ONLY`

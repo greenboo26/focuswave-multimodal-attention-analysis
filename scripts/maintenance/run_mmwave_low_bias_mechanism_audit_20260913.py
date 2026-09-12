@@ -111,12 +111,20 @@ SECONDARY_MECHANISM = (
 )
 
 # Markdown 交付物（由 render 脚本生成；在本脚本中登记摘要以做 provenance）。
+# CLOUD_HANDOFF_VERIFICATION.json 不在此列：它在云端回读之后才写入，收录自身会形成
+# 循环依赖；其摘要记在 HANDOFF.md 与 GitHub issue pointer。
 MARKDOWN_DELIVERABLES = (
     "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_REPORT.md",
     "FUSION_PATH_AUDIT.md",
     "HANDOFF.md",
     "ERROR_LOG.json",
 )
+
+# 云端交接身份（canonical shared Drive _AI_HANDOFF，按 folder id 访问）。
+CLOUD_HANDOFF_FOLDER_NAME = "2026-09-13_mmwave_low_bias_mechanism_audit_v1"
+CLOUD_HANDOFF_PARENT_NAME = "_AI_HANDOFF"
+CLOUD_HANDOFF_PARENT_ID = "1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL"
+CLOUD_HANDOFF_REMOTE_PATH = f"gdrive:{CLOUD_HANDOFF_FOLDER_NAME}"
 
 # 既有 QC 字段（只使用表中确实存在的字段；缺失写 NOT_AVAILABLE）。
 # 注意来源表：usable ratio / phase stability / motion proxy / frames 均在 eligibility
@@ -142,6 +150,16 @@ QC_NOT_AVAILABLE = {
 def sha256_file(path: Path) -> str:
     """Return the uppercase SHA-256 of a file's exact bytes."""
     return hashlib.sha256(path.read_bytes()).hexdigest().upper()
+
+
+def sha256_text_normalised(path: Path) -> str:
+    """Return SHA-256 of LF-normalised content (EOL-independent digest).
+
+    交付物可能在 CRLF/LF checkout 之间变化；raw byte 摘要会随平台改变。需要
+    跨 checkout 稳定的登记值一律使用本函数；上传文件的真实字节仍由
+    CLOUD_HANDOFF_VERIFICATION.json 的逐文件回读负责。
+    """
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest().upper()
 
 
 def read_csv_rows(path: Path) -> list[dict]:
@@ -1246,15 +1264,29 @@ def main(argv: list[str] | None = None) -> int:
         "bias_attribution": attribution_rows,
         "harmonic_relations": harm_rows,
         "secondary_flag_frequency": flags,
+        "cloud_handoff": {
+            "folder_name": CLOUD_HANDOFF_FOLDER_NAME,
+            "parent_name": CLOUD_HANDOFF_PARENT_NAME,
+            "parent_folder_id": CLOUD_HANDOFF_PARENT_ID,
+            "remote_path": CLOUD_HANDOFF_REMOTE_PATH,
+            "access_pattern": "--drive-root-folder-id " + CLOUD_HANDOFF_PARENT_ID,
+            "note": "canonical shared Drive _AI_HANDOFF; the folder is addressed by parent id "
+                    "because it is not reachable from the remote default root.",
+        },
         "mechanism_status": MECHANISM_STATUS,
         "primary_mechanism": PRIMARY_MECHANISM,
         "secondary_mechanism": SECONDARY_MECHANISM,
         "mechanism_candidates": [r["MECHANISM_CANDIDATE"] for r in mechanism],
         "markdown_deliverables": {
             name: (
-                {"sha256": sha256_file(out / name)}
+                {
+                    "sha256_lf_normalised": sha256_text_normalised(out / name),
+                    "digest_basis": "LF-normalised content; raw uploaded bytes are verified in "
+                                    "CLOUD_HANDOFF_VERIFICATION.json",
+                }
                 if (out / name).exists()
-                else {"sha256": None, "note": "rendered by render_mmwave_mechanism_audit_docs_20260913.py"}
+                else {"sha256_lf_normalised": None,
+                      "note": "rendered by render_mmwave_mechanism_audit_docs_20260913.py"}
             )
             for name in MARKDOWN_DELIVERABLES
         },
