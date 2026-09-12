@@ -1,0 +1,172 @@
+term,file,line,text
+AgeBalanced,ANALYSIS_HISTORY_LEDGER.md,383,### 2026-08-14：AgeBalanced 外部 ECG 参考验证 + multi-bin 再次 A/B
+agebalanced,ANALYSIS_HISTORY_LEDGER.md,383,### 2026-08-14：AgeBalanced 外部 ECG 参考验证 + multi-bin 再次 A/B
+AgeBalanced,ANALYSIS_HISTORY_LEDGER.md,458,- Issue #9 后确认：27–38 BPM 的巨大恶化主要来自 AgeBalanced ECG benchmark/reference 定义改变，而不是 project route 突然崩坏。
+agebalanced,ANALYSIS_HISTORY_LEDGER.md,458,- Issue #9 后确认：27–38 BPM 的巨大恶化主要来自 AgeBalanced ECG benchmark/reference 定义改变，而不是 project route 突然崩坏。
+AgeBalanced,ANALYSIS_HISTORY_LEDGER.md,459,- 用 AgeBalanced 官方 ECG FFT 参考重算已有路线：30 s project pooled MAE 约 **10.361 BPM**；50 s project 9.292 vs adapted SSA+VMD 9.012，优势很小且不跨指标稳定。
+agebalanced,ANALYSIS_HISTORY_LEDGER.md,459,- 用 AgeBalanced 官方 ECG FFT 参考重算已有路线：30 s project pooled MAE 约 **10.361 BPM**；50 s project 9.292 vs adapted SSA+VMD 9.012，优势很小且不跨指标稳定。
+AgeBalanced,ANALYSIS_HISTORY_LEDGER.md,461,**当前边界**：旧 `ecg_reference_v1` 的 27–38 BPM 不再作为 AgeBalanced HR 性能结论；但这也不等于 HRV 已经获得验证。
+agebalanced,ANALYSIS_HISTORY_LEDGER.md,461,**当前边界**：旧 `ecg_reference_v1` 的 27–38 BPM 不再作为 AgeBalanced HR 性能结论；但这也不等于 HRV 已经获得验证。
+AgeBalanced,ANALYSIS_HISTORY_LEDGER.md,470,| multi-bin | 2026-08-07 已用于主线；2026-08-14 AgeBalanced A/B | AgeBalanced 9.5→9.3，小收益；2× lock 4→6 | 不得重新包装成新方向 |
+agebalanced,ANALYSIS_HISTORY_LEDGER.md,470,| multi-bin | 2026-08-07 已用于主线；2026-08-14 AgeBalanced A/B | AgeBalanced 9.5→9.3，小收益；2× lock 4→6 | 不得重新包装成新方向 |
+AgeBalanced,ANALYSIS_HISTORY_LEDGER.md,646,3. 这次输入语义是否真的不同（例如 RS6240 raw vs AgeBalanced derived；30s vs 50s；ECG official reference vs旧 scorer）？
+agebalanced,ANALYSIS_HISTORY_LEDGER.md,646,3. 这次输入语义是否真的不同（例如 RS6240 raw vs AgeBalanced derived；30s vs 50s；ECG official reference vs旧 scorer）？
+AgeBalanced,CHANGELOG.md,327,Zenodo 60GHz AgeBalanced 110 人 ECG 金标准）验证处理链路的跨设备可用性与金标准精度，
+agebalanced,CHANGELOG.md,327,Zenodo 60GHz AgeBalanced 110 人 ECG 金标准）验证处理链路的跨设备可用性与金标准精度，
+AgeBalanced,CHANGELOG.md,367,- 数据：`11_数据/外部数据集_AgeBalanced_60GHz/`（110 人）、
+agebalanced,CHANGELOG.md,367,- 数据：`11_数据/外部数据集_AgeBalanced_60GHz/`（110 人）、
+mmWave_Heartbeat,CHANGELOG.md,368,  `11_数据/外部数据集_mmWave_Heartbeat/`（TI gby 批次）
+gby,CHANGELOG.md,368,  `11_数据/外部数据集_mmWave_Heartbeat/`（TI gby 批次）
+AgeBalanced,README.md,13,- mmWave C1 HRV 线已停止扩展，不能解释为硬件失败；C2B/C2C 没有稳定超越 C+B 的正增量，M1 作为 supporting person-effect audit，主线定位为 validation boundary/ablation。AgeBalanced reanalysis 已确认旧约 27–38 BPM 断层主要来自把内部 `ecg_reference_v1` 错当官
+agebalanced,README.md,13,- mmWave C1 HRV 线已停止扩展，不能解释为硬件失败；C2B/C2C 没有稳定超越 C+B 的正增量，M1 作为 supporting person-effect audit，主线定位为 validation boundary/ablation。AgeBalanced reanalysis 已确认旧约 27–38 BPM 断层主要来自把内部 `ecg_reference_v1` 错当官
+AgeBalanced,docs/00_治理/当前脚本清单_2026-08-29.md,138,- `validate_external_agebalanced.py`
+agebalanced,docs/00_治理/当前脚本清单_2026-08-29.md,138,- `validate_external_agebalanced.py`
+AgeBalanced,docs/canonical/ANALYSIS_PROGRESS_MAP_2026-08-28.md,9,"> **2026-08-30 current-state override:** this is a historical map. For mmWave, use `PROJECT_STATUS.md` and `docs/research/MMWAVE_HR_BR_HRV_PROJECT_PIPELINE_MAP_2026-08-30.md`: HR/BR are `HOLD`, HRV is"
+agebalanced,docs/canonical/ANALYSIS_PROGRESS_MAP_2026-08-28.md,9,"> **2026-08-30 current-state override:** this is a historical map. For mmWave, use `PROJECT_STATUS.md` and `docs/research/MMWAVE_HR_BR_HRV_PROJECT_PIPELINE_MAP_2026-08-30.md`: HR/BR are `HOLD`, HRV is"
+AgeBalanced,docs/canonical/ANALYSIS_PROGRESS_MAP_2026-08-28.md,58,| mmWave 外部 HR benchmark | `PASS DEVELOPMENT-ONLY` | AgeBalanced 官方 ECG reference 已纠正；30 s project pooled MAE 10.361 BPM；旧 27–38 BPM 已标 superseded | held-out 80 未开；不继续算法海选 | 只用于算法/reference 边界，不直接替代 J
+agebalanced,docs/canonical/ANALYSIS_PROGRESS_MAP_2026-08-28.md,58,| mmWave 外部 HR benchmark | `PASS DEVELOPMENT-ONLY` | AgeBalanced 官方 ECG reference 已纠正；30 s project pooled MAE 10.361 BPM；旧 27–38 BPM 已标 superseded | held-out 80 未开；不继续算法海选 | 只用于算法/reference 边界，不直接替代 J
+VitalSense,docs/canonical/LOCAL_WORKSPACE_INVENTORY_V1.md,19,"The derived root contains 67 top-level result roots. Important observed manifests include `c2_radar_only_attention_baseline_v1`, `c2b_v2_canonical_baselines_20260826`, `final_behavior_context_baseline"
+vitalsense_c1b_benchmark,docs/canonical/LOCAL_WORKSPACE_INVENTORY_V1.md,19,"The derived root contains 67 top-level result roots. Important observed manifests include `c2_radar_only_attention_baseline_v1`, `c2b_v2_canonical_baselines_20260826`, `final_behavior_context_baseline"
+AgeBalanced,docs/canonical/MMWAVE_CANONICAL_STATE_AND_INTERFACE_V1.md,36,"| `codex/mmwave-formal-reanalysis-v2` | `d87229afe071f23450728a6d617ec82317e6c9df`; diverged historical research line | AgeBalanced benchmark/reference, SSA/VMD, root-cause and literature provenance |"
+agebalanced,docs/canonical/MMWAVE_CANONICAL_STATE_AND_INTERFACE_V1.md,36,"| `codex/mmwave-formal-reanalysis-v2` | `d87229afe071f23450728a6d617ec82317e6c9df`; diverged historical research line | AgeBalanced benchmark/reference, SSA/VMD, root-cause and literature provenance |"
+VitalSense,docs/canonical/SOFTWARE_ENVIRONMENT_MATRIX_V1.md,9,"| C1b VitalSense | MATLAB R2024b Update 1, Signal Processing Toolbox R2024b; executable observed at `D:\Program Files\MATLAB\R2024b\bin\matlab.exe` | official commit `d9f71f96800da7ed2192ff1dc0cba0f0e"
+VS_DATASET,docs/decisions/2026-08-25-c2-c3-handoff.md,9,- `C1b = BLOCKED`：正式 VS_DATASET healthy cohort 与同步 Mindray reference 尚未到位；不再调 VitalSense 12 个示例。
+VitalSense,docs/decisions/2026-08-25-c2-c3-handoff.md,9,- `C1b = BLOCKED`：正式 VS_DATASET healthy cohort 与同步 Mindray reference 尚未到位；不再调 VitalSense 12 个示例。
+VS_DATASET,docs/decisions/2026-08-25-gpt-beijing-sensor-increment-adjudication.md,86,`公开 VS_DATASET Radar–ECG → 逐搏验证 → 心搏间期验证 → HRV 指标验证 → 将经过验证的生理指标重新接回北京 Probe 时间轴`
+VS_DATASET,docs/decisions/2026-08-25-gpt-beijing-sensor-increment-adjudication.md,96,3. ECG/HRV：VS_DATASET 完整包下载完成后立即恢复冻结的逐搏/IBI/HRV 外部验证。
+VS_DATASET,docs/decisions/2026-08-25-gpt-c1b-blocker-and-c2c3-route.md,10,The current smoke test is not a performance result and must not be used to tune the frozen beat-matching protocol. The C1b blocker is legitimate because the formal VS_DATASET healthy cohort and synchr
+VitalSense,docs/decisions/2026-08-25-gpt-c1b-blocker-and-c2c3-route.md,14,Do not spend more time tuning the 12 VitalSense2024 example MAT files.
+VS_DATASET,docs/decisions/2026-08-25-gpt-c1b-blocker-and-c2c3-route.md,20,3. Keep **C1b** parked in `blocked` state until the formal VS_DATASET healthy cohort is obtained and verified.
+VitalSense,docs/decisions/2026-08-25-gpt-c1b-blocker-and-c2c3-route.md,32,"On reactivation, first generate a new `RUN_ID`, freeze the input manifest and configuration, then run the project beat algorithm and VitalSense matched-filter baseline under the same ECG R-peak, devic"
+VS_DATASET,docs/decisions/2026-08-25-gpt-c1b-dataset-local-ready-run-decision.md,9,VS_DATASET 健康队列完整包已经下载到本地：
+VS_DATASET,docs/decisions/2026-08-25-gpt-c1b-dataset-local-ready-run-decision.md,11,`D:\Project\厚粲杯\11_数据\external_benchmarks\VS_DATASET_healthy_v1\`
+VitalSense,docs/decisions/2026-08-25-gpt-c1b-dataset-local-ready-run-decision.md,57,沿用已经冻结的评价协议，不重新调 VitalSense 示例，不改变评价规则。
+VitalSense,docs/decisions/2026-08-25-gpt-c1b-timing-lag-evaluation-amendment.md,9,本修订发生在官方 VitalSense MATLAB 24 人正式结果产出之前，目的不是为了改善某个已经看到的结果，而是纠正原 C1b 中“用单一固定延迟代表全部 ECG–Radar 时间差”的解释风险。
+VS_DATASET,docs/decisions/2026-08-25-gpt-c1b-timing-lag-evaluation-amendment.md,24,当前 VS_DATASET C1b 的参考设备是 Mindray，不是 BIOPAC。因此 BIOPAC 官方硬件/模块延迟不能直接用于修正 VS_DATASET 的 ECG–Radar 时间轴。
+VitalSense,docs/decisions/2026-08-25-gpt-c1b-timing-lag-evaluation-amendment.md,48,## 4. 官方 VitalSense 复现后的时间评价分两层
+VitalSense,docs/decisions/2026-08-25-gpt-c1b-timing-lag-evaluation-amendment.md,105,- 根据官方 VitalSense 测试结果再改变搜索范围。
+VitalSense,docs/decisions/2026-08-25-gpt-c1b-timing-lag-evaluation-amendment.md,136,因此官方 VitalSense 复现当前优先级仍是：
+VitalSense,docs/decisions/2026-08-25-gpt-c1b-timing-lag-evaluation-amendment.md,144,## 8. 对官方 VitalSense 三方法比较的冻结要求
+VitalSense,docs/decisions/2026-08-25-gpt-c1b-timing-lag-evaluation-amendment.md,149,2. `Python VitalSense-inspired AMF`；
+VitalSense,docs/decisions/2026-08-25-gpt-c1b-timing-lag-evaluation-amendment.md,150,3. `official MATLAB VitalSense2024 RWAMF`。
+VS_DATASET,docs/decisions/2026-08-25-gpt-c2-c3-adjudication.md,19,4. **C1b 保持 blocked。** 正式 VS_DATASET 到位后再唤醒，不因 C2 结果改变 HRV 路线。
+VitalSense,docs/decisions/2026-08-25-gpt-c2-c3-audit-handoff.md,11,- C1b 仍为 `BLOCKED`，未调 VitalSense 示例。
+VitalSense,docs/decisions/2026-08-25-gpt-vitalsense-matlab-unblock-decision.md,1,# GPT 裁决：VitalSense 官方复现的 MATLAB 环境解锁
+VitalSense,docs/decisions/2026-08-25-gpt-vitalsense-matlab-unblock-decision.md,4,依据：`docs/decisions/2026-08-25-vitalsense-official-reproduction-handoff.md`
+VS_DATASET,docs/decisions/2026-08-25-gpt-vitalsense-matlab-unblock-decision.md,11,**不得在 MATLAB 环境到位后重新做仓库 clone、六环节差异审计、VS_DATASET 下载、ECG R 峰设计或评价协议设计。应从官方 sample 执行点直接恢复。**
+VitalSense,docs/decisions/2026-08-25-gpt-vitalsense-matlab-unblock-decision.md,19,- 能执行官方 VitalSense2024 commit `d9f71f96800da7ed2192ff1dc0cba0f0ef5b6de6` 中 `.m` 源代码的许可环境。
+VitalSense,docs/decisions/2026-08-25-gpt-vitalsense-matlab-unblock-decision.md,31,5. 与项目带通峰值 baseline、当前透明 Python VitalSense-style AMF baseline 做三方法同裁判比较。
+VS_DATASET,docs/decisions/2026-08-25-gpt-vitalsense-matlab-unblock-decision.md,39,- 重新下载 VS_DATASET；
+VitalSense,docs/decisions/2026-08-25-vitalsense-official-reproduction-handoff.md,1,# C1B official VitalSense reproduction handoff
+VitalSense,docs/decisions/2026-08-25-vitalsense-official-reproduction-handoff.md,9,- 官方仓库：`D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825\external\vendor\VitalSense2024`
+VitalSense,docs/decisions/2026-08-25-vitalsense-official-reproduction-handoff.md,19,`D:\Project\厚粲杯\11_数据\derived\vitalsense_official_reproduction_v1\official_sample_matlab_console.log`
+VitalSense,docs/decisions/2026-08-25-vitalsense-official-reproduction-handoff.md,27,`D:\Project\厚粲杯\11_数据\derived\vitalsense_official_reproduction_v1\`
+VitalSense,docs/decisions/2026-08-25-vitalsense-official-reproduction-handoff.md,31,官方 beat 时间点已送入既有 C1b ECG evaluator，与 `project_bandpass_peak` 和 `python_vitalsense_amf` 使用同一 ECG Lead II、500 Hz、单调一对一匹配、±50/75/100/150 ms 容差，±75 ms 为主容差。未按 subject/session 单独调 delay。
+VS_DATASET,docs/decisions/2026-09-12_MMWAVE_ECG_HRV_MASTER_ANALYSIS_PLAN.md,5,适用范围：正式实验毫米波、ECG/RSP 生理金标准验证、外部 VS_DATASET、HR/BR/IBI/HRV、毫米波下游注意状态与多模态分析。
+VS_DATASET,docs/decisions/2026-09-12_MMWAVE_ECG_HRV_MASTER_ANALYSIS_PLAN.md,77,VS_DATASET 使用自己的：
+VitalSense,docs/decisions/2026-09-12_MMWAVE_ECG_HRV_MASTER_ANALYSIS_PLAN.md,90,- 项目 baseline 与 VitalSense route 的独立比较。
+VS_DATASET,docs/decisions/2026-09-12_MMWAVE_ECG_HRV_MASTER_ANALYSIS_PLAN.md,466,## 11. 工作流 G：外部 VS_DATASET
+VS_DATASET,docs/decisions/2026-09-12_MMWAVE_ECG_HRV_MASTER_ANALYSIS_PLAN.md,473,- 如果后续开发新的 radar beat / IBI / HRV 方法，则把 VS_DATASET 作为独立外部评价集；
+VS_DATASET,docs/decisions/2026-09-12_MMWAVE_ECG_HRV_MASTER_ANALYSIS_PLAN.md,578,外部 VS_DATASET 当前不因 Issue #34 重跑，只在新 HRV method 形成后作为独立外部验证。
+VS_DATASET,docs/decisions/2026-09-12_MMWAVE_ECG_HRV_MASTER_ANALYSIS_PLAN.md,621,外部 VS_DATASET 用于独立验证 beat/IBI/HRV 算法是否具有跨数据集可迁移性。
+VitalSense,docs/report/2026-08-25-gpt-reliability-validity-section-draft.md,36,仅通过频谱峰获得平均心率候选不足以支持 HRV 结论。独立公开 Radar–ECG 数据集将用于算法外部基准验证，其中心电图（electrocardiography [ECG]）作为逐搏参考。该外部 benchmark 能证明算法在独立 Radar–ECG 数据上的逐搏/IBI 恢复能力，但因硬件和采集情境不同，不能单独写成“本项目 RS6240 HRV 已完成 ECG 外部验证”。当前正式 be
+AgeBalanced,docs/repository/EXECUTABLE_PATH_SCOPE_CLASSIFICATION_V1.csv,54,"scripts/validate_external_agebalanced.py,2,LEGACY_PROVENANCE_ONLY,not a current/future canonical entrypoint,excluded from cutover blocker"
+agebalanced,docs/repository/EXECUTABLE_PATH_SCOPE_CLASSIFICATION_V1.csv,54,"scripts/validate_external_agebalanced.py,2,LEGACY_PROVENANCE_ONLY,not a current/future canonical entrypoint,excluded from cutover blocker"
+VS_DATASET,docs/research/2026-08-25-c1a-to-c1b-transition.md,1,# C1a → C1b：VS_DATASET benchmark 状态转换
+VS_DATASET,docs/research/2026-08-25-c1a-to-c1b-transition.md,7,`C1a preflight 已完成 → GitHub 固化 → C1b 正式 VS_DATASET beat/IBI benchmark`
+VitalSense,docs/research/2026-08-25-c1a-to-c1b-transition.md,9,本记录对应的完整预检材料位于同目录 `2026-08-25-external-vitalsense-benchmark-preflight-v1/`。本次同步只提交脚本、manifest、报告和 smoke-test 限定结论，不提交公开数据集 MAT、原始数据或大型派生文件。
+VS_DATASET,docs/research/2026-08-25-c1a-to-c1b-transition.md,13,- 已固定审阅 `VS_DATASET` 与 `VitalSense2024` 的公开代码快照和来源链接。
+VitalSense,docs/research/2026-08-25-c1a-to-c1b-transition.md,13,- 已固定审阅 `VS_DATASET` 与 `VitalSense2024` 的公开代码快照和来源链接。
+VitalSense,docs/research/2026-08-25-c1a-to-c1b-transition.md,15,- 已建立参数化单记录适配器并完成一个 VitalSense2024 示例的 smoke test。
+VS_DATASET,docs/research/2026-08-25-c1a-to-c1b-transition.md,17,- `VS_DATASET` 正式 healthy cohort 当前不在本机，尚未完成正式跨被试 benchmark。
+VitalSense,docs/research/2026-08-25-c1a-to-c1b-transition.md,46,2. VitalSense matched-filter baseline。
+VS_DATASET,docs/research/2026-08-25-c1a-to-c1b-transition.md,48,必须按 subject-disjoint split，禁止随机切窗口。若正式 VS_DATASET 暂时无法取得，不用 VitalSense 的 12 个示例代替正式 24 被试 benchmark；应将数据获取作为 blocker 记录，并转向 C2/C3 已确认的工作。
+VitalSense,docs/research/2026-08-25-c1a-to-c1b-transition.md,48,必须按 subject-disjoint split，禁止随机切窗口。若正式 VS_DATASET 暂时无法取得，不用 VitalSense 的 12 个示例代替正式 24 被试 benchmark；应将数据获取作为 blocker 记录，并转向 C2/C3 已确认的工作。
+VS_DATASET,docs/research/2026-08-25-c1a-to-c1b-transition.md,55,- 不得提交 VS_DATASET/VitalSense 原始 MAT 或大型派生数据。
+VitalSense,docs/research/2026-08-25-c1a-to-c1b-transition.md,55,- 不得提交 VS_DATASET/VitalSense 原始 MAT 或大型派生数据。
+VS_DATASET,docs/research/2026-08-25-c1b-access-status.md,1,# C1b：VS_DATASET 正式 benchmark 数据获取状态
+VS_DATASET,docs/research/2026-08-25-c1b-access-status.md,13,- `https://github.com/Rc-W024/VS_DATASET` 当前 HEAD：`8551e67385e400a884335fef322b3734aadd0bf0`。
+VitalSense,docs/research/2026-08-25-c1b-access-status.md,14,- 该 GitHub 代码快照包含 MATLAB 代码、说明和验证文件，但没有 `VITALSENSE_120_DATASET.zip`、`VS01...VS24` healthy cohort MAT 或完整 reference 数据。
+VS_DATASET,docs/research/2026-08-25-c1b-access-status.md,21,- 用 VitalSense2024 的 12 个示例替代 VS_DATASET 的 24 被试 benchmark；
+VitalSense,docs/research/2026-08-25-c1b-access-status.md,21,- 用 VitalSense2024 的 12 个示例替代 VS_DATASET 的 24 被试 benchmark；
+VitalSense,docs/research/2026-08-25-c1b-access-status.md,31,2. VitalSense matched-filter baseline。
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/data_schema_or_access_status.md,7,### VS_DATASET healthy cohort：可适配，正式 MAT 未在本机
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/data_schema_or_access_status.md,20,### VS_DATASET patient cohort：目前只记录访问入口
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/data_schema_or_access_status.md,24,### VitalSense2024：本机可用的最小示例
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/data_schema_or_access_status.md,28,本预检实际只读取 `C_chest_normal_withECG.mat`，未遍历或训练其余示例，也未将示例与 VS_DATASET 混作同一 cohort。
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/pipeline_manifest.json,2,"  ""name"": ""external_vitalsense_beat_ibi_benchmark_preflight_v1"","
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/pipeline_manifest.json,7,"    ""vitalsense2024_smoke_test"": ""same-ADC index correspondence, fixed lag 0 s, no ECG-driven lag optimization"""
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/pipeline_manifest.json,30,"  ""vitalsense_baseline_comparability"": {"
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,1,# VS_DATASET + ECG 毫米波逐搏/IBI benchmark 预检 v1
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,5,预检已建立可复核的外部基准入口与单文件适配 smoke test，但 **VS_DATASET 正式 healthy cohort 的 MAT、subject metadata 和 reference 文件未在本机，也没有在本任务中下载**，因此尚未执行 VS_DATASET 的正式逐搏/IBI benchmark，更没有训练、跨被试统计或性能结论。
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,7,VitalSense2024 仓库自带的一个 ECG 示例可被无交互地读取、转换为雷达帧级 vital signal、产生暂定峰时间戳并按预注册式的固定 0 s 对齐与 75 ms 容差评价。该成功仅验证了“MAT 布局和端到端 I/O 可运行”，不验证 ECG R 峰质量、机械脉搏相对 R 峰的生理时延、算法性能或对 VS_DATASET 的可迁移性。
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,7,VitalSense2024 仓库自带的一个 ECG 示例可被无交互地读取、转换为雷达帧级 vital signal、产生暂定峰时间戳并按预注册式的固定 0 s 对齐与 75 ms 容差评价。该成功仅验证了“MAT 布局和端到端 I/O 可运行”，不验证 ECG R 峰质量、机械脉搏相对 R 峰的生理时延、算法性能或对 VS_DATASET 的可迁移性。
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,15,"| VS_DATASET `8551e...0bf0` | `LICENSE`, `README.md`, `HEALTHY.md`, `PATIENT.md`, `VS_separation.m`, `TechValidation.m`, `PlotVS.m`, `VitalSig_HUGTiP.m`, `Technical_validation_results.csv` | healthy/p"
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,16,"| VitalSense2024 `d9f71f...6de6` | `LICENSE`, `README.md`, `main.m`, `HRestim.m`, `plotPhase.m`，以及 `data/C_chest_normal_withECG.mat` 的变量头和实际数据 | MIT、原始 ADC/帧参数、信号分离、FFT/自相关周期选择、template/reverse-templa"
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,24,"* **VS_DATASET healthy**：文档描述 24 人、Resting/Apnea、雷达 MAT + Mindray MAT。已由 MATLAB 代码确认预期字段：雷达 `VitalSig`, `T_frame`, `Radar.t_frame`, `Radar.fs`；reference `ecg_lead2`, `Fs_ecg`, `respiration`, `Fs_resp`"
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,25,* **VS_DATASET patient**：文档标为 under construction，说明约 87 GB；代码可读取同 ADC 两通道 raw BIN（CH1 radar，CH2 ECG Lead II），但公开 patient data 未下载，不能预先假定每会话实际可用。
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,26,"* **VitalSense2024 示例**：`data/` 有 12 个 MAT；实测 `beatingTone_time=(512,8000)`、`data=(1,4096000)`，其中 5 个另含 `ECGSignal=(1,4096000)`。没有 RSP、pleth、subject/session metadata，不能代替 VS_DATASET 的正式 cohort。"
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,26,"* **VitalSense2024 示例**：`data/` 有 12 个 MAT；实测 `beatingTone_time=(512,8000)`、`data=(1,4096000)`，其中 5 个另含 `ECGSignal=(1,4096000)`。没有 RSP、pleth、subject/session metadata，不能代替 VS_DATASET 的正式 cohort。"
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,32,### VS_DATASET
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,40,### VitalSense2024 baseline
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,58,| 同步 | 有原始时戳时直接使用；否则只可用独立 RSP 等同步通道得到 session-level lag，并在逐搏评分前冻结。VitalSense2024 smoke test 为同 ADC sample index、0 s lag |
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,67,与 VitalSense route 的共同接口是：phase vital signal、0.3 Hz separation、FFT/自相关 period proposal、radar template matched filter、`findpeaks` timestamps。新增且必须保留的外部 benchmark 接口是 frozen ECG alignment、one-to-one mat
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,74,python run_single_case_preflight.py --input-mat source_snapshots/VitalSense2024/data/C_chest_normal_withECG.mat --output-json single_case_smoke_test.json
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,79,未运行 MATLAB、未运行 VS_DATASET 的 `TechValidation.m` 或 `VS_separation.m`，也未下载 DataPort/figshare 文件、更未进行任何训练或批处理。
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md,85,3. 在至少两个开发 subject 仅确定 ECG detector/QC 与 matched-filter 阈值后，按 subject-disjoint held-out subjects 报告上述五类指标及 subject bootstrap CI；不把 VitalSense2024 示例混入正式估计。
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/run_single_case_preflight.py,1,"""""""Single-record, parameterized smoke test for the VitalSense2024 MAT layout."
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/run_single_case_preflight.py,73,    # VitalSense2024-compatible target selection: maximum positive FFT index
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/single_case_smoke_test.json,3,"  ""input_mat"": ""D:\\Project\\\u539a\u7cb2\u676f\\11_\u6570\u636e\\derived\\external_vitalsense_benchmark_preflight_v1\\source_snapshots\\VitalSense2024\\data\\C_chest_normal_withECG.mat"","
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.csv,2,"VS_DATASET_GitHub,code_and_dataset_documentation,https://github.com/Rc-W024/VS_DATASET,8551e67385e400a884335fef322b3734aadd0bf0,source_snapshots/VS_DATASET,2026-08-25,healthy_and_patient_layout_licens"
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.csv,3,"VitalSense2024_GitHub,code_and_example_data,https://github.com/Rc-W024/VitalSense2024,d9f71f96800da7ed2192ff1dc0cba0f0ef5b6de6,source_snapshots/VitalSense2024,2026-08-25,matched_filter_heartbeat_times"
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.csv,3,"VitalSense2024_GitHub,code_and_example_data,https://github.com/Rc-W024/VitalSense2024,d9f71f96800da7ed2192ff1dc0cba0f0ef5b6de6,source_snapshots/VitalSense2024,2026-08-25,matched_filter_heartbeat_times"
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.csv,4,"VS_DATASET_healthy,public_dataset_entry,https://doi.org/10.21227/wq68-sv85,repository-linked,not_downloaded,2026-08-25,formal_healthy_access_entry,download/auth terms and MAT variables were not direct"
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.csv,5,"VS_DATASET_healthy_alternate,public_dataset_entry,https://doi.org/10.34810/data2962,repository-linked,not_downloaded,2026-08-25,alternate_access_entry,download contents not directly verified"
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.csv,6,"VS_DATASET_patient,public_dataset_entry,https://figshare.com/s/e056be5dd8bfee45dd6c,repository-linked,not_downloaded,2026-08-25,patient_access_entry,repository marks dataset under construction and say"
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.csv,7,"VitalSense_article,publication_metadata,https://doi.org/10.1109/TMC.2025.3640267,repository-linked,not_downloaded,2026-08-25,baseline_provenance_only,not used to infer unverified numerical claims"
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.json,4,"    {""url"": ""https://github.com/Rc-W024/VS_DATASET"", ""commit"": ""8551e67385e400a884335fef322b3734aadd0bf0"", ""license"": ""MIT, copyright 2025 Ruochen Wu""},"
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.json,5,"    {""url"": ""https://github.com/Rc-W024/VitalSense2024"", ""commit"": ""d9f71f96800da7ed2192ff1dc0cba0f0ef5b6de6"", ""license"": ""MIT, copyright 2024 Ruochen Wu""}"
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.json,8,"    {""url"": ""https://github.com/Rc-W024/VS_DATASET/blob/main/HEALTHY.md"", ""use"": ""healthy cohort layout and cited access entries""},"
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.json,9,"    {""url"": ""https://github.com/Rc-W024/VS_DATASET/blob/main/PATIENT.md"", ""use"": ""patient cohort availability and two-channel raw BIN description""},"
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.json,10,"    {""url"": ""https://github.com/Rc-W024/VS_DATASET/blob/main/VS_separation.m"", ""use"": ""radar/reference variables and separation implementation""},"
+VS_DATASET,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.json,11,"    {""url"": ""https://github.com/Rc-W024/VS_DATASET/blob/main/TechValidation.m"", ""use"": ""respiration cross-correlation synchronization route""},"
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.json,12,"    {""url"": ""https://github.com/Rc-W024/VitalSense2024/blob/main/main.m"", ""use"": ""FFT period selection, waveform template, matched-filter, heartbeat timestamps""},"
+VitalSense,docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.json,13,"    {""url"": ""https://github.com/Rc-W024/VitalSense2024/blob/main/HRestim.m"", ""use"": ""spectral/autocorrelation period candidate selection""}"
+VS_DATASET,docs/research/2026-08-25-local-asset-inventory-and-work-map.md,29,| mmWave/ECG/项目算法仓库 | `D:\Project\厚粲杯\08_算法_worktrees\gpt-codex-handoff-20260825` | Git worktree | 以 Git 状态为准 | CURRENT 交接 worktree，HEAD `97b236a` | C1b VS_DATASET benchmark 入口、协议、总账和交接裁决；本地提交已完成，原始 M
+VS_DATASET,docs/research/2026-08-25-local-asset-inventory-and-work-map.md,60,4. C1b 外部 VS_DATASET Radar–Mindray ECG benchmark，结果见 `D:\Project\厚粲杯\11_数据\derived\vitalsense_c1b_benchmark_v1`。
+VitalSense,docs/research/2026-08-25-local-asset-inventory-and-work-map.md,60,4. C1b 外部 VS_DATASET Radar–Mindray ECG benchmark，结果见 `D:\Project\厚粲杯\11_数据\derived\vitalsense_c1b_benchmark_v1`。
+vitalsense_c1b_benchmark,docs/research/2026-08-25-local-asset-inventory-and-work-map.md,60,4. C1b 外部 VS_DATASET Radar–Mindray ECG benchmark，结果见 `D:\Project\厚粲杯\11_数据\derived\vitalsense_c1b_benchmark_v1`。
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_repo_manifest.json,2,"  ""task"": ""C1B_OFFICIAL_VITALSENSE_REPRO_V1_20260825"","
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_repo_manifest.json,4,"  ""repository"": ""https://github.com/Rc-W024/VitalSense2024"","
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_repo_manifest.json,5,"  ""local_path"": ""D:\\Project\\厚粲杯\\08_算法_worktrees\\gpt-codex-handoff-20260825\\external\\vendor\\VitalSense2024"","
+VS_DATASET,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv,2,"phase_or_vital_input,DIFFERENT,Official main.m derives phase vital signal from raw beatingTone_time and selected FFT range bin; current runner consumes VS_DATASET VitalSig directly,official main.m lin"
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv,2,"phase_or_vital_input,DIFFERENT,Official main.m derives phase vital signal from raw beatingTone_time and selected FFT range bin; current runner consumes VS_DATASET VitalSig directly,official main.m lin"
+vitalsense_c1b_benchmark,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv,2,"phase_or_vital_input,DIFFERENT,Official main.m derives phase vital signal from raw beatingTone_time and selected FFT range bin; current runner consumes VS_DATASET VitalSig directly,official main.m lin"
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv,3,"respiration_cardiac_separation,DIFFERENT,Both subtract a 0.3-Hz low-pass estimate but official uses a 300th-order FIR filter while Python uses a 4th-order Butterworth filter,main.m lines 180-188,butte"
+vitalsense_c1b_benchmark,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv,3,"respiration_cardiac_separation,DIFFERENT,Both subtract a 0.3-Hz low-pass estimate but official uses a 300th-order FIR filter while Python uses a 4th-order Butterworth filter,main.m lines 180-188,butte"
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv,4,"HRestim_period_estimation,DIFFERENT,Official calls HRestim.m after band-limited FFT peak candidates; Python selects the maximum rFFT power frequency and does not implement HRestim,HRestim.m and main.m"
+vitalsense_c1b_benchmark,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv,4,"HRestim_period_estimation,DIFFERENT,Official calls HRestim.m after band-limited FFT peak candidates; Python selects the maximum rFFT power frequency and does not implement HRestim,HRestim.m and main.m"
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv,5,"pulse_template_generation,DIFFERENT,Official builds an average pulse template from preliminary detected pulses; Python uses a deterministic sinusoidal template,main.m lines 330-379,vitalsense_amf in r"
+vitalsense_c1b_benchmark,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv,5,"pulse_template_generation,DIFFERENT,Official builds an average pulse template from preliminary detected pulses; Python uses a deterministic sinusoidal template,main.m lines 330-379,vitalsense_amf in r"
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv,6,"RWAMF,DIFFERENT,Official flips the data-derived pulse template and applies adaptive matched filtering; Python convolves with the sinusoidal template,main.m lines 387-396,vitalsense_amf in run_vitalsen"
+vitalsense_c1b_benchmark,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv,6,"RWAMF,DIFFERENT,Official flips the data-derived pulse template and applies adaptive matched filtering; Python convolves with the sinusoidal template,main.m lines 387-396,vitalsense_amf in run_vitalsen"
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv,7,"findpeaks_beat_localization,DIFFERENT,Official uses MATLAB findpeaks with period-derived MinPeakDistance and fixed MinPeakProminence 0.02; Python uses scipy find_peaks with fixed relative prominence,m"
+vitalsense_c1b_benchmark,docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv,7,"findpeaks_beat_localization,DIFFERENT,Official uses MATLAB findpeaks with period-derived MinPeakDistance and fixed MinPeakProminence 0.02; Python uses scipy find_peaks with fixed relative prominence,m"
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/reproduction_report.md,1,# C1B official VitalSense reproduction v1
+VS_DATASET,docs/research/2026-08-25-vitalsense-official-reproduction-v1/reproduction_report.md,9,"The VS_DATASET adapter then completed all 48 sessions (VS01–VS24 × Resting/Apnea). It supplied `VitalSig`, `Radar.fs` and `Radar.t_frame` at the input boundary only; the official cardiac stages and pa"
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/reproduction_report.md,15,"Three methods were compared: `project_bandpass_peak`, `python_vitalsense_amf`, and `official_matlab_vitalsense_rw_amf`. At ±75 ms, mean overall recall was approximately .178, .134 and .156, respective"
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/reproduction_report.md,23,"Detailed local outputs are in `D:\Project\厚粲杯\11_数据\derived\vitalsense_official_reproduction_v1\`, including `official_session_results.csv`, `official_beat_metrics_primary.csv`, `official_beat_metrics"
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/run_manifest.json,2,"  ""task"": ""C1B_OFFICIAL_VITALSENSE_REPRO_V1_20260825"","
+VS_DATASET,docs/research/2026-08-25-vitalsense-official-reproduction-v1/run_manifest.json,4,"  ""dataset"": ""D:\\Project\\厚粲杯\\11_数据\\external_benchmarks\\VS_DATASET_healthy_v1"","
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/run_manifest.json,5,"  ""existing_c1b_result"": ""D:\\Project\\厚粲杯\\11_数据\\derived\\vitalsense_c1b_benchmark_v1"","
+vitalsense_c1b_benchmark,docs/research/2026-08-25-vitalsense-official-reproduction-v1/run_manifest.json,5,"  ""existing_c1b_result"": ""D:\\Project\\厚粲杯\\11_数据\\derived\\vitalsense_c1b_benchmark_v1"","
+VitalSense,docs/research/2026-08-25-vitalsense-official-reproduction-v1/run_manifest.json,9,"  ""official_output"": ""D:\\Project\\厚粲杯\\11_数据\\derived\\vitalsense_official_reproduction_v1"","
+VS_DATASET,docs/research/2026-08-25-vs-dataset-access-check.md,1,# VS_DATASET 完整数据获取核查
+VS_DATASET,docs/research/2026-08-25-vs-dataset-access-check.md,8,正式 VS_DATASET benchmark 所需的完整 24 被试 Radar–Mindray 参考数据目前未在本地工作区中确认到。公开入口已经确认存在，因此当前状态不是“数据集不存在”，而是“完整数据包尚未下载到本地”。
+VS_DATASET,docs/research/2026-08-25-vs-dataset-access-check.md,21,1. 官方说明页：<https://github.com/Rc-W024/VS_DATASET/blob/main/HEALTHY.md>
+VitalSense,docs/research/2026-08-25-vs-dataset-access-check.md,24,4. 官方代码与示例仓库：<https://github.com/Rc-W024/VitalSense2024>
+VitalSense,docs/research/2026-08-25-vs-dataset-access-check.md,26,官方说明页写明完整包约 31 MB，并列出 24 个被试目录和 Mindray 配套文件；官方 VitalSense2024 README 将仓库内 `data` 定义为 sample data，用于测试、熟悉和算法研究，不能替代完整健康队列。
+VitalSense,docs/research/2026-08-25-vs-dataset-access-check.md,36,未发现名为 `VITALSENSE_120_DATASET` 的完整数据包，也未发现成套 `VS01`–`VS24` 与 `*_Mindray.mat` 文件。该检查不改变任何文件。
+VitalSense,docs/research/2026-08-25-vs-dataset-access-check.md,44,通过两个数据入口之一取得完整包后，记录：下载页面、下载日期、许可/使用条款、文件数量、文件大小、SHA-256 和 subject/session manifest。完成这些记录后再恢复冻结的 C1b benchmark；在此之前不把 VitalSense 示例 smoke test 当作性能证据。
+VS_DATASET,docs/results/c1_pilot/C1C_PILOT_REPORT.md,46,本次正式 RS6240 raw ADC 没有可直接运行的官方 MATLAB VitalSense RWAMF 对应输入，因此三条“同输入对照”是本地 C1b-compatible project bandpass、Python AMF 和 v3.1.1 VMD proxy；官方 MATLAB VS_DATASET 结果不能与 RS6240 raw ADC 直接并列为同一输入基准。论文中 mmHRV
+VitalSense,docs/results/c1_pilot/C1C_PILOT_REPORT.md,46,本次正式 RS6240 raw ADC 没有可直接运行的官方 MATLAB VitalSense RWAMF 对应输入，因此三条“同输入对照”是本地 C1b-compatible project bandpass、Python AMF 和 v3.1.1 VMD proxy；官方 MATLAB VS_DATASET 结果不能与 RS6240 raw ADC 直接并列为同一输入基准。论文中 mmHRV

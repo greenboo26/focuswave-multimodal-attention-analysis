@@ -1,0 +1,37 @@
+{
+  "task_id": "mmwave_external_validation_asset_audit_v1",
+  "run_id": "mmwave_external_validation_asset_audit_v1_20260913_r1",
+  "state": "ASSET_AUDIT_COMPLETE",
+  "errors": [],
+  "warnings": [
+    {
+      "id": "PRIOR_INVENTORY_WAS_INCOMPLETE",
+      "detail": "The validation inventory recorded by MMWAVE_HR_CANDIDATE_PREREGISTRATION_V1 covered only internal sources (the 5-session development set, the 116-session formal cohort, and the calibration sessions). It did not include the three external datasets already present under 11_数据 (external_benchmarks/VS_DATASET_healthy_v1, 外部数据集_AgeBalanced_60GHz, 外部数据集_mmWave_Heartbeat). This audit closes that gap and changes the routing decision from 'OPT_A next' to 'OPT_A next as primary, with VS_DATASET added as secondary C2 evidence'."
+    },
+    {
+      "id": "VS_DATASET_ALREADY_BENCHMARKED",
+      "detail": "A completed C1b benchmark already exists for VS_DATASET (RUN_ID C1B_VS_DATASET_20260825_V1, status BENCHMARK_COMPLETE, 24 subjects / 48 pairs / 384 rows, producing HR/IBI/RMSSD/SDNN and beat-matching metrics). Its own report states it does NOT validate Radar beat/IBI/HRV. The cohort therefore counts as development-exposed and cannot serve as primary untouched validation."
+    },
+    {
+      "id": "VS_DATASET_CANNOT_EXPRESS_C1",
+      "detail": "The VS_DATASET radar side is a single pre-extracted displacement waveform (VitalSig, 40000 samples at 333.3 Hz) with no range bins, no channels and no DataCube. C1 targets the spectral-candidate score inside the selection chain over a complex range-domain DataCube, so C1 cannot be expressed or tested on this dataset at all."
+    },
+    {
+      "id": "AGEBALANCED_ROUTE_EXPOSED",
+      "detail": "AgeBalanced was used on 2026-08-14 (commit f4a8c74d89ec28e005c537cbd5280a15dcb584e1) to evaluate and select HR processing routes, including multi-bin consensus, fixed respiration harmonic notch (reverted), HPS, temporal continuity and VMD variants, with published accuracy numbers. Route-level exposure makes it ineligible as an untouched validation set."
+    },
+    {
+      "id": "TI_GBY_HAS_NO_REFERENCE",
+      "detail": "11_数据/外部数据集_mmWave_Heartbeat contains only 10 raw ADC .bin files (13107200 bytes each). There is no ECG, no respiration reference, no timestamp vector, no chirp configuration and no documented subject mapping, so neither HR ground truth nor a 30 s window can be defined."
+    },
+    {
+      "id": "DIRECTORY_IDENTITY_IS_SAMPLED",
+      "detail": "Per-dataset identity digests hash at most the first 400 files of each directory (recorded as hash_limit in the manifest) so the audit stays fast on the 2424-file AgeBalanced tree; they are directory-level identities for provenance, not full-tree integrity proofs."
+    },
+    {
+      "id": "FORMAT_FACTS_FROM_READ_ONLY_INSPECTION",
+      "detail": "Sampling rates, sample counts, variable names and file-format facts recorded for each dataset come from a separate read-only inspection performed during this task; the audit script itself only re-derives directory inventory, directory digests and git history hits."
+    }
+  ],
+  "blocked_conditions_encountered": []
+}

@@ -1,0 +1,456 @@
+{
+  "task_id": "mmwave_external_validation_asset_audit_v1",
+  "run_id": "mmwave_external_validation_asset_audit_v1_20260913_r1",
+  "document_type": "ASSET_AUDIT",
+  "status": "ASSET_AUDIT_COMPLETE",
+  "date": "2026-09-13",
+  "base_commit": "ebcb9e6e7d4f1446ac1a51e17091188c2782d657",
+  "audit_only": true,
+  "data_run_performed": false,
+  "candidate_run_performed": false,
+  "dataset_scans": {
+    "VS_DATASET_healthy_v1": {
+      "exists": true,
+      "path": "D:\\Project\\厚粲杯\\11_数据\\external_benchmarks\\VS_DATASET_healthy_v1",
+      "files": 102,
+      "bytes": 32482279,
+      "megabytes": 30.98,
+      "extension_histogram": {
+        ".mat": 96,
+        ".tab": 2,
+        ".csv": 2,
+        ".txt": 1,
+        ".md": 1
+      },
+      "top_level": [
+        "README.txt",
+        "Subject Information.tab",
+        "VS01_Apnea.mat",
+        "VS01_Apnea_Mindray.mat",
+        "VS01_Resting.mat",
+        "VS01_Resting_Mindray.mat",
+        "VS02_Apnea.mat",
+        "VS02_Apnea_Mindray.mat",
+        "VS02_Resting.mat",
+        "VS02_Resting_Mindray.mat",
+        "VS03_Apnea.mat",
+        "VS03_Apnea_Mindray.mat",
+        "VS03_Resting.mat",
+        "VS03_Resting_Mindray.mat",
+        "VS04_Apnea.mat",
+        "VS04_Apnea_Mindray.mat",
+        "VS04_Resting.mat",
+        "VS04_Resting_Mindray.mat",
+        "VS05_Apnea.mat",
+        "VS05_Apnea_Mindray.mat",
+        "VS05_Resting.mat",
+        "VS05_Resting_Mindray.mat",
+        "VS06_Apnea.mat",
+        "VS06_Apnea_Mindray.mat",
+        "VS06_Resting.mat",
+        "VS06_Resting_Mindray.mat",
+        "VS07_Apnea.mat",
+        "VS07_Apnea_Mindray.mat",
+        "VS07_Resting.mat",
+        "VS07_Resting_Mindray.mat",
+        "VS08_Apnea.mat",
+        "VS08_Apnea_Mindray.mat",
+        "VS08_Resting.mat",
+        "VS08_Resting_Mindray.mat",
+        "VS09_Apnea.mat",
+        "VS09_Apnea_Mindray.mat",
+        "VS09_Resting.mat",
+        "VS09_Resting_Mindray.mat",
+        "VS10_Apnea.mat",
+        "VS10_Apnea_Mindray.mat"
+      ],
+      "top_level_count": 99
+    },
+    "AgeBalanced_60GHz": {
+      "exists": true,
+      "path": "D:\\Project\\厚粲杯\\11_数据\\外部数据集_AgeBalanced_60GHz",
+      "files": 2424,
+      "bytes": 710626642,
+      "megabytes": 677.71,
+      "extension_histogram": {
+        ".csv": 1540,
+        ".json": 440,
+        ".zlib": 440,
+        ".zip": 1,
+        ".ipynb": 1,
+        ".py": 1,
+        ".xlsx": 1
+      },
+      "top_level": [
+        "ExampleCode.ipynb",
+        "P001/",
+        "P002/",
+        "P003/",
+        "P004/",
+        "P005/",
+        "P006/",
+        "P007/",
+        "P008/",
+        "P009/",
+        "P010/",
+        "P011/",
+        "P012/",
+        "P013/",
+        "P014/",
+        "P015/",
+        "P016/",
+        "P017/",
+        "P018/",
+        "P019/",
+        "P020/",
+        "P021/",
+        "P022/",
+        "P023/",
+        "P024/",
+        "P025/",
+        "P026/",
+        "P027/",
+        "P028/",
+        "P029/",
+        "P030/",
+        "P031/",
+        "P032/",
+        "P033/",
+        "P034/",
+        "P035/",
+        "P036/",
+        "P037/",
+        "P038/",
+        "P039/"
+      ],
+      "top_level_count": 114
+    },
+    "mmWave_Heartbeat_TI_gby": {
+      "exists": true,
+      "path": "D:\\Project\\厚粲杯\\11_数据\\外部数据集_mmWave_Heartbeat",
+      "files": 10,
+      "bytes": 131072000,
+      "megabytes": 125.0,
+      "extension_histogram": {
+        ".bin": 10
+      },
+      "top_level": [
+        "1023dataset/"
+      ],
+      "top_level_count": 1
+    }
+  },
+  "directory_identity": {
+    "VS_DATASET_healthy_v1": {
+      "sha256_over_first_n_files": "21CF2CCD05A510CF0CB11DBEE605B3E925C6B75C6075FD6579016B0F6340C991",
+      "hash_limit": 400
+    },
+    "AgeBalanced_60GHz": {
+      "sha256_over_first_n_files": "1A8E2B54048786402B70EB70BE704918ECB1C3526428FD08D18EAC56C8B7E9C7",
+      "hash_limit": 400
+    },
+    "mmWave_Heartbeat_TI_gby": {
+      "sha256_over_first_n_files": "47D90068867DB6CF613A36F189026482E5ABF03C952DC1BE3BB7A66191BA27BD",
+      "hash_limit": 400
+    }
+  },
+  "history_trace_summary": {
+    "total_hits": 171,
+    "by_term": {
+      "AgeBalanced": 14,
+      "VS_DATASET": 57,
+      "VitalSense": 75,
+      "agebalanced": 14,
+      "gby": 1,
+      "mmWave_Heartbeat": 1,
+      "vitalsense_c1b_benchmark": 9
+    },
+    "top_files": [
+      [
+        "docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/report.md",
+        17
+      ],
+      [
+        "docs/research/2026-08-25-vitalsense-official-reproduction-v1/official_vs_python_equivalence.csv",
+        13
+      ],
+      [
+        "docs/research/2026-08-25-c1a-to-c1b-transition.md",
+        12
+      ],
+      [
+        "ANALYSIS_HISTORY_LEDGER.md",
+        12
+      ],
+      [
+        "docs/decisions/2026-08-25-gpt-c1b-timing-lag-evaluation-amendment.md",
+        8
+      ],
+      [
+        "docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.json",
+        8
+      ],
+      [
+        "docs/decisions/2026-09-12_MMWAVE_ECG_HRV_MASTER_ANALYSIS_PLAN.md",
+        7
+      ],
+      [
+        "docs/research/2026-08-25-external-vitalsense-benchmark-preflight-v1/source_manifest.csv",
+        7
+      ],
+      [
+        "docs/research/2026-08-25-vs-dataset-access-check.md",
+        7
+      ],
+      [
+        "docs/decisions/2026-08-25-gpt-vitalsense-matlab-unblock-decision.md",
+        6
+      ],
+      [
+        "docs/research/2026-08-25-c1b-access-status.md",
+        6
+      ],
+      [
+        "CHANGELOG.md",
+        6
+      ],
+      [
+        "docs/research/2026-08-25-vitalsense-official-reproduction-v1/run_manifest.json",
+        5
+      ],
+      [
+        "docs/decisions/2026-08-25-vitalsense-official-reproduction-handoff.md",
+        5
+      ],
+      [
+        "docs/decisions/2026-08-25-gpt-c1b-blocker-and-c2c3-route.md",
+        4
+      ]
+    ]
+  },
+  "assessments": [
+    {
+      "dataset_id": "VS_DATASET_healthy_v1",
+      "citation": "Wu et al., A New Dataset for Millimeter-Wave Radar Vital Sensing With Reference Signals; DOI 10.34810/data2962 (Catalan Open Research Area / Dataverse; previous IEEE Dataport 10.21227/wq68-sv85)",
+      "role": "EXTERNAL_PUBLIC_REFERENCE_DATASET",
+      "hardware": "custom non-commercial FMCW radar, 120 GHz ISM band (CommSensLab-UPC)",
+      "subjects": 24,
+      "conditions": [
+        "Resting",
+        "Apnea"
+      ],
+      "recordings": 48,
+      "recording_seconds": 120,
+      "hr_ecg_ground_truth": {
+        "present": true,
+        "signal": "Mindray reference: ecg_lead2 (ECG Lead II), ecg_lead3, ecg_leadv1",
+        "ecg_rate_hz": 500,
+        "ecg_samples": 60000,
+        "also_present": [
+          "respiration (256 Hz, 30720)",
+          "pleth (60 Hz, 7200)",
+          "per-minute HR (120 samples)",
+          "per-minute RR (120 samples)",
+          "BPS/BPM/BPD"
+        ]
+      },
+      "radar_input": {
+        "present": true,
+        "variable": "VitalSig",
+        "samples": 40000,
+        "frame_rate_hz": 333.3,
+        "derived_time_vector": "Radar.t_frame",
+        "kind": "PRE_EXTRACTED_DISPLACEMENT",
+        "raw_datacube_available": false,
+        "range_bins_available": false,
+        "channels_available": false
+      },
+      "time_resolution": "Radar 3.0 ms frame interval (333.3 Hz); ECG 2.0 ms (500 Hz), both 120 s",
+      "thirty_second_contract": {
+        "feasible": true,
+        "windows_per_recording": 3,
+        "total_non_overlapping_windows": 144,
+        "note": "120 s per recording yields 4 x 30 s; using 3 leaves a guard margin. Contract is [t, t+30 s) on the file-relative time origin."
+      },
+      "c1_eligibility": {
+        "eligible": false,
+        "reason": "C1 targets the spectral-candidate score inside the selection chain over a complex range-domain DataCube (target/bin/channel selection then spectral scoring). This dataset supplies a single already-extracted displacement channel with no range bins and no channels, so C1's mechanism cannot be expressed or tested here."
+      },
+      "c2_eligibility": {
+        "eligible": true,
+        "reason": "C2 is about spectral-peak selection and anchor persistence on the cardiac waveform. A displacement waveform is sufficient to run that mechanism, although it cannot isolate target-selection interaction.",
+        "caveat": "Cannot test target-selection interaction; result is evidence about the spectral/anchor mechanism only."
+      },
+      "development_exposure": {
+        "classification": "DEVELOPMENT_EXPOSED",
+        "what_ran": "C1b formal Radar-ECG benchmark, RUN_ID C1B_VS_DATASET_20260825_V1, status BENCHMARK_COMPLETE, 24 subjects / 48 pairs / 384 rows",
+        "methods_tested": [
+          "project_bandpass_peak",
+          "vitalsense_amf"
+        ],
+        "metrics_produced": [
+          "raw_precision",
+          "raw_recall",
+          "raw_f1",
+          "raw_timing_mae_ms",
+          "raw_ibi_mae_ms",
+          "raw_hr_abs_error_bpm",
+          "raw_rmssd_abs_error_ms",
+          "raw_sdnn_abs_error_ms"
+        ],
+        "output_root": "D:\\Project\\厚粲杯\\11_数据\\derived\\vitalsense_c1b_benchmark_v1",
+        "calibration": "single fixed ECG-radar delay (-18.0 ms) estimated from VS01 Resting and held fixed",
+        "reported_boundary": "benchmark_report.md states the run does NOT validate Radar beat/IBI/HRV; HR/IBI/RMSSD/SDNN rows are diagnostic only",
+        "pre_registered_protocol": "docs/decisions/2026-08-25-gpt-c1b-dataset-local-ready-run-decision.md and 2026-08-25-gpt-c1b-timing-lag-evaluation-amendment.md (frozen before the official 24-subject result)",
+        "exposed_to": "beat-level / timing / HR-magnitude / HRV-metric benchmarking with thin baseline methods",
+        "not_exposed_to": "the production selection+fusion chain and specifically not the C1 spectral-candidate score or the C2 anchor/SmoothTrack mechanism",
+        "tuning_performed": "one subject (VS01 Resting) used for a single global delay constant; no per-subject or per-window algorithm tuning"
+      },
+      "verdict": "PARTIAL_CANDIDATE_SECONDARY",
+      "verdict_reason": "Cannot serve C1 at all. For C2 it is usable only as secondary external evidence, because the cohort already produced published benchmark numbers; the C1/C2 mechanisms themselves were never evaluated on it."
+    },
+    {
+      "dataset_id": "AgeBalanced_60GHz",
+      "citation": "AgeBalanced 60 GHz cohort, 110 participants (Zenodo-distributed), local copy 2026-08-14",
+      "role": "EXTERNAL_PUBLIC_REFERENCE_DATASET",
+      "hardware": "TI mmWave (60.25 GHz start, B=480 MHz, R_BIN 0.312 m), 2 TX / 4 RX, 64 ADC samples, 32 loops, periodic 10 ms",
+      "subjects": 110,
+      "conditions": [
+        "Lying/Rest",
+        "Lying/Post-exercise",
+        "Sitting/Rest",
+        "Sitting/Post-exercise"
+      ],
+      "hr_ecg_ground_truth": {
+        "present": true,
+        "signal": "movesense_ecg.csv (timestamped mV), plus movesense_acc.csv",
+        "ecg_cadence": "~250 Hz (4 ms between samples in the observed file head)"
+      },
+      "radar_input": {
+        "present": true,
+        "kind": "COMPRESSED_RANGE_FFT_FRAMES",
+        "files": [
+          "radar_rFFTs.zlib (per condition)",
+          "radar_timestamps.csv (100 ms cadence)",
+          "radar_chirpConfig.json",
+          "non_breathing_ts.csv"
+        ],
+        "raw_adc_available": false,
+        "note": "Range-FFT-domain frames, not raw ADC; target/range selection is still recoverable in principle"
+      },
+      "time_resolution": "radar frame period 100 ms (10 Hz); ECG ~4 ms",
+      "thirty_second_contract": {
+        "feasible": true,
+        "windows_per_recording": "multiple",
+        "note": "10 Hz frames give 300 frames per 30 s window; ECG at ~250 Hz gives abundant reference."
+      },
+      "c1_eligibility": {
+        "eligible": false,
+        "reason": "Not eligible for C1 as a validation set, because the cohort has already been used to evaluate and select HR routes (see development_exposure). Eligibility is blocked by exposure, not by format."
+      },
+      "c2_eligibility": {
+        "eligible": false,
+        "reason": "Same exposure block as C1."
+      },
+      "development_exposure": {
+        "classification": "DEVELOPMENT_EXPOSED",
+        "what_ran": "2026-08-14 AgeBalanced external ECG reference validation plus multi-bin A/B and HPS / harmonic-notch / VMD comparisons on the historical 220 Resting-session scope",
+        "commit": "f4a8c74d89ec28e005c537cbd5280a15dcb584e1",
+        "published_numbers": {
+          "project_route_session_mae_median_bpm": 9.5,
+          "high_medium_low_bpm": [
+            1.6,
+            3.4,
+            10.1
+          ],
+          "hps": "10.6 -> 9.7, retained",
+          "temporal_continuity": "9.7 -> 9.5, retained",
+          "fixed_respiration_harmonic_notch": "9.5 -> 10.4, net negative, reverted",
+          "top3_multibin_consensus": "9.5 -> 9.3, small gain, 2x locks 4 -> 6",
+          "vmd_adaptive_grid_median_bpm": {
+            "fixed": 22.5,
+            "adaptive": 25.4,
+            "bandpass": 32.1
+          },
+          "official_reference_recompute_30s_pooled_mae_bpm": 10.361,
+          "official_reference_recompute_50s": {
+            "project": 9.292,
+            "ssa_vmd_adapted": 9.012
+          }
+        },
+        "exposed_to": "HR accuracy benchmarking and algorithm-route selection (multi-bin, harmonic notch, VMD, HPS, temporal continuity)",
+        "not_exposed_to": "the production fusion chain and the specific C2 anchor mechanism",
+        "tuning_performed": "yes at the route level: several candidate processing routes were compared and accepted or reverted on this cohort"
+      },
+      "verdict": "INELIGIBLE_FOR_PRIMARY_VALIDATION",
+      "verdict_reason": "Route-level exposure means it can no longer serve as an untouched validation set for this programme, even though the exact C2 anchor code was not the object of that tuning."
+    },
+    {
+      "dataset_id": "mmWave_Heartbeat_TI_gby",
+      "citation": "TI mmWave raw ADC batch (gby), local copy; 10 files, no documentation packaged",
+      "role": "RAW_RADAR_BATCH_WITHOUT_REFERENCE",
+      "hardware": "TI mmWave raw ADC capture (device/firmware not documented in the local copy)",
+      "subjects": "unknown (10 files named gby1..gby10; file-to-subject mapping not documented)",
+      "conditions": "unknown",
+      "hr_ecg_ground_truth": {
+        "present": false,
+        "detail": "The directory contains only 10 .bin raw ADC files (13,107,200 bytes each) and no ECG, no respiration reference, no timestamps and no metadata."
+      },
+      "radar_input": {
+        "present": true,
+        "kind": "RAW_ADC_BINARY",
+        "note": "Raw ADC; would require a full range-FFT front end plus a documented capture configuration."
+      },
+      "time_resolution": "not determinable from the local copy (no chirp config, no timestamps)",
+      "thirty_second_contract": {
+        "feasible": false,
+        "reason": "No timestamp vector and no chirp configuration, so neither wall-clock alignment nor a 30 s window can be defined."
+      },
+      "c1_eligibility": {
+        "eligible": false,
+        "reason": "No HR/ECG ground truth and no time base."
+      },
+      "c2_eligibility": {
+        "eligible": false,
+        "reason": "No HR/ECG ground truth and no time base."
+      },
+      "development_exposure": {
+        "classification": "NOT_EXPOSED_BUT_UNUSABLE",
+        "what_ran": "nothing; only referenced once as an inventory line in CHANGELOG.md",
+        "exposed_to": "nothing",
+        "not_exposed_to": "everything (no analysis ever ran on it)",
+        "tuning_performed": "none"
+      },
+      "verdict": "INELIGIBLE",
+      "verdict_reason": "Cannot serve as a validation set: no ECG reference, no timestamps, no acquisition metadata, no documented subject mapping."
+    }
+  ],
+  "routing": {
+    "PREREGISTRATION": "DONE",
+    "EXTERNAL_ASSET_INVENTORY": "COMPLETE",
+    "OPT_A_BUILD": "PROCEED_AS_PRIMARY",
+    "primary_untouched_validation_source": "OPT_A_FORMAL_COHORT",
+    "primary_reason": "No external asset is untouched for this programme: VS_DATASET was used for a completed C1b benchmark (and cannot express C1 anyway), AgeBalanced was used for route-level HR algorithm selection, and the TI gby batch has no reference at all.",
+    "secondary_external_evidence": "VS_DATASET_healthy_v1 via its C2-applicable displacement waveform, clearly labelled secondary and not a primary untouched validation",
+    "not_usable": [
+      "AgeBalanced_60GHz (route-exposed)",
+      "mmWave_Heartbeat_TI_gby (no reference, no time base)"
+    ]
+  },
+  "c1_code_path": "scripts/process_vital_signs_v3_1_1.py::_select_spectral_bpm",
+  "c2_code_paths": [
+    "scripts/maintenance/run_mmwave_pre30s_selector_hr_20260831.py::selector_step",
+    "scripts/process_vital_signs_v3_1_1.py::_smooth_track"
+  ],
+  "boundaries": {
+    "snapshot_v1_modified": false,
+    "formal_producer_modified": false,
+    "v2_formed": false,
+    "models_trained": false,
+    "hrv_status": "BLOCKED",
+    "hr_br_status": "HOLD / SUPPORTING_ONLY",
+    "candidate_implemented": false,
+    "external_data_modified": false
+  },
+  "next_task": "mmwave_hr_untouched_ecg_validation_set_v1 (OPT_A) as primary, with VS_DATASET secondary C2 evidence only"
+}
