@@ -175,6 +175,80 @@
       "reason": "largest-error probe identifiers and values"
     }
   ],
+  "cloud_handoff": {
+    "destination_folder_name": "2026-09-12_mmwave_estimator_improvement_v1",
+    "destination_folder_id": "1gZC80XNklehALcuJ6U8NJe_aKy5iwzPd",
+    "destination_folder_url": "https://drive.google.com/drive/folders/1gZC80XNklehALcuJ6U8NJe_aKy5iwzPd",
+    "status": "BLOCKED",
+    "blocker": "No Google Drive connector/MCP tool and no Drive OAuth credential are available in the execution environment of this run; the Codex connector route is only reachable from the Codex/ChatGPT app session and the Codex CLI route returned a usage limit at 2026-09-13T03:06 (Asia/Shanghai).",
+    "required_action": "Run the upload plus read-back verification from a session with the Google Drive connector, uploading exactly the files listed in upload_files.",
+    "upload_files": [
+      {
+        "name": "HANDOFF.md",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/HANDOFF.md",
+        "sha256": "49217F0C2BE2A570F51EA36AD11A8D65235CC0FD80BE96FAD053A8293E45BA41"
+      },
+      {
+        "name": "MMWAVE_ESTIMATOR_IMPROVEMENT_V1_REPORT.md",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/MMWAVE_ESTIMATOR_IMPROVEMENT_V1_REPORT.md",
+        "sha256": "574BB1CBCF775835CD651FE60C737D87A744672E6FDC58C705997DA8F5E12D7D"
+      },
+      {
+        "name": "MMWAVE_ESTIMATOR_IMPROVEMENT_V1_MANIFEST.json",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/MMWAVE_ESTIMATOR_IMPROVEMENT_V1_MANIFEST.json",
+        "sha256": "self-referential: recompute after upload read-back; this manifest records its own content except this hash"
+      },
+      {
+        "name": "REFERENCE_QC_LINEAGE_REPORT.md",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/REFERENCE_QC_LINEAGE_REPORT.md",
+        "sha256": "C26AB0E4110C4B464E12235993143FC5E766F0B4F4A794A0665C209506D2FDDA"
+      },
+      {
+        "name": "REFERENCE_QC_ELIGIBILITY_SUMMARY.csv",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/REFERENCE_QC_ELIGIBILITY_SUMMARY.csv",
+        "sha256": "85D1A97E3D10E6EC283BD2B6E208CBC437F44BFCE04917C93A17D576A94D8266"
+      },
+      {
+        "name": "REFERENCE_QC_ELIGIBILITY_SUMMARY.json",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/REFERENCE_QC_ELIGIBILITY_SUMMARY.json",
+        "sha256": "C365F2A0E2ED4A467AF84AD6F6933F0C7EED2EE37A7053B8C6B45D59D7B1A6A4"
+      },
+      {
+        "name": "CONTROL_VS_CANDIDATES_SUMMARY.csv",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/CONTROL_VS_CANDIDATES_SUMMARY.csv",
+        "sha256": "FA9962D29E2333EC42E35B66F5C10F282450A24AB773C88427925C66DAB7F0C0"
+      },
+      {
+        "name": "PER_SESSION_COMPARISON.csv",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/PER_SESSION_COMPARISON.csv",
+        "sha256": "90E2C8F6DCD7C9CDF86BB5A5487435BC65B862D82B461E027697841748545BDD"
+      },
+      {
+        "name": "FAILURE_CLASS_DELTA.csv",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/FAILURE_CLASS_DELTA.csv",
+        "sha256": "D67C82F58E749D350319240B94517C4D05270F80D3695F6B8E0F89FD60F9CCCD"
+      },
+      {
+        "name": "CANDIDATE_DECISION_LOG.md",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/CANDIDATE_DECISION_LOG.md",
+        "sha256": "29066A3F1CF8D70C8555B7B274231F7A4C3426877405347B4131ACEC885C5926"
+      },
+      {
+        "name": "ERROR_LOG.json",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/ERROR_LOG.json",
+        "sha256": "ADC50ECF8AC6928CA8A451B0A3A1007607C4FFEEED57B8EDE9A1CDB96C1960EA"
+      },
+      {
+        "name": "SYSTEMATIC_BIAS_AUDIT.csv",
+        "repo_path": "docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/SYSTEMATIC_BIAS_AUDIT.csv",
+        "sha256": "98700AC784B488E08DF9660BACA2D7702C60B8A840D59F602A646634A27C31BE"
+      }
+    ],
+    "not_uploaded_by_design": [
+      "probe-level reference/candidate/largest-error tables are local-only; see local_only above"
+    ],
+    "v2_candidate_files": "N/A — no candidate formed (NO_STABLE_IMPROVEMENT)"
+  },
   "candidate_local_output": null,
   "python": "3.14.6 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:29:05) [MSC v.1942 64 bit (AMD64)]",
   "platform": "Windows-11-10.0.26100-SP0"

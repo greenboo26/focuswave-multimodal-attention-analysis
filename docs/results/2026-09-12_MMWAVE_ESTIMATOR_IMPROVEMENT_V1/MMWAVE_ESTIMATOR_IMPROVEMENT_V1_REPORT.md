@@ -20,6 +20,10 @@
 
 系统性偏差仍为低估。分场次、ECG 心率带和选中距离代理的聚合见 `SYSTEMATIC_BIAS_AUDIT.csv`；最大误差探针保留在 local-only 表中。
 
+## 云盘交接
+
+GitHub 侧结果、报告、manifest 与决策日志已提交；云端交接为 `CLOUD_UPLOAD=BLOCKED`。本次运行环境没有 Google Drive connector/MCP 工具，也没有本机 Drive OAuth 凭据，Codex CLI 路径在 2026-09-13T03:06（Asia/Shanghai）返回用量上限。待上传文件清单与各自 SHA-256 见 `MMWAVE_ESTIMATOR_IMPROVEMENT_V1_MANIFEST.json` 的 `cloud_handoff` 段；必须在具备 Google Drive connector 的会话中完成上传与回读验证后，本任务才能报告为完成。
+
 ## 证据边界
 
 这是在已经查看过 ECG oracle 的校准集上进行的估计器开发。任何通过开发门的规则都必须经过参与者/场次不重叠、未触碰 ECG 验证后，才能进入 replacement review。不得覆盖 `mmwave_integration_snapshot_v1`，也不得改变 Task B/materialize 输入。

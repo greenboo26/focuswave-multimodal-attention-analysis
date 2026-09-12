@@ -18,6 +18,8 @@
 
 **决策与边界**：三条假设均拒绝，`BEST_CANDIDATE=NONE`、`V2_CANDIDATE_STATUS=NOT_FORMED`、`NO_STABLE_IMPROVEMENT`。现有 5 场均被反复 oracle 检查，未找到 untouched participant/session-disjoint ECG validation，故不得 formal promote、不得替换 snapshot v1、不得修改 Task B/materialize。报告、manifest、per-session、failure-class、bias 与 candidate log 位于 `docs/results/2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1/`；probe-level 表 local-only。HR/BR=`HOLD / SUPPORTING_ONLY`，HRV=`BLOCKED`，`models_trained=false`。
 
+**云盘状态**：`CLOUD_UPLOAD=BLOCKED` —— 执行环境无 Google Drive connector/MCP 工具与本机 Drive 凭据，Codex CLI 路径返回用量上限；上传与回读必须在具备 Drive connector 的会话中补做，因此本轮不得报告为完整完成。
+
 ---
 
 ### 2026-09-12：mmWave HR recovery P0 逐阶段 lineage audit — PASS / P1 READY WITH SOURCE PRECONDITION

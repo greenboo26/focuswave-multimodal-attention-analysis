@@ -8,7 +8,9 @@ branch: `codex/mmwave-estimator-improvement-v1-20260912`
 
 source baseline: `e4c77ceed887ea0d06f21e067914d6f8e0f8aba4`
 
-producing commit: `PENDING_FIRST_COMMIT`
+producing commit: `737a359bb29b1c05b83f7fbcb4a8134922f95220` (`audit(mmwave): record estimator improvement negative result`; parent `e4c77ceed887ea0d06f21e067914d6f8e0f8aba4`)
+
+report commit: the commit that adds this producing-commit pointer; its own hash is recorded in the GitHub issue pointer because a file cannot contain its own commit hash.
 
 objective: reconcile exact current reference/QC lineage, re-confirm P2, and test bounded mmWave-only estimator/fusion repairs without modifying integration snapshot v1.
 
@@ -31,8 +33,10 @@ CLOUD_HANDOFF:
 
 - target folder: `2026-09-12_mmwave_estimator_improvement_v1`
 - folder id: `1gZC80XNklehALcuJ6U8NJe_aKy5iwzPd`
-- uploaded files: `PENDING`
-- CLOUD_UPLOAD: `PENDING`
+- uploaded files: `NONE — CLOUD_UPLOAD_BLOCKED_NO_DRIVE_CONNECTOR_IN_EXECUTION_ENVIRONMENT`
+- CLOUD_UPLOAD: `BLOCKED`
+- blocker: the execution environment for this run exposes no Google Drive connector/MCP tool and no Drive OAuth credential; the Codex connector route (`mcp__codex_apps__google_drive_*`) is only available inside the Codex/ChatGPT app session, and the Codex CLI route returned `usage limit` at 2026-09-13T03:06 (Asia/Shanghai). Upload and read-back must therefore be executed from a session with the Google Drive connector before the task is reported as complete.
+- upload manifest (exact files staged for upload): see `MMWAVE_ESTIMATOR_IMPROVEMENT_V1_MANIFEST.json` → `cloud_handoff`.
 
 HR/BR: `HOLD / SUPPORTING_ONLY`
 

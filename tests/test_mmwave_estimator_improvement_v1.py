@@ -1,8 +1,10 @@
 import importlib.util
+import json
 from pathlib import Path
 
 
 PATH = Path(__file__).resolve().parents[1] / "scripts" / "maintenance" / "run_mmwave_estimator_improvement_v1_20260912.py"
+RESULT_DIR = Path(__file__).resolve().parents[1] / "docs" / "results" / "2026-09-12_MMWAVE_ESTIMATOR_IMPROVEMENT_V1"
 SPEC = importlib.util.spec_from_file_location("improvement", PATH)
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
@@ -56,3 +58,30 @@ def test_acceptance_rejects_new_catastrophic_probe_failure():
     assert accepted is False
     assert "no_control_correct_to_gt10_transition" in failed
     assert "no_probe_worsens_gt5_bpm" in failed
+
+
+def test_manifest_declares_no_snapshot_v1_change_and_cloud_handoff_files():
+    """交付 manifest 必须可解析、声明未改 snapshot v1，并列出待上传文件清单。"""
+    manifest = json.loads((RESULT_DIR / "MMWAVE_ESTIMATOR_IMPROVEMENT_V1_MANIFEST.json").read_text(encoding="utf-8"))
+    assert manifest["snapshot_v1_modified"] is False
+    assert manifest["formal_producer_modified"] is False
+    assert manifest["ecg_used_for_production_rule"] is False
+    assert manifest["status"] == "NO_STABLE_IMPROVEMENT"
+    assert manifest["best_candidate"] is None
+    cloud = manifest["cloud_handoff"]
+    names = [item["name"] for item in cloud["upload_files"]]
+    # 任务正文第 14 节要求的最小上传集合必须全部在清单中
+    for required in [
+        "HANDOFF.md",
+        "MMWAVE_ESTIMATOR_IMPROVEMENT_V1_REPORT.md",
+        "MMWAVE_ESTIMATOR_IMPROVEMENT_V1_MANIFEST.json",
+        "REFERENCE_QC_LINEAGE_REPORT.md",
+        "REFERENCE_QC_ELIGIBILITY_SUMMARY.csv",
+        "CONTROL_VS_CANDIDATES_SUMMARY.csv",
+        "PER_SESSION_COMPARISON.csv",
+        "FAILURE_CLASS_DELTA.csv",
+        "CANDIDATE_DECISION_LOG.md",
+        "ERROR_LOG.json",
+    ]:
+        assert required in names, f"missing upload entry: {required}"
+    assert cloud["status"] in {"BLOCKED", "UPLOADED_AND_VERIFIED"}
