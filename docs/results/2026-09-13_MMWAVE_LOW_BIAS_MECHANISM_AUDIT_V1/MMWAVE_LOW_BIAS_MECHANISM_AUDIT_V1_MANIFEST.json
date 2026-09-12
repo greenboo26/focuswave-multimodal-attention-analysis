@@ -2,10 +2,10 @@
   "task_id": "mmwave_systematic_low_bias_mechanism_audit_v1",
   "run_id": "mmwave_low_bias_mechanism_audit_v1_20260913_r1",
   "audit_type": "MECHANISM_AUDIT",
-  "source_commit": "c87d969e0c7780f7a2544fec17eace6cd15b6222",
+  "source_commit": "57efd3bc78fdc195bd05f32899301be79a64fab5",
   "script": {
     "path": "D:\\Project\\厚粲杯\\08_算法_worktrees\\mmwave_low_bias_mechanism_audit_v1_20260913\\scripts\\maintenance\\run_mmwave_low_bias_mechanism_audit_20260913.py",
-    "sha256": "ECFFC4937EADB2DBAB68FFD45D39085F81954351AAE0655E61B83D7071B4E67B"
+    "sha256": "EC23135D062198310D9A36553017B044E40772603C7CC559EE50882D8204128F"
   },
   "inputs": {
     "CONTROL_VS_CANDIDATES_100_PROBES_LOCAL_ONLY.csv": {
@@ -372,6 +372,14 @@
     "TIME_CORRECT_FUSION_WRONG": 7,
     "SPECTRAL_CORRECT_FUSION_WRONG": 1
   },
+  "cloud_handoff": {
+    "folder_name": "2026-09-13_mmwave_low_bias_mechanism_audit_v1",
+    "parent_name": "_AI_HANDOFF",
+    "parent_folder_id": "1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL",
+    "remote_path": "gdrive:2026-09-13_mmwave_low_bias_mechanism_audit_v1",
+    "access_pattern": "--drive-root-folder-id 1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL",
+    "note": "canonical shared Drive _AI_HANDOFF; the folder is addressed by parent id because it is not reachable from the remote default root."
+  },
   "mechanism_status": "MULTIFACTOR_MECHANISM_SUPPORTED",
   "primary_mechanism": "FAILURE_MODE_CONDITIONAL_LOW_BIAS: 当链路判断正确时融合心率几乎无偏，总体低估集中在 wrong peak / harmonic / target miss 三个失败类别，且这些类别的估计一律偏向低端。",
   "secondary_mechanism": "SPECTRAL_LOW_BIAS_PULLS_FUSION_DOWN: 频域路相对时域路系统性偏低，融合在多数 probe 上把结果进一步拉低并贡献约 1.5 bpm 额外绝对误差。",
@@ -386,16 +394,16 @@
   ],
   "markdown_deliverables": {
     "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_REPORT.md": {
-      "sha256": "B04F9632F001922AC97557C56445F815FC8823D870052EE0BFA89BE0C451DAAE"
+      "sha256": "7040FE09EEBFDDC76298F263BA3530EFAAAC16369CFC386F383B0371CDBE0DA5"
     },
     "FUSION_PATH_AUDIT.md": {
-      "sha256": "17E1C447072C2F6294C0E0594EFA5754A8950C2525F66E7CDB77942C0B41761F"
+      "sha256": "FF651556E6289AEB990DCA3413BA9E1A702C5C0FE9F6E4BB045B1050735648FB"
     },
     "HANDOFF.md": {
-      "sha256": "A40221E0C9A0D17520F9CAAF248579FFA9A3A3D54BC3E26CA6C8504DD05DBE61"
+      "sha256": "9F40ADE47977D2417D8E925322A53A358AD18A5C02200FCCA5D3C01D76480312"
     },
     "ERROR_LOG.json": {
-      "sha256": "0FA0A230D297F60671F21A84ABE0B3D46CF5DB95896B136E7F4B5BDDF92877FB"
+      "sha256": "DD2D5142797D4B2DB18F1E6D8DA70AB18D3ECB638493C88B42F2C8FBE4212061"
     }
   },
   "qc_fields_used": [

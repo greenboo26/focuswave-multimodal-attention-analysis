@@ -440,9 +440,11 @@ def main(argv: list[str] | None = None) -> int:
         "dfc": read_csv(out / "DISTANCE_FAILURE_CLASS_MATRIX.csv"),
     }
 
-    (out / "FUSION_PATH_AUDIT.md").write_text(render_fusion_path_audit(out, manifest), encoding="utf-8")
+    (out / "FUSION_PATH_AUDIT.md").write_text(
+        render_fusion_path_audit(out, manifest), encoding="utf-8", newline="\r\n"
+    )
     (out / "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_REPORT.md").write_text(
-        render_report(out, manifest, tables), encoding="utf-8"
+        render_report(out, manifest, tables), encoding="utf-8", newline="\r\n"
     )
 
     error_log = {
@@ -466,6 +468,17 @@ def main(argv: list[str] | None = None) -> int:
                           "differs and was not used.",
             },
             {
+                "id": "DRIVE_LOCATION_DIAGNOSIS_ERROR",
+                "detail": "An earlier location check used an ASCII-transliterated path segment in the "
+                          "rclone listing, so the canonical shared Drive _AI_HANDOFF appeared to be "
+                          "absent and an alternative listing was misread as the bundle's parent. The "
+                          "shared _AI_HANDOFF is NOT reachable from the rclone remote default root; it "
+                          "must be addressed with --drive-root-folder-id 1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL. "
+                          "The bundle itself was always in the correct folder; the probe command was "
+                          "wrong. Re-verified afterwards: 15/15 files match by read-back in the "
+                          "canonical folder, and no duplicate copy exists elsewhere in the Drive tree.",
+            },
+            {
                 "id": "SESSION_CONFOUNDING",
                 "detail": "Distance-band and ECG-band cells are confounded with the 5 calibration "
                           "sessions; every pooled number in the report is accompanied by a per-session "
@@ -476,7 +489,9 @@ def main(argv: list[str] | None = None) -> int:
         "state": "AUDIT_COMPLETE",
     }
     (out / "ERROR_LOG.json").write_text(
-        json.dumps(error_log, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(error_log, ensure_ascii=False, indent=2) + "\r\n",
+        encoding="utf-8",
+        newline="\r\n",
     )
 
     handoff = f"""# mmWave low-bias mechanism audit v1 — handoff
@@ -517,8 +532,16 @@ LOCAL_OUTPUTS:
 
 - `{manifest['local_only_outputs'][0]['path']}` — {manifest['local_only_outputs'][0]['rows']} rows — SHA-256 `{manifest['local_only_outputs'][0]['sha256']}` — local-only，因为含逐 probe ECG 参照与诊断细节。
 
-CLOUD_HANDOFF: 见 `CLOUD_HANDOFF_VERIFICATION.json`（本任务独立目录
-`2026-09-13_mmwave_low_bias_mechanism_audit_v1`，不混入 snapshot v1 或 estimator improvement 文件）。
+CLOUD_HANDOFF:
+
+- target folder: canonical shared Drive `_AI_HANDOFF/2026-09-13_mmwave_low_bias_mechanism_audit_v1`（本任务独立目录，未混入 snapshot v1 或 estimator improvement 文件）
+- parent folder id: `1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL`（该共享 `_AI_HANDOFF` 不在 rclone remote 默认根下，必须用 `--drive-root-folder-id 1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL` 访问）
+- transport: rclone 1.75.1（便携版，仓库外 `D:\\Project\\.tools\\rclone.exe`），既有已授权 Google Drive remote；凭据只存在于本机 rclone 配置，未打印、未入日志、未入库
+- uploaded files: 15（14 个 Git-safe 交付物 + `CLOUD_HANDOFF_VERIFICATION.json`）
+- CLOUD_UPLOAD: `UPLOADED_AND_VERIFIED`
+- verification: `rclone check --checksum` exit 0；随后把整目录回读到本机 staging 并逐文件重算 SHA-256，15/15 与本地一致，目录内不含任何 snapshot v1 / estimator improvement 文件
+- `CLOUD_HANDOFF_VERIFICATION.json`：逐文件回读结果记录；该文件最后写入，其自身 SHA-256 只登记在 GitHub Issue #35 pointer（收录于此会改变本文件摘要，故不收录）
+- local-only: `PROBE_LEVEL_MECHANISM_100_PROBES.csv` 未上传、未入 Git；摘要记录在审计 manifest
 
 HR/BR: `HOLD / SUPPORTING_ONLY`
 
@@ -526,7 +549,20 @@ HRV: `BLOCKED`
 
 models_trained: `false`
 """
-    (out / "HANDOFF.md").write_text(handoff, encoding="utf-8")
+    (out / "HANDOFF.md").write_text(handoff, encoding="utf-8", newline="\r\n")
+
+    # 统一为 LF：这些文件没有 text/eol 属性，Git 会原样存储 CRLF，
+    # 从而让 git diff --check 把每一行都报成 trailing whitespace。
+    for generated in (
+        "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_REPORT.md",
+        "FUSION_PATH_AUDIT.md",
+        "HANDOFF.md",
+        "ERROR_LOG.json",
+    ):
+        path = out / generated
+        data = path.read_bytes().replace(b"\r\n", b"\n")
+        path.write_bytes(data)
+
     print(f"rendered docs into {out}")
     return 0
 

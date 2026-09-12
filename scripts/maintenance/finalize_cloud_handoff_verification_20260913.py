@@ -28,7 +28,10 @@ RESULT_DIR = REPO / "docs" / "results" / "2026-09-13_MMWAVE_LOW_BIAS_MECHANISM_A
 
 CLOUD_FOLDER_NAME = "2026-09-13_mmwave_low_bias_mechanism_audit_v1"
 CLOUD_FOLDER_PARENT = "_AI_HANDOFF"
-CLOUD_REMOTE_PATH = f"gdrive:_AI_HANDOFF/{CLOUD_FOLDER_NAME}"
+# canonical shared Drive _AI_HANDOFF, addressed by parent id because it is not
+# reachable from the remote default root.
+CLOUD_FOLDER_PARENT_ID = "1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL"
+CLOUD_REMOTE_PATH = f"gdrive:{CLOUD_FOLDER_NAME}"
 
 # 自指文件：本验证记录无法收录自己的最终 digest，其摘要记录在 HANDOFF 与 issue pointer。
 SELF_REFERENTIAL = {"CLOUD_HANDOFF_VERIFICATION.json"}
@@ -87,7 +90,9 @@ def main(argv: list[str] | None = None) -> int:
         "run_id": manifest["run_id"],
         "folder_name": CLOUD_FOLDER_NAME,
         "folder_parent": CLOUD_FOLDER_PARENT,
+        "folder_parent_id": CLOUD_FOLDER_PARENT_ID,
         "remote_path": CLOUD_REMOTE_PATH,
+        "access_pattern": "--drive-root-folder-id " + CLOUD_FOLDER_PARENT_ID,
         "transport": "rclone 1.75.1 (portable, D:\\Project\\.tools\\rclone.exe), Google Drive remote "
                      "'gdrive', authorized previously by the user; scope drive. Credentials live only in "
                      "the machine-local rclone config and were never printed, logged, or committed.",

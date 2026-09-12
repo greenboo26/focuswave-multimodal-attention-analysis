@@ -3,7 +3,9 @@
   "run_id": "mmwave_low_bias_mechanism_audit_v1_20260913_r1",
   "folder_name": "2026-09-13_mmwave_low_bias_mechanism_audit_v1",
   "folder_parent": "_AI_HANDOFF",
-  "remote_path": "gdrive:_AI_HANDOFF/2026-09-13_mmwave_low_bias_mechanism_audit_v1",
+  "folder_parent_id": "1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL",
+  "remote_path": "gdrive:2026-09-13_mmwave_low_bias_mechanism_audit_v1",
+  "access_pattern": "--drive-root-folder-id 1wZ6fHAyz4JMBwQ7LxL2fYZ9DdhO4XAfL",
   "transport": "rclone 1.75.1 (portable, D:\\Project\\.tools\\rclone.exe), Google Drive remote 'gdrive', authorized previously by the user; scope drive. Credentials live only in the machine-local rclone config and were never printed, logged, or committed.",
   "cloud_file_count": 14,
   "cloud_files": [
@@ -23,7 +25,7 @@
     "WITHIN_SESSION_DISTANCE_CHECK.csv"
   ],
   "verified_by_readback": true,
-  "readback_dir": "D:\\Project\\.harness\\drive_readback_20260913b",
+  "readback_dir": "D:\\Project\\.harness\\conv9",
   "per_file": [
     {
       "name": "BIAS_ATTRIBUTION_DECOMPOSITION.csv",
@@ -52,8 +54,8 @@
     {
       "name": "ERROR_LOG.json",
       "status": "MATCH",
-      "local_sha256": "0FA0A230D297F60671F21A84ABE0B3D46CF5DB95896B136E7F4B5BDDF92877FB",
-      "cloud_sha256": "0FA0A230D297F60671F21A84ABE0B3D46CF5DB95896B136E7F4B5BDDF92877FB"
+      "local_sha256": "DD2D5142797D4B2DB18F1E6D8DA70AB18D3ECB638493C88B42F2C8FBE4212061",
+      "cloud_sha256": "DD2D5142797D4B2DB18F1E6D8DA70AB18D3ECB638493C88B42F2C8FBE4212061"
     },
     {
       "name": "FAILURE_CLASS_BIAS_DECOMPOSITION.csv",
@@ -70,14 +72,14 @@
     {
       "name": "FUSION_PATH_AUDIT.md",
       "status": "MATCH",
-      "local_sha256": "17E1C447072C2F6294C0E0594EFA5754A8950C2525F66E7CDB77942C0B41761F",
-      "cloud_sha256": "17E1C447072C2F6294C0E0594EFA5754A8950C2525F66E7CDB77942C0B41761F"
+      "local_sha256": "FF651556E6289AEB990DCA3413BA9E1A702C5C0FE9F6E4BB045B1050735648FB",
+      "cloud_sha256": "FF651556E6289AEB990DCA3413BA9E1A702C5C0FE9F6E4BB045B1050735648FB"
     },
     {
       "name": "HANDOFF.md",
       "status": "MATCH",
-      "local_sha256": "40F3CB5C7B9BFBD5951A5F74A0A45F56F3263136D21692D6C6D6F120B6D32267",
-      "cloud_sha256": "40F3CB5C7B9BFBD5951A5F74A0A45F56F3263136D21692D6C6D6F120B6D32267"
+      "local_sha256": "9F40ADE47977D2417D8E925322A53A358AD18A5C02200FCCA5D3C01D76480312",
+      "cloud_sha256": "9F40ADE47977D2417D8E925322A53A358AD18A5C02200FCCA5D3C01D76480312"
     },
     {
       "name": "MECHANISM_EVIDENCE_MATRIX.csv",
@@ -88,14 +90,14 @@
     {
       "name": "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_MANIFEST.json",
       "status": "MATCH",
-      "local_sha256": "9E0E18575F9F3C4A6E032A8ACF800320AC5119D802EF1730788CAE91EAFC9FA1",
-      "cloud_sha256": "9E0E18575F9F3C4A6E032A8ACF800320AC5119D802EF1730788CAE91EAFC9FA1"
+      "local_sha256": "785CFB9FDC2DA92DB029615D998F62369E65E448566249B35ACEA3BCBB4E4654",
+      "cloud_sha256": "785CFB9FDC2DA92DB029615D998F62369E65E448566249B35ACEA3BCBB4E4654"
     },
     {
       "name": "MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1_REPORT.md",
       "status": "MATCH",
-      "local_sha256": "B04F9632F001922AC97557C56445F815FC8823D870052EE0BFA89BE0C451DAAE",
-      "cloud_sha256": "B04F9632F001922AC97557C56445F815FC8823D870052EE0BFA89BE0C451DAAE"
+      "local_sha256": "7040FE09EEBFDDC76298F263BA3530EFAAAC16369CFC386F383B0371CDBE0DA5",
+      "cloud_sha256": "7040FE09EEBFDDC76298F263BA3530EFAAAC16369CFC386F383B0371CDBE0DA5"
     },
     {
       "name": "QC_BIAS_DECOMPOSITION.csv",
