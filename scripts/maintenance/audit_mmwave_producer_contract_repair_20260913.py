@@ -1,8 +1,18 @@
 """Old-vs-new audit for the mmWave producer M1 contract repair.
 
-This script compares the existing pre-M1 J/E merge-ready tables with the new
-current-main-derived outputs and joins the per-probe frame-membership audit.
-It does not train models and does not use Q1/Q2 for acceptance.
+The producer HR selector is stateful within each session/block: each probe consumes
+an incoming previous_bpm anchor that is updated from prior probe HR output.
+Therefore two determinism contracts are audited separately:
+
+1) stateless derived fields: same frame membership => identical output;
+2) stateful HR fields: same frame membership AND same incoming reconstructed
+   previous_bpm anchor => identical output.
+
+When local membership is unchanged but the incoming anchor has already diverged
+because an earlier probe legitimately changed frame membership, HR differences are
+reported as explained state propagation rather than contract failures.
+
+This script does not train models and does not use Q1/Q2 for acceptance.
 """
 from __future__ import annotations
 
@@ -10,6 +20,7 @@ import argparse
 import csv
 import json
 import math
+import re
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -22,16 +33,12 @@ KEYS = [
     "window_name",
 ]
 
-DETERMINISTIC_IF_MEMBERSHIP_SAME = [
+STATELESS_DETERMINISTIC_IF_MEMBERSHIP_SAME = [
     "mmwave_state",
     "mmwave_observed",
     "mmwave_missing_reason",
     "mmwave_loadable",
-    "mmwave_hr_freq_bpm_median",
-    "mmwave_hr_time_bpm_median",
-    "mmwave_hr_fused_bpm_median",
     "mmwave_breath_rate_breaths_per_min_median",
-    "mmwave_hr_mean_confidence",
     "mmwave_selected_bin_mode",
     "mmwave_selected_channel_mode",
     "mmwave_selected_bin_distance_proxy_m",
@@ -39,10 +46,19 @@ DETERMINISTIC_IF_MEMBERSHIP_SAME = [
     "mmwave_motion_proxy_median",
 ]
 
+STATEFUL_HR_FIELDS = [
+    "mmwave_hr_freq_bpm_median",
+    "mmwave_hr_time_bpm_median",
+    "mmwave_hr_fused_bpm_median",
+    "mmwave_hr_mean_confidence",
+]
+
 INTENTIONALLY_REDEFINED_QC = [
     "mmwave_timestamp_coverage_fraction",
     "mmwave_hr_usable_window_fraction",
 ]
+
+HR_ANCHOR_UPDATE_CONFIDENCE = 0.12
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -80,12 +96,12 @@ def norm(value: Any) -> str | None:
     if text.lower() in {"true", "false"}:
         return text.lower()
     try:
-        numeric = float(text)
+        numeric_value = float(text)
     except ValueError:
         return text
-    if not math.isfinite(numeric):
+    if not math.isfinite(numeric_value):
         return text
-    return f"{numeric:.12g}"
+    return f"{numeric_value:.12g}"
 
 
 def numeric(value: Any) -> float | None:
@@ -132,6 +148,64 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writerows(rows)
 
 
+def probe_order(row: dict[str, Any]) -> int:
+    direct = numeric(row.get("probe_index_in_block"))
+    if direct is not None:
+        return int(direct)
+    match = re.search(r"(\d+)$", str(row.get("probe_id", "")))
+    if match:
+        return int(match.group(1))
+    raise ValueError(f"cannot determine probe order for {canonical_key(row)}")
+
+
+def _anchor_close(a: float | None, b: float | None, atol: float = 1e-9) -> bool:
+    if a is None or b is None:
+        return a is None and b is None
+    return math.isclose(a, b, rel_tol=0.0, abs_tol=atol)
+
+
+def reconstruct_incoming_anchor(
+    rows: list[dict[str, Any]],
+) -> dict[tuple[str, ...], float | None]:
+    """Reconstruct persisted previous_bpm state from emitted HR/confidence.
+
+    The producer updates state after each probe:
+      - first finite fused HR seeds previous_bpm regardless of confidence;
+      - later finite fused HR updates only when confidence >= 0.12;
+      - otherwise previous_bpm is retained.
+
+    Exported fused HR/confidence are rounded, so this is audit-lineage evidence,
+    not a byte-identical copy of internal floating-point state. It is sufficient
+    to determine whether old/new emitted state histories were identical before a
+    probe: identical histories reconstruct identically.
+    """
+    groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for row in rows:
+        groups.setdefault(
+            (str(row.get("session_id", "")), str(row.get("block_id", ""))), []
+        ).append(row)
+
+    incoming: dict[tuple[str, ...], float | None] = {}
+    for group_rows in groups.values():
+        group_rows.sort(key=probe_order)
+        previous: float | None = None
+        for row in group_rows:
+            incoming[canonical_key(row)] = previous
+            fused = numeric(row.get("mmwave_hr_fused_bpm_median"))
+            confidence = numeric(row.get("mmwave_hr_mean_confidence"))
+            if fused is not None and (
+                previous is None
+                or (
+                    confidence is not None
+                    and confidence >= HR_ANCHOR_UPDATE_CONFIDENCE
+                )
+            ):
+                previous = (
+                    fused if previous is None else 0.8 * previous + 0.2 * fused
+                )
+    return incoming
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--old-j", type=Path, required=True)
@@ -151,6 +225,8 @@ def main() -> None:
     old_map = unique_map(old_rows, "old")
     new_map = unique_map(new_rows, "new")
     frame_map = unique_map(frame_rows, "frame_audit")
+    old_anchor = reconstruct_incoming_anchor(old_rows)
+    new_anchor = reconstruct_incoming_anchor(new_rows)
 
     old_keys = set(old_map)
     new_keys = set(new_map)
@@ -162,9 +238,12 @@ def main() -> None:
 
     all_keys = sorted(old_keys | new_keys)
     detail: list[dict[str, Any]] = []
-    deterministic_violations = 0
     membership_changed_n = 0
     strict_frame_violations = 0
+    stateless_violations = 0
+    stateful_unexplained_violations = 0
+    stateful_explained_by_anchor = 0
+    raw_same_membership_hr_difference_n = 0
     state_transition_counts: Counter[str] = Counter()
     hr_changed_n = 0
     br_changed_n = 0
@@ -183,6 +262,10 @@ def main() -> None:
         if audit_status == "SELECTED" and strict_before is not True:
             strict_frame_violations += 1
 
+        old_incoming = old_anchor.get(key)
+        new_incoming = new_anchor.get(key)
+        incoming_anchor_same = _anchor_close(old_incoming, new_incoming)
+
         row: dict[str, Any] = {name: value for name, value in zip(KEYS, key)}
         row.update(
             {
@@ -198,6 +281,9 @@ def main() -> None:
                 ),
                 "membership_changed": membership_changed,
                 "new_all_selected_before_probe": strict_before,
+                "old_incoming_previous_bpm_reconstructed": old_incoming,
+                "new_incoming_previous_bpm_reconstructed": new_incoming,
+                "incoming_previous_bpm_same": incoming_anchor_same,
                 "old_state": state_label(old),
                 "new_state": state_label(new),
             }
@@ -206,27 +292,61 @@ def main() -> None:
         transition = f"{state_label(old)} -> {state_label(new)}"
         state_transition_counts[transition] += 1
 
-        deterministic_field_changes = []
-        for field in DETERMINISTIC_IF_MEMBERSHIP_SAME:
+        stateless_changes: list[str] = []
+        for field in STATELESS_DETERMINISTIC_IF_MEMBERSHIP_SAME:
             is_changed = changed(old.get(field), new.get(field))
             row[f"{field}__changed"] = is_changed
             if is_changed:
-                deterministic_field_changes.append(field)
+                stateless_changes.append(field)
+
+        stateful_hr_changes: list[str] = []
+        for field in STATEFUL_HR_FIELDS:
+            is_changed = changed(old.get(field), new.get(field))
+            row[f"{field}__changed"] = is_changed
+            if is_changed:
+                stateful_hr_changes.append(field)
 
         same_membership_selected = (
             audit_status == "SELECTED" and membership_changed is False
         )
-        deterministic_violation = bool(
-            same_membership_selected and deterministic_field_changes
+
+        stateless_violation = bool(
+            same_membership_selected and stateless_changes
         )
-        row["deterministic_violation_when_membership_same"] = (
-            deterministic_violation
+        if stateless_violation:
+            stateless_violations += 1
+
+        raw_same_membership_hr_difference = bool(
+            same_membership_selected and stateful_hr_changes
         )
-        row["deterministic_changed_fields"] = ";".join(
-            deterministic_field_changes
+        if raw_same_membership_hr_difference:
+            raw_same_membership_hr_difference_n += 1
+
+        explained_stateful = bool(
+            raw_same_membership_hr_difference and not incoming_anchor_same
         )
-        if deterministic_violation:
-            deterministic_violations += 1
+        unexplained_stateful = bool(
+            raw_same_membership_hr_difference and incoming_anchor_same
+        )
+        if explained_stateful:
+            stateful_explained_by_anchor += 1
+        if unexplained_stateful:
+            stateful_unexplained_violations += 1
+
+        row["stateless_deterministic_violation_when_membership_same"] = (
+            stateless_violation
+        )
+        row["stateless_changed_fields"] = ";".join(stateless_changes)
+        row["raw_stateful_hr_difference_when_membership_same"] = (
+            raw_same_membership_hr_difference
+        )
+        row["stateful_hr_difference_explained_by_anchor_divergence"] = (
+            explained_stateful
+        )
+        row[
+            "stateful_hr_violation_when_membership_and_anchor_same"
+        ] = unexplained_stateful
+        row["stateful_hr_changed_fields"] = ";".join(stateful_hr_changes)
 
         old_hr = numeric(old.get("mmwave_hr_fused_bpm_median"))
         new_hr = numeric(new.get("mmwave_hr_fused_bpm_median"))
@@ -268,7 +388,8 @@ def main() -> None:
         and not missing_frame
         and not extra_frame
         and strict_frame_violations == 0
-        and deterministic_violations == 0
+        and stateless_violations == 0
+        and stateful_unexplained_violations == 0
     )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -286,12 +407,28 @@ def main() -> None:
         "extra_frame_audit_n": len(extra_frame),
         "membership_changed_n": membership_changed_n,
         "strict_new_frame_membership_violation_n": strict_frame_violations,
-        "deterministic_violation_when_membership_same_n": deterministic_violations,
+        "stateless_deterministic_violation_when_membership_same_n": stateless_violations,
+        "raw_stateful_hr_difference_when_membership_same_n": raw_same_membership_hr_difference_n,
+        "stateful_hr_difference_explained_by_anchor_divergence_n": stateful_explained_by_anchor,
+        "stateful_hr_violation_when_membership_and_anchor_same_n": stateful_unexplained_violations,
         "hr_fused_changed_n": hr_changed_n,
         "br_changed_n": br_changed_n,
         "usable_fraction_changed_n": usable_fraction_changed_n,
         "state_transitions": dict(sorted(state_transition_counts.items())),
         "acceptance_uses_q1_q2": False,
+        "determinism_contract": {
+            "stateless_fields": (
+                "same frame membership requires identical outputs"
+            ),
+            "stateful_hr_fields": (
+                "same frame membership plus same incoming previous_bpm anchor "
+                "requires identical HR outputs"
+            ),
+            "anchor_update_rule": (
+                "first finite fused HR seeds state; subsequent finite fused HR "
+                "updates at confidence >= 0.12 using 0.8*previous + 0.2*fused"
+            ),
+        },
         "scientific_scope": (
             "producer contract/provenance audit only; not physiology validation"
         ),
