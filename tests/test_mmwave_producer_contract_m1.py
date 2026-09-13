@@ -67,6 +67,22 @@ def test_legacy_audit_reconstructs_old_contract_without_driving_science():
     assert audit["membership_changed"] is True
 
 
+def test_same_frame_indices_with_different_clock_values_are_same_membership():
+    values = np.asarray(
+        [[0, 900, 901], [1, 1000, 1001], [2, 1100, 1101], [3, 1200, 1201], [4, 1300, 1301]],
+        dtype=np.int64,
+    )
+    same_bounds = row(window_start_unix_ms="1000", window_effective_start_unix_ms="1000")
+    selected = contract.select_frame_window(same_bounds, values)
+    legacy = contract.select_legacy_frame_window(same_bounds, values)
+    audit = contract.frame_audit_row(same_bounds, selected, legacy)
+    assert (selected.i0, selected.i1_exclusive) == (1, 4)
+    assert (legacy["legacy_i0"], legacy["legacy_i1_exclusive"]) == (1, 4)
+    assert selected.membership_digest_sha256 == legacy["legacy_membership_digest_sha256"]
+    assert selected.timestamp_digest_sha256 != legacy["legacy_timestamp_digest_sha256"]
+    assert audit["membership_changed"] is False
+
+
 def test_exact_endpoint_identity_and_monotonic_clock_fail_closed():
     with pytest.raises(ValueError, match="must equal"):
         contract.select_frame_window(row(window_end_unix_ms="1301"), timestamps())
