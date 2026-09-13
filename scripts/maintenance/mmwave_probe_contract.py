@@ -28,6 +28,7 @@ class FrameWindow:
     first_science_timestamp_ms: int | None
     last_science_timestamp_ms: int | None
     membership_digest_sha256: str
+    timestamp_digest_sha256: str
     all_selected_before_probe: bool
     all_selected_at_or_after_effective_start: bool
     effective_start_unix_ms: int
@@ -51,11 +52,14 @@ def _validate_timestamp_matrix(timestamps: np.ndarray) -> np.ndarray:
     return science
 
 
-def _membership_digest(i0: int, selected_science_ts: np.ndarray) -> str:
-    payload = "\n".join(
-        f"{idx},{int(ts)}"
-        for idx, ts in zip(range(i0, i0 + len(selected_science_ts)), selected_science_ts)
-    ).encode("ascii")
+def _membership_digest(i0: int, n_frames: int) -> str:
+    """Hash frame indices only so clock-label changes do not fake membership changes."""
+    payload = ",".join(str(idx) for idx in range(i0, i0 + n_frames)).encode("ascii")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _timestamp_digest(selected_ts: np.ndarray) -> str:
+    payload = ",".join(str(int(ts)) for ts in selected_ts).encode("ascii")
     return hashlib.sha256(payload).hexdigest()
 
 
@@ -66,7 +70,9 @@ def select_frame_window(row: Mapping[str, Any], timestamps: np.ndarray) -> Frame
     probe_onset = _as_int(row, "probe_onset_unix_ms")
     declared_end = _as_int(row, "window_end_unix_ms")
     if declared_end != probe_onset:
-        raise ValueError("declared window_end_unix_ms must equal probe_onset_unix_ms exactly")
+        raise ValueError(
+            "declared window_end_unix_ms must equal probe_onset_unix_ms exactly"
+        )
     if effective_start >= probe_onset:
         raise ValueError("effective window start must be strictly before probe onset")
 
@@ -85,7 +91,8 @@ def select_frame_window(row: Mapping[str, Any], timestamps: np.ndarray) -> Frame
         n_frames=i1 - i0,
         first_science_timestamp_ms=int(selected[0]) if selected.size else None,
         last_science_timestamp_ms=int(selected[-1]) if selected.size else None,
-        membership_digest_sha256=_membership_digest(i0, selected),
+        membership_digest_sha256=_membership_digest(i0, len(selected)),
+        timestamp_digest_sha256=_timestamp_digest(selected),
         all_selected_before_probe=before_probe,
         all_selected_at_or_after_effective_start=at_or_after_start,
         effective_start_unix_ms=effective_start,
@@ -94,7 +101,13 @@ def select_frame_window(row: Mapping[str, Any], timestamps: np.ndarray) -> Frame
 
 
 def select_legacy_frame_window(row: Mapping[str, Any], timestamps: np.ndarray) -> dict[str, Any]:
-    """Reconstruct current-main legacy membership for old-vs-new audit only."""
+    """Reconstruct current-main legacy membership for old-vs-new audit only.
+
+    This intentionally mirrors the pre-M1 implementation:
+    Python processing timestamp (column 2), nominal window_start_unix_ms,
+    and a right-inclusive endpoint implemented through searchsorted(..., side="right").
+    It must never be used to generate new scientific features.
+    """
     values = np.asarray(timestamps)
     if values.ndim != 2 or values.shape[1] <= QC_TIMESTAMP_COL:
         raise ValueError("timestamp matrix must contain three columns")
@@ -113,13 +126,32 @@ def select_legacy_frame_window(row: Mapping[str, Any], timestamps: np.ndarray) -
         "legacy_n_frames": i1 - i0,
         "legacy_first_timestamp_ms": int(selected[0]) if selected.size else None,
         "legacy_last_timestamp_ms": int(selected[-1]) if selected.size else None,
-        "legacy_membership_digest_sha256": _membership_digest(i0, selected),
-        "legacy_all_selected_before_probe": bool(np.all(selected < probe_onset)) if selected.size else True,
+        "legacy_membership_digest_sha256": _membership_digest(i0, len(selected)),
+        "legacy_timestamp_digest_sha256": _timestamp_digest(selected),
+        "legacy_all_selected_before_probe": bool(np.all(selected < probe_onset))
+        if selected.size
+        else True,
     }
 
 
-def frame_audit_row(row: Mapping[str, Any], formal: FrameWindow, legacy: Mapping[str, Any] | None = None) -> dict[str, Any]:
-    keys = {key: row.get(key) for key in ("repeat_participant_id", "participant_group_id", "session_id", "block_id", "probe_id", "probe_index_in_block", "window_name") if key in row}
+def frame_audit_row(
+    row: Mapping[str, Any],
+    formal: FrameWindow,
+    legacy: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    keys = {
+        key: row.get(key)
+        for key in (
+            "repeat_participant_id",
+            "participant_group_id",
+            "session_id",
+            "block_id",
+            "probe_id",
+            "probe_index_in_block",
+            "window_name",
+        )
+        if key in row
+    }
     out: dict[str, Any] = {
         **keys,
         "science_timestamp_column_index": SCIENCE_TIMESTAMP_COL,
@@ -133,6 +165,7 @@ def frame_audit_row(row: Mapping[str, Any], formal: FrameWindow, legacy: Mapping
         "new_first_science_timestamp_ms": formal.first_science_timestamp_ms,
         "new_last_science_timestamp_ms": formal.last_science_timestamp_ms,
         "new_membership_digest_sha256": formal.membership_digest_sha256,
+        "new_timestamp_digest_sha256": formal.timestamp_digest_sha256,
         "new_all_selected_before_probe": formal.all_selected_before_probe,
         "new_all_selected_at_or_after_effective_start": formal.all_selected_at_or_after_effective_start,
         "audit_status": "SELECTED",
@@ -140,12 +173,29 @@ def frame_audit_row(row: Mapping[str, Any], formal: FrameWindow, legacy: Mapping
     }
     if legacy is not None:
         out.update(legacy)
-        out["membership_changed"] = legacy.get("legacy_membership_digest_sha256") != formal.membership_digest_sha256
+        out["membership_changed"] = (
+            legacy.get("legacy_membership_digest_sha256")
+            != formal.membership_digest_sha256
+        )
     return out
 
 
-def frame_audit_stub(row: Mapping[str, Any], status: str, reason: str) -> dict[str, Any]:
-    keys = {key: row.get(key) for key in ("repeat_participant_id", "participant_group_id", "session_id", "block_id", "probe_id", "probe_index_in_block", "window_name") if key in row}
+def frame_audit_stub(
+    row: Mapping[str, Any], status: str, reason: str
+) -> dict[str, Any]:
+    keys = {
+        key: row.get(key)
+        for key in (
+            "repeat_participant_id",
+            "participant_group_id",
+            "session_id",
+            "block_id",
+            "probe_id",
+            "probe_index_in_block",
+            "window_name",
+        )
+        if key in row
+    }
     return {
         **keys,
         "science_timestamp_column_index": SCIENCE_TIMESTAMP_COL,
