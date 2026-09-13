@@ -1,9 +1,10 @@
 # mmWave producer M1 contract/provenance repair — implementation handoff
 
 Date: 2026-09-13  
-Status: `IMPLEMENTED_ON_CHILD_BRANCH / REAL_2320_RUN_PENDING`  
+Status: `PRODUCER_RUN_COMPLETE / AUDIT_GATE_REFINED_AFTER_STATEFUL-HR REVIEW`  
 Issue: #43  
-Frozen base: `main@3d3671f05b0c502e60824c9f7b9c2fa18efddbb6`
+Frozen producer execution commit: `01da845e70e255b6537f8d03220aac2e6cc0bf31`  
+Current PR branch: `codex/mmwave-producer-contract-provenance-m1-20260913`
 
 ## Scope
 
@@ -13,11 +14,10 @@ It does not change the HR/BR estimator family, physiology qualification,
 HRV status, C1/C2 status, supervised learning, or form a snapshot v2.
 
 The historical corrected replay commit `16729b2ef245f9304dae8674f3bac433bc02e98c`
-remains supporting lineage evidence, but GitHub cannot currently resolve it as a
-remote commit and the historical replay manifest source hashes are inconsistent
-with the declared source commit. Therefore M1 does not treat that historical
-identifier as provenance closure. A fresh run from this remotely retrievable
-child branch must provide its own exact commit and source hashes.
+remains supporting lineage evidence, but GitHub cannot resolve it as a remote
+commit and its historical replay manifest hashes are inconsistent with the
+declared source commit. M1 therefore establishes a new remotely retrievable
+producer execution lineage.
 
 ## Frozen producer time contract
 
@@ -35,7 +35,7 @@ The shared implementation is
 7. J and E runners call the same `process_probe()` implementation and therefore
    share this contract.
 
-The shared selector also reconstructs the pre-M1 current-main membership
+The shared selector reconstructs the pre-M1 current-main membership
 (Python processing clock + nominal start + right-inclusive endpoint) for
 **audit only**. That legacy selector cannot generate new scientific features.
 
@@ -55,72 +55,99 @@ Each J/E run emits a local-only per-probe frame audit:
 - `mmwave_probe_frame_membership_audit_E.csv`
 
 For selected probes it contains the canonical identity, legacy/new frame range
-and frame count, first/last timestamp, legacy/new membership SHA-256 digest,
-whether membership changed, and strict new-contract predicates including
-`new_all_selected_before_probe`.
+and frame count, first/last timestamp, frame-index membership SHA-256, separate
+clock-value SHA-256, whether membership changed, and strict new-contract
+predicates including `new_all_selected_before_probe`.
 
 Unavailable or unreadable sessions remain present as explicit audit stubs.
 No missing row is zero-filled or deleted.
 
 ## Fresh-run provenance
 
-Each J/E manifest records:
+The governed-cohort run completed from a clean worktree at exact producer
+execution commit:
 
-- exact Git `source_commit`;
-- current `source_branch`;
-- whether the source worktree is clean;
-- SHA-256 of the adapter, shared contract module, and producer source;
-- the frozen clock/window contract;
-- the frame-audit path;
-- explicit `models_trained=false`, `q1_q2_used_for_acceptance=false`,
-  `snapshot_v2_formed=false`.
+`01da845e70e255b6537f8d03220aac2e6cc0bf31`
 
-A fresh run is provenance-closed for this code layer only when the worktree is
-clean and the recorded commit is the pushed PR head. This does not itself grant
-physiology validity or downstream prediction eligibility.
+Both J/E manifests record that exact commit, a clean worktree, source SHA-256
+values, the frozen clock/window contract, and explicit no-model/no-Q1Q2/no-v2
+flags. The four executed source hashes were independently rechecked against the
+files used for the run.
 
-## Old-vs-new audit
+The real run produced 2,320 probe rows across 116 sessions. The producer-level
+legacy `repeat_participant_id` cardinality is 62 in both pre-M1 and M1 tables;
+this field cardinality did not change in M1. The downstream Cardiopulmonary
+ingest layer separately resolves the governed participant-group universe to 61.
+Therefore producer M1 must not claim a native producer-table count of 61 groups.
 
-After the corrected J/E tables are generated, run:
+## Post-run audit finding and corrected determinism contract
 
-```powershell
-python scripts/maintenance/audit_mmwave_producer_contract_repair_20260913.py `
-  --old-j <pre-M1 mmwave_probe_merge_ready.csv> `
-  --old-e <pre-M1 mmwave_probe_merge_ready_E.csv> `
-  --new-j <M1 mmwave_probe_merge_ready.csv> `
-  --new-e <M1 mmwave_probe_merge_ready_E.csv> `
-  --frame-j <M1 mmwave_probe_frame_membership_audit.csv> `
-  --frame-e <M1 mmwave_probe_frame_membership_audit_E.csv> `
-  --output-dir <M1 audit directory>
-```
+The first old-vs-new audit returned `FAIL` because 54 probes had unchanged local
+frame membership but changed HR-derived fields. Review of the frozen producer
+code established that this was not caused by DLL/Python timestamp values being
+fed directly into HR estimation: after frame selection, HR consumes the selected
+IQ frames at fixed `FS=100`.
 
-Acceptance is fail-closed on:
+The HR selector is stateful within each session/block. Each probe consumes an
+incoming `previous_bpm` anchor, and the anchor is updated from prior probe fused
+HR/confidence. Consequently, an earlier legitimate frame-membership change can
+alter the anchor carried into a later probe whose own local frame membership is
+unchanged.
 
-- 2320-probe key conservation;
-- complete frame-audit key coverage;
-- zero `new_all_selected_before_probe` violations;
-- zero deterministic HR/BR/target/state differences on probes whose actual
-  frame membership is unchanged.
+Real audit evidence supports this mechanism: all 54/54 same-membership HR
+differences occurred after at least one earlier membership change in the same
+session/block, and all 54/54 also occurred after an earlier fused-HR change in
+that block. No corresponding same-membership differences were observed in BR,
+target bin/channel, distance proxy, phase, motion, state, observed/missingness,
+or loadability fields.
 
-`mmwave_timestamp_coverage_fraction` and
-`mmwave_hr_usable_window_fraction` are excluded from that deterministic
-same-membership invariant because M1 intentionally corrects their time/QC
-semantics.
+Formal `1.15.9` requires same-membership deterministic quantities to remain
+identical **or otherwise be separately explained**. The audit gate is therefore
+refined as follows:
 
-## Tests
+- stateless derived fields: same frame membership => identical output;
+- stateful HR fields (`freq/time/fused/confidence`): same frame membership **and
+  same incoming `previous_bpm` anchor** => identical output;
+- same local membership with a diverged incoming anchor is reported as explained
+  state propagation, not silently ignored and not counted as an unexplained
+  determinism failure.
 
-`tests/test_mmwave_producer_contract_m1.py` covers DLL science clock selection,
-effective-start truncation, exact right-open endpoint, exact endpoint identity,
-non-monotonic DLL clock rejection, stable membership digests, producer usable
-ratio semantics, E-batch effective-start propagation/fail-closed fallback, and
-J/E shared `process_probe` use.
+The audit reconstructs incoming anchor lineage from emitted fused HR and
+confidence using the unchanged producer update rule: first finite fused HR seeds
+the state; later finite fused HR updates when confidence is `>= 0.12` via
+`0.8 * previous + 0.2 * fused`.
+
+This audit refinement does not change producer outputs and does not require a
+116-session signal rerun. It requires only re-running the old-vs-new auditor on
+the already-generated pre-M1/M1 J/E tables and frame-audit CSVs.
+
+## Tests and execution facts
+
+At producer execution commit `01da845e...`,
+`tests/test_mmwave_producer_contract_m1.py` contains **8** test functions; the
+real machine collected and passed all 8 (`8 passed / 0 failed`). Any earlier PR
+text stating `13 passed` for that exact commit was incorrect and is superseded.
+
+The later audit-gate refinement adds dedicated stateful-anchor unit tests. Local
+verification of those new tests passed (`3 passed / 0 failed`) together with
+positive/negative synthetic audit controls: upstream anchor divergence is
+classified as explained state propagation, while a same-membership + same-anchor
+HR difference remains fail-closed.
 
 ## Remaining gate
 
-Code implementation alone does not change Formal
-`blocked_upstream_contract_mismatch`.
+Producer execution provenance is closed for the `01da845e...` run. Formal
+`blocked_upstream_contract_mismatch` must remain unchanged until the revised
+auditor is executed against the already-produced real old/new J/E tables and the
+result confirms:
 
-The status can only be reconsidered after a fresh clean-worktree run on the
-frozen governed cohort demonstrates 2320 probes / 116 sessions / 61 participant
-groups, produces the old-vs-new audit, and the manifest commit/hash values are
-verified against the pushed PR head.
+- key conservation and frame-audit coverage;
+- zero strict new-frame membership violations;
+- zero stateless same-membership violations;
+- zero stateful HR violations when both local membership and incoming anchor are
+  the same;
+- all remaining same-membership HR differences, if any, are explicitly accounted
+  for by incoming-anchor divergence.
+
+This remains a producer contract/provenance decision only. It does not establish
+HR/BR physiological validity or prediction eligibility by itself.
