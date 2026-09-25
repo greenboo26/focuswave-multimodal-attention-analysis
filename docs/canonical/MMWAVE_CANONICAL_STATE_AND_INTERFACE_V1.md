@@ -1,5 +1,7 @@
 # mmWave canonical state, branch consolidation, and multimodal interface — V1
 
+> **2026-09-25 cross-repository clarification:** M1 producer contract and source provenance became canonical in this repository at `main@527ff09872fbc3c85e09263dead7683b89182da0`. The downstream `Attention-Analysis@codex/formal-analysis-v2-portable` v3 registry grants fused HR and BR formal Q1 prediction and device-package comparison eligibility. Formal results and report interpretation belong to `FocusWave-Formal-Analysis@main`. This is a prediction eligibility decision only: HR/BR physiological qualification remains `LIMITED_SUPPORTING_ONLY` (`HOLD / SUPPORTING_ONLY` in this repository), HRV remains `BLOCKED`, and no snapshot v2 or independent formal-cohort ECG validation exists. Older statements below saying that downstream modeling is pending describe the earlier integration stage.
+
 Status: `CANONICAL / MAIN-BOUND / MMWAVE_INTEGRATION_SNAPSHOT_V1_READY / PHYSIOLOGY_LIMITED`
 
 Effective date: 2026-08-30. This document is the first mmWave-specific state authority for any AI or human entering the canonical repository. It consolidates branch history, current scientific decisions, time semantics, and the reserved multimodal interface. It does not rerun science and does not promote HR/BR/HRV beyond their existing evidence boundaries.

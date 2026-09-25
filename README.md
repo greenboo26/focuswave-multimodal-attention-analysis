@@ -2,6 +2,8 @@
 
 这是 FocusWave 多模态注意力分析的正式中央仓库：`FocusWave Multimodal Attention Analysis`。仓库主体不定义为 HR、BR 或 HRV 算法项目。毫米波是当前已审计的一个传感器验证边界，NIR 与 RGB 的生产代码位于外部 `kyandi233-dev/Attention-Analysis` 的受控 ref，最终结果和跨站点推断在本仓库中央收口。
 
+> **当前正式队列入口（2026-09-25）**：国赛正式方法、结果和报告以 [`kyandi233-dev/FocusWave-Formal-Analysis@main`](https://github.com/kyandi233-dev/FocusWave-Formal-Analysis/tree/main) 为准，分析代码以 [`kyandi233-dev/Attention-Analysis@codex/formal-analysis-v2-portable`](https://github.com/kyandi233-dev/Attention-Analysis/tree/codex/formal-analysis-v2-portable) 为准。正式总体为 61 个参与者组、116 场、2,320 个探针。毫米波 M1 来源追踪与探针前时间合同已使两个心肺特征获得正式**预测比较及设备组合资格**；HR/BR 的生理效度仍为 `LIMITED_SUPPORTING_ONLY`，HRV 为 `BLOCKED`。预测资格不等于生理验证。本页下列北京 70 场等条目是较早的站点与开发阶段记录，不是当前国赛总体或报告的结果入口。
+
 > **任何新算法、新特征、新 producer 改动或高成本重跑之前，先读根目录 [`ANALYSIS_HISTORY_LEDGER.md`](ANALYSIS_HISTORY_LEDGER.md)。** 该账本汇总中央分析、FocusWave 采集、Attention-Analysis producer 与历史 workspace 中已经做过、采用、回退、被后续证据替代和仍缺证据的路线，用于避免重复花费计算/API预算。
 
 ## 当前科学状态

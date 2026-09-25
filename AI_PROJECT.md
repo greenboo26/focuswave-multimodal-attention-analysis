@@ -8,6 +8,7 @@
 - workspace_registry: `greenboo26/project@august/PROJECT_INDEX.md`
 - local_startup_files: `AGENTS.md` if present, then `ANALYSIS_HISTORY_LEDGER.md`, `docs/canonical/MMWAVE_CANONICAL_STATE_AND_INTERFACE_V1.md` when mmWave is in scope, `PROJECT_STATUS.md`, `docs/canonical/RESULT_INDEX_V1.md`, then the current result/handoff package
 - mmwave_current_integration: `docs/results/2026-09-12_MMWAVE_INTEGRATION_SNAPSHOT_V1/`
+- formal_prediction_status_20260925: M1 producer contract/provenance is canonical on `main@527ff09872fbc3c85e09263dead7683b89182da0`; downstream `Attention-Analysis@codex/formal-analysis-v2-portable` registry v3 makes fused HR and BR eligible for formal Q1 prediction/device comparisons. This does not change `HR/BR = HOLD / SUPPORTING_ONLY` as physiological estimates or `HRV = BLOCKED`. Formal result and report authority is `FocusWave-Formal-Analysis@main`.
 - mmwave_current_mechanism_audit: `docs/results/2026-09-13_MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1/`
 - mmwave_current_handoff: `docs/results/2026-09-13_MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1/HANDOFF.md`
 - mmwave_hr_execution_issue: `https://github.com/greenboo26/focuswave-multimodal-attention-analysis/issues/35`
@@ -15,7 +16,7 @@
 - mmwave_current_external_asset_audit: `docs/results/2026-09-13_MMWAVE_EXTERNAL_VALIDATION_ASSET_AUDIT_V1/` (no external asset is C1-eligible; VS_DATASET is C2-only secondary evidence)
 - mmwave_untouched_validation_blocker: `docs/results/2026-09-13_MMWAVE_HR_UNTOUCHED_ECG_VALIDATION_SET_V1/` (BLOCKED: no ECG source exists for the formal cohort, so no untouched validation set can be formed)
 - mmwave_line_closure: `docs/canonical/MMWAVE_IMPROVEMENT_LINE_CLOSURE_V1.md` (OPT_A invalid by design; C1/C2 = PAUSED_PENDING_NEW_COLLECTION; improvement line PAUSED, integration READY)
-- mmwave_next_dependency: untouched participant/session-disjoint ECG validation set (`docs/canonical/MMWAVE_HR_UNTOUCHED_VALIDATION_SET_PLAN_V1.md`, recommended `OPT_A`)
+- mmwave_next_dependency: newly collected participant/session-disjoint synchronous mmWave + ECG data; the older `OPT_A` proposal is invalid because the formal cohort has no ECG source (`docs/canonical/MMWAVE_IMPROVEMENT_LINE_CLOSURE_V1.md`)
 - related_repository_roles: `FocusWave@formaltest` owns current formal experiment/acquisition implementation; `Attention-Analysis` owns Behavior/NIR/RGB producer engineering and single-modality analysis; `FocusWave-Formal-Analysis` owns analysis plans/report evidence; local `11_数据` owns data payloads
 
 This file is navigation only. Current scientific and engineering truth remains in this repository's canonical state, status, tests, manifests, handoffs and evidence. Prefer those durable sources over reconstructing project state from chat memory.
@@ -33,7 +34,7 @@ Current boundaries:
 - `MMWAVE_LOW_BIAS_MECHANISM_AUDIT_V1` is the current mechanism evidence: correct/near-correct probes are nearly unbiased, while wrong-peak / harmonic-or-half-double / target-bin-channel-miss failures carry the pooled negative bias; spectral-to-fusion pull is secondary.
 - Do not apply a global +9 bpm correction or introduce a distance gate from the exposed 100-probe development set.
 - Any mechanism-derived production candidate must be frozen separately and validated on an untouched participant/session-disjoint ECG set before promotion.
-- HR/BR remain `HOLD / SUPPORTING_ONLY`; HRV remains `BLOCKED`; no formal snapshot v2 exists.
+- HR/BR remain `HOLD / SUPPORTING_ONLY` for physiological validity, while downstream formal prediction eligibility is granted under the M1 time/provenance contract; HRV remains `BLOCKED`; no formal snapshot v2 exists.
 
 The historical recovery decision `docs/canonical/2026-09-12_MMWAVE_HR_RECOVERY_AND_BASELINE_INTEGRATION_DECISION.md` remains important provenance and should be read when reconstructing how the current state was reached, but it must not override the newer canonical mechanism-audit and current-state records.
 
