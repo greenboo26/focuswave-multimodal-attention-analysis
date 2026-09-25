@@ -1,27 +1,27 @@
 # FocusWave Multimodal Analysis
 
-这是 FocusWave 多模态注意力分析的正式中央仓库：`FocusWave Multimodal Attention Analysis`。仓库主体不定义为 HR、BR 或 HRV 算法项目。毫米波是当前已审计的一个传感器验证边界，NIR 与 RGB 的生产代码位于外部 `kyandi233-dev/Attention-Analysis` 的受控 ref，最终结果和跨站点推断在本仓库中央收口。
+本仓库维护 FocusWave 毫米波生产、测量验证边界和跨站点整合方法。近红外与可见光生产代码位于 `kyandi233-dev/Attention-Analysis`；当前国赛正式方法、结果与报告由 `kyandi233-dev/FocusWave-Formal-Analysis@main` 收口。历史中央跨站点推断设计保留在本仓库，不覆盖当前国赛证据总账。
 
 > **当前正式队列入口（2026-09-25）**：国赛正式方法、结果和报告以 [`kyandi233-dev/FocusWave-Formal-Analysis@main`](https://github.com/kyandi233-dev/FocusWave-Formal-Analysis/tree/main) 为准，分析代码以 [`kyandi233-dev/Attention-Analysis@codex/formal-analysis-v2-portable`](https://github.com/kyandi233-dev/Attention-Analysis/tree/codex/formal-analysis-v2-portable) 为准。正式总体为 61 个参与者组、116 场、2,320 个探针。毫米波 M1 来源追踪与探针前时间合同已使两个心肺特征获得正式**预测比较及设备组合资格**；HR/BR 的生理效度仍为 `LIMITED_SUPPORTING_ONLY`，HRV 为 `BLOCKED`。预测资格不等于生理验证。本页下列北京 70 场等条目是较早的站点与开发阶段记录，不是当前国赛总体或报告的结果入口。
 
 > **任何新算法、新特征、新 producer 改动或高成本重跑之前，先读根目录 [`ANALYSIS_HISTORY_LEDGER.md`](ANALYSIS_HISTORY_LEDGER.md)。** 该账本汇总中央分析、FocusWave 采集、Attention-Analysis producer 与历史 workspace 中已经做过、采用、回退、被后续证据替代和仍缺证据的路线，用于避免重复花费计算/API预算。
 
-## 当前科学状态
+## 北京站点与早期开发阶段记录（历史）
 
-- 北京报告 cohort：70 sessions、46 natural participants、1,400 probes；label 1 对 labels 2/3/4；C+B 主窗口 30 s，10/20 s 为行为敏感性；participant-disjoint 5-fold；这是当前北京 C+B 锚点，不是未来 Beijing+Zhuhai global folds。
+- 北京阶段报告 cohort：70 sessions、46 natural participants、1,400 probes；label 1 对 labels 2/3/4；C+B 主窗口 30 s，10/20 s 为行为敏感性；participant-disjoint 5-fold。这是当时的北京 C+B 锚点，不是当前 116 场国赛总体或未来 Beijing+Zhuhai global folds。
 - Probe 四类语义固定为：1 完全任务聚焦，2 关注实验但未聚焦分拣，3 任务无关思维，4 思维空白。2/3/4 不得统称 mind-wandering。
 - NIR producer 已完成 2026-08-26 timestamp mapping 修复：`sub-100`、`sub-178` 经 sequential AVI-frame mapping 恢复，当前 source/formal fullclass 成功数为 **71/72**；matched cohort 为 **71 sessions / 1,420 unique probes**，其中 primary coverage `>=0.80` 为 1,174 probes。`sub-099` 仍因缺失有效 `master_timeline.csv` 阻塞。旧 68-session/1,360-probe NIR v1 科学分析在 cohort 扩大后没有自动重跑，因此旧增量结果只能作为 historical/pre-recompute evidence，不能冒充最终 NIR increment。
 - RGB 当前主线为 **Face + Pose + Motion** 连续行为测量，不直接输出 Attention Score，rPPG/HR/HRV 不在正式 RGB 主链。NVIDIA 侧共享科学层已进入 `nvidia-cuda`，但 `sub-130` native CPU ↔ CUDA parity、gap stress、primary-face/blink/PERCLOS gate、direct full-video runner 与统一正式 schema 尚未全部完成；在这些 Gate 完成前不进行 NVIDIA RGB 正式全量，局部 parquet/pilot 不得当作正式统计结果。
 - mmWave C1 HRV 线已停止扩展，不能解释为硬件失败；C2B/C2C 没有稳定超越 C+B 的正增量，M1 作为 supporting person-effect audit，主线定位为 validation boundary/ablation。AgeBalanced reanalysis 已确认旧约 27–38 BPM 断层主要来自把内部 `ecg_reference_v1` 错当官方 benchmark ground truth；按官方 AgeBalanced ECG FFT 重算，现有 project route 30 s development pooled MAE 为 **10.361 BPM**。该结果只修正外部 HR benchmark 口径，不等于 HRV 已验证，也没有打开 held-out 80。
 - 北京 B1+B2 与珠海 B1+B2 是 shared primary，珠海 B3 是 extension。`DEFERRED_EXTERNAL_STORAGE_NOT_AVAILABLE` 表示外部存储暂不可用，不表示数据不存在。
 
-## 科学方法终审
+## 早期科学方法终审（历史）
 
 现有比赛分析已经完成交付前方法终审，正式结论见：
 
 `docs/canonical/SCIENTIFIC_METHOD_REVIEW_V1.md`
 
-终审状态：`PASS WITH ROLE BOUNDARIES`。当前行为主分析、问卷单题效标支持和毫米波增量检验的总体统计设计可以继续使用，不需要推翻重做；但 C1、M1、repeat-session、C2C 和 legacy sensor increment 等必须保持其 supporting/diagnostic 角色，不能被升级成主证据。任何同事或 AI agent 在运行前都必须遵守该文件的标签命名、重复被试、grouped-CV、窗口、FDR、bootstrap 和解释边界。
+该阶段终审状态为 `PASS WITH ROLE BOUNDARIES`。它保留当时行为、问卷与毫米波分析的科学边界；C1、早期 M1、repeat-session、C2C 和 legacy sensor increment 等仍只按各自 supporting/diagnostic 角色解释。当前国赛正式预测资格与结果须回到 Formal `main` 和 Attention 当前代码核对，不能由本历史终审直接推断。
 
 ## 双机中央流程
 
