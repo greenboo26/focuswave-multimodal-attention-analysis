@@ -1,0 +1,33 @@
+{
+  "schema_version": "focuswave-formal-bb-behavior-v1",
+  "accepted_source_contracts": [
+    "focuswave_raw_behavior_bb_v1"
+  ],
+  "explicit_excluded_session_ids": [
+    "sub-9504"
+  ],
+  "rt_valid_min_ms": 150,
+  "rt_valid_max_ms": 2000,
+  "rt_min_count_summary": 1,
+  "rt_min_count_dispersion": 4,
+  "rt_min_count_slope": 5,
+  "sdt_min_go_opportunities": 20,
+  "sdt_min_nogo_opportunities": 5,
+  "probe_window_seconds": [
+    10,
+    20,
+    30
+  ],
+  "fixed_window_seconds": [
+    30
+  ],
+  "error_trajectory_trial_offsets": [
+    -3,
+    -2,
+    -1,
+    0,
+    1,
+    2,
+    3
+  ]
+}
